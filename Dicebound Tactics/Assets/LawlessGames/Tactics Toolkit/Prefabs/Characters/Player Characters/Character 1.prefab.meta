@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: c2fa3c93f9601c7439354188bf6d1b20
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 238215
+  packageName: Tactics Toolkit
+  packageVersion: 1.2.3
+  assetPath: Assets/LawlessGames/Tactics Toolkit/Prefabs/Characters/Player Characters/Character
+    1.prefab
+  uploadId: 665433

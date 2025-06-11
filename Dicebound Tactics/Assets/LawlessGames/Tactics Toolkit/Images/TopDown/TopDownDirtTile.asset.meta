@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 644f989b2a1d4fd40876f94f2272c635
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 238215
+  packageName: Tactics Toolkit
+  packageVersion: 1.2.3
+  assetPath: Assets/LawlessGames/Tactics Toolkit/Images/TopDown/TopDownDirtTile.asset
+  uploadId: 665433

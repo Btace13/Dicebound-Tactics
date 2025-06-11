@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 4bfb0902d80ca874daea9043eed4560e
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 238215
+  packageName: Tactics Toolkit
+  packageVersion: 1.2.3
+  assetPath: Assets/LawlessGames/Tactics Toolkit/Prefabs/TopDownOverlay.prefab
+  uploadId: 665433

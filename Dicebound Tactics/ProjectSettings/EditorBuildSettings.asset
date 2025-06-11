@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/LawlessGames/Tactics Toolkit/Scenes/1 - Pathfinding.unity
+    guid: 845431b98d7dfaa41a769cd6b5a98dba
+  - enabled: 1
+    path: Assets/LawlessGames/Tactics Toolkit/Scenes/2 - Character Stats.unity
+    guid: e4ef4938f00fdd84489dfcca7da34fbd
+  - enabled: 1
+    path: Assets/LawlessGames/Tactics Toolkit/Scenes/3 - Effect Tiles.unity
+    guid: 90f34e5bc20f21f41aa84113c9be4cfd
+  - enabled: 1
+    path: Assets/LawlessGames/Tactics Toolkit/Scenes/4 - Turn Based.unity
+    guid: 7c7ac59622ecbc34cbd5d3c6fe30df53
+  - enabled: 1
+    path: Assets/LawlessGames/Tactics Toolkit/Scenes/5 - Basic Attacks.unity
+    guid: a86757c5a7e1ae846b2eacc0953065a9
+  - enabled: 1
+    path: Assets/LawlessGames/Tactics Toolkit/Scenes/6 - Abilities.unity
+    guid: b2522753503b66f4c82ef01aae0ffaf8
+  - enabled: 1
+    path: Assets/LawlessGames/Tactics Toolkit/Scenes/7 - Enemy AI.unity
+    guid: a2e53584ceb28d94f8a6cb433b6882eb
+  - enabled: 1
+    path: Assets/LawlessGames/Tactics Toolkit/Scenes/8 - Final Scene.unity
+    guid: 7d3c62eca06f81347ac76f49d6a75cde
+  m_configObjects: {}
