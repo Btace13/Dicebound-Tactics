@@ -21,7 +21,8 @@
         "com.unity.modules.ui": "1.0.0",
         "com.unity.modules.uielements": "1.0.0",
         "com.unity.ugui": "1.0.0"
-      },
+      }
+    },
     "com.mibdev.fullscreen-editor": {
       "version": "file:com.mibdev.fullscreen-editor",
       "depth": 0,
@@ -488,5 +489,4 @@
       }
     }
   }
-}
 }

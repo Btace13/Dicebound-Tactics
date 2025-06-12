@@ -1,5 +1,0 @@
-sceneSetups:
-- path: Assets/LawlessGames/Tactics Toolkit/Scenes/9 - 3D Map.unity
-  isLoaded: 1
-  isActive: 1
-  isSubScene: 0
