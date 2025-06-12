@@ -4,7 +4,7 @@
 PlayerSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 28
-  productGUID: 00000000000000000000000000000000
+  productGUID: 6134e6237c64e44719765c21994bf23b
   AndroidProfiler: 0
   AndroidFilterTouchesWhenObscured: 0
   AndroidEnableSustainedPerformanceMode: 0
@@ -724,7 +724,7 @@ PlayerSettings:
   cloudProjectId: caad2ad1-ea68-4479-8473-60bf4279a618
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: 
+  projectName: Dicebound Tactics
   organizationId: acedev
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0

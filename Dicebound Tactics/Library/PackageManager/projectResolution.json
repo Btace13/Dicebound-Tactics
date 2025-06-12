@@ -6,7 +6,8 @@
   "inputs": [
     "/Users/enriqueurbina/Documents/Github/Dicebound-Tactics/Dicebound Tactics/Packages/manifest.json",
     "/Users/enriqueurbina/Documents/Github/Dicebound-Tactics/Dicebound Tactics/Packages/packages-lock.json",
-    "/Applications/Unity/Hub/Editor/6000.1.1f1/Unity.app/Contents/Resources/PackageManager/BuiltInPackages/BuiltInPackagesCombined.sha1"
+    "/Applications/Unity/Hub/Editor/6000.1.1f1/Unity.app/Contents/Resources/PackageManager/BuiltInPackages/BuiltInPackagesCombined.sha1",
+    "/Users/enriqueurbina/Documents/Github/Dicebound-Tactics/Dicebound Tactics/Packages/com.mibdev.fullscreen-editor/package.json"
   ],
   "outputs": {
     "com.unity.ai.navigation@2.0.7": {
@@ -374,6 +375,15 @@
       "version": "1.0.0",
       "source": "builtin",
       "testable": false
+    },
+    "com.mibdev.fullscreen-editor@file:/Users/enriqueurbina/Documents/Github/Dicebound-Tactics/Dicebound Tactics/Packages/com.mibdev.fullscreen-editor": {
+      "name": "com.mibdev.fullscreen-editor",
+      "displayName": "Fullscreen Editor",
+      "resolvedPath": "/Users/enriqueurbina/Documents/Github/Dicebound-Tactics/Dicebound Tactics/Packages/com.mibdev.fullscreen-editor",
+      "editorCompatibility": "2019.4.0a1",
+      "version": "2.2.9",
+      "source": "embedded",
+      "testable": true
     },
     "com.unity.modules.subsystems@1.0.0": {
       "name": "com.unity.modules.subsystems",
