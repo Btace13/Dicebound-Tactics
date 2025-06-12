@@ -12057,6 +12057,14 @@ PrefabInstance:
       propertyPath: Response.m_PersistentCalls.m_Calls.Array.data[3].m_Target
       value: 
       objectReference: {fileID: 2047768717}
+    - target: {fileID: 1985991870, guid: 69982a98b7a46fd49b8a6fc7daaec0b8, type: 3}
+      propertyPath: switchCharacterEvent
+      value: 
+      objectReference: {fileID: 11400000, guid: 1c33afe0e4259457ebfe8988979f969a, type: 2}
+    - target: {fileID: 1985991870, guid: 69982a98b7a46fd49b8a6fc7daaec0b8, type: 3}
+      propertyPath: switchCharacterButton
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 8098888150774196200, guid: 69982a98b7a46fd49b8a6fc7daaec0b8, type: 3}
       propertyPath: m_RootOrder
       value: 5
