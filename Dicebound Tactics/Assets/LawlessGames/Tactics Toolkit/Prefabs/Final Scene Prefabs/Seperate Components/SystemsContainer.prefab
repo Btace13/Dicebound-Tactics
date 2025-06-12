@@ -326,7 +326,7 @@ MonoBehaviour:
   leftMovementButton: 276
   rightMovementButton: 275
   actionButton: 32
-  switchCharacterButton: 0
+  switchCharacterButton: 9
   enterMovementModeButton: 113
   enterAttackModeButton: 101
   endTurnButton: 13
@@ -335,7 +335,7 @@ MonoBehaviour:
   enterAttackModeEvent: {fileID: 11400000, guid: 92bdd9f1b0d42b24ba20416cea19410c, type: 2}
   endTurnEvent: {fileID: 11400000, guid: fdfd2d860fc9f35449f03cd73e2c6948, type: 2}
   cancelActionEvent: {fileID: 11400000, guid: 24315e7b4739869498fb3db3d60ea022, type: 2}
-  switchCharacterEvent: {fileID: 0}
+  switchCharacterEvent: {fileID: 11400000, guid: 1c33afe0e4259457ebfe8988979f969a, type: 2}
   actionButtonPressedEvent: {fileID: 11400000, guid: 2ed4320790dccdc4c931594b4ff6d15f, type: 2}
   focusOnNewTile: {fileID: 11400000, guid: de76920c1495cae42be3d0e4f0208b68, type: 2}
 --- !u!114 &1985991869
@@ -505,20 +505,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 8098888151626782105}
-        m_TargetAssemblyTypeName: MovementController, Assembly-CSharp
-        m_MethodName: EnterMovementMode
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: TacticsToolkit.ButtonStateManager, Assembly-CSharp
-        m_MethodName: DisableOnEvent
+        m_TargetAssemblyTypeName: TacticsToolkit.MovementController, Assembly-CSharp
+        m_MethodName: StartMovementMode
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -938,7 +926,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 303f3761256367140b179ebfb6a3223e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  turnSorting: 0
+  turnSorting: 2
   startNewCharacterTurn: {fileID: 11400000, guid: c4e0d453d72137543842d48f73e3a632, type: 2}
   turnOrderSet: {fileID: 11400000, guid: 223d7181e2cfdce45af269b328895f73, type: 2}
   turnPreviewSet: {fileID: 0}
@@ -1497,6 +1485,18 @@ MonoBehaviour:
       - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: TacticsToolkit.CameraController, Assembly-CSharp
         m_MethodName: FocusOnTarget
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: TacticsToolkit.MapManager, Assembly-CSharp
+        m_MethodName: SetActiveCharacter
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
