@@ -288,6 +288,30 @@ namespace TacticsToolkit
             turnOrderPreview = currentTurnOrderPreview;
             turnOrderSet.Raise(currentTurnOrderPreview.Select(x => x.character.gameObject).ToList());
         }
+
+        public void SwitchCharacter()
+        {
+            if (turnSorting != TurnSorting.SideBased) return;
+
+            var team = GetCurrentTeam();
+            if (team.Count <= 1) return; // Nothing to switch to
+
+            // Deactivate current character
+            if (activeCharacter != null)
+                activeCharacter.isActive = false;
+
+            // Advance index
+            turnIndex = (turnIndex + 1) % team.Count;
+
+            // Set new character
+            activeCharacter = team[turnIndex];
+            activeCharacter.isActive = true;
+
+            // Start new character's control phase
+            activeCharacter.StartTurn();
+            startNewCharacterTurn.Raise(activeCharacter.gameObject);
+        }
+
     }
 
     public class TurnOrderPreviewObject
