@@ -10,6 +10,7 @@ namespace TacticsToolkit
         public KeyCode rightMovementButton;
 
         public KeyCode actionButton;
+        public KeyCode switchCharacterButton;
 
         public KeyCode enterMovementModeButton;
         public KeyCode enterAttackModeButton;
@@ -22,6 +23,7 @@ namespace TacticsToolkit
         public GameEvent endTurnEvent;
         public GameEvent cancelActionEvent;
 
+        public GameEvent switchCharacterEvent;
         public GameEvent actionButtonPressedEvent;
         public GameEventGameObject focusOnNewTile;
 
@@ -61,6 +63,11 @@ namespace TacticsToolkit
             if (Input.GetKeyDown(cancelActionButton))
             {
                 cancelActionEvent.Raise();
+            }
+
+            if(Input.GetKeyDown(switchCharacterButton))
+            {
+                switchCharacterEvent.Raise();
             }
         }
 

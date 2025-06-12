@@ -15,10 +15,19 @@ m_ProjectFiles:
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 638852789520000000
-    m_Hash: 3310690747
+      ticks: 638852965180000000
+    m_Hash: 4176925878
 m_EmbeddedPackageManifests:
-  m_ManifestsStatus: {}
+  m_ManifestsStatus:
+    /Users/enriqueurbina/Documents/Github/Dicebound-Tactics/Dicebound Tactics/Packages/com.mibdev.fullscreen-editor/package.json:
+      m_FilePath: /Users/enriqueurbina/Documents/Github/Dicebound-Tactics/Dicebound
+        Tactics/Packages/com.mibdev.fullscreen-editor/package.json
+      m_PathExists: 1
+      m_ContentTrackingEnabled: 1
+      m_ModificationDate:
+        serializedVersion: 2
+        ticks: 638827922140000000
+      m_Hash: 4234363929
 m_LocalPackages:
   m_LocalFileStatus: []
 m_ProjectPath: /Users/enriqueurbina/Documents/Github/Dicebound-Tactics/Dicebound
@@ -3774,6 +3783,73 @@ m_ResolvedPackages:
     compatibilityLevel: 0
     minimumPackageVersion: 1.0.0
     minimumUnityVersion: 
+- packageId: com.mibdev.fullscreen-editor@file:/Users/enriqueurbina/Documents/Github/Dicebound-Tactics/Dicebound
+    Tactics/Packages/com.mibdev.fullscreen-editor
+  testable: 1
+  isDirectDependency: 1
+  version: 2.2.9
+  source: 3
+  resolvedPath: /Users/enriqueurbina/Documents/Github/Dicebound-Tactics/Dicebound
+    Tactics/Packages/com.mibdev.fullscreen-editor
+  assetPath: Packages/com.mibdev.fullscreen-editor
+  name: com.mibdev.fullscreen-editor
+  displayName: Fullscreen Editor
+  author:
+    name: 
+    email: 
+    url: 
+  category: 
+  type: tool
+  description: Play, develop, test, and record your game in Fullscreen directly from
+    within the editor.
+  errors: []
+  versions:
+    all: []
+    compatible: []
+    recommended: 
+    deprecated: []
+  dependencies: []
+  resolvedDependencies: []
+  keywords: []
+  registry:
+    id: main
+    name: 
+    url: https://packages.unity.com
+    scopes: []
+    isDefault: 1
+    capabilities: 7
+    configSource: 0
+  hideInEditor: 1
+  entitlements:
+    licensingModel: 0
+  isAssetStorePackage: 0
+  datePublishedTicks: 0
+  documentationUrl: 
+  hasRepository: 0
+  repository:
+    type: 
+    url: 
+    revision: 
+    path: 
+  unityLifecycle:
+    version: 
+    nextVersion: 
+    recommendedVersion: 
+    isDeprecated: 0
+    deprecationMessage: 
+  isDeprecated: 0
+  deprecationMessage: 
+  git:
+    hash: 
+    revision: 
+  upmReserved: 
+  assetStore:
+    productId: 
+  fingerprint: 
+  editorCompatibility:
+    compatibilityLevel: 0
+    minimumPackageVersion: 
+    minimumUnityVersion: 2019.4.0a1
 - packageId: com.unity.modules.subsystems@1.0.0
   testable: 0
   isDirectDependency: 0
