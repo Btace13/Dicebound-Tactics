@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 260aa8b1e92131440831a2a5e29e8622, type: 3}
   m_Name: Warrior
   m_EditorClassIdentifier: 
+  className: Warrior
+  classIcon: {fileID: -1960546628078278901, guid: cc8cb170ff11da442bedd0e9e3be0e9a, type: 3}
   Health:
     baseStatValue: 100
     baseStatModifier:
