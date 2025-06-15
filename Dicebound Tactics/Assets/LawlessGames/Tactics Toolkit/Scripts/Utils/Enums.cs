@@ -3,9 +3,11 @@ namespace TacticsToolkit
 {
     public enum Stats
     {
+        ActionPoints,
+        CarriedOverActionPoints,
         Health,
         Mana,
-        Strenght,
+        Strength,
         Endurance,
         Speed,
         Intelligence,

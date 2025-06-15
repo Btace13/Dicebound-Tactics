@@ -66,7 +66,7 @@ namespace TacticsToolkit
         //Attack targeted entity.
         private void AttackUnit()
         {
-            focusedCharacter.TakeDamage(activeCharacter.GetStat(Stats.Strenght).statValue);
+            focusedCharacter.TakeDamage(activeCharacter.GetStat(Stats.Strength).statValue);
             activeCharacter.UpdateInitiative(Constants.AttackCost);
             hasAttacked = true;
 

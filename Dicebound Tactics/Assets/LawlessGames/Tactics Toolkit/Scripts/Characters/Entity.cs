@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,13 +12,15 @@ namespace TacticsToolkit
         public List<AbilityContainer> abilitiesForUse;
         public Sprite portrait;
 
+        [Header("Abilities")]
+        public List<AbilitySO> abilities = new();
+
         [Header("Level")]
         public int level;
         public int experience = 0;
         public int requiredExperience = 0;
 
         [Header("General")]
-        public bool hasActed = false;
         public bool isStunned = false;
         public int teamID = 0;
         [HideInInspector]
@@ -71,7 +72,7 @@ namespace TacticsToolkit
                 statsContainer = ScriptableObject.CreateInstance<CharacterStats>();
                 statsContainer.Health = new Stat(Stats.Health, characterClass.Health.baseStatValue, this);
                 statsContainer.Mana = new Stat(Stats.Mana, characterClass.Mana.baseStatValue, this);
-                statsContainer.Strenght = new Stat(Stats.Strenght, characterClass.Strenght.baseStatValue, this);
+                statsContainer.Strenght = new Stat(Stats.Strength, characterClass.Strenght.baseStatValue, this);
                 statsContainer.Endurance = new Stat(Stats.Endurance, characterClass.Endurance.baseStatValue, this);
                 statsContainer.Speed = new Stat(Stats.Speed, characterClass.Speed.baseStatValue, this);
                 statsContainer.Intelligence = new Stat(Stats.Intelligence, characterClass.Intelligence.baseStatValue, this);
@@ -79,6 +80,8 @@ namespace TacticsToolkit
                 statsContainer.AttackRange = new Stat(Stats.AttackRange, characterClass.AttackRange, this);
                 statsContainer.CurrentHealth = new Stat(Stats.CurrentHealth, characterClass.Health.baseStatValue, this);
                 statsContainer.CurrentMana = new Stat(Stats.CurrentMana, characterClass.Mana.baseStatValue, this);
+                statsContainer.ActionPoints = new Stat(Stats.ActionPoints, 0, this);
+                statsContainer.CarriedOverActionPoints = new Stat(Stats.CarriedOverActionPoints, 0, this);
             }
 
             for (int i = 0; i < level; i++)
@@ -251,7 +254,7 @@ namespace TacticsToolkit
                     return statsContainer.Health;
                 case Stats.Mana:
                     return statsContainer.Mana;
-                case Stats.Strenght:
+                case Stats.Strength:
                     return statsContainer.Strenght;
                 case Stats.Endurance:
                     return statsContainer.Endurance;
@@ -267,6 +270,10 @@ namespace TacticsToolkit
                     return statsContainer.CurrentMana;
                 case Stats.AttackRange:
                     return statsContainer.AttackRange;
+                case Stats.ActionPoints:
+                    return statsContainer.ActionPoints;
+                case Stats.CarriedOverActionPoints:
+                    return statsContainer.CarriedOverActionPoints;
                 default:
                     return statsContainer.Health;
             }
@@ -401,12 +408,23 @@ namespace TacticsToolkit
         public void Reset()
         {
             isAlive = true;
-            hasActed = false;
             isStunned = false;
             isTargetted = false;
             statsContainer.CurrentHealth.statValue = statsContainer.Health.statValue;
             statsContainer.CurrentMana.statValue = statsContainer.Mana.statValue;
             UpdateCharacterUI();
+        }
+
+        public void SpendAP(int apCost)
+        {
+            if (apCost <= statsContainer.ActionPoints.statValue)
+            {
+                statsContainer.ActionPoints.statValue -= apCost;
+            }
+            else
+            {
+                Debug.LogWarning("Not enough Action Points to perform this action.");
+            }
         }
     }
 }

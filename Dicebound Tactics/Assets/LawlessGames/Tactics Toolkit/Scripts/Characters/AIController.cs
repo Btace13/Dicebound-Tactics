@@ -106,12 +106,12 @@ namespace TacticsToolkit
                 if (closestDistance <= GetStat(Stats.AttackRange).statValue)
                 {
                     //calculate senarioValue;
-                    var senarioValue = GetStat(Stats.Strenght).statValue
+                    var senarioValue = GetStat(Stats.Strength).statValue
                         + closestDistance
                         - targetCharacter.GetStat(Stats.CurrentHealth).statValue;
 
                     //we can kill
-                    if (targetCharacter.GetStat(Stats.CurrentHealth).statValue < GetStat(Stats.Strenght).statValue)
+                    if (targetCharacter.GetStat(Stats.CurrentHealth).statValue < GetStat(Stats.Strength).statValue)
                     {
                         senarioValue = 10000;
                     }
@@ -136,7 +136,7 @@ namespace TacticsToolkit
                 {
                     //calculate senarioValue;
                     var senarioValue = 0;
-                    senarioValue += GetStat(Stats.Strenght).statValue + (closestDistance - GetStat(Stats.MoveRange).statValue);
+                    senarioValue += GetStat(Stats.Strength).statValue + (closestDistance - GetStat(Stats.MoveRange).statValue);
                     return new Senario(senarioValue, null, targetCharacter.activeTile, position, true);
                 }
             }
@@ -158,7 +158,7 @@ namespace TacticsToolkit
 
                     //calculate senarioValue;
                     var senarioValue = 0;
-                    senarioValue += GetStat(Stats.Strenght).statValue + (GetStat(Stats.MoveRange).statValue - closestDistance);
+                    senarioValue += GetStat(Stats.Strength).statValue + (GetStat(Stats.MoveRange).statValue - closestDistance);
 
                     return new Senario(senarioValue, null, targetCharacter.activeTile, position, true);
                 }
@@ -292,10 +292,10 @@ namespace TacticsToolkit
 
             yield return new WaitForSeconds(0.5f);
 
-            logAction.Raise(gameObject.name + ": " + GetStat(Stats.Strenght).statValue + " Damage");
+            logAction.Raise(gameObject.name + ": " + GetStat(Stats.Strength).statValue + " Damage");
 
             //As an example, damage is just the strenght stat. 
-            targetedCharacter.TakeDamage(GetStat(Stats.Strenght).statValue);
+            targetedCharacter.TakeDamage(GetStat(Stats.Strength).statValue);
             UpdateInitiative(Constants.AttackCost);
             StartCoroutine(EndTurn());
         }

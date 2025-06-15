@@ -16,6 +16,8 @@ namespace TacticsToolkit
         public Stat AttackRange;
         public Stat CurrentHealth;
         public Stat CurrentMana;
+        public Stat ActionPoints;
+        public Stat CarriedOverActionPoints;
 
 
         public Stat getStat(Stats statKey)
@@ -33,5 +35,6 @@ namespace TacticsToolkit
 
             return null;
         }
+        
     }
 }

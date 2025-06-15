@@ -1,10 +1,7 @@
 using UnityEngine;
 using UnityEditor;
-using UnityEditor.SceneManagement;
-using UnityEngine.SceneManagement;
-using System.Collections.Generic;
-using System.Linq;
 using TacticsToolkit;
+using System.Linq;
 
 public class TurnDebuggerWindow : EditorWindow
 {
@@ -63,7 +60,6 @@ public class TurnDebuggerWindow : EditorWindow
         EditorGUILayout.Space();
         EditorGUILayout.LabelField("Current Turn Info", EditorStyles.boldLabel);
         EditorGUILayout.LabelField("Turn Side", turnManager.playerTurn ? "Player" : "Enemies");
-        EditorGUILayout.LabelField("Auto Advance", autoAdvance.ToString());
         EditorGUILayout.Space();
 
         if (GUILayout.Button("Next Turn"))
@@ -110,9 +106,44 @@ public class TurnDebuggerWindow : EditorWindow
 
         EditorGUILayout.LabelField(entity.name, EditorStyles.boldLabel);
         EditorGUILayout.LabelField("HP: " + entity.GetStat(Stats.CurrentHealth).statValue + "/" + entity.GetStat(Stats.Health).statValue);
-        EditorGUILayout.LabelField("Mana: " + entity.GetStat(Stats.CurrentMana).statValue);
-        EditorGUILayout.LabelField("Status: " + (entity.isAlive ? (entity.hasActed ? "Acted" : "Ready") : "Dead"));
+        EditorGUILayout.LabelField("AP: " + entity.GetStat(Stats.ActionPoints).statValue);
+        EditorGUILayout.LabelField("Rollover AP: " + entity.GetStat(Stats.CarriedOverActionPoints).statValue);
+        EditorGUILayout.LabelField("Alive: " + (entity.isAlive ? "Yes" : "No"));
+        EditorGUILayout.Space();
 
+        if (entity.abilities != null && entity.abilities.Count > 0)
+        {
+            EditorGUILayout.LabelField("Abilities", EditorStyles.boldLabel);
+            foreach (var ability in entity.abilities)
+            {
+                bool canUse = entity.GetStat(Stats.ActionPoints).statValue >= ability.apCost;
+                GUI.enabled = canUse && entity.isAlive;
+
+                if (GUILayout.Button($"Use {ability.abilityName}"))
+                {
+                    if (turnManager.playerTurn)
+                    {
+                        var targets = turnManager.enemyUnits.Where(p => p != null && p.isAlive).ToList();
+                        if (targets.Count > 0)
+                        {
+                            ability.Execute(entity, targets[0]);
+                        }
+                    }
+                    else
+                    {
+                        var targets = turnManager.playerUnits.Where(e => e != null && e.isAlive).ToList();
+                        if (targets.Count > 0)
+                        {
+                            ability.Execute(entity, targets[0]);
+                        }
+                    }
+                }
+            }
+            GUI.enabled = true; 
+        }
+
+        EditorGUILayout.Space();
+        EditorGUILayout.LabelField("Health Management", EditorStyles.boldLabel);
         GUI.enabled = entity.isAlive;
         if (GUILayout.Button("Damage 10"))
         {
@@ -124,14 +155,20 @@ public class TurnDebuggerWindow : EditorWindow
             entity.HealEntity(10);
         }
 
-        if (GUILayout.Button("Set Acted"))
+        if (GUILayout.Button("Kill"))
         {
-            entity.hasActed = true;
+            entity.TakeDamage(9999);
         }
 
-        if (GUILayout.Button("Reset Acted"))
+        // Only show "End Turn" if this entity is the current unit
+        if (turnManager.GetCurrentUnit() == entity && entity.isAlive)
         {
-            entity.hasActed = false;
+            GUI.color = Color.cyan;
+            if (GUILayout.Button("End Turn"))
+            {
+                turnManager.AdvanceTurn();
+            }
+            GUI.color = Color.white;
         }
 
         GUI.enabled = true;

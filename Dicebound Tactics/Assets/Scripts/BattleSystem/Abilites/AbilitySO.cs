@@ -1,0 +1,11 @@
+using UnityEngine;
+using TacticsToolkit;
+
+public abstract class AbilitySO : ScriptableObject
+{
+    public string abilityName;
+    public Sprite icon;
+    public int apCost;
+
+    public abstract void Execute(Entity user, Entity target);
+}
