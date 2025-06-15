@@ -18,6 +18,8 @@ namespace TacticsToolkit
         public int requiredExperience = 0;
 
         [Header("General")]
+        public bool hasActed = false;
+        public bool isStunned = false;
         public int teamID = 0;
         [HideInInspector]
         public OverlayTile activeTile;
@@ -393,6 +395,17 @@ namespace TacticsToolkit
                 activeTile.isBlocked = false;
                 activeTile = null;
             }
+        }
+
+        public void Reset()
+        {
+            isAlive = true;
+            hasActed = false;
+            isStunned = false;
+            isTargetted = false;
+            statsContainer.CurrentHealth.statValue = statsContainer.Health.statValue;
+            statsContainer.CurrentMana.statValue = statsContainer.Mana.statValue;
+            UpdateCharacterUI();
         }
     }
 }
