@@ -1,13 +1,16 @@
-using UnityEditor;
 using UnityEngine;
+using UnityEditor;
+using UnityEditor.SceneManagement;
+using UnityEngine.SceneManagement;
+using System.Collections.Generic;
+using System.Linq;
 using TacticsToolkit;
 
 public class TurnDebuggerWindow : EditorWindow
 {
     private TurnManager turnManager;
-    private Vector2 scroll;
-    private bool autoAdvanceTurn = false;
-    private string actionLog = "";
+    private Vector2 scrollPosition;
+    private bool autoAdvance = false;
 
     [MenuItem("Tools/Turn Debugger")]
     public static void ShowWindow()
@@ -15,95 +18,123 @@ public class TurnDebuggerWindow : EditorWindow
         GetWindow<TurnDebuggerWindow>("Turn Debugger");
     }
 
+    private void OnEnable()
+    {
+        EditorApplication.playModeStateChanged += OnPlayModeChanged;
+        FindTurnManager();
+    }
+
+    private void OnDisable()
+    {
+        EditorApplication.playModeStateChanged -= OnPlayModeChanged;
+    }
+
+    private void OnPlayModeChanged(PlayModeStateChange state)
+    {
+        if (state == PlayModeStateChange.EnteredPlayMode)
+        {
+            FindTurnManager();
+        }
+    }
+
+    private void FindTurnManager()
+    {
+        turnManager = FindAnyObjectByType<TurnManager>();
+    }
+
     private void OnGUI()
     {
-        GUILayout.Label("JRPG Turn Debugger", EditorStyles.boldLabel);
-
-        turnManager = (TurnManager)EditorGUILayout.ObjectField("Turn Manager", turnManager, typeof(TurnManager), true);
-
-        if (turnManager == null)
+        if (!Application.isPlaying)
         {
-            EditorGUILayout.HelpBox("Assign a TurnManager to begin tracking.", MessageType.Info);
+            EditorGUILayout.HelpBox("Enter Play Mode to debug turns.", MessageType.Info);
             return;
         }
 
-        GUILayout.Space(10);
-        GUILayout.Label("Current Turn", EditorStyles.boldLabel);
-        GUILayout.Label(turnManager.playerTurn ? "PLAYER TURN" : "ENEMY TURN", EditorStyles.helpBox);
+        if (turnManager == null)
+        {
+            EditorGUILayout.HelpBox("No TurnManager found in scene.", MessageType.Warning);
+            if (GUILayout.Button("Find TurnManager"))
+            {
+                FindTurnManager();
+            }
+            return;
+        }
+
+        EditorGUILayout.Space();
+        EditorGUILayout.LabelField("Current Turn Info", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("Turn Side", turnManager.playerTurn ? "Player" : "Enemies");
+        EditorGUILayout.LabelField("Auto Advance", autoAdvance.ToString());
+        EditorGUILayout.Space();
 
         if (GUILayout.Button("Next Turn"))
         {
             turnManager.AdvanceTurn();
-            actionLog += $"Advanced to {(turnManager.playerTurn ? "Player" : "Enemy")} Turn\n";
         }
 
-        if (GUILayout.Button("Reset Battle"))
+        if (GUILayout.Button("Reset Turn Order"))
         {
             turnManager.ResetBattle();
-            actionLog += "Battle Reset\n";
         }
 
-        autoAdvanceTurn = EditorGUILayout.Toggle("Auto Advance", autoAdvanceTurn);
+        autoAdvance = EditorGUILayout.Toggle("Auto Advance", autoAdvance);
 
-        GUILayout.Space(10);
-        scroll = EditorGUILayout.BeginScrollView(scroll);
+        EditorGUILayout.Space();
+        scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
 
-        GUILayout.Label("Player Units", EditorStyles.boldLabel);
-        foreach (var unit in turnManager.playerUnits)
+        // Player Characters Row
+        EditorGUILayout.LabelField("Player Characters", EditorStyles.boldLabel);
+        EditorGUILayout.BeginHorizontal();
+        foreach (var character in turnManager.playerUnits)
         {
-            if (unit == null) continue;
-            DrawEntityControls(unit);
+            DrawEntityBox(character);
         }
+        EditorGUILayout.EndHorizontal();
 
-        GUILayout.Space(10);
-        GUILayout.Label("Enemy Units", EditorStyles.boldLabel);
-        foreach (var unit in turnManager.enemyUnits)
+        EditorGUILayout.Space();
+
+        // Enemies Row
+        EditorGUILayout.LabelField("Enemies", EditorStyles.boldLabel);
+        EditorGUILayout.BeginHorizontal();
+        foreach (var enemy in turnManager.enemyUnits)
         {
-            if (unit == null) continue;
-            DrawEntityControls(unit);
+            DrawEntityBox(enemy);
         }
-
-        GUILayout.Space(10);
-        GUILayout.Label("Action Log", EditorStyles.boldLabel);
-        EditorGUILayout.TextArea(actionLog, GUILayout.Height(100));
+        EditorGUILayout.EndHorizontal();
 
         EditorGUILayout.EndScrollView();
     }
 
-    private void DrawEntityControls(Entity entity)
+    private void DrawEntityBox(Entity entity)
     {
-        EditorGUILayout.BeginVertical("box");
-        GUILayout.Label(entity.name, EditorStyles.boldLabel);
-        GUILayout.Label($"Alive: {entity.isAlive}");
-        GUILayout.Label($"Stunned: {entity.isStunned}");
-        GUILayout.Label($"Has Acted: {entity.hasActed}");
-        GUILayout.Label($"HP: {entity.GetStat(Stats.CurrentHealth).statValue}/{entity.GetStat(Stats.Health).statValue}");
+        EditorGUILayout.BeginVertical("box", GUILayout.Width(150));
 
-        EditorGUILayout.BeginHorizontal();
-        if (GUILayout.Button("Take 10 DMG"))
+        EditorGUILayout.LabelField(entity.name, EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("HP: " + entity.GetStat(Stats.CurrentHealth).statValue + "/" + entity.GetStat(Stats.Health).statValue);
+        EditorGUILayout.LabelField("Mana: " + entity.GetStat(Stats.CurrentMana).statValue);
+        EditorGUILayout.LabelField("Status: " + (entity.isAlive ? (entity.hasActed ? "Acted" : "Ready") : "Dead"));
+
+        GUI.enabled = entity.isAlive;
+        if (GUILayout.Button("Damage 10"))
         {
             entity.TakeDamage(10);
-            actionLog += $"{entity.name} took 10 damage.\n";
         }
+
         if (GUILayout.Button("Heal 10"))
         {
             entity.HealEntity(10);
-            actionLog += $"{entity.name} healed 10 HP.\n";
         }
-        EditorGUILayout.EndHorizontal();
 
-        if (GUILayout.Button("Mark As Acted"))
+        if (GUILayout.Button("Set Acted"))
         {
             entity.hasActed = true;
-            actionLog += $"{entity.name} marked as acted.\n";
         }
 
-        if (GUILayout.Button("Kill Unit"))
+        if (GUILayout.Button("Reset Acted"))
         {
-            entity.TakeDamage(9999);
-            actionLog += $"{entity.name} was slain.\n";
+            entity.hasActed = false;
         }
 
+        GUI.enabled = true;
         EditorGUILayout.EndVertical();
     }
 }

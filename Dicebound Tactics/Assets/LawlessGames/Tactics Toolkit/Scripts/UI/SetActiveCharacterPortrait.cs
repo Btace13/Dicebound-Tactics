@@ -7,7 +7,7 @@ namespace TacticsToolkit
     {
         public void SetCharacterImage(GameObject activeCharacter)
         {
-            GetComponent<Image>().sprite = activeCharacter.GetComponent<SpriteRenderer>().sprite;
+            GetComponent<Image>().sprite = activeCharacter.GetComponent<Entity>().portrait;
         }
     }
 }

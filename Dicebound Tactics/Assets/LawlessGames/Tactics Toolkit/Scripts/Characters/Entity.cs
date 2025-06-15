@@ -11,6 +11,7 @@ namespace TacticsToolkit
     {
         [Header("Character Specific")]
         public List<AbilityContainer> abilitiesForUse;
+        public Sprite portrait;
 
         [Header("Level")]
         public int level;

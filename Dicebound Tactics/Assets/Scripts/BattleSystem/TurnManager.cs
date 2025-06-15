@@ -8,6 +8,9 @@ public class TurnManager : MonoBehaviour
   public List<CharacterManager> playerUnits = new List<CharacterManager>();
   public List<EnemyManager> enemyUnits = new List<EnemyManager>();
 
+  [Header("Events")]
+  public GameEventGameObject startNewTurn;
+
   private int currentPlayerIndex = 0;
   private int currentEnemyIndex = 0;
   public bool playerTurn = true;
@@ -35,6 +38,7 @@ public class TurnManager : MonoBehaviour
         if (unit != null && unit.isAlive)
         {
           unit.StartTurn();
+          startNewTurn.Raise(unit.gameObject);
           return;
         }
       }
@@ -54,6 +58,7 @@ public class TurnManager : MonoBehaviour
         if (unit != null && unit.isAlive)
         {
           unit.StartTurn();
+          startNewTurn.Raise(unit.gameObject);
           return;
         }
       }
