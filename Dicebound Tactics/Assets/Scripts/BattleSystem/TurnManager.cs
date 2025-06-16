@@ -107,7 +107,7 @@ public class TurnManager : MonoBehaviour
       {
           if (!character.isAlive) continue;
 
-          int diceRoll = Random.Range(1, 7);
+          int diceRoll = character.RollDice();
           int carriedOver = character.GetStat(Stats.CarriedOverActionPoints).statValue;
 
           int totalAP = diceRoll + carriedOver;

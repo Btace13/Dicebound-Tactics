@@ -241,6 +241,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: caf52369d36c6463fa64c52bb15a4dfc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  equippedDice: {fileID: 0}
   portrait: {fileID: 3229708652140166120, guid: 3e5c6627436f52749bd3a5b2d7b4ad79, type: 3}
   abilities:
   - {fileID: 11400000, guid: 71895a1f9982b4faebb510e4a913cd15, type: 2}
@@ -1596,6 +1597,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: caf52369d36c6463fa64c52bb15a4dfc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  equippedDice: {fileID: 0}
   portrait: {fileID: 876784968147787122, guid: 3e5c6627436f52749bd3a5b2d7b4ad79, type: 3}
   abilities:
   - {fileID: 11400000, guid: 71895a1f9982b4faebb510e4a913cd15, type: 2}
@@ -2103,6 +2105,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a67821d0ea4da545a4405a4a9cceb86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  equippedDice: {fileID: 11400000, guid: 13934ccd0cd1b4e7bb563bac2bcb4735, type: 2}
   portrait: {fileID: 3542127132570728493, guid: cc8cb170ff11da442bedd0e9e3be0e9a, type: 3}
   abilities:
   - {fileID: 11400000, guid: 71895a1f9982b4faebb510e4a913cd15, type: 2}
@@ -3082,6 +3085,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a67821d0ea4da545a4405a4a9cceb86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  equippedDice: {fileID: 11400000, guid: 13934ccd0cd1b4e7bb563bac2bcb4735, type: 2}
   portrait: {fileID: 8248543377919322394, guid: cc8cb170ff11da442bedd0e9e3be0e9a, type: 3}
   abilities:
   - {fileID: 11400000, guid: 71895a1f9982b4faebb510e4a913cd15, type: 2}
@@ -3519,6 +3523,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: caf52369d36c6463fa64c52bb15a4dfc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  equippedDice: {fileID: 0}
   portrait: {fileID: 2731795287329381114, guid: 3e5c6627436f52749bd3a5b2d7b4ad79, type: 3}
   abilities:
   - {fileID: 11400000, guid: 71895a1f9982b4faebb510e4a913cd15, type: 2}
@@ -4222,6 +4227,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a67821d0ea4da545a4405a4a9cceb86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  equippedDice: {fileID: 11400000, guid: 13934ccd0cd1b4e7bb563bac2bcb4735, type: 2}
   portrait: {fileID: -1960546628078278901, guid: cc8cb170ff11da442bedd0e9e3be0e9a, type: 3}
   abilities:
   - {fileID: 11400000, guid: 71895a1f9982b4faebb510e4a913cd15, type: 2}

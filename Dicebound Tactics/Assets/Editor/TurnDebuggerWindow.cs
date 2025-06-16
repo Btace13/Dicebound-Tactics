@@ -110,6 +110,28 @@ public class TurnDebuggerWindow : EditorWindow
         EditorGUILayout.LabelField("Rollover AP: " + entity.GetStat(Stats.CarriedOverActionPoints).statValue);
         EditorGUILayout.LabelField("Alive: " + (entity.isAlive ? "Yes" : "No"));
         EditorGUILayout.Space();
+        if (entity.equippedDice != null)
+        {
+            EditorGUILayout.LabelField("Dice Sides:");
+            for (int i = 0; i < entity.equippedDice.sides.Count; i++)
+            {
+                var side = entity.equippedDice.sides[i];
+                string label = $"[{i + 1}] Value: {side.value}";
+                if (side.modifier != null)
+                    label += $" | {side.modifier.modifierName}";
+
+                EditorGUILayout.LabelField(label);
+            }
+
+            if (GUILayout.Button("Roll Dice"))
+            {
+                int amount = entity.RollDice();
+                entity.statsContainer.ActionPoints.statValue = amount;
+                Debug.Log($"{entity.name} rolled: {amount} AP");
+            }
+        }
+
+        EditorGUILayout.Space();
 
         if (entity.abilities != null && entity.abilities.Count > 0)
         {
@@ -139,7 +161,7 @@ public class TurnDebuggerWindow : EditorWindow
                     }
                 }
             }
-            GUI.enabled = true; 
+            GUI.enabled = true;
         }
 
         EditorGUILayout.Space();

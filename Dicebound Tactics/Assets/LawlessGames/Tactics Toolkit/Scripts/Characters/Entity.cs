@@ -9,8 +9,10 @@ namespace TacticsToolkit
     public class Entity : MonoBehaviour
     {
         [Header("Character Specific")]
+        public Dice equippedDice;
         public List<AbilityContainer> abilitiesForUse;
         public Sprite portrait;
+        public int CurrentAP => statsContainer.ActionPoints.statValue;
 
         [Header("Abilities")]
         public List<AbilitySO> abilities = new();
@@ -425,6 +427,17 @@ namespace TacticsToolkit
             {
                 Debug.LogWarning("Not enough Action Points to perform this action.");
             }
+        }
+
+        public int RollDice()
+        {
+            if (equippedDice == null)
+            {
+                Debug.LogError("Character Dice is not assigned for " + name);
+                return 0;
+            }
+
+            return equippedDice.Roll().value;
         }
     }
 }
