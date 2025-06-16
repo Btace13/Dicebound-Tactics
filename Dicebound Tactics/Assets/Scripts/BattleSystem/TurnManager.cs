@@ -18,21 +18,10 @@ public class TurnManager : MonoBehaviour
   private int currentEnemyIndex = 0;
   private Entity currentUnit;
 
-  public void StartBattle()
-  {
-    currentPlayerIndex = 0;
-    currentEnemyIndex = 0;
-    playerTurn = true;
-    GameIsPlaying = true;
-    BeginPlayerTurn();
-    StartNextTurn();
-  }
-
-  private void StartNextTurn()
+  private void Update()
   {
     if (!GameIsPlaying)
     {
-      Debug.Log("Game is not currently playing. Cannot start next turn.");
       return;
     }
 
@@ -53,6 +42,25 @@ public class TurnManager : MonoBehaviour
       Debug.Log("All player units defeated! Player loses!");
       GameIsPlaying = false;
       GameEnded.Raise();
+      return;
+    }
+  }
+
+  public void StartBattle()
+  {
+    currentPlayerIndex = 0;
+    currentEnemyIndex = 0;
+    playerTurn = true;
+    GameIsPlaying = true;
+    BeginPlayerTurn();
+    StartNextTurn();
+  }
+
+  private void StartNextTurn()
+  {
+    if (!GameIsPlaying)
+    {
+      Debug.Log("Game is not currently playing. Cannot start next turn.");
       return;
     }
 
@@ -89,6 +97,12 @@ public class TurnManager : MonoBehaviour
           unit.StartTurn();
           startNewTurn.Raise(unit.gameObject);
           currentUnit = unit;
+
+          if (unit != null)
+          {
+              unit.BeginAITurn();
+          }
+
           return;
         }
       }
@@ -118,7 +132,18 @@ public class TurnManager : MonoBehaviour
           Debug.Log($"{character.name} rolled a {diceRoll} and now has {totalAP} AP.");
       }
 
-      // Call any other logic to start character actions
+      foreach (var enemy in enemyUnits)
+      {
+          if (!enemy.isAlive) continue;
+
+          int diceRoll = enemy.RollDice();
+          int carriedOver = enemy.GetStat(Stats.CarriedOverActionPoints).statValue;
+
+          int totalAP = diceRoll + carriedOver;
+
+          enemy.statsContainer.ActionPoints.statValue = totalAP;
+          enemy.statsContainer.CarriedOverActionPoints.statValue = 0;
+      }
   }
 
   public void EndCharacterTurn(Entity character)
