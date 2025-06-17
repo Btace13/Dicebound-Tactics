@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CustomBlends:
   - From: CombatMenuCamera1
-    To: CombatMenuCamera2
+    To: '**ANY CAMERA**'
     Blend:
       Style: 4
       Time: 0.35
@@ -25,7 +25,18 @@ MonoBehaviour:
         m_PostInfinity: 0
         m_RotationOrder: 0
   - From: CombatMenuCamera2
-    To: ItemMenuCamera
+    To: '**ANY CAMERA**'
+    Blend:
+      Style: 4
+      Time: 0.35
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+  - From: ItemMenuCamera
+    To: '**ANY CAMERA**'
     Blend:
       Style: 4
       Time: 0.35

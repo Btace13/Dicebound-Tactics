@@ -4,7 +4,7 @@ using DG.Tweening;
 public class CombatUIHandler : MonoBehaviour
 {
     [SerializeField] private float _fadeDuration = 0.5f;
-
+    [SerializeField] private Vector3 _canvasOffset = new Vector3(0.25f, 0.5f, 0); // Offset for the canvas position
 
     [SerializeField] private CombatPanel currentPanel;
     public CombatPanel CurrentPanel
@@ -39,7 +39,7 @@ public class CombatUIHandler : MonoBehaviour
             return;
         }
 
-        Vector3 targetPosition = target.position;
+        Vector3 targetPosition = target.position + _canvasOffset;
 
         currentPanel.FadeOutCanvas(() =>
         {
