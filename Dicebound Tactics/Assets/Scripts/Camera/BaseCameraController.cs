@@ -14,10 +14,7 @@ public class BaseCameraController : MonoBehaviour, ICameraController
     protected virtual void Awake()
     {
         CinemachineCam = GetComponent<CinemachineCamera>();
-    }
 
-    protected virtual void Start()
-    {
         if (CameraManager.Instance != null)
         {
             CameraManager.Instance.RegisterCamera(CameraName, this);
