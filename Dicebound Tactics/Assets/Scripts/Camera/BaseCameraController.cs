@@ -11,7 +11,7 @@ public class BaseCameraController : MonoBehaviour, ICameraController
 
     protected Tween _moveTween;
 
-    protected virtual void Awake()
+    protected virtual void Start()
     {
         CinemachineCam = GetComponent<CinemachineCamera>();
 

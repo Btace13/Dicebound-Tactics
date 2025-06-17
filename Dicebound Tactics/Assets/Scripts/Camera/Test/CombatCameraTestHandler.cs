@@ -18,7 +18,8 @@ public class CombatCameraTestHandler : MonoBehaviour
     private int currentTargetIndex = 0;
     private int currentActiveCharacterIndex = 0;
 
-    private void Start()
+    [Button("Start Combat Camera Test", ButtonSizes.Medium, ButtonStyle.CompactBox)]
+    public void StartCombatCameraTest()
     {
         if (activeCharacters.Count > 0)
         {
@@ -37,6 +38,8 @@ public class CombatCameraTestHandler : MonoBehaviour
         {
             Debug.LogWarning("No targets set in CombatCameraTestHandler.");
         }
+
+        CameraManager.Instance.TrySetActiveCamera("CombatMenuCamera1");
     }
 
     public void SetTarget(int index)

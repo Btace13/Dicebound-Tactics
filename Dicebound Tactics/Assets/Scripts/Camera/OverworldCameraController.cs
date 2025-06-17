@@ -14,9 +14,9 @@ public class OverworldCameraController : BaseCameraController
     private float _currentZoomLevel;
     private CinemachinePositionComposer _positionTransposer;
 
-    protected override void Awake()
+    protected override void Start()
     {
-        base.Awake();
+        base.Start();
         _cameraName = "OverworldCamera";
 
         if (CinemachineCam != null)

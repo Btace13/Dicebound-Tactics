@@ -61,6 +61,8 @@ public class CameraManager : MonoBehaviour
 
     public void RegisterCamera(string cameraName, ICameraController cameraController)
     {
+        print($"Attempting to register camera: {cameraName}");
+
         if (!Cameras.ContainsKey(cameraName))
         {
             Cameras.Add(cameraName, cameraController);

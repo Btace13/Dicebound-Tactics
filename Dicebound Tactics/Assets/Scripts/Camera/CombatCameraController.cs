@@ -9,10 +9,9 @@ public class CombatCameraController : BaseCameraController
     public Transform FollowTarget { get; set; }
 
 
-    protected override void Awake()
+    protected override void Start()
     {
-        base.Awake();
-        _cameraName = "CombatCamera";
+        base.Start();
 
         CreateTargetGroup();
     }
@@ -23,7 +22,7 @@ public class CombatCameraController : BaseCameraController
         GameObject targetGroupObj = new GameObject($"{_cameraName}TargetGroup");
 
         _targetGroup = targetGroupObj.AddComponent<CinemachineTargetGroup>();
-        ;
+
         if (CinemachineCam != null)
         {
             CinemachineCam.LookAt = _targetGroup.transform;
