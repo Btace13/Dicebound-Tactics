@@ -37,9 +37,9 @@ public class CameraManager : MonoBehaviour
 {
     public static CameraManager Instance { get; private set; }
 
-    public ICameraController ActiveCamera { get; private set; }
+    public BaseCameraController ActiveCamera { get; private set; }
 
-    public UDictionary<string, ICameraController> Cameras = new UDictionary<string, ICameraController>();
+    public UDictionary<string, BaseCameraController> Cameras = new UDictionary<string, BaseCameraController>();
 
     private Dictionary<string, CameraState> _cameraStates = new Dictionary<string, CameraState>();
 
@@ -59,7 +59,7 @@ public class CameraManager : MonoBehaviour
         }
     }
 
-    public void RegisterCamera(string cameraName, ICameraController cameraController)
+    public void RegisterCamera(string cameraName, BaseCameraController cameraController)
     {
         print($"Attempting to register camera: {cameraName}");
 
@@ -90,7 +90,7 @@ public class CameraManager : MonoBehaviour
         }
     }
 
-    public void SetActiveCamera(ICameraController cameraController)
+    public void SetActiveCamera(BaseCameraController cameraController)
     {
         // Implementation to set the active camera
         foreach (var cam in Cameras.Values)
@@ -108,14 +108,14 @@ public class CameraManager : MonoBehaviour
         ActiveCamera = cameraController;
     }
 
-    public ICameraController GetActiveCamera()
+    public BaseCameraController GetActiveCamera()
     {
         return ActiveCamera;
     }
 
     public void TransitionToCamera(string cameraName, float blendTime = 0.5f)
     {
-        if (Cameras.TryGetValue(cameraName, out ICameraController camera))
+        if (Cameras.TryGetValue(cameraName, out BaseCameraController camera))
         {
             // Set this camera to high priority and others to lower priority
             foreach (var cam in Cameras.Values)
@@ -133,7 +133,7 @@ public class CameraManager : MonoBehaviour
 
     public void ShakeCamera(string cameraName, float intensity = 1f, float duration = 0.5f)
     {
-        if (Cameras.TryGetValue(cameraName, out ICameraController camera))
+        if (Cameras.TryGetValue(cameraName, out BaseCameraController camera))
         {
             if (camera.CinemachineCam == null)
             {
@@ -159,7 +159,7 @@ public class CameraManager : MonoBehaviour
 
     public void SaveCameraState(string cameraName, string stateId)
     {
-        if (Cameras.TryGetValue(cameraName, out ICameraController camera))
+        if (Cameras.TryGetValue(cameraName, out BaseCameraController camera))
         {
             // Store position, rotation, zoom level, etc.
             _cameraStates[stateId] = new CameraState(
@@ -173,7 +173,7 @@ public class CameraManager : MonoBehaviour
 
     public void RestoreCameraState(string cameraName, string stateId, float blendTime = 0.5f)
     {
-        if (Cameras.TryGetValue(cameraName, out ICameraController camera) &&
+        if (Cameras.TryGetValue(cameraName, out BaseCameraController camera) &&
             _cameraStates.TryGetValue(stateId, out CameraState state))
         {
             // Restore the saved state with appropriate blending
@@ -191,7 +191,7 @@ public class CameraManager : MonoBehaviour
 
     public void FrameCamera(string cameraName, CameraFramingOptions framingOption)
     {
-        if (Cameras.TryGetValue(cameraName, out ICameraController camera))
+        if (Cameras.TryGetValue(cameraName, out BaseCameraController camera))
         {
             CinemachineRotationComposer composer = camera.CinemachineCam.GetComponent<CinemachineRotationComposer>();
             if (composer == null)
