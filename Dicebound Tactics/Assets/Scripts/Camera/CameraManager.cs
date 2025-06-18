@@ -46,6 +46,9 @@ public class CameraManager : MonoBehaviour
     const int DefaultCameraPriority = 10;
     const int HighCameraPriority = 20;
 
+    public Transform activeCharacter { get; private set; }
+    public Transform activeTarget { get; private set; }
+
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -106,6 +109,16 @@ public class CameraManager : MonoBehaviour
         }
 
         ActiveCamera = cameraController;
+
+        if (activeCharacter != null)
+        {
+            SetActiveCombatCharacter(activeCharacter);
+        }
+
+        if (activeTarget != null)
+        {
+            SetCombatTarget(activeTarget);
+        }
     }
 
     public BaseCameraController GetActiveCamera()
@@ -282,6 +295,13 @@ public class CameraManager : MonoBehaviour
         {
             Debug.LogWarning("No active camera to set target for.");
         }
+
+        activeTarget = target;
+    }
+
+    public void SetCombatTarget(GameObject targetObject)
+    {
+        SetCombatTarget(targetObject.transform);
     }
 
     public void SetActiveCombatCharacter(Transform character)
@@ -311,5 +331,12 @@ public class CameraManager : MonoBehaviour
         {
             Debug.LogWarning("No active camera to set active character for.");
         }
+
+        activeCharacter = character;
+    }
+
+    public void SetActiveCombatCharacter(GameObject characterObject)
+    {
+        SetActiveCombatCharacter(characterObject.transform);
     }
 }

@@ -8,8 +8,8 @@ using UnityEngine.Events;
 public class CombatCameraTestHandler : MonoBehaviour
 {
     [Header("Scene References")]
-    [SerializeField] List<Transform> targets = new List<Transform>();
-    [SerializeField] List<Transform> activeCharacters = new List<Transform>();
+    [SerializeField] List<EnemyManager> targets = new List<EnemyManager>();
+    [SerializeField] List<CharacterManager> activeCharacters = new List<CharacterManager>();
 
     [Header("Event Handlers")]
     public UnityEvent<Transform> OnTargetChanged;
@@ -17,6 +17,10 @@ public class CombatCameraTestHandler : MonoBehaviour
 
     private int currentTargetIndex = 0;
     private int currentActiveCharacterIndex = 0;
+
+    public CharacterManager CurrentActiveCharacter => activeCharacters[currentActiveCharacterIndex];
+    public EnemyManager CurrentTarget => targets[currentTargetIndex];
+
 
     [Button("Start Combat Camera Test", ButtonSizes.Medium, ButtonStyle.CompactBox)]
     public void StartCombatCameraTest()
@@ -52,7 +56,7 @@ public class CombatCameraTestHandler : MonoBehaviour
 
         currentTargetIndex = index;
 
-        OnTargetChanged?.Invoke(targets[currentTargetIndex]);
+        OnTargetChanged?.Invoke(targets[currentTargetIndex].transform);
     }
 
     public void SetActiveCharacter(int index)
@@ -64,7 +68,7 @@ public class CombatCameraTestHandler : MonoBehaviour
         }
         currentActiveCharacterIndex = index;
 
-        OnActiveCharacterChanged?.Invoke(activeCharacters[currentActiveCharacterIndex]);
+        OnActiveCharacterChanged?.Invoke(activeCharacters[currentActiveCharacterIndex].transform);
     }
 
     [Button("Previous Target", ButtonSizes.Medium, ButtonStyle.CompactBox)]

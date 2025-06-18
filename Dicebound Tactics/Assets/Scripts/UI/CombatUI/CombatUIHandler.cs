@@ -1,5 +1,6 @@
 using UnityEngine;
 using DG.Tweening;
+using TacticsToolkit;
 
 public class CombatUIHandler : MonoBehaviour
 {
@@ -23,6 +24,11 @@ public class CombatUIHandler : MonoBehaviour
         }
     }
 
+    [Header("Panel References")]
+    public ActionPanel ActionPanel;
+    public AbilityPanel AbilityPanel;
+    public ItemPanel ItemPanel;
+
     private void Awake()
     {
         if (currentPanel == null)
@@ -31,11 +37,32 @@ public class CombatUIHandler : MonoBehaviour
         }
     }
 
+    public void MoveCanvasToGameObject(GameObject target)
+    {
+        MoveCanvasToTarget(target.transform);
+    }
+
     public void MoveCanvasToTarget(Transform target)
     {
         if (currentPanel == null || target == null)
         {
             Debug.LogError("Current Panel or target is not set.");
+            return;
+        }
+
+        // Check if the target is a CharacterManager
+        // If it is, populate the AbilityPanel with the character's abilities
+        if (target.TryGetComponent(out CharacterManager character))
+        {
+            if (AbilityPanel != null)
+            {
+                AbilityPanel.PopulateAbilityPanel(character);
+            }
+            else
+            {
+                Debug.LogError("AbilityPanel is not set in CombatUIHandler.");
+            }
+
             return;
         }
 

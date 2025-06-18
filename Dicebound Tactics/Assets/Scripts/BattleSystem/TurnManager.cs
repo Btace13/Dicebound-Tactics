@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TacticsToolkit;
+using Sirenix.OdinInspector;
 
 public class TurnManager : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class TurnManager : MonoBehaviour
   public bool playerTurn = true;
 
   [Header("Events")]
+  public GameEvent BattleStarted;
   public GameEventGameObject startNewTurn;
   public GameEvent GameEnded;
 
@@ -46,12 +48,17 @@ public class TurnManager : MonoBehaviour
     }
   }
 
+  [Button("Start Battle", ButtonSizes.Medium, ButtonStyle.CompactBox)]
   public void StartBattle()
   {
     currentPlayerIndex = 0;
     currentEnemyIndex = 0;
     playerTurn = true;
     GameIsPlaying = true;
+
+    BattleStarted?.Raise();
+    Debug.Log("Battle started!");
+
     BeginPlayerTurn();
     StartNextTurn();
   }
@@ -100,7 +107,7 @@ public class TurnManager : MonoBehaviour
 
           if (unit != null)
           {
-              unit.BeginAITurn();
+            unit.BeginAITurn();
           }
 
           return;
@@ -117,40 +124,40 @@ public class TurnManager : MonoBehaviour
 
   private void BeginPlayerTurn()
   {
-      foreach (var character in playerUnits)
-      {
-          if (!character.isAlive) continue;
+    foreach (var character in playerUnits)
+    {
+      if (!character.isAlive) continue;
 
-          int diceRoll = character.RollDice();
-          int carriedOver = character.GetStat(Stats.CarriedOverActionPoints).statValue;
+      int diceRoll = character.RollDice();
+      int carriedOver = character.GetStat(Stats.CarriedOverActionPoints).statValue;
 
-          int totalAP = diceRoll + carriedOver;
+      int totalAP = diceRoll + carriedOver;
 
-          character.statsContainer.ActionPoints.statValue = totalAP;
-          character.statsContainer.CarriedOverActionPoints.statValue = 0;
+      character.statsContainer.ActionPoints.statValue = totalAP;
+      character.statsContainer.CarriedOverActionPoints.statValue = 0;
 
-          Debug.Log($"{character.name} rolled a {diceRoll} and now has {totalAP} AP.");
-      }
+      Debug.Log($"{character.name} rolled a {diceRoll} and now has {totalAP} AP.");
+    }
 
-      foreach (var enemy in enemyUnits)
-      {
-          if (!enemy.isAlive) continue;
+    foreach (var enemy in enemyUnits)
+    {
+      if (!enemy.isAlive) continue;
 
-          int diceRoll = enemy.RollDice();
-          int carriedOver = enemy.GetStat(Stats.CarriedOverActionPoints).statValue;
+      int diceRoll = enemy.RollDice();
+      int carriedOver = enemy.GetStat(Stats.CarriedOverActionPoints).statValue;
 
-          int totalAP = diceRoll + carriedOver;
+      int totalAP = diceRoll + carriedOver;
 
-          enemy.statsContainer.ActionPoints.statValue = totalAP;
-          enemy.statsContainer.CarriedOverActionPoints.statValue = 0;
-      }
+      enemy.statsContainer.ActionPoints.statValue = totalAP;
+      enemy.statsContainer.CarriedOverActionPoints.statValue = 0;
+    }
   }
 
   public void EndCharacterTurn(Entity character)
   {
-      int leftover = character.GetStat(Stats.ActionPoints).statValue;
-      character.statsContainer.CarriedOverActionPoints.statValue = leftover;
-      character.statsContainer.ActionPoints.statValue = 0;
+    int leftover = character.GetStat(Stats.ActionPoints).statValue;
+    character.statsContainer.CarriedOverActionPoints.statValue = leftover;
+    character.statsContainer.ActionPoints.statValue = 0;
   }
 
   public void EndTurn()
@@ -158,6 +165,7 @@ public class TurnManager : MonoBehaviour
     StartNextTurn();
   }
 
+  [Button("Reset Battle", ButtonSizes.Medium, ButtonStyle.CompactBox)]
   public void ResetBattle()
   {
     currentPlayerIndex = 0;

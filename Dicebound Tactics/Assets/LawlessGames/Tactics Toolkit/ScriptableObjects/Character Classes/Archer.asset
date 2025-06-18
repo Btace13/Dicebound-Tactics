@@ -172,4 +172,5 @@ MonoBehaviour:
       m_RotationOrder: 4
   MoveRange: 4
   AttackRange: 3
-  abilities: []
+  abilities:
+  - {fileID: 11400000, guid: 78833d6594003ad46881698b841a1fd5, type: 2}
