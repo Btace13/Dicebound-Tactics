@@ -3,6 +3,8 @@ using UnityEngine;
 using Unity.Cinemachine;
 using DG.Tweening;
 using Unity.VisualScripting;
+using System.Linq;
+using TacticsToolkit;
 
 // Camera state class to store camera position data
 public class CameraState
@@ -118,29 +120,6 @@ public class CameraManager : MonoBehaviour
         if (activeTarget != null)
         {
             SetCombatTarget(activeTarget);
-        }
-    }
-
-    public BaseCameraController GetActiveCamera()
-    {
-        return ActiveCamera;
-    }
-
-    public void TransitionToCamera(string cameraName, float blendTime = 0.5f)
-    {
-        if (Cameras.TryGetValue(cameraName, out BaseCameraController camera))
-        {
-            // Set this camera to high priority and others to lower priority
-            foreach (var cam in Cameras.Values)
-            {
-                cam.SetCameraPriority(cam == camera ? 20 : 10);
-            }
-
-            // Could also use custom blending profiles or handle special transitions
-        }
-        else
-        {
-            Debug.LogWarning($"Camera {cameraName} not found in CameraManager");
         }
     }
 
@@ -266,9 +245,8 @@ public class CameraManager : MonoBehaviour
 
     public void SetCombatTarget(Transform target)
     {
-        if (ActiveCamera != null)
+        foreach (CombatCameraController combatCameraController in Cameras.Values.OfType<CombatCameraController>())
         {
-            CombatCameraController combatCameraController = ActiveCamera as CombatCameraController;
             if (combatCameraController == null)
             {
                 Debug.LogWarning("Active camera is not a CombatCameraController.");
@@ -281,37 +259,43 @@ public class CameraManager : MonoBehaviour
                 return;
             }
 
-            if (combatCameraController.TargetGroup.Targets.Count == 1)
+            if (combatCameraController.cameraTarget == CameraTarget.ActivePlayer)
             {
-                combatCameraController.AddTarget(target);
+                Debug.LogWarning("Camera target is set to ActivePlayer. Cannot set target.");
+                return;
             }
-            else
-            {
-                // Update the first target in the group
-                combatCameraController.UpdateTargetAtIndex(target, 1);
-            }
-        }
-        else
-        {
-            Debug.LogWarning("No active camera to set target for.");
+
+            combatCameraController.TargetGroup.Targets.Clear();
+            combatCameraController.AddTarget(target);
         }
 
         activeTarget = target;
     }
 
-    public void SetCombatTarget(GameObject targetObject)
+    public void SetCombatTarget(Entity targetEntity)
     {
-        SetCombatTarget(targetObject.transform);
+        SetCombatTarget(targetEntity.transform);
     }
 
     public void SetActiveCombatCharacter(Transform character)
     {
-        if (ActiveCamera != null)
+        foreach (CombatCameraController combatCamera in Cameras.Values.OfType<CombatCameraController>())
         {
-            CombatCameraController combatCamera = ActiveCamera as CombatCameraController;
             if (combatCamera == null)
             {
                 Debug.LogWarning("Active camera is not a CombatCameraController.");
+                return;
+            }
+
+            if (combatCamera.TargetGroup == null)
+            {
+                Debug.LogError("Target group is not initialized in CombatCameraController.");
+                return;
+            }
+
+            if (combatCamera.cameraTarget == CameraTarget.Target)
+            {
+                Debug.LogWarning("Camera target is set to Target. Cannot set active character.");
                 return;
             }
 
@@ -326,10 +310,6 @@ public class CameraManager : MonoBehaviour
             }
 
             combatCamera.UpdateFollowTarget(character);
-        }
-        else
-        {
-            Debug.LogWarning("No active camera to set active character for.");
         }
 
         activeCharacter = character;

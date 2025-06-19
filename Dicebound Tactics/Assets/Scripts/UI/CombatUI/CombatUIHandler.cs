@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using DG.Tweening;
 using TacticsToolkit;
 
@@ -36,6 +37,7 @@ public class CombatUIHandler : MonoBehaviour
     [Header("Screen Space UI References")]
     [SerializeField] private CanvasGroup screenSpaceCanvasGroup;
     [SerializeField] private CanvasGroup panelInputsCanvasGroup;
+    [SerializeField] private Button confirmButton;
 
     private void Awake()
     {
@@ -138,17 +140,37 @@ public class CombatUIHandler : MonoBehaviour
 
         // if the panel you're returning to has no previous panel,
         // hide the screen space inputs
-        if (currentPanel.PreviousPanel.PreviousPanel == null)
+        if (currentPanel.PreviousPanel == null || currentPanel.PreviousPanel.PreviousPanel == null)
         {
             ShowScreenSpacePanelInputs(false);
         }
 
         currentPanel.FadeOutCanvas(() =>
         {
-            if (currentPanel != null)
+            if (currentPanel.PreviousPanel != null)
             {
                 OpenPanel(currentPanel.PreviousPanel);
             }
+            else
+            {
+                currentPanel = null;
+            }
+
+        }, _fadeDuration, Ease.InOutQuad);
+    }
+
+    public void CloseAllPanels()
+    {
+        if (currentPanel == null)
+        {
+            Debug.LogError("No current panel to close.");
+            return;
+        }
+
+        currentPanel.FadeOutCanvas(() =>
+        {
+            currentPanel = null;
+            ShowScreenSpacePanelInputs(false);
         }, _fadeDuration, Ease.InOutQuad);
     }
 
@@ -174,5 +196,22 @@ public class CombatUIHandler : MonoBehaviour
                     panelInputsCanvasGroup.blocksRaycasts = false;
                 }
             });
+    }
+
+    public void ShowConfirmButton(bool enable)
+    {
+        if (confirmButton == null)
+        {
+            Debug.LogError("Confirm Button is not set.");
+            return;
+        }
+
+        if (enable && panelInputsCanvasGroup.alpha < 1)
+        {
+            // Ensure the panel inputs are visible before showing the confirm button
+            ShowScreenSpacePanelInputs(true);
+        }
+
+        confirmButton.gameObject.SetActive(enable);
     }
 }

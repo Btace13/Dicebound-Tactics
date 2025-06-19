@@ -1,6 +1,13 @@
 using UnityEngine;
 using Unity.Cinemachine;
 
+public enum CameraTarget
+{
+    ActivePlayer = 0,
+    Target = 1,
+    Both = 2
+}
+
 public class CombatCameraController : BaseCameraController
 {
     protected CinemachineTargetGroup _targetGroup;
@@ -8,6 +15,8 @@ public class CombatCameraController : BaseCameraController
 
     public Transform FollowTarget { get; set; }
 
+    [Header("Camera Target Settings")]
+    public CameraTarget cameraTarget = CameraTarget.ActivePlayer;
 
     protected override void Start()
     {
@@ -26,6 +35,7 @@ public class CombatCameraController : BaseCameraController
         if (CinemachineCam != null)
         {
             CinemachineCam.LookAt = _targetGroup.transform;
+            CinemachineCam.Follow = _targetGroup.transform;
         }
     }
 

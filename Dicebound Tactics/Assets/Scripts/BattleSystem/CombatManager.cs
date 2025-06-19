@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using TacticsToolkit;
@@ -12,6 +13,9 @@ public class CombatManager : MonoBehaviour
     [Space(10)]
     [Header("Component References")]
     [SerializeField] private SelectionController selectionController;
+
+    [Header("Events")]
+    public GameEventEntity OnTargetSelected;
 
     public void SetActiveCharacterGameObject(GameObject character)
     {
@@ -69,6 +73,18 @@ public class CombatManager : MonoBehaviour
 
         CurrentActiveCharacter = character;
         Debug.Log($"Current active character set to: {CurrentActiveCharacter.name}");
+    }
+
+    public void BasicAttackSelected()
+    {
+        if (CurrentActiveCharacter == null)
+        {
+            Debug.LogError("No active character to use the basic attack.");
+            return;
+        }
+
+        selectionController.ChangeSelectionType(true);
+        selectionController.SetSelectableTargetCount(Math.Max(1, CurrentTargets.Count));
     }
 
     public void AbilitySelected(Ability ability)
