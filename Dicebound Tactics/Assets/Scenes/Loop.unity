@@ -1473,7 +1473,7 @@ MonoBehaviour:
   canUseMouseSelection: 0
   onEntitySelected: {fileID: 0}
   SelectedEntities: []
-  numberOfSelectableTargets: 2
+  numberOfSelectableTargets: 1
   cyclingEnemies: 1
 --- !u!4 &743866053
 Transform:
