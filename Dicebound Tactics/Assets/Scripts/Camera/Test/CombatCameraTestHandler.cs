@@ -13,7 +13,7 @@ public class CombatCameraTestHandler : MonoBehaviour
 
     [Header("Event Handlers")]
     public UnityEvent<Transform> OnTargetChanged;
-    public UnityEvent<Transform> OnActiveCharacterChanged;
+    public GameEventGameObject OnActiveCharacterChanged;
 
     private int currentTargetIndex = 0;
     private int currentActiveCharacterIndex = 0;
@@ -68,7 +68,7 @@ public class CombatCameraTestHandler : MonoBehaviour
         }
         currentActiveCharacterIndex = index;
 
-        OnActiveCharacterChanged?.Invoke(activeCharacters[currentActiveCharacterIndex].transform);
+        OnActiveCharacterChanged?.Raise(activeCharacters[currentActiveCharacterIndex].gameObject);
     }
 
     [Button("Previous Target", ButtonSizes.Medium, ButtonStyle.CompactBox)]

@@ -17,6 +17,10 @@ namespace TacticsToolkit
         [Header("Abilities")]
         public List<AbilitySO> abilities = new();
 
+        [Header("Inventory")]
+        public Inventory inventory;
+        public List<CombatItem> combatItems => inventory.combatItems.Keys;
+
         [Header("Level")]
         public int level;
         public int experience = 0;
