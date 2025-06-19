@@ -79,12 +79,6 @@ public class CombatManager : MonoBehaviour
             return;
         }
 
-        if (CurrentTargets == null || CurrentTargets.Count == 0)
-        {
-            Debug.LogError("No targets selected for the ability.");
-            return;
-        }
-
         if (selectionController == null)
         {
             Debug.LogError("SelectionController is not assigned.");
@@ -109,12 +103,6 @@ public class CombatManager : MonoBehaviour
         if (CurrentActiveCharacter == null)
         {
             Debug.LogError("No active character to use the item.");
-            return;
-        }
-
-        if (CurrentTargets == null || CurrentTargets.Count == 0)
-        {
-            Debug.LogError("No targets selected for the item.");
             return;
         }
 

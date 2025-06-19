@@ -24,6 +24,10 @@ public class CombatUIHandler : MonoBehaviour
         }
     }
 
+    [Header("Camera Settings")]
+    [SerializeField] private CameraManager cameraManager;
+    [SerializeField] private UDictionary<CombatPanel, string> PanelCameras = new UDictionary<CombatPanel, string>();
+
     [Header("Panel References")]
     public ActionPanel ActionPanel;
     public AbilityPanel AbilityPanel;
@@ -54,6 +58,8 @@ public class CombatUIHandler : MonoBehaviour
             return;
         }
 
+        print($"Moving canvas to target: {target.name}");
+
         // Check if the target is a CharacterManager
         // If it is, populate the AbilityPanel with the character's abilities
         if (target.TryGetComponent(out CharacterManager character))
@@ -75,20 +81,9 @@ public class CombatUIHandler : MonoBehaviour
             {
                 Debug.LogError("ItemPanel is not set in CombatUIHandler.");
             }
-
-            return;
         }
 
-        Vector3 targetPosition = target.position + _canvasOffset;
-
-        currentPanel.FadeOutCanvas(() =>
-        {
-            // Move the canvas to the target position after fading out
-            transform.position = targetPosition;
-
-            // Fade in the canvas after moving
-            currentPanel.FadeInCanvas(null, _fadeDuration, Ease.InOutQuad);
-        }, _fadeDuration, Ease.InOutQuad);
+        transform.position = target.position + _canvasOffset;
     }
 
     public void OpenPanel(CombatPanel panel)
@@ -101,15 +96,35 @@ public class CombatUIHandler : MonoBehaviour
 
         if (currentPanel != null)
         {
-            // store the current panel as previous
-            panel.PreviousPanel = currentPanel;
-
             // Fade out the current panel before switching
             currentPanel.FadeOutCanvas(() =>
             {
+                CombatPanel previousPanel = currentPanel;
                 currentPanel = panel;
+                if (previousPanel != null && previousPanel != panel)
+                {
+                    currentPanel.PreviousPanel = previousPanel;
+                }
+
+                ShowScreenSpacePanelInputs(currentPanel.PreviousPanel != null);
                 currentPanel.FadeInCanvas(null, _fadeDuration, Ease.InOutQuad);
             }, _fadeDuration, Ease.InOutQuad);
+        }
+        else
+        {
+            ShowScreenSpacePanelInputs(false);
+        }
+
+        if (cameraManager)
+        {
+            if (PanelCameras.TryGetValue(panel, out string cameraName))
+            {
+                cameraManager.TrySetActiveCamera(cameraName);
+            }
+            else
+            {
+                Debug.LogError($"No camera found for panel: {panel.name}");
+            }
         }
     }
 
@@ -130,11 +145,9 @@ public class CombatUIHandler : MonoBehaviour
 
         currentPanel.FadeOutCanvas(() =>
         {
-
             if (currentPanel != null)
             {
-                currentPanel = currentPanel.PreviousPanel;
-                currentPanel.FadeInCanvas(null, _fadeDuration, Ease.InOutQuad);
+                OpenPanel(currentPanel.PreviousPanel);
             }
         }, _fadeDuration, Ease.InOutQuad);
     }

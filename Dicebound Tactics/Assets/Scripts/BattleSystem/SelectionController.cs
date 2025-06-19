@@ -144,9 +144,12 @@ public class SelectionController : MonoBehaviour
       }
 
       SelectedEntities.Add(entity);
-      var indicator = Instantiate(selectionIndicatorPrefab, entity.transform.position + Vector3.up * 1.5f, Quaternion.identity);
-      indicator.transform.SetParent(entity.transform);
-      indicators[entity] = indicator;
+      if (selectionIndicatorPrefab != null)
+      {
+        var indicator = Instantiate(selectionIndicatorPrefab, entity.transform.position + Vector3.up * 1.5f, Quaternion.identity);
+        indicator.transform.SetParent(entity.transform);
+        indicators[entity] = indicator;
+      }
       onEntitySelected?.Raise(entity);
     }
     else if (additive && SelectedEntities.Contains(entity))
