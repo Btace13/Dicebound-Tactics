@@ -1,11 +1,13 @@
 using UnityEngine;
 using DG.Tweening;
 using TacticsToolkit;
-using System.Collections.Generic; // Add this if not already imported for Ease type
+using System.Collections.Generic;
+using UnityEngine.Events; // Add this if not already imported for Ease type
 
 public class AbilityPanel : CombatPanel
 {
     [SerializeField] List<AbilityButton> abilityButtons = new List<AbilityButton>();
+    public UnityEvent<Ability> OnAbilitySelected;
 
     public void PopulateAbilityPanel(CharacterManager character)
     {
@@ -29,6 +31,7 @@ public class AbilityPanel : CombatPanel
             abilityButtons[i].SetupButton(abilityButtons[i].ability.Name, () =>
             {
                 print("Using ability: " + abilityButtons[i].ability.Name);
+                OnAbilitySelected?.Invoke(abilityButtons[i].ability);
             });
             abilityButtons[i].AnimateIn();
         }

@@ -8,8 +8,7 @@ using UnityEngine.Events;
 public class CombatCameraTestHandler : MonoBehaviour
 {
     [Header("Scene References")]
-    [SerializeField] List<EnemyManager> targets = new List<EnemyManager>();
-    [SerializeField] List<CharacterManager> activeCharacters = new List<CharacterManager>();
+    [SerializeField] private TurnManager turnManager;
 
     [Header("Event Handlers")]
     public UnityEvent<Transform> OnTargetChanged;
@@ -18,37 +17,12 @@ public class CombatCameraTestHandler : MonoBehaviour
     private int currentTargetIndex = 0;
     private int currentActiveCharacterIndex = 0;
 
-    public CharacterManager CurrentActiveCharacter => activeCharacters[currentActiveCharacterIndex];
-    public EnemyManager CurrentTarget => targets[currentTargetIndex];
-
-
-    [Button("Start Combat Camera Test", ButtonSizes.Medium, ButtonStyle.CompactBox)]
-    public void StartCombatCameraTest()
-    {
-        if (activeCharacters.Count > 0)
-        {
-            SetActiveCharacter(0);
-        }
-        else
-        {
-            Debug.LogWarning("No active characters set in CombatCameraTestHandler.");
-        }
-
-        if (targets.Count > 0)
-        {
-            SetTarget(0);
-        }
-        else
-        {
-            Debug.LogWarning("No targets set in CombatCameraTestHandler.");
-        }
-
-        CameraManager.Instance.TrySetActiveCamera("CombatMenuCamera1");
-    }
+    public CharacterManager CurrentActiveCharacter => turnManager.playerUnits[currentActiveCharacterIndex];
+    public EnemyManager CurrentTarget => turnManager.enemyUnits[currentTargetIndex];
 
     public void SetTarget(int index)
     {
-        if (index < 0 || index >= targets.Count)
+        if (index < 0 || index >= turnManager.enemyUnits.Count)
         {
             Debug.LogError("Index out of range for targets list.");
             return;
@@ -56,32 +30,32 @@ public class CombatCameraTestHandler : MonoBehaviour
 
         currentTargetIndex = index;
 
-        OnTargetChanged?.Invoke(targets[currentTargetIndex].transform);
+        OnTargetChanged?.Invoke(turnManager.enemyUnits[currentTargetIndex].transform);
     }
 
     public void SetActiveCharacter(int index)
     {
-        if (index < 0 || index >= activeCharacters.Count)
+        if (index < 0 || index >= turnManager.playerUnits.Count)
         {
             Debug.LogError("Index out of range for active characters list.");
             return;
         }
         currentActiveCharacterIndex = index;
 
-        OnActiveCharacterChanged?.Raise(activeCharacters[currentActiveCharacterIndex].gameObject);
+        OnActiveCharacterChanged?.Raise(turnManager.playerUnits[currentActiveCharacterIndex].gameObject);
     }
 
     [Button("Previous Target", ButtonSizes.Medium, ButtonStyle.CompactBox)]
     public void PreviousTarget()
     {
-        int previousIndex = (currentTargetIndex - 1 + targets.Count) % targets.Count;
+        int previousIndex = (currentTargetIndex - 1 + turnManager.enemyUnits.Count) % turnManager.enemyUnits.Count;
         SetTarget(previousIndex);
     }
 
     [Button("Next Target", ButtonSizes.Medium, ButtonStyle.CompactBox)]
     public void NextTarget()
     {
-        int nextIndex = (currentTargetIndex + 1) % targets.Count;
+        int nextIndex = (currentTargetIndex + 1) % turnManager.enemyUnits.Count;
         SetTarget(nextIndex);
     }
 
@@ -89,14 +63,14 @@ public class CombatCameraTestHandler : MonoBehaviour
     [Button("Previous Active Character", ButtonSizes.Medium, ButtonStyle.CompactBox)]
     public void PreviousActiveCharacter()
     {
-        int previousIndex = (currentActiveCharacterIndex - 1 + activeCharacters.Count) % activeCharacters.Count;
+        int previousIndex = (currentActiveCharacterIndex - 1 + turnManager.playerUnits.Count) % turnManager.playerUnits.Count;
         SetActiveCharacter(previousIndex);
     }
 
     [Button("Next Active Character", ButtonSizes.Medium, ButtonStyle.CompactBox)]
     public void NextActiveCharacter()
     {
-        int nextIndex = (currentActiveCharacterIndex + 1) % activeCharacters.Count;
+        int nextIndex = (currentActiveCharacterIndex + 1) % turnManager.playerUnits.Count;
         SetActiveCharacter(nextIndex);
     }
 }
