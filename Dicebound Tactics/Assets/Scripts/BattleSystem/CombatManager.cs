@@ -1,11 +1,35 @@
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using TacticsToolkit;
 using UnityEngine;
 
 public class CombatManager : MonoBehaviour
 {
-    public CharacterManager CurrentActiveCharacter { get; private set; }
-    public List<Entity> CurrentTargets { get; private set; } = new List<Entity>();
+    [Header("Combat State")]
+    [ShowInInspector, ReadOnly] public CharacterManager CurrentActiveCharacter;
+    [ShowInInspector, ReadOnly] public List<Entity> CurrentTargets = new List<Entity>();
+
+    [Space(10)]
+    [Header("Component References")]
+    [SerializeField] private SelectionController selectionController;
+
+    public void SetActiveCharacterGameObject(GameObject character)
+    {
+        if (character == null)
+        {
+            Debug.LogError("Character GameObject is null.");
+            return;
+        }
+
+        CharacterManager characterManager = character.GetComponent<CharacterManager>();
+        if (characterManager == null)
+        {
+            Debug.LogError("Character GameObject does not have a CharacterManager component.");
+            return;
+        }
+
+        SetActiveCharacter(characterManager);
+    }
 
     public void SetTarget(Entity target)
     {
@@ -60,6 +84,24 @@ public class CombatManager : MonoBehaviour
             Debug.LogError("No targets selected for the ability.");
             return;
         }
+
+        if (selectionController == null)
+        {
+            Debug.LogError("SelectionController is not assigned.");
+            return;
+        }
+
+        if (ability == null)
+        {
+            Debug.LogError("Ability is null.");
+            return;
+        }
+
+        // sets whether the ability is for allies or enemies
+        selectionController.ChangeSelectionType(ability.abilityType == Ability.AbilityTypes.Enemy);
+        // sets the number of targets the ability can hit, 
+        // TODO: need to implement logic for this
+        selectionController.SetSelectableTargetCount(1);
     }
 
     public void ItemSelected(CombatItem item)
@@ -76,6 +118,19 @@ public class CombatManager : MonoBehaviour
             return;
         }
 
-        // Implement item usage logic here
+        if (selectionController == null)
+        {
+            Debug.LogError("SelectionController is not assigned.");
+            return;
+        }
+
+        if (item == null)
+        {
+            Debug.LogError("Item is null.");
+            return;
+        }
+
+        selectionController.ChangeSelectionType(false); // Assuming items target allies
+        selectionController.SetSelectableTargetCount(1); // Assuming items can target one entity at a time
     }
 }

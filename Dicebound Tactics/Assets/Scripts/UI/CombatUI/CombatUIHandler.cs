@@ -29,6 +29,10 @@ public class CombatUIHandler : MonoBehaviour
     public AbilityPanel AbilityPanel;
     public ItemPanel ItemPanel;
 
+    [Header("Screen Space UI References")]
+    [SerializeField] private CanvasGroup screenSpaceCanvasGroup;
+    [SerializeField] private CanvasGroup panelInputsCanvasGroup;
+
     private void Awake()
     {
         if (currentPanel == null)
@@ -117,6 +121,13 @@ public class CombatUIHandler : MonoBehaviour
             return;
         }
 
+        // if the panel you're returning to has no previous panel,
+        // hide the screen space inputs
+        if (currentPanel.PreviousPanel.PreviousPanel == null)
+        {
+            ShowScreenSpacePanelInputs(false);
+        }
+
         currentPanel.FadeOutCanvas(() =>
         {
 
@@ -126,5 +137,29 @@ public class CombatUIHandler : MonoBehaviour
                 currentPanel.FadeInCanvas(null, _fadeDuration, Ease.InOutQuad);
             }
         }, _fadeDuration, Ease.InOutQuad);
+    }
+
+    public void ShowScreenSpacePanelInputs(bool enable)
+    {
+        if (panelInputsCanvasGroup == null)
+        {
+            Debug.LogError("Panel Inputs Canvas Group is not set.");
+            return;
+        }
+
+        DOTween.To(() => panelInputsCanvasGroup.alpha, x => panelInputsCanvasGroup.alpha = x, enable ? 1 : 0, _fadeDuration)
+            .OnStart(() =>
+            {
+                panelInputsCanvasGroup.interactable = enable;
+                panelInputsCanvasGroup.blocksRaycasts = enable;
+            })
+            .OnComplete(() =>
+            {
+                if (!enable)
+                {
+                    panelInputsCanvasGroup.interactable = false;
+                    panelInputsCanvasGroup.blocksRaycasts = false;
+                }
+            });
     }
 }

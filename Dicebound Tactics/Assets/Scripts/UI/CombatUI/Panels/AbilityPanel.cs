@@ -21,17 +21,20 @@ public class AbilityPanel : CombatPanel
                 continue;
             }
 
+            Ability ability = character.abilitiesForUse[i].ability;
+
             // Set up the button with the ability name and action
             abilityButtons[i].gameObject.SetActive(true); // Ensure the button is active
-            abilityButtons[i].ability = character.abilitiesForUse[i].ability;
-
-            print("Setting up ability button: " + abilityButtons[i].ability.Name);
+            abilityButtons[i].ability = ability;
 
 
-            abilityButtons[i].SetupButton(abilityButtons[i].ability.Name, () =>
+            print("Setting up ability button: " + ability.Name);
+
+            // Set the button text and action
+            abilityButtons[i].SetupButton(ability.Name, () =>
             {
-                print("Using ability: " + abilityButtons[i].ability.Name);
-                OnAbilitySelected?.Invoke(abilityButtons[i].ability);
+                print("Using ability: " + ability.Name);
+                OnAbilitySelected?.Invoke(ability);
             });
             abilityButtons[i].AnimateIn();
         }
