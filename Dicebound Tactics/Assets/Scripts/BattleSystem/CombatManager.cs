@@ -1,10 +1,11 @@
+using System.Collections.Generic;
 using TacticsToolkit;
 using UnityEngine;
 
 public class CombatManager : MonoBehaviour
 {
-    public Entity CurrentTarget { get; private set; }
     public CharacterManager CurrentActiveCharacter { get; private set; }
+    public List<Entity> CurrentTargets { get; private set; } = new List<Entity>();
 
     public void SetTarget(Entity target)
     {
@@ -14,8 +15,24 @@ public class CombatManager : MonoBehaviour
             return;
         }
 
-        CurrentTarget = target;
-        Debug.Log($"Current target set to: {CurrentTarget.name}");
+        if (CurrentTargets.Contains(target))
+        {
+            Debug.LogWarning("Target already selected.");
+            return;
+        }
+
+        CurrentTargets.Add(target);
+    }
+
+    public void SetTargets(List<Entity> targets)
+    {
+        if (targets == null || targets.Count == 0)
+        {
+            Debug.LogError("Targets list is null or empty.");
+            return;
+        }
+
+        CurrentTargets = targets;
     }
 
     public void SetActiveCharacter(CharacterManager character)
@@ -38,13 +55,11 @@ public class CombatManager : MonoBehaviour
             return;
         }
 
-        if (CurrentTarget == null)
+        if (CurrentTargets == null || CurrentTargets.Count == 0)
         {
-            Debug.LogError("No target selected for the ability.");
+            Debug.LogError("No targets selected for the ability.");
             return;
         }
-
-
     }
 
     public void ItemSelected(CombatItem item)
@@ -55,9 +70,9 @@ public class CombatManager : MonoBehaviour
             return;
         }
 
-        if (CurrentTarget == null)
+        if (CurrentTargets == null || CurrentTargets.Count == 0)
         {
-            Debug.LogError("No target selected for the item.");
+            Debug.LogError("No targets selected for the item.");
             return;
         }
 

@@ -950,7 +950,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4942958996491298561, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
       propertyPath: m_Name
-      value: CombatPrimaryMenuButton (1)
+      value: AbilitiesButton
       objectReference: {fileID: 0}
     - target: {fileID: 6132562457352715467, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
       propertyPath: m_text
@@ -2315,6 +2315,66 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!1 &650896117
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 650896118}
+  - component: {fileID: 650896119}
+  m_Layer: 0
+  m_Name: NewTarget_Listener
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &650896118
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 650896117}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 840856651}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &650896119
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 650896117}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a477474571446164abd7b5cd0246d974, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eventGameObject: {fileID: 11400000, guid: fd5c1bbee67180646a01c17f67a0c1ed, type: 2}
+  response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1404614838}
+        m_TargetAssemblyTypeName: CombatManager, Assembly-CSharp
+        m_MethodName: SetTarget
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &666035114
 GameObject:
   m_ObjectHideFlags: 0
@@ -2575,6 +2635,7 @@ Transform:
   - {fileID: 561831144}
   - {fileID: 636481112}
   - {fileID: 574948549}
+  - {fileID: 650896118}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &896658383
@@ -3545,6 +3606,7 @@ Transform:
   - {fileID: 508894815}
   - {fileID: 1404614837}
   - {fileID: 666035116}
+  - {fileID: 1640901218}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1201685918
@@ -5382,6 +5444,57 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1634853651}
   m_CullTransparentMesh: 1
+--- !u!1 &1640901217
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1640901218}
+  - component: {fileID: 1640901219}
+  m_Layer: 0
+  m_Name: SelectionController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1640901218
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1640901217}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1193889628}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1640901219
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1640901217}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45656fc9f807648c790c29948f60dfc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selectionIndicatorPrefab: {fileID: 0}
+  highlightIndicatorPrefab: {fileID: 0}
+  canUseMouseSelection: 0
+  onEntitySelected: {fileID: 11400000, guid: fd5c1bbee67180646a01c17f67a0c1ed, type: 2}
+  SelectedEntities: []
+  numberOfSelectableTargets: 1
+  cyclingEnemies: 0
 --- !u!1001 &1690972145
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5988,6 +6101,7 @@ MonoBehaviour:
   - {fileID: 1269485936}
   - {fileID: 113792147}
   playerTurn: 1
+  GameIsPlaying: 0
   BattleStarted: {fileID: 11400000, guid: 268e6d8ada6fc4c418ed24a4f446609c, type: 2}
   startNewTurn: {fileID: 11400000, guid: c4e0d453d72137543842d48f73e3a632, type: 2}
   GameEnded: {fileID: 11400000, guid: 337dc5eed5ed2461f8f6776f98116f6b, type: 2}
@@ -6096,7 +6210,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4942958996491298561, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
       propertyPath: m_Name
-      value: CombatPrimaryMenuButton (2)
+      value: ItemButton
       objectReference: {fileID: 0}
     - target: {fileID: 6132562457352715467, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
       propertyPath: m_text
@@ -6262,7 +6376,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4942958996491298561, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
       propertyPath: m_Name
-      value: CombatPrimaryMenuButton (3)
+      value: PassButton
       objectReference: {fileID: 0}
     - target: {fileID: 6132562457352715467, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
       propertyPath: m_text
@@ -6274,27 +6388,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6552332917840215383, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6552332917840215383, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 508894814}
+      objectReference: {fileID: 1957448905}
     - target: {fileID: 6552332917840215383, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6552332917840215383, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: TrySetActiveCamera
+      value: AdvanceTurn
       objectReference: {fileID: 0}
     - target: {fileID: 6552332917840215383, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: CameraManager, Assembly-CSharp
+      value: TurnManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 6552332917840215383, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
-      value: CombatMenuCamera1
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 6552332917840215383, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -6711,7 +6825,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4942958996491298561, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
       propertyPath: m_Name
-      value: CombatPrimaryMenuButton
+      value: AttackButton
       objectReference: {fileID: 0}
     - target: {fileID: 6132562457352715467, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
       propertyPath: m_text

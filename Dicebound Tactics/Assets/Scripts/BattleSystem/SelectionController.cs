@@ -8,7 +8,7 @@ public class SelectionController : MonoBehaviour
   public GameObject highlightIndicatorPrefab;
 
   public bool canUseMouseSelection = false;
-  public GameEventGameObject onEntitySelected;
+  public GameEventEntity onEntitySelected;
   public List<Entity> SelectedEntities = new();
 
   [Header("Selection Settings")]
@@ -147,7 +147,7 @@ public class SelectionController : MonoBehaviour
       var indicator = Instantiate(selectionIndicatorPrefab, entity.transform.position + Vector3.up * 1.5f, Quaternion.identity);
       indicator.transform.SetParent(entity.transform);
       indicators[entity] = indicator;
-      onEntitySelected?.Raise(entity.gameObject);
+      onEntitySelected?.Raise(entity);
     }
     else if (additive && SelectedEntities.Contains(entity))
     {
@@ -170,13 +170,13 @@ public class SelectionController : MonoBehaviour
 
   public void ClearAllSelections()
   {
-      foreach (var indicator in indicators.Values)
-          Destroy(indicator);
+    foreach (var indicator in indicators.Values)
+      Destroy(indicator);
 
-      indicators.Clear();
-      SelectedEntities.Clear();
+    indicators.Clear();
+    SelectedEntities.Clear();
 
-      ClearHighlight();
+    ClearHighlight();
   }
 
   public void SetSelectableTargetCount(int count)
@@ -266,15 +266,15 @@ public class SelectionController : MonoBehaviour
       highlightIndicator.transform.SetParent(entity.transform);
     }
   }
-  
+
   private void ClearHighlight()
   {
-      if (highlightIndicator != null)
-      {
-          Destroy(highlightIndicator);
-          highlightIndicator = null;
-      }
+    if (highlightIndicator != null)
+    {
+      Destroy(highlightIndicator);
+      highlightIndicator = null;
+    }
 
-      highlightedEntity = null;
+    highlightedEntity = null;
   }
 }
