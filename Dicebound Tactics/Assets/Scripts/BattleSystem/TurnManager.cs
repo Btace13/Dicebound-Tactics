@@ -9,13 +9,13 @@ public class TurnManager : MonoBehaviour
   public List<CharacterManager> playerUnits = new List<CharacterManager>();
   public List<EnemyManager> enemyUnits = new List<EnemyManager>();
   public bool playerTurn = true;
+  public bool GameIsPlaying;
 
   [Header("Events")]
   public GameEvent BattleStarted;
   public GameEventGameObject startNewTurn;
   public GameEvent GameEnded;
 
-  private bool GameIsPlaying;
   private int currentPlayerIndex = 0;
   private int currentEnemyIndex = 0;
   private Entity currentUnit;

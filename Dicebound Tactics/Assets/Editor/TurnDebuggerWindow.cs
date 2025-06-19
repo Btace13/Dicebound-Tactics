@@ -6,6 +6,7 @@ using System.Linq;
 public class TurnDebuggerWindow : EditorWindow
 {
     private TurnManager turnManager;
+    private SelectionController selectionController;
     private Vector2 scrollPosition;
     private bool autoAdvance = false;
 
@@ -37,6 +38,7 @@ public class TurnDebuggerWindow : EditorWindow
     private void FindTurnManager()
     {
         turnManager = FindAnyObjectByType<TurnManager>();
+        selectionController = FindAnyObjectByType<SelectionController>();
     }
 
     private void OnGUI()
@@ -70,6 +72,11 @@ public class TurnDebuggerWindow : EditorWindow
         if (GUILayout.Button("Reset Turn Order"))
         {
             turnManager.ResetBattle();
+        }
+
+        if (GUILayout.Button("Toggle Selection Mode"))
+        {
+            selectionController.ChangeSelectionType(!selectionController.cyclingEnemies);
         }
 
         autoAdvance = EditorGUILayout.Toggle("Auto Advance", autoAdvance);
@@ -148,7 +155,13 @@ public class TurnDebuggerWindow : EditorWindow
                         var targets = turnManager.enemyUnits.Where(p => p != null && p.isAlive).ToList();
                         if (targets.Count > 0)
                         {
-                            ability.Execute(entity, targets[0]);
+                            selectionController.SelectedEntities.ForEach(target => 
+                            {
+                                if (target != null && target.isAlive)
+                                {
+                                    ability.Execute(entity, target);
+                                }
+                            });
                         }
                     }
                     else
@@ -156,7 +169,13 @@ public class TurnDebuggerWindow : EditorWindow
                         var targets = turnManager.playerUnits.Where(e => e != null && e.isAlive).ToList();
                         if (targets.Count > 0)
                         {
-                            ability.Execute(entity, targets[0]);
+                            selectionController.SelectedEntities.ForEach(target => 
+                            {
+                                if (target != null && target.isAlive)
+                                {
+                                    ability.Execute(entity, target);
+                                }
+                            });
                         }
                     }
                 }
