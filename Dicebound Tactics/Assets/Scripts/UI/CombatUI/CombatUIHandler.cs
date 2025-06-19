@@ -63,6 +63,15 @@ public class CombatUIHandler : MonoBehaviour
                 Debug.LogError("AbilityPanel is not set in CombatUIHandler.");
             }
 
+            if (ItemPanel != null)
+            {
+                ItemPanel.PopulateItemPanel(character);
+            }
+            else
+            {
+                Debug.LogError("ItemPanel is not set in CombatUIHandler.");
+            }
+
             return;
         }
 
