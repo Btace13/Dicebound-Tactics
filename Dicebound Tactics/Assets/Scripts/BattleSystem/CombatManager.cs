@@ -6,90 +6,34 @@ using UnityEngine;
 
 public class CombatManager : MonoBehaviour
 {
-    [Header("Combat State")]
-    [ShowInInspector, ReadOnly] public CharacterManager CurrentActiveCharacter;
-    [ShowInInspector, ReadOnly] public List<Entity> CurrentTargets = new List<Entity>();
-
     [Space(10)]
     [Header("Component References")]
     [SerializeField] private SelectionController selectionController;
+    [SerializeField] private TurnManager turnManager;
 
     [Header("Events")]
     public GameEventEntity OnTargetSelected;
 
-    public void SetActiveCharacterGameObject(GameObject character)
-    {
-        if (character == null)
-        {
-            Debug.LogError("Character GameObject is null.");
-            return;
-        }
-
-        CharacterManager characterManager = character.GetComponent<CharacterManager>();
-        if (characterManager == null)
-        {
-            Debug.LogError("Character GameObject does not have a CharacterManager component.");
-            return;
-        }
-
-        SetActiveCharacter(characterManager);
-    }
-
-    public void SetTarget(Entity target)
-    {
-        if (target == null)
-        {
-            Debug.LogError("Target is null.");
-            return;
-        }
-
-        if (CurrentTargets.Contains(target))
-        {
-            Debug.LogWarning("Target already selected.");
-            return;
-        }
-
-        CurrentTargets.Add(target);
-    }
-
-    public void SetTargets(List<Entity> targets)
-    {
-        if (targets == null || targets.Count == 0)
-        {
-            Debug.LogError("Targets list is null or empty.");
-            return;
-        }
-
-        CurrentTargets = targets;
-    }
-
-    public void SetActiveCharacter(CharacterManager character)
-    {
-        if (character == null)
-        {
-            Debug.LogError("Active character is null.");
-            return;
-        }
-
-        CurrentActiveCharacter = character;
-        Debug.Log($"Current active character set to: {CurrentActiveCharacter.name}");
-    }
-
     public void BasicAttackSelected()
     {
-        if (CurrentActiveCharacter == null)
+        Entity currentUnit = turnManager.GetCurrentUnit();
+
+        if (currentUnit == null)
         {
             Debug.LogError("No active character to use the basic attack.");
             return;
         }
 
         selectionController.ChangeSelectionType(true);
-        selectionController.SetSelectableTargetCount(Math.Max(1, CurrentTargets.Count));
+        selectionController.SetSelectableTargetCount(Math.Max(1, turnManager.enemyUnits.Count));
+        selectionController.ToggleEntitySelection(turnManager.enemyUnits[0], false);
     }
 
     public void AbilitySelected(Ability ability)
     {
-        if (CurrentActiveCharacter == null)
+        Entity currentUnit = turnManager.GetCurrentUnit();
+
+        if (currentUnit == null)
         {
             Debug.LogError("No active character to use the ability.");
             return;
@@ -107,16 +51,21 @@ public class CombatManager : MonoBehaviour
             return;
         }
 
+        bool targetsEnemy = ability.abilityType == Ability.AbilityTypes.Enemy;
+
         // sets whether the ability is for allies or enemies
-        selectionController.ChangeSelectionType(ability.abilityType == Ability.AbilityTypes.Enemy);
+        selectionController.ChangeSelectionType(targetsEnemy);
         // sets the number of targets the ability can hit, 
         // TODO: need to implement logic for this
         selectionController.SetSelectableTargetCount(1);
+        selectionController.ToggleEntitySelection(targetsEnemy ? turnManager.enemyUnits[0] : turnManager.playerUnits[0], false);
     }
 
     public void ItemSelected(CombatItem item)
     {
-        if (CurrentActiveCharacter == null)
+        Entity currentUnit = turnManager.GetCurrentUnit();
+
+        if (currentUnit == null)
         {
             Debug.LogError("No active character to use the item.");
             return;
@@ -136,5 +85,6 @@ public class CombatManager : MonoBehaviour
 
         selectionController.ChangeSelectionType(false); // Assuming items target allies
         selectionController.SetSelectableTargetCount(1); // Assuming items can target one entity at a time
+        selectionController.ToggleEntitySelection(turnManager.playerUnits[0], false); // Assuming items target allies
     }
 }

@@ -245,24 +245,32 @@ public class CameraManager : MonoBehaviour
 
     public void SetCombatTarget(Transform target)
     {
+        if (target == null)
+        {
+            Debug.LogError("Target is null. Cannot set combat target.");
+            return;
+        }
+
+        print("Setting combat target: " + target.name);
+
         foreach (CombatCameraController combatCameraController in Cameras.Values.OfType<CombatCameraController>())
         {
             if (combatCameraController == null)
             {
                 Debug.LogWarning("Active camera is not a CombatCameraController.");
-                return;
+                continue;
             }
 
             if (combatCameraController.TargetGroup == null)
             {
                 Debug.LogError("Target group is not initialized in CombatCameraController.");
-                return;
+                continue;
             }
 
             if (combatCameraController.cameraTarget == CameraTarget.ActivePlayer)
             {
                 Debug.LogWarning("Camera target is set to ActivePlayer. Cannot set target.");
-                return;
+                continue;
             }
 
             combatCameraController.TargetGroup.Targets.Clear();
@@ -284,19 +292,19 @@ public class CameraManager : MonoBehaviour
             if (combatCamera == null)
             {
                 Debug.LogWarning("Active camera is not a CombatCameraController.");
-                return;
+                continue;
             }
 
             if (combatCamera.TargetGroup == null)
             {
                 Debug.LogError("Target group is not initialized in CombatCameraController.");
-                return;
+                continue;
             }
 
             if (combatCamera.cameraTarget == CameraTarget.Target)
             {
                 Debug.LogWarning("Camera target is set to Target. Cannot set active character.");
-                return;
+                continue;
             }
 
             if (combatCamera.TargetGroup.Targets.Count == 0)

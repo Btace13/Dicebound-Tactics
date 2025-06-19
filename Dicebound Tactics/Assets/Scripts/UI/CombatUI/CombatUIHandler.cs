@@ -115,6 +115,9 @@ public class CombatUIHandler : MonoBehaviour
         else
         {
             ShowScreenSpacePanelInputs(false);
+            currentPanel = panel;
+            currentPanel.FadeInCanvas(null, _fadeDuration, Ease.InOutQuad);
+
         }
 
         if (cameraManager)
@@ -135,6 +138,7 @@ public class CombatUIHandler : MonoBehaviour
         if (currentPanel == null)
         {
             Debug.LogError("No current panel to close.");
+            OpenPanel(ActionPanel);
             return;
         }
 
@@ -149,7 +153,24 @@ public class CombatUIHandler : MonoBehaviour
         {
             if (currentPanel.PreviousPanel != null)
             {
-                OpenPanel(currentPanel.PreviousPanel);
+                currentPanel.FadeOutCanvas(() =>
+                {
+                    currentPanel = currentPanel.PreviousPanel;
+                    ShowScreenSpacePanelInputs(currentPanel.PreviousPanel != null);
+                    currentPanel.FadeInCanvas(null, _fadeDuration, Ease.InOutQuad);
+
+                    if (cameraManager)
+                    {
+                        if (PanelCameras.TryGetValue(currentPanel, out string cameraName))
+                        {
+                            cameraManager.TrySetActiveCamera(cameraName);
+                        }
+                        else
+                        {
+                            Debug.LogError($"No camera found for panel: {currentPanel.name}");
+                        }
+                    }
+                }, _fadeDuration, Ease.InOutQuad);
             }
             else
             {
@@ -187,14 +208,6 @@ public class CombatUIHandler : MonoBehaviour
             {
                 panelInputsCanvasGroup.interactable = enable;
                 panelInputsCanvasGroup.blocksRaycasts = enable;
-            })
-            .OnComplete(() =>
-            {
-                if (!enable)
-                {
-                    panelInputsCanvasGroup.interactable = false;
-                    panelInputsCanvasGroup.blocksRaycasts = false;
-                }
             });
     }
 
@@ -206,7 +219,7 @@ public class CombatUIHandler : MonoBehaviour
             return;
         }
 
-        if (enable && panelInputsCanvasGroup.alpha < 1)
+        if (enable)
         {
             // Ensure the panel inputs are visible before showing the confirm button
             ShowScreenSpacePanelInputs(true);

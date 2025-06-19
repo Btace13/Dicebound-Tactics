@@ -5107,9 +5107,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35f34c15d0b4baf46b5bd0f4f4b763bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CurrentActiveCharacter: {fileID: 0}
-  CurrentTargets: []
   selectionController: {fileID: 1640901219}
+  turnManager: {fileID: 1957448905}
+  OnTargetSelected: {fileID: 11400000, guid: fd5c1bbee67180646a01c17f67a0c1ed, type: 2}
 --- !u!1 &1407422998
 GameObject:
   m_ObjectHideFlags: 0
