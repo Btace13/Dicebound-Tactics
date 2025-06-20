@@ -25,7 +25,7 @@ public class CombatManager : MonoBehaviour
         }
 
         selectionController.ChangeSelectionType(true);
-        selectionController.SetSelectableTargetCount(Math.Max(1, turnManager.enemyUnits.Count));
+        selectionController.SetSelectableTargetCount(1);
         selectionController.ToggleEntitySelection(turnManager.enemyUnits[0], false);
     }
 
