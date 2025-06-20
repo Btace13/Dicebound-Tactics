@@ -151,30 +151,29 @@ public class CameraManager : MonoBehaviour
         CinemachineBasicMultiChannelPerlin noise = cameraToShake.CinemachineCam.GetOrAddComponent<CinemachineBasicMultiChannelPerlin>();
 
         noise.enabled = true; // Ensure noise is enabled
-        noise.AmplitudeGain = cameraShakeSettings.Intensity;
-        noise.FrequencyGain = cameraShakeSettings.Frequency;
-
-        DG.Tweening.Sequence shakeSequence = DOTween.Sequence();
 
         // Setup the sequence to sample the animation curve over time
         float initialAmplitude = noise.AmplitudeGain;
         float initialFrequency = noise.FrequencyGain;
 
+        float x = 0f;
+
         // Add tween that updates the noise parameters based on the animation curve
-        shakeSequence.Append(DOTween.To(() => 0f, x =>
+        DOTween.To(value => x = value, 0f, 1f, cameraShakeSettings.Duration)
+        .OnUpdate(() =>
         {
             // Use the animation curve to control the intensity over time
             float curveValue = cameraShakeSettings.ShakeCurve.Evaluate(x);
             noise.AmplitudeGain = cameraShakeSettings.Intensity * curveValue;
             noise.FrequencyGain = cameraShakeSettings.Frequency * curveValue;
-        }, 1f, cameraShakeSettings.Duration));
-
-        // Reset noise values after shake
-        shakeSequence.OnComplete(() =>
+        })
+        .OnComplete(() =>
         {
+            // Reset the noise parameters to their initial values
             noise.AmplitudeGain = initialAmplitude;
             noise.FrequencyGain = initialFrequency;
             noise.enabled = false; // Disable noise after shaking
+            print("Camera shake completed and noise disabled.");
         });
     }
 

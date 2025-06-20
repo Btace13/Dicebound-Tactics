@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3976809d7572cc449a58bd8873ec36e9, type: 3}
   m_Name: BasicCameraShake
   m_EditorClassIdentifier: 
-  intensity: 4
+  intensity: 3
   frequency: 1
   duration: 0.5
   shakeCurve:
