@@ -58,9 +58,31 @@ MonoBehaviour:
         m_PostInfinity: 0
         m_RotationOrder: 0
   - From: ConfirmTargetCamera
+    To: AttackCamera
+    Blend:
+      Style: 0
+      Time: 0.35
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+  - From: AttackCamera
     To: CombatMenuCamera1
     Blend:
       Style: 0
+      Time: 0.35
+      CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+  - From: ConfirmTargetCamera
+    To: CombatMenuCamera1
+    Blend:
+      Style: 4
       Time: 0.35
       CustomCurve:
         serializedVersion: 2

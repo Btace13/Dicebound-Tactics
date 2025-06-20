@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using TacticsToolkit;
 using UnityEngine;
+using DG.Tweening;
 
 public class CombatManager : MonoBehaviour
 {
@@ -115,39 +116,63 @@ public class CombatManager : MonoBehaviour
             return;
         }
 
-        // Execute the action with the selected targets
-        foreach (var target in selectedTargets)
+        Sequence sequence = DOTween.Sequence();
+        sequence.AppendCallback(() =>
         {
-            // if should use ability
-            if (_selectedAbility != null)
-            {
-                int damage = _selectedAbility.abilityType == Ability.AbilityTypes.Ally ? -_selectedAbility.value
-                                                                                        : _selectedAbility.value;
+            // set the active camera as the AttackCamera
+            CameraManager.Instance?.TrySetActiveCamera("AttackCamera");
 
-                target.TakeDamage(damage);
-                Debug.Log($"{currentUnit.name} uses {_selectedAbility.Name} on {target.name}");
-            }
-            else if (_selectedItem != null)
-            {
-                // Use the item on the target
-                if (target is CharacterManager character)
-                {
-                    //character.UseItem(_selectedItem);
-                    Debug.Log($"{currentUnit.name} uses {_selectedItem.ItemName} on {character.name}.");
-                }
-                else
-                {
-                    Debug.LogError("Selected target is not a character.");
-                }
-            }
-            else // basic attack
-            {
-                int damage = currentUnit.characterClass.Strenght.baseStatValue;
-                target.TakeDamage(damage);
-                Debug.Log($"{currentUnit.name} attacks {target.name} for {damage} damage.");
-            }
-        }
+            //TODO: trigger animations / effects here
+        });
+        //TODO: the duration of the sequence should be based on the animation length
+        sequence.AppendInterval(0.5f);
+        sequence.AppendCallback(() =>
+        {
 
-        turnManager.AdvanceTurn();
+            // Execute the action with the selected targets
+            foreach (var target in selectedTargets)
+            {
+                // if should use ability
+                if (_selectedAbility != null)
+                {
+                    int damage = _selectedAbility.abilityType == Ability.AbilityTypes.Ally ? -_selectedAbility.value
+                                                                                            : _selectedAbility.value;
+
+                    target.TakeDamage(damage);
+                    CameraManager.Instance?.ShakeActiveCamera();
+
+                    Debug.Log($"{currentUnit.name} uses {_selectedAbility.Name} on {target.name}");
+                }
+                else if (_selectedItem != null)
+                {
+                    // Use the item on the target
+                    if (target is CharacterManager character)
+                    {
+                        //character.UseItem(_selectedItem);
+                        Debug.Log($"{currentUnit.name} uses {_selectedItem.ItemName} on {character.name}.");
+                    }
+                    else
+                    {
+                        Debug.LogError("Selected target is not a character.");
+                    }
+                }
+                else // basic attack
+                {
+                    int damage = currentUnit.characterClass.Strenght.baseStatValue;
+                    target.TakeDamage(damage);
+                    CameraManager.Instance?.ShakeActiveCamera();
+
+                    Debug.Log($"{currentUnit.name} attacks {target.name} for {damage} damage.");
+                }
+            }
+        });
+        sequence.AppendInterval(1);
+        sequence.AppendCallback(() =>
+        {
+            _selectedAbility = null;
+            _selectedItem = null;
+
+            turnManager.AdvanceTurn();
+        });
     }
 }

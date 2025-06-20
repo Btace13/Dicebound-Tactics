@@ -51,6 +51,9 @@ public class CameraManager : MonoBehaviour
     public Transform activeCharacter { get; private set; }
     public Transform activeTarget { get; private set; }
 
+    [Header("General Settings")]
+    [SerializeField] private CameraShakeSettings defaultCameraShakeSettings;
+
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -123,29 +126,56 @@ public class CameraManager : MonoBehaviour
         }
     }
 
-    public void ShakeCamera(string cameraName, float intensity = 1f, float duration = 0.5f)
+    public void ShakeActiveCamera(CameraShakeSettings cameraShakeSettings = null)
     {
-        if (Cameras.TryGetValue(cameraName, out BaseCameraController camera))
+        if (ActiveCamera == null)
         {
-            if (camera.CinemachineCam == null)
-            {
-                Debug.LogError($"CinemachineCam is null in camera {cameraName}");
-                return;
-            }
-
-            if (intensity <= 0 || duration <= 0)
-            {
-                Debug.LogWarning("Intensity and duration must be greater than zero for camera shake.");
-                return;
-            }
-
-            CinemachineBasicMultiChannelPerlin noise = camera.CinemachineCam.GetOrAddComponent<CinemachineBasicMultiChannelPerlin>();
-            noise.AmplitudeGain = intensity;
-
-            DG.Tweening.Sequence s = DOTween.Sequence();
-            s.AppendInterval(duration);
-            s.AppendCallback(() => noise.AmplitudeGain = 0);
+            Debug.LogWarning("No active camera to shake.");
+            return;
         }
+
+        BaseCameraController cameraToShake = ActiveCamera;
+
+        if (cameraShakeSettings == null)
+        {
+            cameraShakeSettings = defaultCameraShakeSettings;
+            print("Using default camera shake settings.");
+        }
+
+        if (cameraShakeSettings.Intensity <= 0 || cameraShakeSettings.Duration <= 0)
+        {
+            Debug.LogWarning("Intensity and duration must be greater than zero for camera shake.");
+            return;
+        }
+
+        CinemachineBasicMultiChannelPerlin noise = cameraToShake.CinemachineCam.GetOrAddComponent<CinemachineBasicMultiChannelPerlin>();
+
+        noise.enabled = true; // Ensure noise is enabled
+        noise.AmplitudeGain = cameraShakeSettings.Intensity;
+        noise.FrequencyGain = cameraShakeSettings.Frequency;
+
+        DG.Tweening.Sequence shakeSequence = DOTween.Sequence();
+
+        // Setup the sequence to sample the animation curve over time
+        float initialAmplitude = noise.AmplitudeGain;
+        float initialFrequency = noise.FrequencyGain;
+
+        // Add tween that updates the noise parameters based on the animation curve
+        shakeSequence.Append(DOTween.To(() => 0f, x =>
+        {
+            // Use the animation curve to control the intensity over time
+            float curveValue = cameraShakeSettings.ShakeCurve.Evaluate(x);
+            noise.AmplitudeGain = cameraShakeSettings.Intensity * curveValue;
+            noise.FrequencyGain = cameraShakeSettings.Frequency * curveValue;
+        }, 1f, cameraShakeSettings.Duration));
+
+        // Reset noise values after shake
+        shakeSequence.OnComplete(() =>
+        {
+            noise.AmplitudeGain = initialAmplitude;
+            noise.FrequencyGain = initialFrequency;
+            noise.enabled = false; // Disable noise after shaking
+        });
     }
 
 
