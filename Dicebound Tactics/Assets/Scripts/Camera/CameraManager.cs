@@ -150,6 +150,7 @@ public class CameraManager : MonoBehaviour
 
         CinemachineBasicMultiChannelPerlin noise = cameraToShake.CinemachineCam.GetOrAddComponent<CinemachineBasicMultiChannelPerlin>();
 
+        noise.NoiseProfile = cameraShakeSettings.NoiseSettings;
         noise.enabled = true; // Ensure noise is enabled
 
         // Setup the sequence to sample the animation curve over time

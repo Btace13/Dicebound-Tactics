@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3976809d7572cc449a58bd8873ec36e9, type: 3}
   m_Name: BasicCameraShake
   m_EditorClassIdentifier: 
-  intensity: 3
+  intensity: 4
   frequency: 1
   duration: 0.5
   shakeCurve:
@@ -21,21 +21,21 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 0.5070747
-      inSlope: 0
-      outSlope: 0
+      inSlope: 3.2916105
+      outSlope: 3.2916105
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.22697368
+      outWeight: 0.14473684
     - serializedVersion: 3
       time: 0.5
       value: 1
-      inSlope: 0.04481142
-      outSlope: 0.04481142
+      inSlope: 0.0046872282
+      outSlope: 0.0046872282
       tangentMode: 0
       weightedMode: 0
       inWeight: 0.33333334
-      outWeight: 0.21052635
+      outWeight: 1
     - serializedVersion: 3
       time: 1
       value: 0
@@ -48,3 +48,4 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  noiseSettings: {fileID: 11400000, guid: 8608ec81ee27a15488d33f9dad239e91, type: 2}
