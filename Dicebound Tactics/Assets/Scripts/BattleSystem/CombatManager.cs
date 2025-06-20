@@ -14,6 +14,9 @@ public class CombatManager : MonoBehaviour
     [Header("Events")]
     public GameEventEntity OnTargetSelected;
 
+    private CombatItem _selectedItem;
+    private Ability _selectedAbility;
+
     public void BasicAttackSelected()
     {
         Entity currentUnit = turnManager.GetCurrentUnit();
@@ -86,5 +89,65 @@ public class CombatManager : MonoBehaviour
         selectionController.ChangeSelectionType(false); // Assuming items target allies
         selectionController.SetSelectableTargetCount(1); // Assuming items can target one entity at a time
         selectionController.ToggleEntitySelection(turnManager.playerUnits[0], false); // Assuming items target allies
+    }
+
+    public void ExecuteAction()
+    {
+        Entity currentUnit = turnManager.GetCurrentUnit();
+
+        if (currentUnit == null)
+        {
+            Debug.LogError("No active character to execute action.");
+            return;
+        }
+
+        if (selectionController == null)
+        {
+            Debug.LogError("SelectionController is not assigned.");
+            return;
+        }
+
+        List<Entity> selectedTargets = selectionController.SelectedEntities;
+
+        if (selectedTargets.Count == 0)
+        {
+            Debug.LogError("No targets selected.");
+            return;
+        }
+
+        // Execute the action with the selected targets
+        foreach (var target in selectedTargets)
+        {
+            // if should use ability
+            if (_selectedAbility != null)
+            {
+                int damage = _selectedAbility.abilityType == Ability.AbilityTypes.Ally ? -_selectedAbility.value
+                                                                                        : _selectedAbility.value;
+
+                target.TakeDamage(damage);
+                Debug.Log($"{currentUnit.name} uses {_selectedAbility.Name} on {target.name}");
+            }
+            else if (_selectedItem != null)
+            {
+                // Use the item on the target
+                if (target is CharacterManager character)
+                {
+                    //character.UseItem(_selectedItem);
+                    Debug.Log($"{currentUnit.name} uses {_selectedItem.ItemName} on {character.name}.");
+                }
+                else
+                {
+                    Debug.LogError("Selected target is not a character.");
+                }
+            }
+            else // basic attack
+            {
+                int damage = currentUnit.characterClass.Strenght.baseStatValue;
+                target.TakeDamage(damage);
+                Debug.Log($"{currentUnit.name} attacks {target.name} for {damage} damage.");
+            }
+        }
+
+        turnManager.AdvanceTurn();
     }
 }

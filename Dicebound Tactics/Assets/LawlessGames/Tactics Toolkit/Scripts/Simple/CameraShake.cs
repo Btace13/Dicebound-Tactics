@@ -29,6 +29,12 @@ namespace TacticsToolkit
 
         public static void Shake(float duration, float amount)
         {
+            if (instance == null)
+            {
+                Debug.LogError("CameraShake instance is not set. Please ensure the CameraShake script is attached to a GameObject in the scene.");
+                return;
+            }
+
             instance._originalPos = instance.gameObject.transform.localPosition;
             instance.StopAllCoroutines();
             instance.StartCoroutine(instance.cShake(duration, amount));
