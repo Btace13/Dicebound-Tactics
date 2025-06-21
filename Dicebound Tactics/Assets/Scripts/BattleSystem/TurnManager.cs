@@ -14,6 +14,7 @@ public class TurnManager : MonoBehaviour
   [Header("Events")]
   public GameEvent BattleStarted;
   public GameEventGameObject startNewTurn;
+  public GameEventCharacterManager startNewCharacterTurn;
   public GameEvent GameEnded;
 
   private int currentPlayerIndex = 0;
@@ -82,6 +83,12 @@ public class TurnManager : MonoBehaviour
         {
           unit.StartTurn();
           startNewTurn.Raise(unit.gameObject);
+
+          if (startNewCharacterTurn != null)
+          {
+            startNewCharacterTurn.Raise(unit);
+          }
+
           currentUnit = unit;
           return;
         }

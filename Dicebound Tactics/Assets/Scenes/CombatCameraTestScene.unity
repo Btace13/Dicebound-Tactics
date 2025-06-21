@@ -2810,6 +2810,7 @@ GameObject:
   m_Component:
   - component: {fileID: 636481112}
   - component: {fileID: 636481113}
+  - component: {fileID: 636481114}
   m_Layer: 0
   m_Name: NewTurn_Listener
   m_TagString: Untagged
@@ -2860,6 +2861,22 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &636481114
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 636481111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89bd41ba62fef5549b43273ddfc9c200, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eventGameObject: {fileID: 11400000, guid: c686141809457a34da7f5297f2397b5c, type: 2}
+  response:
+    m_PersistentCalls:
+      m_Calls:
       - m_Target: {fileID: 453086991}
         m_TargetAssemblyTypeName: CombatUIHandler, Assembly-CSharp
         m_MethodName: OpenPanel
@@ -2874,7 +2891,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 453086991}
         m_TargetAssemblyTypeName: CombatUIHandler, Assembly-CSharp
-        m_MethodName: MoveCanvasToGameObject
+        m_MethodName: MoveCanvasToCharacter
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7216,6 +7233,7 @@ MonoBehaviour:
   GameIsPlaying: 1
   BattleStarted: {fileID: 11400000, guid: 268e6d8ada6fc4c418ed24a4f446609c, type: 2}
   startNewTurn: {fileID: 11400000, guid: c4e0d453d72137543842d48f73e3a632, type: 2}
+  startNewCharacterTurn: {fileID: 11400000, guid: c686141809457a34da7f5297f2397b5c, type: 2}
   GameEnded: {fileID: 11400000, guid: 337dc5eed5ed2461f8f6776f98116f6b, type: 2}
 --- !u!4 &1957448906
 Transform:

@@ -47,9 +47,15 @@ public class CombatUIHandler : MonoBehaviour
         }
     }
 
-    public void MoveCanvasToGameObject(GameObject target)
+    public void MoveCanvasToCharacter(CharacterManager character)
     {
-        MoveCanvasToTarget(target.transform);
+        if (character == null)
+        {
+            Debug.LogError("Character is null. Cannot move canvas.");
+            return;
+        }
+
+        MoveCanvasToTarget(character.transform);
     }
 
     public void MoveCanvasToTarget(Transform target)
