@@ -49,7 +49,15 @@ public class EnemyManager : Entity
 
             Debug.Log($"[AI] {name} uses {ability.abilityName} on {target.name}");
 
+            //need to add logic for timing and animations here
+            CameraManager.Instance.SetActiveCombatCharacter(target.transform);
+            CameraManager.Instance.SetCombatTarget(transform);
+
+            CameraManager.Instance.TrySetActiveCamera("EnemyAttackCamera");
+            yield return new WaitForSeconds(1f);
+
             ability.Execute(this, target);
+            CameraManager.Instance.ShakeActiveCamera();
             statsContainer.ActionPoints.statValue -= ability.apCost;
 
             yield return new WaitForSeconds(0.5f);

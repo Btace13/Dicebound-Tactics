@@ -15,5 +15,7 @@ public abstract class AbilitySO : ScriptableObject
     public Sprite icon;
     public int apCost;
     public AbilityType abilityType = AbilityType.All;
+    public bool requiresMovement = false;
+
     public abstract void Execute(Entity user, Entity target);
 }
