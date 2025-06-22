@@ -31,7 +31,7 @@ public class AbilityPanel : CombatPanel
             print("Setting up ability button: " + ability.abilityName);
 
             // Set the button text and action
-            abilityButtons[i].SetupButton(ability.abilityName, () =>
+            abilityButtons[i].SetupAbilityButton(ability, () =>
             {
                 print("Using ability: " + ability.abilityName);
                 OnAbilitySelected?.Invoke(ability);
