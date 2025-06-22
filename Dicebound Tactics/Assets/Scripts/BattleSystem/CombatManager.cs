@@ -16,7 +16,7 @@ public class CombatManager : MonoBehaviour
     public GameEventEntity OnTargetSelected;
 
     private CombatItem _selectedItem;
-    private Ability _selectedAbility;
+    private AbilitySO _selectedAbility;
 
     public void BasicAttackSelected()
     {
@@ -33,7 +33,7 @@ public class CombatManager : MonoBehaviour
         selectionController.ToggleEntitySelection(turnManager.enemyUnits[0], false);
     }
 
-    public void AbilitySelected(Ability ability)
+    public void AbilitySelected(AbilitySO ability)
     {
         Entity currentUnit = turnManager.GetCurrentUnit();
 
@@ -55,7 +55,7 @@ public class CombatManager : MonoBehaviour
             return;
         }
 
-        bool targetsEnemy = ability.abilityType == Ability.AbilityTypes.Enemy;
+        bool targetsEnemy = ability.abilityType == AbilityType.Enemy;
 
         // sets whether the ability is for allies or enemies
         selectionController.ChangeSelectionType(targetsEnemy);
@@ -63,6 +63,9 @@ public class CombatManager : MonoBehaviour
         // TODO: need to implement logic for this
         selectionController.SetSelectableTargetCount(1);
         selectionController.ToggleEntitySelection(targetsEnemy ? turnManager.enemyUnits[0] : turnManager.playerUnits[0], false);
+
+        _selectedAbility = ability;
+        Debug.Log($"Selected ability: {_selectedAbility.abilityName}");
     }
 
     public void ItemSelected(CombatItem item)
@@ -135,13 +138,21 @@ public class CombatManager : MonoBehaviour
                 // if should use ability
                 if (_selectedAbility != null)
                 {
-                    int damage = _selectedAbility.abilityType == Ability.AbilityTypes.Ally ? -_selectedAbility.value
-                                                                                            : _selectedAbility.value;
+                    DamageAbilitySO damageAbility = _selectedAbility as DamageAbilitySO;
+
+                    if (damageAbility == null)
+                    {
+                        Debug.LogError("Selected ability is not a DamageAbilitySO.");
+                        continue;
+                    }
+
+                    int damage = _selectedAbility.abilityType == AbilityType.Ally ? -damageAbility.damageAmount
+                                                                                            : damageAbility.damageAmount;
 
                     target.TakeDamage(damage);
                     CameraManager.Instance?.ShakeActiveCamera();
 
-                    Debug.Log($"{currentUnit.name} uses {_selectedAbility.Name} on {target.name}");
+                    Debug.Log($"{currentUnit.name} uses {_selectedAbility.abilityName} on {target.name}");
                 }
                 else if (_selectedItem != null)
                 {

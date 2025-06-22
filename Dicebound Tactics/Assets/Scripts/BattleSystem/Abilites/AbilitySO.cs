@@ -1,11 +1,19 @@
 using UnityEngine;
 using TacticsToolkit;
 
+public enum AbilityType
+{
+    All,
+    Ally,
+    Enemy,
+    Self
+}
+
 public abstract class AbilitySO : ScriptableObject
 {
     public string abilityName;
     public Sprite icon;
     public int apCost;
-
+    public AbilityType abilityType = AbilityType.All;
     public abstract void Execute(Entity user, Entity target);
 }

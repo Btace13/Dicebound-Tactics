@@ -3,7 +3,7 @@ using UnityEngine.Events;
 
 public class AbilityButton : CombatButton
 {
-    public Ability ability;
+    public AbilitySO ability;
 
     public override void AnimateIn()
     {
