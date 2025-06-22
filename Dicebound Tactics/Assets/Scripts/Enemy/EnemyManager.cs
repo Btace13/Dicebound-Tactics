@@ -36,7 +36,7 @@ public class EnemyManager : Entity
             if (usableAbilities.Count == 0)
                 break;
 
-            var ability = usableAbilities[Random.Range(0, usableAbilities.Count)];
+            AbilitySO ability = usableAbilities[Random.Range(0, usableAbilities.Count)];
 
             var targets = turnManager.playerUnits
                 .Where(p => p != null && p.isAlive)
