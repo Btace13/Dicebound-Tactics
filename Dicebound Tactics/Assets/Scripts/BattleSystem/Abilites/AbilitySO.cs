@@ -12,6 +12,7 @@ public enum AbilityType
 public abstract class AbilitySO : ScriptableObject
 {
     public string abilityName;
+    public string notifcationMessage;
     public Sprite icon;
     public int apCost;
     public AbilityType abilityType = AbilityType.All;

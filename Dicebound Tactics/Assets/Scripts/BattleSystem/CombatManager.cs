@@ -11,6 +11,7 @@ public class CombatManager : MonoBehaviour
     [Header("Component References")]
     [SerializeField] private SelectionController selectionController;
     [SerializeField] private TurnManager turnManager;
+    [SerializeField] private CombatUIHandler combatUIHandler;
 
     [Header("Events")]
     public GameEventEntity OnTargetSelected;
@@ -122,6 +123,25 @@ public class CombatManager : MonoBehaviour
         Sequence sequence = DOTween.Sequence();
         sequence.AppendCallback(() =>
         {
+            if (_selectedAbility != null)
+            {
+                // Show notification for ability usage
+                combatUIHandler.ShowNotification($"{currentUnit.name}{_selectedAbility.notifcationMessage}", 1);
+            }
+            else if (_selectedItem != null)
+            {
+                // Show notification for item usage
+                combatUIHandler.ShowNotification($"{currentUnit.name} used a {_selectedItem.ItemName}", 1);
+            }
+            else
+            {
+                //Show notifcation that the action is being executed
+                if (selectedTargets.Count > 1)
+                    combatUIHandler.ShowNotification($"{currentUnit.name} is attacking {selectedTargets.Count} targets", 1);
+                else
+                    combatUIHandler.ShowNotification($"{currentUnit.name} is attacking {selectedTargets[0].name}", 1);
+            }
+
             // set the active camera as the AttackCamera
             CameraManager.Instance?.TrySetActiveCamera("AttackCamera");
 
