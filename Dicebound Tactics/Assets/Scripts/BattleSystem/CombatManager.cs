@@ -197,7 +197,7 @@ public class CombatManager : MonoBehaviour
                 }
             }
         });
-        sequence.AppendInterval(1);
+        sequence.AppendInterval(2f);
         sequence.AppendCallback(() =>
         {
             _selectedAbility = null;
