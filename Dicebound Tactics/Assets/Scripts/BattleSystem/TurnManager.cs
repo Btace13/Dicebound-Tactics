@@ -6,8 +6,8 @@ using Sirenix.OdinInspector;
 
 public class TurnManager : MonoBehaviour
 {
-  public List<CharacterManager> playerUnits = new List<CharacterManager>();
-  public List<EnemyManager> enemyUnits = new List<EnemyManager>();
+  public List<CharacterManager> playerUnits = new();
+  public List<EnemyManager> enemyUnits = new();
   public bool playerTurn = true;
   public bool GameIsPlaying;
 
@@ -135,28 +135,16 @@ public class TurnManager : MonoBehaviour
     {
       if (!character.isAlive) continue;
 
-      int diceRoll = character.RollDice();
-      int carriedOver = character.GetStat(Stats.CarriedOverActionPoints).statValue;
-
-      int totalAP = diceRoll + carriedOver;
-
-      character.statsContainer.ActionPoints.statValue = totalAP;
-      character.statsContainer.CarriedOverActionPoints.statValue = 0;
-
-      Debug.Log($"{character.name} rolled a {diceRoll} and now has {totalAP} AP.");
+      character.RollDice();
+      Debug.Log($"{character.name} rolled a {character.LastRollValue} and now has {character.CurrentAP} AP.");
     }
 
     foreach (var enemy in enemyUnits)
     {
       if (!enemy.isAlive) continue;
 
-      int diceRoll = enemy.RollDice();
-      int carriedOver = enemy.GetStat(Stats.CarriedOverActionPoints).statValue;
-
-      int totalAP = diceRoll + carriedOver;
-
-      enemy.statsContainer.ActionPoints.statValue = totalAP;
-      enemy.statsContainer.CarriedOverActionPoints.statValue = 0;
+      enemy.RollDice();
+      Debug.Log($"{enemy.name} rolled a {enemy.LastRollValue} and now has {enemy.CurrentAP} AP.");
     }
   }
 

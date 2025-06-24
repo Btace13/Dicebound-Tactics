@@ -4,6 +4,8 @@ using TacticsToolkit;
 public abstract class DiceModifier : ScriptableObject
 {
     public string modifierName;
+    [TextArea] public string description;
 
-    public abstract void Apply(Entity roller, TurnManager turnManager);
+    // Called when the modifier is triggered
+    public abstract void Apply(Entity user);
 }

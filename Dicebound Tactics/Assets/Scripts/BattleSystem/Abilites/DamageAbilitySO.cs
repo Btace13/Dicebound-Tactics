@@ -10,11 +10,12 @@ public class DamageAbilitySO : AbilitySO
 
     public override void Execute(Entity user, Entity target)
     {
-        if (user.GetStat(Stats.ActionPoints).statValue >= apCost)
+        if (user.SpendAP(apCost))
         {
-            user.SpendAP(apCost);
-            target.TakeDamage(damageAmount);
-            Debug.Log($"{user.name} used {abilityName} on {target.name} for {damageAmount} damage.");
+            int amount = user.CalculateDamageWithModifiers(damageAmount);
+            target.TakeDamage(amount);
+            target.HealOnNextHit(amount);
+            Debug.Log($"{user.name} used {abilityName} on {target.name} for {amount} damage.");
         }
         else
         {

@@ -113,6 +113,7 @@ public class TurnDebuggerWindow : EditorWindow
 
         EditorGUILayout.LabelField(entity.name, EditorStyles.boldLabel);
         EditorGUILayout.LabelField("HP: " + entity.GetStat(Stats.CurrentHealth).statValue + "/" + entity.GetStat(Stats.Health).statValue);
+        EditorGUILayout.LabelField("Last Roll: " + entity.equippedDice.LastRollValue);
         EditorGUILayout.LabelField("AP: " + entity.GetStat(Stats.ActionPoints).statValue);
         EditorGUILayout.LabelField("Rollover AP: " + entity.GetStat(Stats.CarriedOverActionPoints).statValue);
         EditorGUILayout.LabelField("Alive: " + (entity.isAlive ? "Yes" : "No"));
@@ -132,9 +133,8 @@ public class TurnDebuggerWindow : EditorWindow
 
             if (GUILayout.Button("Roll Dice"))
             {
-                int amount = entity.RollDice();
-                entity.statsContainer.ActionPoints.statValue = amount;
-                Debug.Log($"{entity.name} rolled: {amount} AP");
+                entity.RollDice();
+                Debug.Log($"{entity.name} rolled: {entity.LastRollValue} AP");
             }
         }
 

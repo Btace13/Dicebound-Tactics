@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 namespace TacticsToolkit
 {
@@ -13,6 +14,10 @@ namespace TacticsToolkit
         public List<AbilityContainer> abilitiesForUse;
         public Sprite portrait;
         public int CurrentAP => statsContainer.ActionPoints.statValue;
+        public int LastRollValue => equippedDice.LastRollValue;
+        public bool HasFreeAbility => nextAbilityFree;
+        public bool IsTaunting => isTaunting;
+        public bool IsOverloaded => isOverloaded;
 
         [Header("Abilities")]
         public List<AbilitySO> abilities = new();
@@ -54,6 +59,13 @@ namespace TacticsToolkit
 
         private int initiativeBase = 1000;
         private float i;
+        private bool nextAbilityFree = false;
+        private Dictionary<string, float> tempModifiers = new();
+        private float healOnNextHit = 0f;
+        private bool isTaunting = false;
+        private int tauntTurnsRemaining = 0;
+        private bool isOverloaded = false;
+
 
         private void Awake()
         {
@@ -213,7 +225,7 @@ namespace TacticsToolkit
         //Take damage from an attack or ability. 
         public void TakeDamage(int damage, bool ignoreDefence = false)
         {
-            int damageToTake = ignoreDefence ? damage : CalculateDamage(damage);
+            int damageToTake = ignoreDefence ? damage : CalculateDamageTakenWithModifiers(damage);
 
             if (damageToTake > 0)
             {
@@ -239,7 +251,7 @@ namespace TacticsToolkit
             UpdateCharacterUI();
         }
 
-        //basic example if using a defencive stat
+        //basic example if using a defensive stat
         private int CalculateDamage(int damage)
         {
             var endurance = (float)GetStat(Stats.Endurance).statValue;
@@ -411,6 +423,59 @@ namespace TacticsToolkit
             }
         }
 
+        public int CalculateDamageWithModifiers(int baseDamage)
+        {
+            float modifiedDamage = baseDamage;
+
+            foreach (var modifier in tempModifiers)
+            {
+                switch (modifier.Key)
+                {
+                    case "BonusDamage":
+                        modifiedDamage += ((modifier.Value / 100f) * baseDamage);
+                        break;
+                    case "PowerStack":
+                        modifiedDamage += (baseDamage * (modifier.Value / 100f));
+                        break;
+                    default:
+                        Debug.LogWarning($"Unknown damage modifier key: {modifier.Key}");
+                        break;
+                }
+            }
+
+            return Mathf.RoundToInt(modifiedDamage);
+        }
+
+        public int CalculateDamageTakenWithModifiers(int baseDamage)
+        {
+            float modifiedDamage = baseDamage;
+
+            foreach (var modifier in tempModifiers)
+            {
+                switch (modifier.Key)
+                {
+                    case "DamageReduction":
+                        modifiedDamage -= modifier.Value;
+                        break;
+                    default:
+                        Debug.LogWarning($"Unknown damage taken modifier key: {modifier.Key}");
+                        break;
+                }
+            }
+
+            return Mathf.Max(0, Mathf.RoundToInt(modifiedDamage));
+        }
+
+        public void HealOnNextHit(int damageDealt)
+        {
+            if (healOnNextHit > 0f)
+            {
+                int healAmount = Mathf.RoundToInt(damageDealt * healOnNextHit);
+                HealEntity(healAmount);
+                healOnNextHit = 0f;
+            }
+        }
+
         public void Reset()
         {
             isAlive = true;
@@ -418,30 +483,135 @@ namespace TacticsToolkit
             isTargetted = false;
             statsContainer.CurrentHealth.statValue = statsContainer.Health.statValue;
             statsContainer.CurrentMana.statValue = statsContainer.Mana.statValue;
+            statsContainer.ActionPoints.statValue = 0;
+            statsContainer.CarriedOverActionPoints.statValue = 0;
             UpdateCharacterUI();
         }
 
-        public void SpendAP(int apCost)
+        public bool SpendAP(int apCost)
         {
+            if (nextAbilityFree)
+            {
+                nextAbilityFree = false;
+                return true;
+            }
+
             if (apCost <= statsContainer.ActionPoints.statValue)
             {
                 statsContainer.ActionPoints.statValue -= apCost;
+                return true;
             }
             else
             {
                 Debug.LogWarning("Not enough Action Points to perform this action.");
+                return false;
             }
         }
 
-        public int RollDice()
+        public void RollDice()
         {
             if (equippedDice == null)
             {
                 Debug.LogError("Character Dice is not assigned for " + name);
-                return 0;
+                return;
             }
 
-            return equippedDice.Roll().value;
+            DiceSide diceRoll = equippedDice.Roll();
+            int totalAP = diceRoll.value + statsContainer.CarriedOverActionPoints.statValue;
+            
+            statsContainer.ActionPoints.statValue = totalAP;
+            statsContainer.CarriedOverActionPoints.statValue = 0;
+            diceRoll.modifier.Apply(this);
+        }
+
+        public void ResetTempModifiers()
+        {
+            tempModifiers.Clear();
+            nextAbilityFree = false;
+            isOverloaded = false;
+            healOnNextHit = 0f;
+
+            if (isTaunting)
+            {
+                tauntTurnsRemaining--;
+                if (tauntTurnsRemaining <= 0)
+                    isTaunting = false;
+            }
+        }
+
+        public void AddActionPoints(int amount)
+        {
+            statsContainer.ActionPoints.statValue += amount;
+        }
+
+        public void SetNextAbilityFree()
+        {
+            nextAbilityFree = true;
+        }
+
+        public void AddTempModifier(string key, float value)
+        {
+            if (!tempModifiers.ContainsKey(key))
+                tempModifiers[key] = 0;
+
+            tempModifiers[key] += value;
+        }
+
+        public void ApplyFocusBoost()
+        {
+            AddTempModifier("BonusDamage", 10f);
+            SetNextAbilityFree();
+        }
+
+        public void AddPowerStack(int percentage)
+        {
+            AddTempModifier("PowerStack", percentage);
+        }
+
+        public void ApplyTemporaryDefenseBuff(float reduction)
+        {
+            AddTempModifier("DamageReduction", reduction);
+        }
+
+        public void SetHealOnNextHit(float fraction)
+        {
+            healOnNextHit = fraction;
+        }
+
+        public void ApplyTaunt()
+        {
+            isTaunting = true;
+            tauntTurnsRemaining = 1;
+        }
+
+        public void ApplyOverload()
+        {
+            isOverloaded = true;
+        }
+
+        public void HealTeam(int teamID, int amount)
+        {
+            var team = FindObjectsByType<Entity>(FindObjectsSortMode.None).Where(e => e.teamID == teamID && e.isAlive);
+            foreach (var entity in team)
+            {
+                entity.HealEntity(amount);
+            }
+        }
+
+        public void HealTeamByPercentage(int teamID, float percent)
+        {
+            var team = FindObjectsByType<Entity>(FindObjectsSortMode.None).Where(e => e.teamID == teamID && e.isAlive);
+            foreach (var entity in team)
+            {
+                int healAmount = Mathf.RoundToInt((percent / 100f) * entity.statsContainer.Health.statValue);
+                entity.HealEntity(healAmount);
+            }
+        }
+
+        public void HealEntityByPercentage(float percent)
+        {
+            int healAmount = Mathf.RoundToInt((percent / 100f) * statsContainer.Health.statValue);
+            HealEntity(healAmount);
         }
     }
 }
