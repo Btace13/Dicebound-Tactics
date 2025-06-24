@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a2c3c37a982447789bd3c4433c4d83a, type: 3}
+  m_Name: CharacterDie3
+  m_EditorClassIdentifier: 
+  sides:
+  - value: 1
+    modifier: {fileID: 11400000, guid: e0b7489338d0b478897f8173c25d8f8d, type: 2}
+  - value: 2
+    modifier: {fileID: 11400000, guid: e0b7489338d0b478897f8173c25d8f8d, type: 2}
+  - value: 3
+    modifier: {fileID: 11400000, guid: e0b7489338d0b478897f8173c25d8f8d, type: 2}
+  - value: 4
+    modifier: {fileID: 11400000, guid: e0b7489338d0b478897f8173c25d8f8d, type: 2}
+  - value: 5
+    modifier: {fileID: 11400000, guid: e0b7489338d0b478897f8173c25d8f8d, type: 2}
+  - value: 6
+    modifier: {fileID: 11400000, guid: e0b7489338d0b478897f8173c25d8f8d, type: 2}

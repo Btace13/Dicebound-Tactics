@@ -10,18 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9a2c3c37a982447789bd3c4433c4d83a, type: 3}
-  m_Name: 6
+  m_Name: BackupDie
   m_EditorClassIdentifier: 
   sides:
-  - value: 1
+  - value: 0
     modifier: {fileID: 0}
-  - value: 2
+  - value: 0
     modifier: {fileID: 0}
-  - value: 3
+  - value: 0
     modifier: {fileID: 0}
-  - value: 4
+  - value: 0
     modifier: {fileID: 0}
-  - value: 5
+  - value: 0
     modifier: {fileID: 0}
-  - value: 6
+  - value: 0
     modifier: {fileID: 0}

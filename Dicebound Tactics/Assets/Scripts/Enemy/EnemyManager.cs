@@ -2,14 +2,18 @@ using System.Collections;
 using UnityEngine;
 using System.Linq;
 using TacticsToolkit;
+using System.Collections.Generic;
 
 public class EnemyManager : Entity
 {
+    [Header("Enemy Specifics")]
+    public EnemyDiceProfile diceProfile;
     private TurnManager turnManager;
 
     private void Start()
     {
         turnManager = FindFirstObjectByType<TurnManager>();
+        equippedDice = CreateDiceFromProfile(diceProfile);
     }
 
     public void BeginAITurn()
@@ -65,6 +69,20 @@ public class EnemyManager : Entity
 
         Debug.Log($"[AI] {name} ends turn with {CurrentAP} AP");
         EndAITurn();
+    }
+
+    public static Dice CreateDiceFromProfile(EnemyDiceProfile profile)
+    {
+        int sides = Random.Range(profile.minSides, profile.maxSides + 1);
+        List<DiceSide> generatedSides = new();
+
+        for (int i = 0; i < sides; i++)
+        {
+            DiceModifier randomMod = profile.possibleModifiers[Random.Range(0, profile.possibleModifiers.Count)];
+            generatedSides.Add(new DiceSide(randomMod));
+        }
+
+        return new Dice(generatedSides);
     }
 
     private void EndAITurn()

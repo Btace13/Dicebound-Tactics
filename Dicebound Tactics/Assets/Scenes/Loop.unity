@@ -241,10 +241,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: caf52369d36c6463fa64c52bb15a4dfc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  equippedDice: {fileID: 11400000, guid: 13934ccd0cd1b4e7bb563bac2bcb4735, type: 2}
+  equippedDice: {fileID: 11400000, guid: c41cf5cdd117b4da5b898d87cff864ae, type: 2}
   portrait: {fileID: 3229708652140166120, guid: 3e5c6627436f52749bd3a5b2d7b4ad79, type: 3}
   abilities:
   - {fileID: 11400000, guid: 71895a1f9982b4faebb510e4a913cd15, type: 2}
+  inventory: {fileID: 0}
   level: 0
   experience: 0
   requiredExperience: 0
@@ -257,10 +258,11 @@ MonoBehaviour:
   isAlive: 1
   isActive: 0
   endTurn: {fileID: 11400000, guid: fdfd2d860fc9f35449f03cd73e2c6948, type: 2}
-  healthBar: {fileID: 1858955873}
+  healthBar: {fileID: 0}
   previousTurnCost: -1
   myRenderer: {fileID: 0}
   gameConfig: {fileID: 11400000, guid: eaeab84eb6b1df54eb4c6951b5ec44ae, type: 2}
+  diceProfile: {fileID: 11400000, guid: 22d593f9d0fc74833ae292890888b6e8, type: 2}
 --- !u!1 &141835404
 GameObject:
   m_ObjectHideFlags: 0
@@ -1672,10 +1674,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: caf52369d36c6463fa64c52bb15a4dfc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  equippedDice: {fileID: 11400000, guid: 13934ccd0cd1b4e7bb563bac2bcb4735, type: 2}
+  equippedDice: {fileID: 11400000, guid: c41cf5cdd117b4da5b898d87cff864ae, type: 2}
   portrait: {fileID: 876784968147787122, guid: 3e5c6627436f52749bd3a5b2d7b4ad79, type: 3}
   abilities:
   - {fileID: 11400000, guid: 71895a1f9982b4faebb510e4a913cd15, type: 2}
+  inventory: {fileID: 0}
   level: 0
   experience: 0
   requiredExperience: 0
@@ -1688,10 +1691,11 @@ MonoBehaviour:
   isAlive: 1
   isActive: 0
   endTurn: {fileID: 11400000, guid: fdfd2d860fc9f35449f03cd73e2c6948, type: 2}
-  healthBar: {fileID: 2069558204}
+  healthBar: {fileID: 0}
   previousTurnCost: -1
   myRenderer: {fileID: 0}
   gameConfig: {fileID: 11400000, guid: eaeab84eb6b1df54eb4c6951b5ec44ae, type: 2}
+  diceProfile: {fileID: 11400000, guid: 22d593f9d0fc74833ae292890888b6e8, type: 2}
 --- !u!1001 &844530597
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2184,6 +2188,7 @@ MonoBehaviour:
   portrait: {fileID: 3542127132570728493, guid: cc8cb170ff11da442bedd0e9e3be0e9a, type: 3}
   abilities:
   - {fileID: 11400000, guid: 71895a1f9982b4faebb510e4a913cd15, type: 2}
+  inventory: {fileID: 0}
   level: 0
   experience: 0
   requiredExperience: 0
@@ -2196,7 +2201,7 @@ MonoBehaviour:
   isAlive: 1
   isActive: 0
   endTurn: {fileID: 11400000, guid: fdfd2d860fc9f35449f03cd73e2c6948, type: 2}
-  healthBar: {fileID: 1693621143}
+  healthBar: {fileID: 0}
   previousTurnCost: -1
   myRenderer: {fileID: 0}
   gameConfig: {fileID: 11400000, guid: eaeab84eb6b1df54eb4c6951b5ec44ae, type: 2}
@@ -3160,10 +3165,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a67821d0ea4da545a4405a4a9cceb86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  equippedDice: {fileID: 11400000, guid: 13934ccd0cd1b4e7bb563bac2bcb4735, type: 2}
+  equippedDice: {fileID: 11400000, guid: 2a0f62e01cb67493db66c41a09fc09c4, type: 2}
   portrait: {fileID: 8248543377919322394, guid: cc8cb170ff11da442bedd0e9e3be0e9a, type: 3}
   abilities:
   - {fileID: 11400000, guid: 71895a1f9982b4faebb510e4a913cd15, type: 2}
+  inventory: {fileID: 0}
   level: 0
   experience: 0
   requiredExperience: 0
@@ -3176,7 +3182,7 @@ MonoBehaviour:
   isAlive: 1
   isActive: 0
   endTurn: {fileID: 11400000, guid: fdfd2d860fc9f35449f03cd73e2c6948, type: 2}
-  healthBar: {fileID: 1288684745}
+  healthBar: {fileID: 0}
   previousTurnCost: -1
   myRenderer: {fileID: 0}
   gameConfig: {fileID: 11400000, guid: eaeab84eb6b1df54eb4c6951b5ec44ae, type: 2}
@@ -3598,10 +3604,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: caf52369d36c6463fa64c52bb15a4dfc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  equippedDice: {fileID: 11400000, guid: 13934ccd0cd1b4e7bb563bac2bcb4735, type: 2}
+  equippedDice: {fileID: 11400000, guid: c41cf5cdd117b4da5b898d87cff864ae, type: 2}
   portrait: {fileID: 2731795287329381114, guid: 3e5c6627436f52749bd3a5b2d7b4ad79, type: 3}
   abilities:
   - {fileID: 11400000, guid: 71895a1f9982b4faebb510e4a913cd15, type: 2}
+  inventory: {fileID: 0}
   level: 0
   experience: 0
   requiredExperience: 0
@@ -3614,10 +3621,11 @@ MonoBehaviour:
   isAlive: 1
   isActive: 0
   endTurn: {fileID: 11400000, guid: fdfd2d860fc9f35449f03cd73e2c6948, type: 2}
-  healthBar: {fileID: 211799311}
+  healthBar: {fileID: 0}
   previousTurnCost: -1
   myRenderer: {fileID: 0}
   gameConfig: {fileID: 11400000, guid: eaeab84eb6b1df54eb4c6951b5ec44ae, type: 2}
+  diceProfile: {fileID: 11400000, guid: 22d593f9d0fc74833ae292890888b6e8, type: 2}
 --- !u!1 &1580786530
 GameObject:
   m_ObjectHideFlags: 0
@@ -3659,6 +3667,8 @@ MonoBehaviour:
   GameIsPlaying: 0
   BattleStarted: {fileID: 0}
   startNewTurn: {fileID: 11400000, guid: c4e0d453d72137543842d48f73e3a632, type: 2}
+  startNewCharacterTurn: {fileID: 0}
+  startNewEnemyTurn: {fileID: 0}
   GameEnded: {fileID: 11400000, guid: 337dc5eed5ed2461f8f6776f98116f6b, type: 2}
 --- !u!4 &1580786532
 Transform:
@@ -4304,10 +4314,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a67821d0ea4da545a4405a4a9cceb86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  equippedDice: {fileID: 11400000, guid: 13934ccd0cd1b4e7bb563bac2bcb4735, type: 2}
+  equippedDice: {fileID: 11400000, guid: 8065c17c830c7476eacbf993e53bd33e, type: 2}
   portrait: {fileID: -1960546628078278901, guid: cc8cb170ff11da442bedd0e9e3be0e9a, type: 3}
   abilities:
   - {fileID: 11400000, guid: 71895a1f9982b4faebb510e4a913cd15, type: 2}
+  inventory: {fileID: 0}
   level: 0
   experience: 0
   requiredExperience: 0
@@ -4320,7 +4331,7 @@ MonoBehaviour:
   isAlive: 1
   isActive: 0
   endTurn: {fileID: 11400000, guid: fdfd2d860fc9f35449f03cd73e2c6948, type: 2}
-  healthBar: {fileID: 1144906461}
+  healthBar: {fileID: 0}
   previousTurnCost: -1
   myRenderer: {fileID: 0}
   gameConfig: {fileID: 11400000, guid: eaeab84eb6b1df54eb4c6951b5ec44ae, type: 2}

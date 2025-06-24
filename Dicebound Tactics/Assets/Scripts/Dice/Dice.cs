@@ -7,6 +7,11 @@ public class Dice : ScriptableObject
     public List<DiceSide> sides = new(6);
     public int LastRollValue { get; private set; }
 
+    public Dice(List<DiceSide> generatedSides)
+    {
+        sides = generatedSides;
+    }
+
     public DiceSide Roll()
     {
         int index = Random.Range(1, sides.Count);
