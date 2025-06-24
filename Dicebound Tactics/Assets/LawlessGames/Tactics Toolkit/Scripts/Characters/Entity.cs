@@ -47,7 +47,7 @@ namespace TacticsToolkit
         [HideInInspector]
         public bool isActive;
         public GameEvent endTurn;
-        public Image healthBar;
+        public HealthBarUI healthBar;
         [HideInInspector]
         public int previousTurnCost = -1;
 
@@ -323,7 +323,7 @@ namespace TacticsToolkit
         //Updates the characters healthbar. 
         private void UpdateCharacterUI()
         {
-            healthBar.fillAmount = (float)statsContainer.CurrentHealth.statValue / (float)statsContainer.Health.statValue;
+            healthBar.SetHealth((float)statsContainer.CurrentHealth.statValue, statsContainer.Health.statValue);
         }
 
         //Change characters mana

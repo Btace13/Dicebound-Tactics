@@ -36,6 +36,7 @@ public class CombatUIHandler : MonoBehaviour
 
     [Header("Screen Space UI References")]
     [SerializeField] private CanvasGroup screenSpaceCanvasGroup;
+    [SerializeField] private CombatNotification notificationUI;
     [SerializeField] private CanvasGroup panelInputsCanvasGroup;
     [SerializeField] private Button confirmButton;
 
@@ -232,5 +233,16 @@ public class CombatUIHandler : MonoBehaviour
         }
 
         confirmButton.gameObject.SetActive(enable);
+    }
+
+    public void ShowNotification(string message, float duration = 2f)
+    {
+        if (notificationUI == null)
+        {
+            Debug.LogError("Notification UI is not set.");
+            return;
+        }
+
+        notificationUI.ShowNotification(message, duration);
     }
 }

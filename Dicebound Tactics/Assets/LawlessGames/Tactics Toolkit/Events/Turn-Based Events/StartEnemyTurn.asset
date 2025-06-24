@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 24b62ddf693d77b4f95cadaf7d77ad53, type: 3}
+  m_Script: {fileID: 11500000, guid: a69b3d00a052c22478e9658e2db6963c, type: 3}
   m_Name: StartEnemyTurn
   m_EditorClassIdentifier: 
-  gameObject: {fileID: 0}
+  value: {fileID: 0}

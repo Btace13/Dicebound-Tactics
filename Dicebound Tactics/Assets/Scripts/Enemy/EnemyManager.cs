@@ -36,7 +36,7 @@ public class EnemyManager : Entity
             if (usableAbilities.Count == 0)
                 break;
 
-            var ability = usableAbilities[Random.Range(0, usableAbilities.Count)];
+            AbilitySO ability = usableAbilities[Random.Range(0, usableAbilities.Count)];
 
             var targets = turnManager.playerUnits
                 .Where(p => p != null && p.isAlive)
@@ -49,7 +49,15 @@ public class EnemyManager : Entity
 
             Debug.Log($"[AI] {name} uses {ability.abilityName} on {target.name}");
 
+            //need to add logic for timing and animations here
+            CameraManager.Instance.SetActiveCombatCharacter(target.transform);
+            CameraManager.Instance.SetCombatTarget(transform);
+
+            CameraManager.Instance.TrySetActiveCamera("EnemyAttackCamera");
+            yield return new WaitForSeconds(1f);
+
             ability.Execute(this, target);
+            CameraManager.Instance.ShakeActiveCamera();
             statsContainer.ActionPoints.statValue -= ability.apCost;
 
             yield return new WaitForSeconds(0.5f);

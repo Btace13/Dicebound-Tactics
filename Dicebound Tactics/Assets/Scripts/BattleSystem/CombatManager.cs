@@ -11,12 +11,13 @@ public class CombatManager : MonoBehaviour
     [Header("Component References")]
     [SerializeField] private SelectionController selectionController;
     [SerializeField] private TurnManager turnManager;
+    [SerializeField] private CombatUIHandler combatUIHandler;
 
     [Header("Events")]
     public GameEventEntity OnTargetSelected;
 
     private CombatItem _selectedItem;
-    private Ability _selectedAbility;
+    private AbilitySO _selectedAbility;
 
     public void BasicAttackSelected()
     {
@@ -33,7 +34,7 @@ public class CombatManager : MonoBehaviour
         selectionController.ToggleEntitySelection(turnManager.enemyUnits[0], false);
     }
 
-    public void AbilitySelected(Ability ability)
+    public void AbilitySelected(AbilitySO ability)
     {
         Entity currentUnit = turnManager.GetCurrentUnit();
 
@@ -55,7 +56,7 @@ public class CombatManager : MonoBehaviour
             return;
         }
 
-        bool targetsEnemy = ability.abilityType == Ability.AbilityTypes.Enemy;
+        bool targetsEnemy = ability.abilityType == AbilityType.Enemy;
 
         // sets whether the ability is for allies or enemies
         selectionController.ChangeSelectionType(targetsEnemy);
@@ -63,6 +64,9 @@ public class CombatManager : MonoBehaviour
         // TODO: need to implement logic for this
         selectionController.SetSelectableTargetCount(1);
         selectionController.ToggleEntitySelection(targetsEnemy ? turnManager.enemyUnits[0] : turnManager.playerUnits[0], false);
+
+        _selectedAbility = ability;
+        Debug.Log($"Selected ability: {_selectedAbility.abilityName}");
     }
 
     public void ItemSelected(CombatItem item)
@@ -119,6 +123,25 @@ public class CombatManager : MonoBehaviour
         Sequence sequence = DOTween.Sequence();
         sequence.AppendCallback(() =>
         {
+            if (_selectedAbility != null)
+            {
+                // Show notification for ability usage
+                combatUIHandler.ShowNotification($"{currentUnit.name}{_selectedAbility.notifcationMessage}", 1);
+            }
+            else if (_selectedItem != null)
+            {
+                // Show notification for item usage
+                combatUIHandler.ShowNotification($"{currentUnit.name} used a {_selectedItem.ItemName}", 1);
+            }
+            else
+            {
+                //Show notifcation that the action is being executed
+                if (selectedTargets.Count > 1)
+                    combatUIHandler.ShowNotification($"{currentUnit.name} is attacking {selectedTargets.Count} targets", 1);
+                else
+                    combatUIHandler.ShowNotification($"{currentUnit.name} is attacking {selectedTargets[0].name}", 1);
+            }
+
             // set the active camera as the AttackCamera
             CameraManager.Instance?.TrySetActiveCamera("AttackCamera");
 
@@ -135,13 +158,21 @@ public class CombatManager : MonoBehaviour
                 // if should use ability
                 if (_selectedAbility != null)
                 {
-                    int damage = _selectedAbility.abilityType == Ability.AbilityTypes.Ally ? -_selectedAbility.value
-                                                                                            : _selectedAbility.value;
+                    DamageAbilitySO damageAbility = _selectedAbility as DamageAbilitySO;
+
+                    if (damageAbility == null)
+                    {
+                        Debug.LogError("Selected ability is not a DamageAbilitySO.");
+                        continue;
+                    }
+
+                    int damage = _selectedAbility.abilityType == AbilityType.Ally ? -damageAbility.damageAmount
+                                                                                            : damageAbility.damageAmount;
 
                     target.TakeDamage(damage);
                     CameraManager.Instance?.ShakeActiveCamera();
 
-                    Debug.Log($"{currentUnit.name} uses {_selectedAbility.Name} on {target.name}");
+                    Debug.Log($"{currentUnit.name} uses {_selectedAbility.abilityName} on {target.name}");
                 }
                 else if (_selectedItem != null)
                 {
@@ -166,7 +197,7 @@ public class CombatManager : MonoBehaviour
                 }
             }
         });
-        sequence.AppendInterval(1);
+        sequence.AppendInterval(2f);
         sequence.AppendCallback(() =>
         {
             _selectedAbility = null;
