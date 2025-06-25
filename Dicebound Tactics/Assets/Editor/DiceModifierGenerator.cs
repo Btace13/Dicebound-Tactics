@@ -31,7 +31,7 @@ public class DiceModifierGenerator : EditorWindow
 
         CreateModifier("Power Stack", "+5% damage bonus to each ability this turn.", new PowerStackModifier { percent = 5 });
 
-        CreateModifier("Heal on Hit", "Heal 15% of damage dealt on next ability.", new HealOnHitModifier { percent = 0.15f });
+        CreateModifier("Heal on Hit", "Heal 15% of damage dealt on next ability.", new HealOnHitModifier { percent = 15 });
 
         CreateModifier("Taunt", "Enemies prioritize you until next turn.", new TauntModifier());
 

@@ -79,7 +79,7 @@ public class EnemyManager : Entity
         for (int i = 0; i < sides; i++)
         {
             DiceModifier randomMod = profile.possibleModifiers[Random.Range(0, profile.possibleModifiers.Count)];
-            generatedSides.Add(new DiceSide(randomMod));
+            generatedSides.Add(new DiceSide(i + 1, randomMod));
         }
 
         return new Dice(generatedSides);

@@ -142,7 +142,7 @@ public class TurnManager : MonoBehaviour
     foreach (var character in playerUnits)
     {
       if (!character.isAlive) continue;
-
+      character.ResetTempModifiers();
       character.RollDice();
       Debug.Log($"{character.name} rolled a {character.LastRollValue} and now has {character.CurrentAP} AP.");
     }
@@ -151,6 +151,7 @@ public class TurnManager : MonoBehaviour
     {
       if (!enemy.isAlive) continue;
 
+      enemy.ResetTempModifiers();
       enemy.RollDice();
       Debug.Log($"{enemy.name} rolled a {enemy.LastRollValue} and now has {enemy.CurrentAP} AP.");
     }

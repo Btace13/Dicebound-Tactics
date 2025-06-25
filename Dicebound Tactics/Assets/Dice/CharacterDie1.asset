@@ -14,14 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sides:
   - value: 1
-    modifier: {fileID: 11400000, guid: e0b7489338d0b478897f8173c25d8f8d, type: 2}
+    modifier: {fileID: 11400000, guid: d8f05a7f391e942a88c5fd84807c2a5a, type: 2}
   - value: 2
-    modifier: {fileID: 11400000, guid: e0b7489338d0b478897f8173c25d8f8d, type: 2}
+    modifier: {fileID: 11400000, guid: d8f05a7f391e942a88c5fd84807c2a5a, type: 2}
   - value: 3
-    modifier: {fileID: 11400000, guid: e0b7489338d0b478897f8173c25d8f8d, type: 2}
+    modifier: {fileID: 11400000, guid: d8f05a7f391e942a88c5fd84807c2a5a, type: 2}
   - value: 4
-    modifier: {fileID: 11400000, guid: e0b7489338d0b478897f8173c25d8f8d, type: 2}
+    modifier: {fileID: 11400000, guid: d8f05a7f391e942a88c5fd84807c2a5a, type: 2}
   - value: 5
-    modifier: {fileID: 11400000, guid: e0b7489338d0b478897f8173c25d8f8d, type: 2}
+    modifier: {fileID: 11400000, guid: d8f05a7f391e942a88c5fd84807c2a5a, type: 2}
   - value: 6
-    modifier: {fileID: 11400000, guid: e0b7489338d0b478897f8173c25d8f8d, type: 2}
+    modifier: {fileID: 11400000, guid: d8f05a7f391e942a88c5fd84807c2a5a, type: 2}

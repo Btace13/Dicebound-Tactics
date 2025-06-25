@@ -13,8 +13,10 @@ public class DamageAbilitySO : AbilitySO
         if (user.SpendAP(apCost))
         {
             int amount = user.CalculateDamageWithModifiers(damageAmount);
+
             target.TakeDamage(amount);
-            target.HealOnNextHit(amount);
+            user.ApplyOverloadHit(amount, target);
+            user.HealOnHit(amount);
             Debug.Log($"{user.name} used {abilityName} on {target.name} for {amount} damage.");
         }
         else

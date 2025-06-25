@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Team Heal
   m_EditorClassIdentifier: 
   modifierName: Team Heal
-  description: All allies restore 15 HP.
+  description: All allies restore %15 HP.
   percent: 15

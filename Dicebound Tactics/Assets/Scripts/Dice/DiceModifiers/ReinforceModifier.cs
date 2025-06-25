@@ -5,7 +5,7 @@ using TacticsToolkit;
 [CreateAssetMenu(menuName = "DiceModifiers/Reinforce")]
 public class ReinforceModifier : DiceModifier
 {
-    public float defenseBoost = 0.25f; // 25% defense boost
+    public float defenseBoost = 25f;
     public override void Apply(Entity user)
     {
         if (user == null || !user.isAlive) return;

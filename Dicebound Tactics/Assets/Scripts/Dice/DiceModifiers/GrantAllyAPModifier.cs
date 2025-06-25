@@ -15,6 +15,7 @@ public class GrantAllyAPModifier : DiceModifier
         {
             var target = allies[Random.Range(0, allies.Count)];
             target.AddActionPoints(amount);
+            Debug.Log($"{user.name} grants {amount} AP to {target.name}");
         }
     }
 }

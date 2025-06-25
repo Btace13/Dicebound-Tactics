@@ -225,7 +225,7 @@ namespace TacticsToolkit
         //Take damage from an attack or ability. 
         public void TakeDamage(int damage, bool ignoreDefence = false)
         {
-            int damageToTake = ignoreDefence ? damage : CalculateDamageTakenWithModifiers(damage);
+            int damageToTake = CalculateDamageTakenWithModifiers(damage);
 
             if (damageToTake > 0)
             {
@@ -248,6 +248,7 @@ namespace TacticsToolkit
         public void HealEntity(int value)
         {
             statsContainer.CurrentHealth.statValue += value;
+            Debug.Log($"{name} healed for {value} HP.");
             UpdateCharacterUI();
         }
 
@@ -323,7 +324,8 @@ namespace TacticsToolkit
         //Updates the characters healthbar. 
         private void UpdateCharacterUI()
         {
-            healthBar.SetHealth((float)statsContainer.CurrentHealth.statValue, statsContainer.Health.statValue);
+            if (healthBar)
+                healthBar.SetHealth((float)statsContainer.CurrentHealth.statValue, statsContainer.Health.statValue);
         }
 
         //Change characters mana
@@ -433,6 +435,7 @@ namespace TacticsToolkit
                 {
                     case "BonusDamage":
                         modifiedDamage += ((modifier.Value / 100f) * baseDamage);
+                        tempModifiers.Remove(modifier.Key);
                         break;
                     case "PowerStack":
                         modifiedDamage += (baseDamage * (modifier.Value / 100f));
@@ -455,7 +458,8 @@ namespace TacticsToolkit
                 switch (modifier.Key)
                 {
                     case "DamageReduction":
-                        modifiedDamage -= modifier.Value;
+                        modifiedDamage -= ((modifier.Value / 100f) * baseDamage);
+                        Debug.Log($"Damage reduced by {modifier.Value}%");
                         break;
                     default:
                         Debug.LogWarning($"Unknown damage taken modifier key: {modifier.Key}");
@@ -463,14 +467,14 @@ namespace TacticsToolkit
                 }
             }
 
-            return Mathf.Max(0, Mathf.RoundToInt(modifiedDamage));
+            return modifiedDamage > 0 ? Mathf.RoundToInt(modifiedDamage) : 0;
         }
 
-        public void HealOnNextHit(int damageDealt)
+        public void HealOnHit(int damageDealt)
         {
             if (healOnNextHit > 0f)
             {
-                int healAmount = Mathf.RoundToInt(damageDealt * healOnNextHit);
+                int healAmount = Mathf.RoundToInt((healOnNextHit / 100) * damageDealt);
                 HealEntity(healAmount);
                 healOnNextHit = 0f;
             }
@@ -490,15 +494,24 @@ namespace TacticsToolkit
 
         public bool SpendAP(int apCost)
         {
+            int cost = apCost;
+
             if (nextAbilityFree)
             {
                 nextAbilityFree = false;
                 return true;
             }
 
-            if (apCost <= statsContainer.ActionPoints.statValue)
+            if (tempModifiers.TryGetValue("APCostReduction", out float reduction))
             {
-                statsContainer.ActionPoints.statValue -= apCost;
+                cost -= Mathf.RoundToInt(reduction);
+                cost = Mathf.Max(0, cost);
+                tempModifiers.Remove("APCostReduction");
+            }
+
+            if (cost <= statsContainer.ActionPoints.statValue)
+            {
+                statsContainer.ActionPoints.statValue -= cost;
                 return true;
             }
             else
@@ -518,8 +531,8 @@ namespace TacticsToolkit
 
             DiceSide diceRoll = equippedDice.Roll();
             int totalAP = diceRoll.value + statsContainer.CarriedOverActionPoints.statValue;
-            
-            statsContainer.ActionPoints.statValue = totalAP;
+
+            statsContainer.ActionPoints.statValue = statsContainer.ActionPoints.statValue += totalAP;
             statsContainer.CarriedOverActionPoints.statValue = 0;
             diceRoll.modifier.Apply(this);
         }
@@ -560,7 +573,7 @@ namespace TacticsToolkit
         public void ApplyFocusBoost()
         {
             AddTempModifier("BonusDamage", 10f);
-            SetNextAbilityFree();
+            AddTempModifier("APCostReduction", 1f);
         }
 
         public void AddPowerStack(int percentage)
@@ -573,9 +586,9 @@ namespace TacticsToolkit
             AddTempModifier("DamageReduction", reduction);
         }
 
-        public void SetHealOnNextHit(float fraction)
+        public void SetHealOnNextHit(int amount)
         {
-            healOnNextHit = fraction;
+            healOnNextHit = amount;
         }
 
         public void ApplyTaunt()
@@ -587,6 +600,32 @@ namespace TacticsToolkit
         public void ApplyOverload()
         {
             isOverloaded = true;
+        }
+
+        public void ApplyOverloadHit(int damageDealt, Entity originalTarget)
+        {
+            if (isOverloaded)
+            {
+                var enemies = FindObjectsByType<Entity>(FindObjectsSortMode.None).Where(e => e.teamID != teamID && e.isAlive).ToList();
+                if (enemies.Count == 0)
+                    return;
+
+                Entity randomEnemy;
+                if (enemies.Count == 1)
+                {
+                    randomEnemy = enemies[0];
+                }
+                else
+                {
+                    do
+                    {
+                        randomEnemy = enemies[Random.Range(0, enemies.Count)];
+                    } while (randomEnemy == originalTarget);
+                }
+                randomEnemy.TakeDamage(damageDealt);
+                Debug.Log($"{name} overloads and hits {randomEnemy.name} for {damageDealt} damage.");
+                isOverloaded = false;
+            }
         }
 
         public void HealTeam(int teamID, int amount)

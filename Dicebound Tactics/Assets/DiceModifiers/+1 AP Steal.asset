@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bf328570db25d400bbaff669820108fe, type: 3}
-  m_Name: AP Steal
+  m_Name: +1 AP Steal
   m_EditorClassIdentifier: 
   modifierName: AP Steal
   description: Steal 1 AP from a random enemy.
