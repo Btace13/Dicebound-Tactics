@@ -166,10 +166,15 @@ public class CombatManager : MonoBehaviour
                         continue;
                     }
 
-                    int damage = _selectedAbility.abilityType == AbilityType.Ally ? -damageAbility.damageAmount
-                                                                                            : damageAbility.damageAmount;
+                    bool isHealAbility = _selectedAbility.abilityType == AbilityType.Ally;
+
+                    int damage = isHealAbility ? -damageAbility.damageAmount : damageAbility.damageAmount;
 
                     target.TakeDamage(damage);
+
+                    combatUIHandler.damageNumberUIHandler.ShowDamageNumber(damage, target.transform.position,
+                        isHealAbility ? DamageNumberType.Heal : DamageNumberType.Normal);
+
                     CameraManager.Instance?.ShakeActiveCamera();
 
                     Debug.Log($"{currentUnit.name} uses {_selectedAbility.abilityName} on {target.name}");
@@ -191,6 +196,9 @@ public class CombatManager : MonoBehaviour
                 {
                     int damage = currentUnit.characterClass.Strenght.baseStatValue;
                     target.TakeDamage(damage);
+
+                    combatUIHandler.damageNumberUIHandler.ShowDamageNumber(damage, target.transform.position, DamageNumberType.Normal);
+
                     CameraManager.Instance?.ShakeActiveCamera();
 
                     Debug.Log($"{currentUnit.name} attacks {target.name} for {damage} damage.");

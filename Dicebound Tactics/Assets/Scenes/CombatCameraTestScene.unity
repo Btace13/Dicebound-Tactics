@@ -1644,6 +1644,7 @@ GameObject:
   - component: {fileID: 453086988}
   - component: {fileID: 453086987}
   - component: {fileID: 453086992}
+  - component: {fileID: 453086993}
   m_Layer: 5
   m_Name: CombatUICanvas
   m_TagString: Untagged
@@ -1768,6 +1769,7 @@ MonoBehaviour:
   notificationUI: {fileID: 1669800638}
   panelInputsCanvasGroup: {fileID: 423185911}
   confirmButton: {fileID: 1050117264}
+  damageNumberUIHandler: {fileID: 453086993}
 --- !u!114 &453086992
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1782,6 +1784,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShouldBillboard: 1
   FlipHorizontal: 1
+--- !u!114 &453086993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 453086985}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11a1d4104c8035143855470b8086667f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damageNumberPrefab: {fileID: 1143124466201597861, guid: b649fe79970dce945bcd7682196336a1, type: 3}
+  resistantDamageNumberPrefab: {fileID: 88279366817349507, guid: 47a0504d9f9c037498a2c975da644b13, type: 3}
+  criticalDamageNumberPrefab: {fileID: 2191642218884379111, guid: 09380dd5f0d813441a4738599b3d8ac4, type: 3}
+  healDamageNumberPrefab: {fileID: 8454332704013916021, guid: 4c4924619d0ea994abe06c3db1934ca9, type: 3}
+  immuneDamageNumberPrefab: {fileID: 0}
 --- !u!1 &463703116
 GameObject:
   m_ObjectHideFlags: 0

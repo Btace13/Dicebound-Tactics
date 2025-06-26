@@ -40,6 +40,9 @@ public class CombatUIHandler : MonoBehaviour
     [SerializeField] private CanvasGroup panelInputsCanvasGroup;
     [SerializeField] private Button confirmButton;
 
+    [Header("Other References")]
+    public DamageNumberUIHandler damageNumberUIHandler;
+
     private void Awake()
     {
         if (currentPanel == null)
