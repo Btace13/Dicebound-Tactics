@@ -46,6 +46,33 @@ public class CombatUIHandler : MonoBehaviour
         {
             Debug.LogError("Current Panel is not set in CombatUIHandler.");
         }
+
+        if (ActionPanel)
+        {
+            ActionPanel.gameObject.SetActive(false);
+        }
+        else
+        {
+            Debug.LogError("ActionPanel is not set in CombatUIHandler.");
+        }
+
+        if (AbilityPanel)
+        {
+            AbilityPanel.gameObject.SetActive(false);
+        }
+        else
+        {
+            Debug.LogError("AbilityPanel is not set in CombatUIHandler.");
+        }
+
+        if (ItemPanel)
+        {
+            ItemPanel.gameObject.SetActive(false);
+        }
+        else
+        {
+            Debug.LogError("ItemPanel is not set in CombatUIHandler.");
+        }
     }
 
     public void MoveCanvasToCharacter(CharacterManager character)
@@ -115,6 +142,10 @@ public class CombatUIHandler : MonoBehaviour
                     currentPanel.PreviousPanel = previousPanel;
                 }
 
+                // deactivate the previous panel and activate the new one
+                previousPanel.gameObject.SetActive(false);
+                panel.gameObject.SetActive(true);
+
                 ShowScreenSpacePanelInputs(currentPanel.PreviousPanel != null);
                 currentPanel.FadeInCanvas(null, _fadeDuration, Ease.InOutQuad);
             }, _fadeDuration, Ease.InOutQuad);
@@ -162,8 +193,13 @@ public class CombatUIHandler : MonoBehaviour
             {
                 currentPanel.FadeOutCanvas(() =>
                 {
+                    // Deactivate the current panel and set the previous panel as current
+                    currentPanel.gameObject.SetActive(false);
+
                     currentPanel = currentPanel.PreviousPanel;
                     ShowScreenSpacePanelInputs(currentPanel.PreviousPanel != null);
+
+                    currentPanel.gameObject.SetActive(true);
                     currentPanel.FadeInCanvas(null, _fadeDuration, Ease.InOutQuad);
 
                     if (cameraManager)

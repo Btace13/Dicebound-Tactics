@@ -1,9 +1,13 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Sirenix.OdinInspector;
+using DiceboundTactics.UI;
+using System.Collections.Generic;
 
 public class InputManager : MonoBehaviour
 {
+    public static InputManager Instance { get; private set; }
+
     public enum ActionMap
     {
         NONE = 0,
@@ -13,11 +17,26 @@ public class InputManager : MonoBehaviour
 
     [SerializeField, ReadOnly] public ActionMap CurrentActionMap = ActionMap.NONE;
 
-    //private InputSystem_Actions inputActions;
+    public InputSystem_Actions InputActions;
+    [SerializeField] InputIconManager inputIconManager;
+
+    private List<IIconUpdater> _iconUpdaters = new List<IIconUpdater>();
+    private InputDevice currentDevice;
 
     private void Awake()
     {
-        //inputActions = new InputSystem_Actions();
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        InputActions = new InputSystem_Actions();
 
         // inputActions.Player.Move.performed += Move;
         // inputActions.Player.Look.performed += Look;
@@ -41,6 +60,66 @@ public class InputManager : MonoBehaviour
         SetActionMap(ActionMap.PLAYER);
     }
 
+    private void OnEnable()
+    {
+        InputSystem.onActionChange += OnInputAction;
+    }
+
+    private void OnDisable()
+    {
+        InputSystem.onActionChange -= OnInputAction;
+    }
+
+    private void OnInputAction(object obj, InputActionChange change)
+    {
+        if (change == InputActionChange.ActionPerformed)
+        {
+            var inputAction = (InputAction)obj;
+            if (inputAction.activeControl != null)
+            {
+                OnInputReceived(inputAction.activeControl);
+            }
+        }
+    }
+
+    private void OnInputReceived(InputControl control)
+    {
+        currentDevice = control.device;
+
+        if (currentDevice is Keyboard || currentDevice is Mouse)
+        {
+            Debug.Log("Current Device: Keyboard and Mouse");
+            // Update icons for keyboard and mouse
+        }
+        else if (currentDevice is Gamepad)
+        {
+            var gamepad = currentDevice as Gamepad;
+            if (gamepad != null)
+            {
+                if (gamepad.name.Contains("Xbox"))
+                {
+                    Debug.Log("Current Device: Xbox Controller");
+                    // Update icons for Xbox controller
+                }
+                else if (gamepad.name.Contains("PlayStation"))
+                {
+                    Debug.Log("Current Device: PlayStation Controller");
+                    // Update icons for PlayStation controller
+                }
+                else
+                {
+                    Debug.Log("Current Device: Generic Gamepad");
+                    // Update icons for generic gamepad
+                }
+            }
+        }
+        else
+        {
+            Debug.Log("Current Device: Unknown");
+            // Handle other input devices
+        }
+    }
+
     public void SetActionMap(ActionMap actionMap)
     {
         switch (actionMap)
@@ -60,5 +139,50 @@ public class InputManager : MonoBehaviour
         }
 
         CurrentActionMap = actionMap;
+    }
+
+    public void UpdateAllIcons()
+    {
+        // Use currentDevice to determine which icons to update
+        if (currentDevice != null)
+        {
+            Debug.Log($"Updating icons for: {currentDevice.displayName}");
+
+            foreach (var updater in _iconUpdaters)
+            {
+                updater.UpdateIcon();
+            }
+        }
+        else
+        {
+            Debug.LogWarning("No current device detected. Cannot update icons.");
+        }
+    }
+
+    public void RegisterIconUpdater(IIconUpdater updater)
+    {
+        if (!_iconUpdaters.Contains(updater))
+        {
+            _iconUpdaters.Add(updater);
+        }
+    }
+
+    public void UnregisterIconUpdater(IIconUpdater updater)
+    {
+        if (_iconUpdaters.Contains(updater))
+        {
+            _iconUpdaters.Remove(updater);
+        }
+    }
+
+    public Sprite TryGetIconForAction(InputActionReference action)
+    {
+        if (inputIconManager == null)
+        {
+            Debug.LogWarning("InputIconManager is not assigned. Please assign it in the inspector.");
+            return null;
+        }
+
+        return inputIconManager.GetIconForAction(action.name);
     }
 }

@@ -30,6 +30,8 @@ public class CombatPanel : MonoBehaviour
 
     public void FadeCanvas(bool fadeIn, UnityAction OnFadeComplete = null, float duration = 0.15f, Ease ease = Ease.InOutQuad)
     {
+        gameObject.SetActive(true);
+
         if (FadeSequence != null && FadeSequence.IsActive())
         {
             FadeSequence.Kill();

@@ -12,7 +12,17 @@ public class CombatButton : MonoBehaviour
 
     private CanvasGroup canvasGroup;
     private Button button;
-    public Button Button => button;
+    public Button Button
+    {
+        get
+        {
+            if (button == null)
+            {
+                button = GetComponent<Button>();
+            }
+            return button;
+        }
+    }
 
     UnityAction OnClickAction { get; set; }
 
@@ -31,6 +41,11 @@ public class CombatButton : MonoBehaviour
 
     public virtual void AnimateIn()
     {
+        if (canvasGroup == null)
+        {
+            canvasGroup = GetComponent<CanvasGroup>();
+        }
+
         canvasGroup.alpha = 0f;
         canvasGroup.interactable = true;
         canvasGroup.blocksRaycasts = true;

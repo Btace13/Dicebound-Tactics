@@ -13,8 +13,18 @@ MonoBehaviour:
   m_Name: InputIconManager
   m_EditorClassIdentifier: 
   inputIcons:
-  - actionName: 
-    keyboardSprite: {fileID: 0}
-    xboxControllerSprite: {fileID: 0}
-    playstationControllerSprite: {fileID: 0}
-    switchControllerSprite: {fileID: 0}
+  - actionName: Player/BottomGamepad
+    keyboardSprite: {fileID: 21300000, guid: 4789e236c7871438999424ef6458e92a, type: 3}
+    xboxControllerSprite: {fileID: 21300000, guid: b0c5051b63928453e8e28fff904f72b9, type: 3}
+    playstationControllerSprite: {fileID: 21300000, guid: 4ceadec3b87c84a58b6d87f6e1fa32fe, type: 3}
+    switchControllerSprite: {fileID: 21300000, guid: c857710ff39b04c2ebe92fb9fd9132a1, type: 3}
+  - actionName: Player/LeftGamepad
+    keyboardSprite: {fileID: 21300000, guid: f29661a30c39547b58fd0c87d74567d6, type: 3}
+    xboxControllerSprite: {fileID: 21300000, guid: 590ff31d509bb41d5982a7d6d07a48f2, type: 3}
+    playstationControllerSprite: {fileID: 21300000, guid: c0421c17554ad4ebd89271858ae1b00f, type: 3}
+    switchControllerSprite: {fileID: 21300000, guid: 2be5addb1e00a44cf9eaf6df1fdbfee4, type: 3}
+  - actionName: Player/TopGamepad
+    keyboardSprite: {fileID: 21300000, guid: 609495502a2d24a0a9478e4f95b6b74b, type: 3}
+    xboxControllerSprite: {fileID: 21300000, guid: d460753b0bc9f4c77b78f61cde97fd17, type: 3}
+    playstationControllerSprite: {fileID: 21300000, guid: ab4c3cc16ec9f4e8c9c468f070af023b, type: 3}
+    switchControllerSprite: {fileID: 21300000, guid: 052b632a4eea64b9cb3b94974e74e182, type: 3}

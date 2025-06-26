@@ -29,4 +29,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/LawlessGames/Tactics Toolkit/Scenes/8 - Final Scene.unity
     guid: 7d3c62eca06f81347ac76f49d6a75cde
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  m_UseUCBPForAssetBundles: 0
