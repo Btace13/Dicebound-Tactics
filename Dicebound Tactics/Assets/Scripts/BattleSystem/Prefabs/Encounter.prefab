@@ -71,6 +71,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  OnEncounterStarted: {fileID: 11400000, guid: 5602efbc61e74c5479dfe518c32eba5f, type: 2}
+  OnEncounterEnded: {fileID: 11400000, guid: b0c87ef0e778e9c4ba01907396cb37fe, type: 2}
 --- !u!1 &2100083295855948143
 GameObject:
   m_ObjectHideFlags: 0

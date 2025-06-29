@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using TacticsToolkit;
+using Sirenix.OdinInspector;
 
 public class CombatEncounter : MonoBehaviour
 {
@@ -38,6 +39,10 @@ public class CombatEncounter : MonoBehaviour
     [Header("Encounter References")]
     [SerializeField] private EncounterSide[] encounterSides = new EncounterSide[2];
     public List<EnemyManager> Enemies = new List<EnemyManager>();
+
+    [Header("Events")]
+    public GameEventCombatEncounter OnEncounterStarted;
+    public GameEventCombatEncounter OnEncounterEnded;
 
     public EncounterSide GetClosestEncounterSide(Vector3 position)
     {
@@ -79,5 +84,29 @@ public class CombatEncounter : MonoBehaviour
         }
 
         return closestSlot;
+    }
+
+    [Button("Start Encounter")]
+    public void StartEncounter()
+    {
+        if (OnEncounterStarted != null)
+        {
+            OnEncounterStarted.Raise(this);
+        }
+
+        // Initialize encounter logic here, such as spawning enemies, setting up UI, etc.
+        Debug.Log("Combat Encounter Started");
+    }
+
+    [Button("End Encounter")]
+    public void EndEncounter()
+    {
+        if (OnEncounterEnded != null)
+        {
+            OnEncounterEnded.Raise(this);
+        }
+
+        // Cleanup encounter logic here, such as removing enemies, resetting UI, etc.
+        Debug.Log("Combat Encounter Ended");
     }
 }
