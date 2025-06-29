@@ -11,6 +11,7 @@ public class OverworldCharacterController : MonoBehaviour
     private CharacterController characterController;
 
     public bool IsControlled { get { return isControlled; } private set { isControlled = value; } }
+    public bool CanFollowLeader { get; set; } = true;
 
     private void Awake()
     {
@@ -55,5 +56,22 @@ public class OverworldCharacterController : MonoBehaviour
         {
             IsControlled = false;
         }
+    }
+
+    public bool CheckShouldFollowLeader()
+    {
+        if (PartyManager.Instance == null || PartyManager.Instance.PartyLeader == null)
+        {
+            Debug.LogWarning("PartyManager or PartyLeader is not initialized.");
+            return false;
+        }
+
+        if (PartyManager.Instance.PartyLeader.GetComponent<OverworldCharacterController>() == null)
+        {
+            Debug.LogWarning("PartyLeader does not have an OverworldCharacterController component.");
+            return false;
+        }
+
+        return PartyManager.Instance.PartyLeader.IsControlled && CanFollowLeader;
     }
 }
