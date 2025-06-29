@@ -7,9 +7,6 @@ public class OverworldCameraController : BaseCameraController
     [SerializeField] private float _maxZoomDistance = 20f;
     [SerializeField] private float _minZoomDistance = 5f;
     [SerializeField] private float _zoomSpeed = 2f;
-    [SerializeField] private float _panSpeed = 20f;
-    [SerializeField] private bool _enableEdgePanning = true;
-    [SerializeField] private float _edgePanThreshold = 20f;
 
     private float _currentZoomLevel;
     private CinemachinePositionComposer _positionTransposer;
@@ -28,13 +25,15 @@ public class OverworldCameraController : BaseCameraController
             {
                 _currentZoomLevel = _positionTransposer.CameraDistance;
             }
+
+            CinemachineCam.Follow = PartyManager.Instance.PartyLeader.transform;
+            CinemachineCam.LookAt = PartyManager.Instance.PartyLeader.transform;
         }
     }
 
     private void Update()
     {
         HandleZoom();
-        HandlePanning();
     }
 
     private void HandleZoom()
@@ -45,42 +44,6 @@ public class OverworldCameraController : BaseCameraController
             _currentZoomLevel -= scrollDelta * _zoomSpeed;
             _currentZoomLevel = Mathf.Clamp(_currentZoomLevel, _minZoomDistance, _maxZoomDistance);
             _positionTransposer.CameraDistance = _currentZoomLevel;
-        }
-    }
-
-    private void HandlePanning()
-    {
-        // WASD keyboard panning
-        Vector3 moveDirection = Vector3.zero;
-
-        if (Input.GetKey(KeyCode.W) || (Input.mousePosition.y >= Screen.height - _edgePanThreshold && _enableEdgePanning))
-        {
-            moveDirection += Vector3.forward;
-        }
-
-        if (Input.GetKey(KeyCode.S) || (Input.mousePosition.y <= _edgePanThreshold && _enableEdgePanning))
-        {
-            moveDirection += Vector3.back;
-        }
-
-        if (Input.GetKey(KeyCode.A) || (Input.mousePosition.x <= _edgePanThreshold && _enableEdgePanning))
-        {
-            moveDirection += Vector3.left;
-        }
-
-        if (Input.GetKey(KeyCode.D) || (Input.mousePosition.x >= Screen.width - _edgePanThreshold && _enableEdgePanning))
-        {
-            moveDirection += Vector3.right;
-        }
-
-        if (moveDirection != Vector3.zero)
-        {
-            // Convert from local to world coordinates
-            moveDirection = transform.TransformDirection(moveDirection.normalized);
-            // Only move in XZ plane
-            moveDirection.y = 0;
-
-            transform.position += moveDirection * _panSpeed * Time.deltaTime;
         }
     }
 
@@ -105,11 +68,6 @@ public class OverworldCameraController : BaseCameraController
             _currentZoomLevel = targetZoom;
             _positionTransposer.CameraDistance = targetZoom;
         }
-    }
-
-    public void SetPanningEnabled(bool enabled)
-    {
-        _enableEdgePanning = enabled;
     }
 
     // Override UpdateCameraTarget to maintain zoom level when changing targets

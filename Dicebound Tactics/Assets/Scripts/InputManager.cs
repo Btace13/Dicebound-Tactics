@@ -38,24 +38,24 @@ public class InputManager : MonoBehaviour
 
         InputActions = new InputSystem_Actions();
 
-        // inputActions.Player.Move.performed += Move;
-        // inputActions.Player.Look.performed += Look;
-        // inputActions.Player.Jump.performed += Jump;
-        // inputActions.Player.CycleUnit.performed += Cycle;
-        // inputActions.Player.OpenInventory.performed += OpenInventory;
-        // inputActions.Player.Pause.performed += PauseGame;
-        // inputActions.Player.NumberKey.performed += NumberKeyPressed;
-        // inputActions.Player.StopTime.performed += StopTime;
+        // InputActions.Player.Move.performed += Move;
+        // InputActions.Player.Look.performed += Look;
+        // InputActions.Player.Jump.performed += Jump;
+        // InputActions.Player.CycleUnit.performed += Cycle;
+        // InputActions.Player.OpenInventory.performed += OpenInventory;
+        // InputActions.Player.Pause.performed += PauseGame;
+        // InputActions.Player.NumberKey.performed += NumberKeyPressed;
+        // InputActions.Player.StopTime.performed += StopTime;
 
-        // inputActions.UI.RotateObjectLeft.performed += RotateItemLeft;
-        // inputActions.UI.RotateObjectRight.performed += RotateItemRight;
-        // inputActions.UI.Confirm.performed += Confirm;
-        // inputActions.UI.CloseInventory.performed += CloseInventory;
-        // inputActions.UI.Click.performed += UIClick;
-        // inputActions.UI.Click.canceled += UIClickReleased;
-        // inputActions.UI.CycleUI.performed += CycleUI;
-        // inputActions.UI.ScrollWheel.performed += ScrollUI;
-        // inputActions.UI.Close.performed += PauseGame;
+        // InputActions.UI.RotateObjectLeft.performed += RotateItemLeft;
+        // InputActions.UI.RotateObjectRight.performed += RotateItemRight;
+        // InputActions.UI.Confirm.performed += Confirm;
+        // InputActions.UI.CloseInventory.performed += CloseInventory;
+        // InputActions.UI.Click.performed += UIClick;
+        // InputActions.UI.Click.canceled += UIClickReleased;
+        // InputActions.UI.CycleUI.performed += CycleUI;
+        // InputActions.UI.ScrollWheel.performed += ScrollUI;
+        // InputActions.UI.Close.performed += PauseGame;
 
         SetActionMap(ActionMap.PLAYER);
     }
@@ -125,16 +125,16 @@ public class InputManager : MonoBehaviour
         switch (actionMap)
         {
             case ActionMap.NONE:
-                //inputActions.UI.Disable();
-                //inputActions.Player.Disable();
+                InputActions.UI.Disable();
+                InputActions.Player.Disable();
                 break;
             case ActionMap.UI:
-                //inputActions.UI.Enable();
-                //inputActions.Player.Disable();
+                InputActions.UI.Enable();
+                InputActions.Player.Disable();
                 break;
             case ActionMap.PLAYER:
-                //inputActions.UI.Disable();
-                //inputActions.Player.Enable();
+                InputActions.UI.Disable();
+                InputActions.Player.Enable();
                 break;
         }
 
