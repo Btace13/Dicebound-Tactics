@@ -24,6 +24,7 @@ public class CombatManager : MonoBehaviour
         if (newState == GameState.Combat)
         {
             turnManager.StartBattle();
+            combatUIHandler.ShowCombatUI();
         }
         else
         {

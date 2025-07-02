@@ -3,6 +3,7 @@ using Sirenix.OdinInspector;
 using Unity.VisualScripting;
 using Pathfinding;
 using Pathfinding.RVO;
+using UnityEngine.Events;
 
 public class OverworldCharacterController : MonoBehaviour
 {
@@ -141,8 +142,14 @@ public class OverworldCharacterController : MonoBehaviour
         return PartyManager.Instance.PartyLeader.OverworldCharacterController.IsControlled && CanFollowLeader;
     }
 
-    public void MoveToTarget(Transform target, bool overrideTime = false)
+    public void MoveToTarget(Transform target, bool overrideTime = false, UnityAction onTargetReached = null)
     {
+        if (pathfindingAI == null)
+        {
+            Debug.LogWarning("pathfindingAI is not initialized.");
+            return;
+        }
+
         if (target == null)
         {
             Debug.LogWarning("Target is null. Cannot move to a null target.");
@@ -150,10 +157,10 @@ public class OverworldCharacterController : MonoBehaviour
         }
 
         pathfindingAI.desiredFinalRotation = target.rotation;
-        MoveToPosition(target.position, overrideTime);
+        MoveToPosition(target.position, overrideTime, onTargetReached);
     }
 
-    public void MoveToPosition(Vector3 targetPosition, bool overrideTime = false)
+    public void MoveToPosition(Vector3 targetPosition, bool overrideTime = false, UnityAction onTargetReached = null)
     {
         if (pathfindingAI == null)
         {
@@ -170,6 +177,7 @@ public class OverworldCharacterController : MonoBehaviour
         {
             lastRepath = Time.time;
 
+            pathfindingAI.onTargetReached = onTargetReached;
             pathfindingAI.destination = targetPosition;
             pathfindingAI.SearchPath();
         }

@@ -2427,7 +2427,7 @@ MonoBehaviour:
     sensitivity: 10
     maximumPeriod: 2
     visualizeSensitivity: 0
-  acceleration: 5
+  acceleration: 10
   rotationSpeed: 360
   slowdownTime: 0.5
   wallForce: 3
@@ -3416,7 +3416,7 @@ MonoBehaviour:
     sensitivity: 10
     maximumPeriod: 2
     visualizeSensitivity: 0
-  acceleration: 5
+  acceleration: 10
   rotationSpeed: 360
   slowdownTime: 0.5
   wallForce: 3
@@ -4538,7 +4538,7 @@ MonoBehaviour:
     sensitivity: 10
     maximumPeriod: 2
     visualizeSensitivity: 0
-  acceleration: 5
+  acceleration: 10
   rotationSpeed: 360
   slowdownTime: 0.5
   wallForce: 3
@@ -6650,8 +6650,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PartyMembers:
-  - {fileID: 1169327128}
   - {fileID: 896658385}
+  - {fileID: 1169327128}
   - {fileID: 561669390}
   maxPartySize: 3
   OnPartyMemberAdded: {fileID: 0}
