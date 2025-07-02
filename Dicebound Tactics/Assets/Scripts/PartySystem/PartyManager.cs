@@ -7,10 +7,11 @@ public class PartyManager : MonoBehaviour
 {
     public static PartyManager Instance { get; private set; }
 
-    [BoxGroup("Party Settings"), SerializeField] private List<CharacterManager> PartyMembers = new List<CharacterManager>();
+    [BoxGroup("Party Settings"), SerializeField] public List<CharacterManager> PartyMembers = new List<CharacterManager>();
     [BoxGroup("Party Settings"), SerializeField] private int maxPartySize = 4;
 
     public CharacterManager PartyLeader => PartyMembers.Count > 0 ? PartyMembers[0] : null;
+    public List<CharacterManager> ActivePartyMembers => PartyMembers.FindAll(member => member.gameObject.activeInHierarchy);
 
     [BoxGroup("Events")] public GameEventCharacterManager OnPartyMemberAdded;
     [BoxGroup("Events")] public GameEventCharacterManager OnPartyMemberRemoved;
