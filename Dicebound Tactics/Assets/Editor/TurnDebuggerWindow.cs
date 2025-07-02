@@ -111,12 +111,15 @@ public class TurnDebuggerWindow : EditorWindow
     {
         EditorGUILayout.BeginVertical("box", GUILayout.Width(150));
 
-        EditorGUILayout.LabelField(entity.name, EditorStyles.boldLabel);
-        EditorGUILayout.LabelField("HP: " + entity.GetStat(Stats.CurrentHealth).statValue + "/" + entity.GetStat(Stats.Health).statValue);
-        EditorGUILayout.LabelField("Last Roll: " + entity.equippedDice.LastRollValue);
-        EditorGUILayout.LabelField("AP: " + entity.GetStat(Stats.ActionPoints).statValue);
-        EditorGUILayout.LabelField("Rollover AP: " + entity.GetStat(Stats.CarriedOverActionPoints).statValue);
-        EditorGUILayout.LabelField("Alive: " + (entity.isAlive ? "Yes" : "No"));
+        if (entity.statsContainer != null)
+        { 
+            EditorGUILayout.LabelField(entity.name, EditorStyles.boldLabel);
+            EditorGUILayout.LabelField("HP: " + entity.GetStat(Stats.CurrentHealth).statValue + "/" + entity.GetStat(Stats.Health).statValue);
+            EditorGUILayout.LabelField("Last Roll: " + entity.equippedDice.LastRollValue);
+            EditorGUILayout.LabelField("AP: " + entity.GetStat(Stats.ActionPoints).statValue);
+            EditorGUILayout.LabelField("Rollover AP: " + entity.GetStat(Stats.CarriedOverActionPoints).statValue);
+            EditorGUILayout.LabelField("Alive: " + (entity.isAlive ? "Yes" : "No"));
+        }
         EditorGUILayout.Space();
         if (entity.equippedDice != null)
         {
@@ -140,10 +143,10 @@ public class TurnDebuggerWindow : EditorWindow
 
         EditorGUILayout.Space();
 
-        if (entity.abilities != null && entity.abilities.Count > 0)
+        if (entity.abilityLoadout != null && entity.abilityLoadout.Count > 0)
         {
             EditorGUILayout.LabelField("Abilities", EditorStyles.boldLabel);
-            foreach (var ability in entity.abilities)
+            foreach (var ability in entity.abilityLoadout)
             {
                 bool canUse = entity.GetStat(Stats.ActionPoints).statValue >= ability.apCost;
                 GUI.enabled = canUse && entity.isAlive;

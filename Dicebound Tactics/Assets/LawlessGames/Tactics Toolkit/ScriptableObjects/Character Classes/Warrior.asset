@@ -173,4 +173,5 @@ MonoBehaviour:
   MoveRange: 3
   AttackRange: 1
   abilities:
-  - {fileID: 11400000, guid: 04fcd65fa2acd0b4592ad2cf4c0b62f2, type: 2}
+  - {fileID: 11400000, guid: 7e911d070168540809fbadd791ad7ee7, type: 2}
+  abilitiesLegacy: []

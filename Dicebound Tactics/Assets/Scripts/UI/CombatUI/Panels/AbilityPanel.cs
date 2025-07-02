@@ -11,17 +11,17 @@ public class AbilityPanel : CombatPanel
 
     public void PopulateAbilityPanel(CharacterManager character)
     {
-        print($"Populating ability panel for {character.name} with {character.abilities.Count} abilities.");
+        print($"Populating ability panel for {character.name} with {character.abilityLoadout.Count} abilities.");
 
         for (int i = 0; i < abilityButtons.Count; i++)
         {
-            if (i >= character.abilities.Count)
+            if (i >= character.abilityLoadout.Count)
             {
                 abilityButtons[i].gameObject.SetActive(false);
                 continue;
             }
 
-            AbilitySO ability = character.abilities[i];
+            AbilitySO ability = character.abilityLoadout[i];
 
             // Set up the button with the ability name and action
             abilityButtons[i].gameObject.SetActive(true); // Ensure the button is active
