@@ -2233,8 +2233,9 @@ GameObject:
   - component: {fileID: 561669390}
   - component: {fileID: 561669394}
   - component: {fileID: 561669396}
-  - component: {fileID: 561669395}
+  - component: {fileID: 561669398}
   - component: {fileID: 561669397}
+  - component: {fileID: 561669399}
   m_Layer: 0
   m_Name: Player 3
   m_TagString: Untagged
@@ -2331,53 +2332,6 @@ MonoBehaviour:
   aiFollowDistance: 4
   nextWaypointDistance: 0.1
   repathRate: 0.5
---- !u!114 &561669395
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 561669388}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce11ea984e202491d9271f53021d8b89, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  version: 1073741824
-  radius: 2
-  height: 2
-  canMove: 1
-  maxSpeed: 1
-  gravity: {x: NaN, y: NaN, z: NaN}
-  groundMask:
-    serializedVersion: 2
-    m_Bits: 64
-  endReachedDistance: 0.2
-  whenCloseToDestination: 0
-  rvoDensityBehavior:
-    enabled: 1
-    densityThreshold: 0.5
-    returnAfterBeingPushedAway: 1
-    progressAverage: 0
-    lastJobDensityResult: 0
-  repathRateCompatibility: NaN
-  canSearchCompability: 0
-  orientation: 0
-  enableRotation: 1
-  autoRepath:
-    mode: 2
-    period: 0.5
-    sensitivity: 10
-    maximumPeriod: 2
-    visualizeSensitivity: 0
-  acceleration: 5
-  rotationSpeed: 360
-  slowdownTime: 0.5
-  wallForce: 3
-  wallDist: 1
-  funnelSimplification: 0
-  slowWhenNotFacingTarget: 1
-  preventMovingBackwards: 0
 --- !u!114 &561669396
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2433,6 +2387,76 @@ MonoBehaviour:
   wallAvoidFalloff: 1
   priority: 0.5
   debug: 0
+--- !u!114 &561669398
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 561669388}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76b407dd254d2f6489ae286e1696d623, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 1073741824
+  radius: 1
+  height: 2
+  canMove: 1
+  maxSpeed: 1
+  gravity: {x: NaN, y: NaN, z: NaN}
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  endReachedDistance: 0.1
+  whenCloseToDestination: 0
+  rvoDensityBehavior:
+    enabled: 1
+    densityThreshold: 0.5
+    returnAfterBeingPushedAway: 1
+    progressAverage: 0
+    lastJobDensityResult: 0
+  repathRateCompatibility: NaN
+  canSearchCompability: 0
+  orientation: 0
+  enableRotation: 1
+  autoRepath:
+    mode: 2
+    period: 0.5
+    sensitivity: 10
+    maximumPeriod: 2
+    visualizeSensitivity: 0
+  acceleration: 5
+  rotationSpeed: 360
+  slowdownTime: 0.5
+  wallForce: 3
+  wallDist: 1
+  funnelSimplification: 0
+  slowWhenNotFacingTarget: 1
+  preventMovingBackwards: 0
+  desiredFinalRotation: {x: 0, y: 0, z: 0, w: 1}
+--- !u!114 &561669399
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 561669388}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb6a34d769a1e4ac7b0b30e433aa443c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 1073741824
+  smoothType: 0
+  subdivisions: 2
+  iterations: 2
+  strength: 0.5
+  uniformLength: 1
+  maxSegmentLength: 2
+  bezierTangentLength: 0.4
+  offset: 0.2
+  factor: 0.1
 --- !u!1 &561831143
 GameObject:
   m_ObjectHideFlags: 0
@@ -2701,7 +2725,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 1073741824
   data:
-    dataString: UEsDBBQAAAgIAACQn+uE3gkvRQIAALQEAAALACQAZ3JhcGgwLmpzb24KACAAAAAAAAEAGAAAgD7V3rGdAQCAPtXesZ0BAIA+1d6xnQGVU8tu2zAQ/BVD56aw5KQteoydpofYKSwDDVL0sCZXEhGKdEnKjmPk37tLPay0vfREaGZnn6NTIipwIAK6NUjV+OTzZPr+6t0kEdYE27glPN84Zx3hGaOoda5eMIZlHHcA/QRbjV9RlVXownpwrlW9HVLW8Jxru2PxbNp+38gS79CUoWJlBJVZY6ms6crMCEOpgnUbpbED0+wTwaEDHv5CHgek8cg6niu4BgnZobuDI7qllapQAgLVYvrHTyKlqtF4QojlQsmiB2aLhPgtiKfS2cbIjYM9Og9bpVU4cuj3bmiOc6hxDybcOthVeeMKEDiktCsb1virUS7GCqs1Cm4jxxCUKbmb0wjuhbFtz5JddfRK+FygYeb0+geWLXpUx1HBPzEwSfagG1ZcpBNmA5QdF6d34MkItL851VaSiw1rG7gl+iruswDt3zAbdA6U+Ydm43B8gtAGtpapYbewB+Oh3mka/guZMdpt1q2G+1j3iRYYQGm+LrHWzNsdDS2ZRmuey9kQ79oO/cwOJPTYvS/8xvkL6wTKa76nn6OhGv+j6MzYxafTXpH2EoKiyFf2wD3eN4FGxPMimFjRdefWmPbW48X2ss4/Z5lBcOhDTo+o7o0+PjyOZGjYhSvY16SdN9FSZ23ZKPnWC4nIrhCKdCs/CJgV6fTiMhPyEqcCoJiJj2mWxCmUUUGB/kb5deg3Q7/z6OAG6phxjYIuNonuZ79KB4db9VLbkQmUKWwuyBjmvs0xjE2XBk27lTfxvx/9FcnpNXn9DVBLAwQUAAAICAAAkJ/r8NEs7W4AAAB5AAAACQAkAG1ldGEuanNvbgoAIAAAAAAAAQAYAACAPtXesZ0BAIA+1d6xnQEAgD7V3rGdAatWKkstKs7Mz1OyUjDVM9az0FFQSi9KLMgoBgoYgjilmSkgdrRSspFpamKaYVKKWXKicZqhga6JUXKKSapBcmJimnGyuaGRUixQfUllQapfYm4qRE9AYklGWmZeSmZeul5QanJicYk7yHCl2FoAUEsBAi0AFAAACAgAAJCf64TeCS9FAgAAtAQAAAsAJAAAAAAAAAAAAAAAAAAAAGdyYXBoMC5qc29uCgAgAAAAAAABABgAAIA+1d6xnQEAgD7V3rGdAQCAPtXesZ0BUEsBAi0AFAAACAgAAJCf6/DRLO1uAAAAeQAAAAkAJAAAAAAAAAAAAAAAkgIAAG1ldGEuanNvbgoAIAAAAAAAAQAYAACAPtXesZ0BAIA+1d6xnQEAgD7V3rGdAVBLBQYAAAAAAgACALgAAABLAwAAAAA=
+    dataString: UEsDBBQAAAgIAACQn+ukzvTISAIAALgEAAALACQAZ3JhcGgwLmpzb24KACAAAAAAAAEAGAAAgD7V3rGdAQCAPtXesZ0BAIA+1d6xnQGVU8tu2zAQ/BVD56aw5KQteoztpofELiwDDVL0sCZXEhGKdEnKjhPk37tLPay0vfQkaHZnH7PDl0RU4EAEdBuQqvHJ58n0/dW7SSKsCbZxd/C0dM46wjNGUetcPWNMyzjvCPoRdhq/oiqr0KX14FyrejeUrOEp13bP5Nm0/V/KEm/RlKFiZgSV2WCprOnazAhDqYJ1W6WxA9PsE8GhA+7/Qh4GpPHIPN4ruAYJ2aO7hRO6OytVoQQE6sXhHz8pKFWNxhNCUW6ULHpgtkgovgPxWDrbGLl1cEDnYae0CidO/d4tzXkONR7AhBsH+ypvXAECh5J2ZcMGfzXKxVxhtUbBY+QYgjIlT/MygntiHNszZV+dvBI+F2g4Yhqt/0CzxRnXcV3wj1x3khxAN8y6SCevrBmUXSwq4MCTGUjDOfVXkhsO0g2xO/RV1LQA7d9EtugcKPMPztbh+AyhTWxtU8N+YY/GQ73XJMAXMmS03KyTh+fY9IUWGEBpvjBFrZm3Og0j8dK8l7Mh3rZd+oldSOip+z7zN+5fWCdQXvNN/RwN9fgfRmfILj+d9oy0pxAUSb6yR55x3QRaEc9CcGBFF55bY9p7j4XtaZ2HzjSD4NCHnD6iWht9un8Y0dCwE1dwqIk7b6KtztyyUfKtFxKRXSEU6U5+EDAr0unFZSbkJU4FQDETH9MsiVsoo4IC/Y3q69ArQ096dHADday4QUEXm8QXwJ6VDo436rm2IxMoU9hckDHMuq0xrE2XBk3aymV8+6OXkby8Jq+/AVBLAwQUAAAICAAAkJ/r8NEs7W4AAAB5AAAACQAkAG1ldGEuanNvbgoAIAAAAAAAAQAYAACAPtXesZ0BAIA+1d6xnQEAgD7V3rGdAatWKkstKs7Mz1OyUjDVM9az0FFQSi9KLMgoBgoYgjilmSkgdrRSspFpamKaYVKKWXKicZqhga6JUXKKSapBcmJimnGyuaGRUixQfUllQapfYm4qRE9AYklGWmZeSmZeul5QanJicYk7yHCl2FoAUEsBAi0AFAAACAgAAJCf66TO9MhIAgAAuAQAAAsAJAAAAAAAAAAAAAAAAAAAAGdyYXBoMC5qc29uCgAgAAAAAAABABgAAIA+1d6xnQEAgD7V3rGdAQCAPtXesZ0BUEsBAi0AFAAACAgAAJCf6/DRLO1uAAAAeQAAAAkAJAAAAAAAAAAAAAAAlQIAAG1ldGEuanNvbgoAIAAAAAAAAQAYAACAPtXesZ0BAIA+1d6xnQEAgD7V3rGdAVBLBQYAAAAAAgACALgAAABOAwAAAAA=
     file_cachedStartup: {fileID: 0}
     cacheStartup: 0
   showNavGraphs: 1
@@ -3136,6 +3160,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1404614838}
+        m_TargetAssemblyTypeName: CombatManager, Assembly-CSharp
+        m_MethodName: OnGameStateChanged
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &840856650
 GameObject:
   m_ObjectHideFlags: 0
@@ -3185,8 +3221,9 @@ GameObject:
   - component: {fileID: 896658385}
   - component: {fileID: 896658389}
   - component: {fileID: 896658391}
-  - component: {fileID: 896658390}
+  - component: {fileID: 896658393}
   - component: {fileID: 896658392}
+  - component: {fileID: 896658394}
   m_Layer: 0
   m_Name: Player 2
   m_TagString: Untagged
@@ -3283,53 +3320,6 @@ MonoBehaviour:
   aiFollowDistance: 4
   nextWaypointDistance: 0.1
   repathRate: 0.5
---- !u!114 &896658390
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 896658383}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce11ea984e202491d9271f53021d8b89, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  version: 1073741824
-  radius: 2
-  height: 2
-  canMove: 1
-  maxSpeed: 1
-  gravity: {x: NaN, y: NaN, z: NaN}
-  groundMask:
-    serializedVersion: 2
-    m_Bits: 64
-  endReachedDistance: 0.2
-  whenCloseToDestination: 0
-  rvoDensityBehavior:
-    enabled: 1
-    densityThreshold: 0.5
-    returnAfterBeingPushedAway: 1
-    progressAverage: 0
-    lastJobDensityResult: 0
-  repathRateCompatibility: NaN
-  canSearchCompability: 0
-  orientation: 0
-  enableRotation: 1
-  autoRepath:
-    mode: 2
-    period: 0.5
-    sensitivity: 10
-    maximumPeriod: 2
-    visualizeSensitivity: 0
-  acceleration: 5
-  rotationSpeed: 360
-  slowdownTime: 0.5
-  wallForce: 3
-  wallDist: 1
-  funnelSimplification: 0
-  slowWhenNotFacingTarget: 1
-  preventMovingBackwards: 0
 --- !u!114 &896658391
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3385,6 +3375,76 @@ MonoBehaviour:
   wallAvoidFalloff: 1
   priority: 0.5
   debug: 0
+--- !u!114 &896658393
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 896658383}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76b407dd254d2f6489ae286e1696d623, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 1073741824
+  radius: 1
+  height: 2
+  canMove: 1
+  maxSpeed: 1
+  gravity: {x: NaN, y: NaN, z: NaN}
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  endReachedDistance: 0.1
+  whenCloseToDestination: 0
+  rvoDensityBehavior:
+    enabled: 1
+    densityThreshold: 0.5
+    returnAfterBeingPushedAway: 1
+    progressAverage: 0
+    lastJobDensityResult: 0
+  repathRateCompatibility: NaN
+  canSearchCompability: 0
+  orientation: 0
+  enableRotation: 1
+  autoRepath:
+    mode: 2
+    period: 0.5
+    sensitivity: 10
+    maximumPeriod: 2
+    visualizeSensitivity: 0
+  acceleration: 5
+  rotationSpeed: 360
+  slowdownTime: 0.5
+  wallForce: 3
+  wallDist: 1
+  funnelSimplification: 0
+  slowWhenNotFacingTarget: 1
+  preventMovingBackwards: 0
+  desiredFinalRotation: {x: 0, y: 0, z: 0, w: 1}
+--- !u!114 &896658394
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 896658383}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb6a34d769a1e4ac7b0b30e433aa443c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 1073741824
+  smoothType: 0
+  subdivisions: 2
+  iterations: 2
+  strength: 0.5
+  uniformLength: 1
+  maxSegmentLength: 2
+  bezierTangentLength: 0.4
+  offset: 0.2
+  factor: 0.1
 --- !u!1 &961040591
 GameObject:
   m_ObjectHideFlags: 0
@@ -4282,8 +4342,9 @@ GameObject:
   - component: {fileID: 1169327128}
   - component: {fileID: 1169327132}
   - component: {fileID: 1169327134}
-  - component: {fileID: 1169327133}
+  - component: {fileID: 1169327136}
   - component: {fileID: 1169327135}
+  - component: {fileID: 1169327137}
   m_Layer: 0
   m_Name: Player 1
   m_TagString: Untagged
@@ -4380,53 +4441,6 @@ MonoBehaviour:
   aiFollowDistance: 4
   nextWaypointDistance: 0.1
   repathRate: 0.5
---- !u!114 &1169327133
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1169327126}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce11ea984e202491d9271f53021d8b89, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  version: 1073741824
-  radius: 2
-  height: 2
-  canMove: 1
-  maxSpeed: 1
-  gravity: {x: NaN, y: NaN, z: NaN}
-  groundMask:
-    serializedVersion: 2
-    m_Bits: 64
-  endReachedDistance: 0.2
-  whenCloseToDestination: 0
-  rvoDensityBehavior:
-    enabled: 1
-    densityThreshold: 0.5
-    returnAfterBeingPushedAway: 1
-    progressAverage: 0
-    lastJobDensityResult: 0
-  repathRateCompatibility: NaN
-  canSearchCompability: 0
-  orientation: 0
-  enableRotation: 1
-  autoRepath:
-    mode: 2
-    period: 0.5
-    sensitivity: 10
-    maximumPeriod: 2
-    visualizeSensitivity: 0
-  acceleration: 5
-  rotationSpeed: 360
-  slowdownTime: 0.5
-  wallForce: 3
-  wallDist: 1
-  funnelSimplification: 0
-  slowWhenNotFacingTarget: 1
-  preventMovingBackwards: 0
 --- !u!114 &1169327134
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4482,6 +4496,76 @@ MonoBehaviour:
   wallAvoidFalloff: 1
   priority: 1
   debug: 0
+--- !u!114 &1169327136
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1169327126}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76b407dd254d2f6489ae286e1696d623, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 1073741824
+  radius: 1
+  height: 2
+  canMove: 1
+  maxSpeed: 1
+  gravity: {x: NaN, y: NaN, z: NaN}
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  endReachedDistance: 0.1
+  whenCloseToDestination: 0
+  rvoDensityBehavior:
+    enabled: 1
+    densityThreshold: 0.5
+    returnAfterBeingPushedAway: 1
+    progressAverage: 0
+    lastJobDensityResult: 0
+  repathRateCompatibility: NaN
+  canSearchCompability: 0
+  orientation: 0
+  enableRotation: 1
+  autoRepath:
+    mode: 2
+    period: 0.5
+    sensitivity: 10
+    maximumPeriod: 2
+    visualizeSensitivity: 0
+  acceleration: 5
+  rotationSpeed: 360
+  slowdownTime: 0.5
+  wallForce: 3
+  wallDist: 1
+  funnelSimplification: 0
+  slowWhenNotFacingTarget: 1
+  preventMovingBackwards: 0
+  desiredFinalRotation: {x: 0, y: 0, z: 0, w: 1}
+--- !u!114 &1169327137
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1169327126}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb6a34d769a1e4ac7b0b30e433aa443c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 1073741824
+  smoothType: 0
+  subdivisions: 2
+  iterations: 2
+  strength: 0.5
+  uniformLength: 1
+  maxSegmentLength: 2
+  bezierTangentLength: 0.4
+  offset: 0.2
+  factor: 0.1
 --- !u!1 &1193889627
 GameObject:
   m_ObjectHideFlags: 0

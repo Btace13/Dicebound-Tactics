@@ -14,7 +14,7 @@ public class OverworldCharacterController : MonoBehaviour
     [BoxGroup("AI Movement Settings"), SerializeField] public float nextWaypointDistance = 0.1f;
     [BoxGroup("AI Movement Settings"), SerializeField] public float repathRate = 0.5f;
 
-    private IAstarAI pathfindingAI;
+    private CustomRichAI pathfindingAI;
     private RVOController rvoController;
     private float lastRepath = float.NegativeInfinity;
 
@@ -24,9 +24,10 @@ public class OverworldCharacterController : MonoBehaviour
     private void Awake()
     {
         rvoController = gameObject.GetOrAddComponent<RVOController>();
-        pathfindingAI = gameObject.GetOrAddComponent<RichAI>();
+        pathfindingAI = gameObject.GetOrAddComponent<CustomRichAI>();
         pathfindingAI.maxSpeed = moveSpeed;
     }
+
 
     public void Update()
     {
@@ -71,13 +72,6 @@ public class OverworldCharacterController : MonoBehaviour
                     MoveToPosition(leaderPosition);
                 }
             }
-            else
-            {
-                if (pathfindingAI.hasPath)
-                {
-                    CancelPath(); // Cancel the path if we cannot follow the leader
-                }
-            }
         }
     }
 
@@ -110,10 +104,12 @@ public class OverworldCharacterController : MonoBehaviour
     {
         if (newState == GameState.Overworld)
         {
+            moveSpeed = 5f; // Set the movement speed for overworld
             isControlled = true;
         }
         else
         {
+            moveSpeed = 10f; // Set the movement speed for combat or other states
             isControlled = false;
         }
     }
@@ -138,7 +134,19 @@ public class OverworldCharacterController : MonoBehaviour
         return PartyManager.Instance.PartyLeader.OverworldCharacterController.IsControlled && CanFollowLeader;
     }
 
-    public void MoveToPosition(Vector3 targetPosition)
+    public void MoveToTarget(Transform target, bool overrideTime = false)
+    {
+        if (target == null)
+        {
+            Debug.LogWarning("Target is null. Cannot move to a null target.");
+            return;
+        }
+
+        pathfindingAI.desiredFinalRotation = target.rotation;
+        MoveToPosition(target.position, overrideTime);
+    }
+
+    public void MoveToPosition(Vector3 targetPosition, bool overrideTime = false)
     {
         if (pathfindingAI == null)
         {
@@ -151,7 +159,7 @@ public class OverworldCharacterController : MonoBehaviour
             rvoController.locked = false;
         }
 
-        if (Time.time > lastRepath + repathRate)
+        if (overrideTime || Time.time > lastRepath + repathRate)
         {
             lastRepath = Time.time;
 
@@ -167,6 +175,7 @@ public class OverworldCharacterController : MonoBehaviour
         if (pathfindingAI != null)
         {
             pathfindingAI.destination = transform.position; // Set destination to current position to stop moving
+            pathfindingAI.SearchPath(); // Force a search to update the AI state
         }
     }
     #endregion

@@ -19,6 +19,18 @@ public class CombatManager : MonoBehaviour
     private CombatItem _selectedItem;
     private AbilitySO _selectedAbility;
 
+    public void OnGameStateChanged(GameState newState)
+    {
+        if (newState == GameState.Combat)
+        {
+            turnManager.StartBattle();
+        }
+        else
+        {
+            // Hide the combat UI when not in combat
+        }
+    }
+
     public void BasicAttackSelected()
     {
         Entity currentUnit = turnManager.GetCurrentUnit();

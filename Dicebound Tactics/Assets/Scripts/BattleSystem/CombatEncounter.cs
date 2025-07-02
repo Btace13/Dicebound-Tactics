@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using TacticsToolkit;
 using Sirenix.OdinInspector;
+using System.Threading.Tasks;
 
 public class CombatEncounter : MonoBehaviour
 {
@@ -87,12 +88,45 @@ public class CombatEncounter : MonoBehaviour
     }
 
     [Button("Start Encounter")]
-    public void StartEncounter()
+    public async void StartEncounter()
     {
         if (OnEncounterStarted != null)
         {
             OnEncounterStarted.Raise(this);
         }
+
+        EncounterSide closestSide = GetClosestEncounterSide(PartyManager.Instance.PartyLeader.transform.position);
+
+        foreach (CharacterManager c in PartyManager.Instance.ActivePartyMembers)
+        {
+            if (c.TryGetComponent(out OverworldCharacterController controller))
+            {
+                controller.CanFollowLeader = false; // Disable player control during combat
+                controller.CancelPath(); // Cancel any existing pathfinding
+
+                EncounterSlot closestSlot = GetClosestSlot(c.transform.position, closestSide);
+
+                if (closestSlot == null)
+                {
+                    Debug.LogWarning($"No available slots for {c.name} in the closest encounter side.");
+                    continue;
+                }
+                else
+                {
+                    Debug.Log($"{c.name} assigned to slot at {closestSlot.slotTransform.position}");
+                }
+
+                controller.MoveToTarget(closestSlot.slotTransform, true);
+                closestSlot.isOccupied = true;
+            }
+        }
+
+        while (closestSide.combatSlots.Exists(slot => slot.isOccupied == false))
+        {
+            await Task.Yield(); // Wait until all slots are occupied
+        }
+
+        GameStateManager.Instance.ChangeGameState(GameState.Combat);
 
         // Initialize encounter logic here, such as spawning enemies, setting up UI, etc.
         Debug.Log("Combat Encounter Started");
