@@ -24,10 +24,12 @@ public class CombatManager : MonoBehaviour
         if (newState == GameState.Combat)
         {
             turnManager.StartBattle();
+            combatUIHandler.ShowCombatUI();
         }
         else
         {
             // Hide the combat UI when not in combat
+            combatUIHandler.HideCombatUI();
         }
     }
 

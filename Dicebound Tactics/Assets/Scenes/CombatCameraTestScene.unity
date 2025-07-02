@@ -2326,7 +2326,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28a244090561de44495066d2eb1d88f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
+  overworldMoveSpeed: 5
+  combatMoveSpeed: 20
   rotationSpeed: 720
   isControlled: 0
   aiFollowDistance: 4
@@ -2419,14 +2420,14 @@ MonoBehaviour:
   repathRateCompatibility: NaN
   canSearchCompability: 0
   orientation: 0
-  enableRotation: 1
+  enableRotation: 0
   autoRepath:
     mode: 2
     period: 0.5
     sensitivity: 10
     maximumPeriod: 2
     visualizeSensitivity: 0
-  acceleration: 5
+  acceleration: 10
   rotationSpeed: 360
   slowdownTime: 0.5
   wallForce: 3
@@ -3314,7 +3315,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28a244090561de44495066d2eb1d88f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
+  overworldMoveSpeed: 5
+  combatMoveSpeed: 20
   rotationSpeed: 720
   isControlled: 0
   aiFollowDistance: 4
@@ -3407,14 +3409,14 @@ MonoBehaviour:
   repathRateCompatibility: NaN
   canSearchCompability: 0
   orientation: 0
-  enableRotation: 1
+  enableRotation: 0
   autoRepath:
     mode: 2
     period: 0.5
     sensitivity: 10
     maximumPeriod: 2
     visualizeSensitivity: 0
-  acceleration: 5
+  acceleration: 10
   rotationSpeed: 360
   slowdownTime: 0.5
   wallForce: 3
@@ -3512,7 +3514,7 @@ MonoBehaviour:
     AngularDampingMode: 0
     RotationDamping: {x: 1, y: 1, z: 1}
     QuaternionDamping: 1
-  FollowOffset: {x: 0, y: 7, z: -7}
+  FollowOffset: {x: 0, y: 10, z: -7}
 --- !u!114 &961040594
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4435,7 +4437,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28a244090561de44495066d2eb1d88f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
+  overworldMoveSpeed: 5
+  combatMoveSpeed: 20
   rotationSpeed: 720
   isControlled: 0
   aiFollowDistance: 4
@@ -4528,14 +4531,14 @@ MonoBehaviour:
   repathRateCompatibility: NaN
   canSearchCompability: 0
   orientation: 0
-  enableRotation: 1
+  enableRotation: 0
   autoRepath:
     mode: 2
     period: 0.5
     sensitivity: 10
     maximumPeriod: 2
     visualizeSensitivity: 0
-  acceleration: 5
+  acceleration: 10
   rotationSpeed: 360
   slowdownTime: 0.5
   wallForce: 3
@@ -6647,8 +6650,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PartyMembers:
-  - {fileID: 1169327128}
   - {fileID: 896658385}
+  - {fileID: 1169327128}
   - {fileID: 561669390}
   maxPartySize: 3
   OnPartyMemberAdded: {fileID: 0}

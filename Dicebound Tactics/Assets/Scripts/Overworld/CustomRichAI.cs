@@ -24,6 +24,11 @@ public class CustomRichAI : RichAI
     {
         if (shouldRotateAtEnd)
         {
+            if (desiredFinalRotation == Quaternion.identity)
+            {
+                desiredFinalRotation = Quaternion.LookRotation(transform.forward, Vector3.up);
+            }
+
             rotation = Quaternion.RotateTowards(
                 rotation,
                 desiredFinalRotation,

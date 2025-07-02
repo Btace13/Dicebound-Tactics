@@ -3,10 +3,19 @@ using Sirenix.OdinInspector;
 using Unity.VisualScripting;
 using Pathfinding;
 using Pathfinding.RVO;
+using UnityEngine.Events;
 
 public class OverworldCharacterController : MonoBehaviour
 {
-    [BoxGroup("Control Settings"), SerializeField] protected float moveSpeed = 5f;
+    [BoxGroup("Control Settings"), SerializeField] protected float overworldMoveSpeed = 5f;
+    [BoxGroup("Control Settings"), SerializeField] protected float combatMoveSpeed = 20f;
+    public float moveSpeed
+    {
+        get
+        {
+            return GameStateManager.Instance.CurrentGameState == GameState.Overworld ? overworldMoveSpeed : combatMoveSpeed;
+        }
+    }
     [BoxGroup("Control Settings"), SerializeField] protected float rotationSpeed = 720f;
     [BoxGroup("Control Settings"), SerializeField] protected bool isControlled = false;
 
@@ -96,6 +105,7 @@ public class OverworldCharacterController : MonoBehaviour
             pathfindingAI.destination = transform.position + moveDirection * moveSpeed * Time.deltaTime;
             Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+            pathfindingAI.desiredFinalRotation = targetRotation;
         }
     }
     #endregion
@@ -104,12 +114,10 @@ public class OverworldCharacterController : MonoBehaviour
     {
         if (newState == GameState.Overworld)
         {
-            moveSpeed = 5f; // Set the movement speed for overworld
             isControlled = true;
         }
         else
         {
-            moveSpeed = 10f; // Set the movement speed for combat or other states
             isControlled = false;
         }
     }
@@ -134,8 +142,14 @@ public class OverworldCharacterController : MonoBehaviour
         return PartyManager.Instance.PartyLeader.OverworldCharacterController.IsControlled && CanFollowLeader;
     }
 
-    public void MoveToTarget(Transform target, bool overrideTime = false)
+    public void MoveToTarget(Transform target, bool overrideTime = false, UnityAction onTargetReached = null)
     {
+        if (pathfindingAI == null)
+        {
+            Debug.LogWarning("pathfindingAI is not initialized.");
+            return;
+        }
+
         if (target == null)
         {
             Debug.LogWarning("Target is null. Cannot move to a null target.");
@@ -143,10 +157,10 @@ public class OverworldCharacterController : MonoBehaviour
         }
 
         pathfindingAI.desiredFinalRotation = target.rotation;
-        MoveToPosition(target.position, overrideTime);
+        MoveToPosition(target.position, overrideTime, onTargetReached);
     }
 
-    public void MoveToPosition(Vector3 targetPosition, bool overrideTime = false)
+    public void MoveToPosition(Vector3 targetPosition, bool overrideTime = false, UnityAction onTargetReached = null)
     {
         if (pathfindingAI == null)
         {
@@ -163,6 +177,7 @@ public class OverworldCharacterController : MonoBehaviour
         {
             lastRepath = Time.time;
 
+            pathfindingAI.onTargetReached = onTargetReached;
             pathfindingAI.destination = targetPosition;
             pathfindingAI.SearchPath();
         }

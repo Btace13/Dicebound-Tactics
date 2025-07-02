@@ -97,6 +97,8 @@ public class CombatEncounter : MonoBehaviour
 
         EncounterSide closestSide = GetClosestEncounterSide(PartyManager.Instance.PartyLeader.transform.position);
 
+        int remainingMovingCharacters = PartyManager.Instance.ActivePartyMembers.Count;
+
         foreach (CharacterManager c in PartyManager.Instance.ActivePartyMembers)
         {
             if (c.TryGetComponent(out OverworldCharacterController controller))
@@ -116,14 +118,21 @@ public class CombatEncounter : MonoBehaviour
                     Debug.Log($"{c.name} assigned to slot at {closestSlot.slotTransform.position}");
                 }
 
-                controller.MoveToTarget(closestSlot.slotTransform, true);
+                controller.MoveToTarget(closestSlot.slotTransform, true, () =>
+                {
+                    remainingMovingCharacters--;
+                    if (remainingMovingCharacters <= 0)
+                    {
+                        Debug.Log("All characters have reached their combat slots.");
+                    }
+                });
                 closestSlot.isOccupied = true;
             }
         }
 
-        while (closestSide.combatSlots.Exists(slot => slot.isOccupied == false))
+        while (remainingMovingCharacters > 0)
         {
-            await Task.Yield(); // Wait until all slots are occupied
+            await Task.Yield(); // Wait until all units have moved to their slots
         }
 
         GameStateManager.Instance.ChangeGameState(GameState.Combat);

@@ -142,14 +142,34 @@ public class TurnManager : MonoBehaviour
     foreach (var character in playerUnits)
     {
       if (!character.isAlive) continue;
+
+      if (character.statsContainer == null)
+      {
+        Debug.LogError($"StatsContainer is not assigned for {character.name}");
+        continue;
+      }
+
       character.ResetTempModifiers();
       character.RollDice();
+
       Debug.Log($"{character.name} rolled a {character.LastRollValue} and now has {character.CurrentAP} AP.");
     }
 
     foreach (var enemy in enemyUnits)
     {
+      if (enemy == null)
+      {
+        Debug.LogWarning("Enemy unit is null, skipping.");
+        continue;
+      }
+
       if (!enemy.isAlive) continue;
+
+      if (enemy.statsContainer == null)
+      {
+        Debug.LogError($"StatsContainer is not assigned for {enemy.name}");
+        continue;
+      }
 
       enemy.ResetTempModifiers();
       enemy.RollDice();
