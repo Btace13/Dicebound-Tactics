@@ -2326,8 +2326,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28a244090561de44495066d2eb1d88f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  overworldMoveSpeed: 5
-  combatMoveSpeed: 20
+  moveSpeed: 5
+  defaultAcceleration: 10
+  sprintSpeed: 25
+  sprintAcceleration: 200
   rotationSpeed: 720
   isControlled: 0
   aiFollowDistance: 4
@@ -3315,8 +3317,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28a244090561de44495066d2eb1d88f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  overworldMoveSpeed: 5
-  combatMoveSpeed: 20
+  moveSpeed: 5
+  defaultAcceleration: 10
+  sprintSpeed: 25
+  sprintAcceleration: 200
   rotationSpeed: 720
   isControlled: 0
   aiFollowDistance: 4
@@ -4437,8 +4441,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28a244090561de44495066d2eb1d88f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  overworldMoveSpeed: 5
-  combatMoveSpeed: 20
+  moveSpeed: 5
+  defaultAcceleration: 10
+  sprintSpeed: 25
+  sprintAcceleration: 200
   rotationSpeed: 720
   isControlled: 0
   aiFollowDistance: 4

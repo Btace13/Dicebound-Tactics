@@ -7,15 +7,11 @@ using UnityEngine.Events;
 
 public class OverworldCharacterController : MonoBehaviour
 {
-    [BoxGroup("Control Settings"), SerializeField] protected float overworldMoveSpeed = 5f;
-    [BoxGroup("Control Settings"), SerializeField] protected float combatMoveSpeed = 20f;
-    public float moveSpeed
-    {
-        get
-        {
-            return GameStateManager.Instance.CurrentGameState == GameState.Overworld ? overworldMoveSpeed : combatMoveSpeed;
-        }
-    }
+    [BoxGroup("Control Settings"), SerializeField] protected float moveSpeed = 5f;
+    [BoxGroup("Control Settings"), SerializeField] protected float defaultAcceleration = 10f;
+    [BoxGroup("Control Settings"), SerializeField] protected float sprintSpeed = 20f;
+    [BoxGroup("Control Settings"), SerializeField] protected float sprintAcceleration = 100f;
+
     [BoxGroup("Control Settings"), SerializeField] protected float rotationSpeed = 720f;
     [BoxGroup("Control Settings"), SerializeField] protected bool isControlled = false;
 
@@ -115,13 +111,28 @@ public class OverworldCharacterController : MonoBehaviour
         if (newState == GameState.Overworld)
         {
             isControlled = true;
+            SetShouldSprint(false);
         }
         else
         {
             isControlled = false;
+            SetShouldSprint(true);
         }
     }
 
+    public void SetShouldSprint(bool shouldSprint)
+    {
+        if (shouldSprint)
+        {
+            pathfindingAI.maxSpeed = sprintSpeed;
+            pathfindingAI.acceleration = sprintAcceleration;
+        }
+        else
+        {
+            pathfindingAI.maxSpeed = moveSpeed;
+            pathfindingAI.acceleration = defaultAcceleration;
+        }
+    }
 
     #region AI MOVEMENT
     public bool CheckShouldFollowLeader()

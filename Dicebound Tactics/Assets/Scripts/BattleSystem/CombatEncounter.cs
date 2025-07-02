@@ -105,6 +105,7 @@ public class CombatEncounter : MonoBehaviour
             {
                 controller.CanFollowLeader = false; // Disable player control during combat
                 controller.CancelPath(); // Cancel any existing pathfinding
+                controller.SetShouldSprint(true); // Enable sprinting for combat movement
 
                 EncounterSlot closestSlot = GetClosestSlot(c.transform.position, closestSide);
 
