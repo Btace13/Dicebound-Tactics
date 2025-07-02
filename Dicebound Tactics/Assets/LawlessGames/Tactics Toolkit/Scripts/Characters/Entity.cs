@@ -20,7 +20,7 @@ namespace TacticsToolkit
         public bool IsOverloaded => isOverloaded;
 
         [Header("Abilities")]
-        public List<AbilitySO> abilities = new();
+        public List<AbilitySO> abilityLoadout = new();
 
         [Header("Inventory")]
         public Inventory inventory;
@@ -67,7 +67,7 @@ namespace TacticsToolkit
         private bool isOverloaded = false;
 
 
-        private void Awake()
+        private void Start()
         {
             SpawnCharacter();
         }
@@ -75,6 +75,7 @@ namespace TacticsToolkit
         public void SpawnCharacter()
         {
             SetAbilityList();
+            SetDefaultAbilityList();
             SetStats();
             requiredExperience = gameConfig.GetRequiredExp(level);
 
@@ -111,6 +112,9 @@ namespace TacticsToolkit
         // Update is called once per frame
         public void Update()
         {
+            if (statsContainer == null)
+                statsContainer = ScriptableObject.CreateInstance<CharacterStats>();
+
             if (isTargetted)
             {
                 //Just a Color Lerp for when a character is targetted for an attack. 
@@ -119,18 +123,31 @@ namespace TacticsToolkit
             }
         }
 
+        public void SetDefaultAbilityList()
+        {
+            if (abilityLoadout == null || abilityLoadout.Count == 0)
+            {
+                var usableAbilities = characterClass.GetUsableAbilities(level);
+                if (usableAbilities != null && usableAbilities.Count > 0)
+                {
+                    abilityLoadout = usableAbilities.Take(3).ToList();
+                }
+            }
+        }
+
+
         //Get's all the available abilities from the characters class. 
         public void SetAbilityList()
         {
             abilitiesForUse = new List<AbilityContainer>();
-            foreach (var ability in characterClass.abilities)
+            foreach (var ability in characterClass.abilitiesLegacy)
             {
                 if (level >= ability.requiredLevel)
                     abilitiesForUse.Add(new AbilityContainer(ability));
             }
         }
 
-        //Scale up attributes based on a weighted random. 
+        //Scale up attributes based on a weighted random.
         public void LevelUpStats()
         {
             float v = Random.Range(0f, 1f);
@@ -267,6 +284,9 @@ namespace TacticsToolkit
         //Get a perticular stat object. 
         public Stat GetStat(Stats statName)
         {
+            if (statsContainer == null)
+                return null;
+
             switch (statName)
             {
                 case Stats.Health:

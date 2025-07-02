@@ -140,10 +140,10 @@ public class TurnDebuggerWindow : EditorWindow
 
         EditorGUILayout.Space();
 
-        if (entity.abilities != null && entity.abilities.Count > 0)
+        if (entity.abilityLoadout != null && entity.abilityLoadout.Count > 0)
         {
             EditorGUILayout.LabelField("Abilities", EditorStyles.boldLabel);
-            foreach (var ability in entity.abilities)
+            foreach (var ability in entity.abilityLoadout)
             {
                 bool canUse = entity.GetStat(Stats.ActionPoints).statValue >= ability.apCost;
                 GUI.enabled = canUse && entity.isAlive;

@@ -22,8 +22,13 @@ namespace TacticsToolkit
         public int MoveRange;
         public int AttackRange;
 
+        public List<AbilitySO> abilities;
+        public List<Ability> abilitiesLegacy;
 
-        public List<Ability> abilities;
+        public List<AbilitySO> GetUsableAbilities(int level)
+        {
+            return abilities.FindAll(ability => ability.unlockLevel <= level);
+        }
 
     }
 }

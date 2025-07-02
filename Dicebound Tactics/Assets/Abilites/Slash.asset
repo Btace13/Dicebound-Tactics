@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2ffa81a779bc640479befcccdab77d70, type: 3}
-  m_Name: Fireball
+  m_Name: Slash
   m_EditorClassIdentifier: 
-  abilityName: Fireball
-  description: A ball of fire
+  abilityName: Slash
+  description: Sword slash
   notifcationMessage: '''s hands begin to generate extreme heat.'
   icon: {fileID: -6941875414966023432, guid: bfe016ef2a04aa04d957b688986f78b9, type: 3}
   apCost: 2

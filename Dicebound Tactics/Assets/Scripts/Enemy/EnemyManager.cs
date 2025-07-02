@@ -33,7 +33,7 @@ public class EnemyManager : Entity
 
         while (CurrentAP > 0)
         {
-            var usableAbilities = abilities
+            var usableAbilities = abilityLoadout
                 .Where(a => a.apCost <= CurrentAP)
                 .ToList();
 
