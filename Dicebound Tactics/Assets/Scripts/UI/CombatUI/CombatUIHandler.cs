@@ -284,4 +284,38 @@ public class CombatUIHandler : MonoBehaviour
 
         notificationUI.ShowNotification(message, duration);
     }
+
+    public void ShowCombatUI()
+    {
+        if (screenSpaceCanvasGroup == null)
+        {
+            Debug.LogError("Screen Space Canvas Group is not set.");
+            return;
+        }
+
+        DOTween.To(() => screenSpaceCanvasGroup.alpha, x => screenSpaceCanvasGroup.alpha = x, 1, _fadeDuration)
+            .OnStart(() =>
+            {
+                screenSpaceCanvasGroup.interactable = true;
+                screenSpaceCanvasGroup.blocksRaycasts = true;
+            });
+    }
+
+    public void HideCombatUI()
+    {
+        if (screenSpaceCanvasGroup == null)
+        {
+            Debug.LogError("Screen Space Canvas Group is not set.");
+            return;
+        }
+
+        CloseAllPanels();
+
+        DOTween.To(() => screenSpaceCanvasGroup.alpha, x => screenSpaceCanvasGroup.alpha = x, 0, _fadeDuration)
+            .OnComplete(() =>
+            {
+                screenSpaceCanvasGroup.interactable = false;
+                screenSpaceCanvasGroup.blocksRaycasts = false;
+            });
+    }
 }

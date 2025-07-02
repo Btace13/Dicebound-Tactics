@@ -6,7 +6,15 @@ using Pathfinding.RVO;
 
 public class OverworldCharacterController : MonoBehaviour
 {
-    [BoxGroup("Control Settings"), SerializeField] protected float moveSpeed = 5f;
+    [BoxGroup("Control Settings"), SerializeField] protected float overworldMoveSpeed = 5f;
+    [BoxGroup("Control Settings"), SerializeField] protected float combatMoveSpeed = 20f;
+    public float moveSpeed
+    {
+        get
+        {
+            return GameStateManager.Instance.CurrentGameState == GameState.Overworld ? overworldMoveSpeed : combatMoveSpeed;
+        }
+    }
     [BoxGroup("Control Settings"), SerializeField] protected float rotationSpeed = 720f;
     [BoxGroup("Control Settings"), SerializeField] protected bool isControlled = false;
 
@@ -96,6 +104,7 @@ public class OverworldCharacterController : MonoBehaviour
             pathfindingAI.destination = transform.position + moveDirection * moveSpeed * Time.deltaTime;
             Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+            pathfindingAI.desiredFinalRotation = targetRotation;
         }
     }
     #endregion
@@ -104,12 +113,10 @@ public class OverworldCharacterController : MonoBehaviour
     {
         if (newState == GameState.Overworld)
         {
-            moveSpeed = 5f; // Set the movement speed for overworld
             isControlled = true;
         }
         else
         {
-            moveSpeed = 10f; // Set the movement speed for combat or other states
             isControlled = false;
         }
     }

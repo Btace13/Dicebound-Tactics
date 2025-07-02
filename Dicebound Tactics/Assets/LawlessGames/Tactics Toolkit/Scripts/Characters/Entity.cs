@@ -395,12 +395,19 @@ namespace TacticsToolkit
 
             foreach (var item in fields)
             {
+                if (statsContainer == null)
+                {
+                    Debug.LogError("StatsContainer is not assigned for " + name);
+                    continue;
+                }
+
                 var type = item.FieldType;
                 Stat value = (Stat)item.GetValue(statsContainer);
 
                 value.TickStatMods();
             }
         }
+
         public virtual void CharacterMoved()
         {
         }
@@ -526,6 +533,12 @@ namespace TacticsToolkit
             if (equippedDice == null)
             {
                 Debug.LogError("Character Dice is not assigned for " + name);
+                return;
+            }
+
+            if (statsContainer == null)
+            {
+                Debug.LogError("StatsContainer is not assigned for " + name);
                 return;
             }
 

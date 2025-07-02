@@ -28,6 +28,7 @@ public class CombatManager : MonoBehaviour
         else
         {
             // Hide the combat UI when not in combat
+            combatUIHandler.HideCombatUI();
         }
     }
 
