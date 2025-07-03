@@ -2272,7 +2272,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   equippedDice: {fileID: 11400000, guid: 13934ccd0cd1b4e7bb563bac2bcb4735, type: 2}
   portrait: {fileID: 8248543377919322394, guid: cc8cb170ff11da442bedd0e9e3be0e9a, type: 3}
-  abilityLoadout: []
+  abilityLoadout:
+  - {fileID: 11400000, guid: 7e911d070168540809fbadd791ad7ee7, type: 2}
   inventory: {fileID: 1229161592}
   level: 0
   experience: 0
@@ -3262,7 +3263,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   equippedDice: {fileID: 11400000, guid: 13934ccd0cd1b4e7bb563bac2bcb4735, type: 2}
   portrait: {fileID: -1960546628078278901, guid: cc8cb170ff11da442bedd0e9e3be0e9a, type: 3}
-  abilityLoadout: []
+  abilityLoadout:
+  - {fileID: 11400000, guid: 594f47a0dcaef4935b1b146f622cabb8, type: 2}
   inventory: {fileID: 1229161592}
   level: 0
   experience: 0
@@ -4385,7 +4387,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   equippedDice: {fileID: 11400000, guid: 13934ccd0cd1b4e7bb563bac2bcb4735, type: 2}
   portrait: {fileID: 3542127132570728493, guid: cc8cb170ff11da442bedd0e9e3be0e9a, type: 3}
-  abilityLoadout: []
+  abilityLoadout:
+  - {fileID: 11400000, guid: 71895a1f9982b4faebb510e4a913cd15, type: 2}
   inventory: {fileID: 1229161592}
   level: 0
   experience: 0
