@@ -89,6 +89,7 @@ namespace TacticsToolkit
             if (statsContainer == null)
             {
                 statsContainer = ScriptableObject.CreateInstance<CharacterStats>();
+
                 statsContainer.Health = new Stat(Stats.Health, characterClass.Health.baseStatValue, this);
                 statsContainer.Mana = new Stat(Stats.Mana, characterClass.Mana.baseStatValue, this);
                 statsContainer.Strenght = new Stat(Stats.Strength, characterClass.Strenght.baseStatValue, this);
@@ -113,7 +114,7 @@ namespace TacticsToolkit
         public void Update()
         {
             if (statsContainer == null)
-                statsContainer = ScriptableObject.CreateInstance<CharacterStats>();
+                SetStats();
 
             if (isTargetted)
             {
