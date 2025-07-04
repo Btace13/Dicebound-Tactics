@@ -97,6 +97,7 @@ MonoBehaviour:
   healthBar: {fileID: 29737043087070182}
   healthText: {fileID: 228659373144554518}
   apAmountText: {fileID: 3838261197035029363}
+  modifierText: {fileID: 8080319792324018518}
 --- !u!1 &2129589047545155485
 GameObject:
   m_ObjectHideFlags: 0

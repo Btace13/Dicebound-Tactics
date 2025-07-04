@@ -6,6 +6,7 @@ public class Dice : ScriptableObject
 {
     public List<DiceSide> sides = new(6);
     public int LastRollValue { get; private set; }
+    public DiceModifier LastRollModifier { get; private set; }
 
     public Dice(List<DiceSide> generatedSides)
     {
@@ -16,6 +17,7 @@ public class Dice : ScriptableObject
     {
         int index = Random.Range(1, sides.Count);
         LastRollValue = sides[index].value;
+        LastRollModifier = sides[index].modifier;
         return sides[index];
     }
 }

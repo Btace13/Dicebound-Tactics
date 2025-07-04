@@ -8,7 +8,7 @@ public class CharacterCardsHandler : MonoBehaviour
   {
     foreach (var character in TurnManager.Instance.playerUnits)
     {
-      if (character == null)
+      if (character == null || character.statsContainer == null)
       {
         Debug.Log("Character or statsContainer is null, skipping card creation.");
         continue;
@@ -17,7 +17,6 @@ public class CharacterCardsHandler : MonoBehaviour
       GameObject card = Instantiate(characterCardPrefab, transform);
       card.name = character.name + " Card";
 
-      // Assuming the card prefab has a script to set the character data
       CharacterCard cardScript = card.GetComponent<CharacterCard>();
       if (cardScript != null)
       {

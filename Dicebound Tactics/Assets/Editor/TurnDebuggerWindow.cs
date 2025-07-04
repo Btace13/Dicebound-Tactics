@@ -129,7 +129,7 @@ public class TurnDebuggerWindow : EditorWindow
                 var side = entity.equippedDice.sides[i];
                 string label = $"[{i + 1}] Value: {side.value}";
                 if (side.modifier != null)
-                    label += $" | {side.modifier.modifierName}";
+                    label += $" | {side.modifier.Name}";
 
                 EditorGUILayout.LabelField(label);
             }

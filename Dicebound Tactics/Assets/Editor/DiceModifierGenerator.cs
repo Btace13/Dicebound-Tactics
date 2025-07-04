@@ -44,8 +44,8 @@ public class DiceModifierGenerator : EditorWindow
 
     private static void CreateModifier(string name, string description, DiceModifier instance)
     {
-        instance.modifierName = name;
-        instance.description = description;
+        instance.Name = name;
+        instance.Description = description;
 
         string path = $"Assets/DiceModifiers/{name}.asset";
         AssetDatabase.CreateAsset(instance, path);

@@ -11,6 +11,7 @@ public class CharacterCard : MonoBehaviour
   [SerializeField] private Image healthBar;
   [SerializeField] private TextMeshProUGUI healthText;
   [SerializeField] private TextMeshProUGUI apAmountText;
+  [SerializeField] private TextMeshProUGUI modifierText;
 
   public void SetCharacterInfo(Entity character)
   {
@@ -30,5 +31,8 @@ public class CharacterCard : MonoBehaviour
 
     if (apAmountText != null)
       apAmountText.text = character.GetStat(Stats.ActionPoints).statValue.ToString();
+
+    if (modifierText != null)
+      modifierText.text = character.equippedDice.LastRollModifier.Name;
   }
 }

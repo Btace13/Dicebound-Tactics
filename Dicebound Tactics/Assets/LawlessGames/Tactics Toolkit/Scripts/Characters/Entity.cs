@@ -86,6 +86,7 @@ namespace TacticsToolkit
         //Setup the statsContainer and scale up the stats based on level. 
         public void SetStats()
         {
+
             if (statsContainer == null)
             {
                 statsContainer = ScriptableObject.CreateInstance<CharacterStats>();
