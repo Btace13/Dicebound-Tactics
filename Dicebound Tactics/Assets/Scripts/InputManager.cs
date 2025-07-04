@@ -88,7 +88,7 @@ public class InputManager : MonoBehaviour
 
         if (currentDevice is Keyboard || currentDevice is Mouse)
         {
-            Debug.Log("Current Device: Keyboard and Mouse");
+            // Debug.Log("Current Device: Keyboard and Mouse");
             // Update icons for keyboard and mouse
         }
         else if (currentDevice is Gamepad)

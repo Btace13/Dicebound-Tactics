@@ -1,0 +1,28 @@
+using UnityEngine;
+
+public class CharacterCardsHandler : MonoBehaviour
+{
+  [SerializeField] GameObject characterCardPrefab;
+  
+  public void InitializeCharacterCards()
+  {
+    foreach (var character in TurnManager.Instance.playerUnits)
+    {
+      if (character == null)
+      {
+        Debug.Log("Character or statsContainer is null, skipping card creation.");
+        continue;
+      }
+
+      GameObject card = Instantiate(characterCardPrefab, transform);
+      card.name = character.name + " Card";
+
+      // Assuming the card prefab has a script to set the character data
+      CharacterCard cardScript = card.GetComponent<CharacterCard>();
+      if (cardScript != null)
+      {
+        cardScript.SetCharacterInfo(character);
+      }
+    }
+  }
+}

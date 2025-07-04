@@ -6,6 +6,8 @@ using Sirenix.OdinInspector;
 
 public class TurnManager : MonoBehaviour
 {
+  public static TurnManager Instance { get; private set; }
+
   public List<CharacterManager> playerUnits = new();
   public List<EnemyManager> enemyUnits = new();
   public bool playerTurn = true;
@@ -22,6 +24,16 @@ public class TurnManager : MonoBehaviour
   private int currentPlayerIndex = 0;
   private int currentEnemyIndex = 0;
   private Entity currentUnit;
+
+  private void Awake()
+  {
+      if (Instance != null && Instance != this)
+      {
+          Destroy(gameObject);
+          return;
+      }
+      Instance = this;
+  }
 
   private void Update()
   {
