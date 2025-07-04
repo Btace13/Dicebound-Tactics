@@ -208,7 +208,7 @@ public class CombatManager : MonoBehaviour
                 }
                 else // basic attack
                 {
-                    int damage = currentUnit.characterClass.Strenght.baseStatValue;
+                    int damage = currentUnit.characterClass.Strength.baseStatValue;
                     target.TakeDamage(damage);
 
                     combatUIHandler.damageNumberUIHandler.ShowDamageNumber(damage, target.transform.position, DamageNumberType.Normal);

@@ -827,7 +827,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: caf52369d36c6463fa64c52bb15a4dfc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  equippedDice: {fileID: 11400000, guid: 13934ccd0cd1b4e7bb563bac2bcb4735, type: 2}
+  equippedDice: {fileID: 0}
   portrait: {fileID: 3229708652140166120, guid: 3e5c6627436f52749bd3a5b2d7b4ad79, type: 3}
   abilityLoadout: []
   inventory: {fileID: 0}
@@ -847,7 +847,7 @@ MonoBehaviour:
   previousTurnCost: -1
   myRenderer: {fileID: 0}
   gameConfig: {fileID: 11400000, guid: eaeab84eb6b1df54eb4c6951b5ec44ae, type: 2}
-  diceProfile: {fileID: 0}
+  diceProfile: {fileID: 11400000, guid: 22d593f9d0fc74833ae292890888b6e8, type: 2}
 --- !u!65 &499237564
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -986,6 +986,18 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: TacticsToolkit.CameraController, Assembly-CSharp
         m_MethodName: FocusOnTarget
         m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1373306195}
+        m_TargetAssemblyTypeName: CharacterCardsHandler, Assembly-CSharp
+        m_MethodName: InitializeCharacterCards
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1460,7 +1472,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: caf52369d36c6463fa64c52bb15a4dfc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  equippedDice: {fileID: 11400000, guid: 13934ccd0cd1b4e7bb563bac2bcb4735, type: 2}
+  equippedDice: {fileID: 0}
   portrait: {fileID: 876784968147787122, guid: 3e5c6627436f52749bd3a5b2d7b4ad79, type: 3}
   abilityLoadout: []
   inventory: {fileID: 0}
@@ -1480,7 +1492,7 @@ MonoBehaviour:
   previousTurnCost: -1
   myRenderer: {fileID: 0}
   gameConfig: {fileID: 11400000, guid: eaeab84eb6b1df54eb4c6951b5ec44ae, type: 2}
-  diceProfile: {fileID: 0}
+  diceProfile: {fileID: 11400000, guid: 22d593f9d0fc74833ae292890888b6e8, type: 2}
 --- !u!65 &836372357
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2346,12 +2358,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a67821d0ea4da545a4405a4a9cceb86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  equippedDice: {fileID: 11400000, guid: 13934ccd0cd1b4e7bb563bac2bcb4735, type: 2}
+  equippedDice: {fileID: 11400000, guid: 2a0f62e01cb67493db66c41a09fc09c4, type: 2}
   portrait: {fileID: 8248543377919322394, guid: cc8cb170ff11da442bedd0e9e3be0e9a, type: 3}
   abilityLoadout:
   - {fileID: 11400000, guid: 594f47a0dcaef4935b1b146f622cabb8, type: 2}
   inventory: {fileID: 0}
-  level: 0
+  level: 1
   experience: 0
   requiredExperience: 0
   isStunned: 0
@@ -2367,6 +2379,7 @@ MonoBehaviour:
   previousTurnCost: -1
   myRenderer: {fileID: 0}
   gameConfig: {fileID: 11400000, guid: eaeab84eb6b1df54eb4c6951b5ec44ae, type: 2}
+  characterId: CharacterThree
 --- !u!65 &1148619200
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2436,7 +2449,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: caf52369d36c6463fa64c52bb15a4dfc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  equippedDice: {fileID: 11400000, guid: 13934ccd0cd1b4e7bb563bac2bcb4735, type: 2}
+  equippedDice: {fileID: 0}
   portrait: {fileID: 2731795287329381114, guid: 3e5c6627436f52749bd3a5b2d7b4ad79, type: 3}
   abilityLoadout: []
   inventory: {fileID: 0}
@@ -2456,7 +2469,7 @@ MonoBehaviour:
   previousTurnCost: -1
   myRenderer: {fileID: 0}
   gameConfig: {fileID: 11400000, guid: eaeab84eb6b1df54eb4c6951b5ec44ae, type: 2}
-  diceProfile: {fileID: 0}
+  diceProfile: {fileID: 11400000, guid: 22d593f9d0fc74833ae292890888b6e8, type: 2}
 --- !u!65 &1371381553
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2531,6 +2544,17 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1371381550}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1373306195 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5874347826634806040, guid: e1f9a69a4cedf46829057740ee818a5d, type: 3}
+  m_PrefabInstance: {fileID: 5051335181305866653}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99996a40dd27b429e96bdb2b827e640a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1395460344
 GameObject:
   m_ObjectHideFlags: 0
@@ -2956,7 +2980,7 @@ MonoBehaviour:
   abilityLoadout:
   - {fileID: 11400000, guid: 7e911d070168540809fbadd791ad7ee7, type: 2}
   inventory: {fileID: 0}
-  level: 0
+  level: 1
   experience: 0
   requiredExperience: 0
   isStunned: 0
@@ -2972,6 +2996,7 @@ MonoBehaviour:
   previousTurnCost: -1
   myRenderer: {fileID: 0}
   gameConfig: {fileID: 11400000, guid: eaeab84eb6b1df54eb4c6951b5ec44ae, type: 2}
+  characterId: CharacterOne
 --- !u!65 &1470602819
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4237,12 +4262,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a67821d0ea4da545a4405a4a9cceb86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  equippedDice: {fileID: 11400000, guid: 13934ccd0cd1b4e7bb563bac2bcb4735, type: 2}
+  equippedDice: {fileID: 11400000, guid: 8065c17c830c7476eacbf993e53bd33e, type: 2}
   portrait: {fileID: -1960546628078278901, guid: cc8cb170ff11da442bedd0e9e3be0e9a, type: 3}
   abilityLoadout:
   - {fileID: 11400000, guid: 71895a1f9982b4faebb510e4a913cd15, type: 2}
   inventory: {fileID: 0}
-  level: 0
+  level: 1
   experience: 0
   requiredExperience: 0
   isStunned: 0
@@ -4258,6 +4283,7 @@ MonoBehaviour:
   previousTurnCost: -1
   myRenderer: {fileID: 0}
   gameConfig: {fileID: 11400000, guid: eaeab84eb6b1df54eb4c6951b5ec44ae, type: 2}
+  characterId: CharacterTwo
 --- !u!65 &2062490682
 BoxCollider:
   m_ObjectHideFlags: 0

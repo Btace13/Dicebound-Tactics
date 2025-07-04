@@ -13,7 +13,17 @@ public class EnemyManager : Entity
     private void Start()
     {
         turnManager = FindFirstObjectByType<TurnManager>();
-        equippedDice = CreateDiceFromProfile(diceProfile);
+
+        if(diceProfile != null)
+        {
+            equippedDice = CreateDiceFromProfile(diceProfile);
+        }
+        else
+        {
+            Debug.LogWarning($"No dice profile assigned for {name}. Using default dice.");
+            equippedDice = new Dice(new List<DiceSide> { new(1, null) });
+        }
+        
     }
 
     public void BeginAITurn()

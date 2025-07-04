@@ -1,0 +1,98 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51b3f7102032ecd44b77d0cc7648f4db, type: 3}
+  m_Name: CharacterThree
+  m_EditorClassIdentifier: 
+  Health:
+    statKey: 2
+    character: {fileID: 0}
+    baseStatValue: 100
+    baseStatModifier: 0
+    statValue: 100
+    isModified: 0
+  Mana:
+    statKey: 3
+    character: {fileID: 0}
+    baseStatValue: 30
+    baseStatModifier: 0
+    statValue: 30
+    isModified: 0
+  Strength:
+    statKey: 4
+    character: {fileID: 0}
+    baseStatValue: 0
+    baseStatModifier: 0
+    statValue: 0
+    isModified: 0
+  Endurance:
+    statKey: 5
+    character: {fileID: 0}
+    baseStatValue: 4
+    baseStatModifier: 0
+    statValue: 4
+    isModified: 0
+  Speed:
+    statKey: 6
+    character: {fileID: 0}
+    baseStatValue: 10
+    baseStatModifier: 0
+    statValue: 10
+    isModified: 0
+  Intelligence:
+    statKey: 7
+    character: {fileID: 0}
+    baseStatValue: 5
+    baseStatModifier: 0
+    statValue: 5
+    isModified: 0
+  MoveRange:
+    statKey: 8
+    character: {fileID: 0}
+    baseStatValue: 4
+    baseStatModifier: 0
+    statValue: 4
+    isModified: 0
+  AttackRange:
+    statKey: 9
+    character: {fileID: 0}
+    baseStatValue: 3
+    baseStatModifier: 0
+    statValue: 3
+    isModified: 0
+  CurrentHealth:
+    statKey: 10
+    character: {fileID: 0}
+    baseStatValue: 100
+    baseStatModifier: 0
+    statValue: 100
+    isModified: 0
+  CurrentMana:
+    statKey: 11
+    character: {fileID: 0}
+    baseStatValue: 30
+    baseStatModifier: 0
+    statValue: 30
+    isModified: 0
+  ActionPoints:
+    statKey: 0
+    character: {fileID: 0}
+    baseStatValue: 0
+    baseStatModifier: 0
+    statValue: 0
+    isModified: 0
+  CarriedOverActionPoints:
+    statKey: 1
+    character: {fileID: 0}
+    baseStatValue: 0
+    baseStatModifier: 0
+    statValue: 0
+    isModified: 0

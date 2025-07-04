@@ -76,11 +76,15 @@ namespace TacticsToolkit
         {
             SetAbilityList();
             SetDefaultAbilityList();
-            SetStats();
+            // SetStats();
             requiredExperience = gameConfig.GetRequiredExp(level);
 
             myRenderer = gameObject.GetComponent<SpriteRenderer>();
-            initiativeValue = Mathf.RoundToInt(initiativeBase / GetStat(Stats.Speed).statValue);
+
+            if (statsContainer != null)
+            { 
+                initiativeValue = Mathf.RoundToInt(initiativeBase / GetStat(Stats.Speed).statValue);
+            }
         }
 
         //Setup the statsContainer and scale up the stats based on level. 
@@ -93,7 +97,7 @@ namespace TacticsToolkit
 
                 statsContainer.Health = new Stat(Stats.Health, characterClass.Health.baseStatValue, this);
                 statsContainer.Mana = new Stat(Stats.Mana, characterClass.Mana.baseStatValue, this);
-                statsContainer.Strenght = new Stat(Stats.Strength, characterClass.Strenght.baseStatValue, this);
+                statsContainer.Strength = new Stat(Stats.Strength, characterClass.Strength.baseStatValue, this);
                 statsContainer.Endurance = new Stat(Stats.Endurance, characterClass.Endurance.baseStatValue, this);
                 statsContainer.Speed = new Stat(Stats.Speed, characterClass.Speed.baseStatValue, this);
                 statsContainer.Intelligence = new Stat(Stats.Intelligence, characterClass.Intelligence.baseStatValue, this);
@@ -157,7 +161,7 @@ namespace TacticsToolkit
             v = Random.Range(0f, 1f);
             statsContainer.Mana.ChangeStatValue(statsContainer.Mana.statValue + Mathf.RoundToInt(characterClass.Mana.baseStatModifier.Evaluate(v) * 10));
             v = Random.Range(0f, 1f);
-            statsContainer.Strenght.ChangeStatValue(statsContainer.Strenght.statValue + Mathf.RoundToInt(characterClass.Strenght.baseStatModifier.Evaluate(v) * 10));
+            statsContainer.Strength.ChangeStatValue(statsContainer.Strength.statValue + Mathf.RoundToInt(characterClass.Strength.baseStatModifier.Evaluate(v) * 10));
             v = Random.Range(0f, 1f);
             statsContainer.Endurance.ChangeStatValue(statsContainer.Endurance.statValue + Mathf.RoundToInt(characterClass.Endurance.baseStatModifier.Evaluate(v) * 10));
             v = Random.Range(0f, 1f);
@@ -177,7 +181,7 @@ namespace TacticsToolkit
             v = Random.Range(0f, 1f);
             statsContainer.Mana.ChangeStatValue(statsContainer.Mana.statValue - Mathf.RoundToInt(characterClass.Mana.baseStatModifier.Evaluate(v) * 10));
             v = Random.Range(0f, 1f);
-            statsContainer.Strenght.ChangeStatValue(statsContainer.Strenght.statValue - Mathf.RoundToInt(characterClass.Strenght.baseStatModifier.Evaluate(v) * 10));
+            statsContainer.Strength.ChangeStatValue(statsContainer.Strength.statValue - Mathf.RoundToInt(characterClass.Strength.baseStatModifier.Evaluate(v) * 10));
             v = Random.Range(0f, 1f);
             statsContainer.Endurance.ChangeStatValue(statsContainer.Endurance.statValue - Mathf.RoundToInt(characterClass.Endurance.baseStatModifier.Evaluate(v) * 10));
             v = Random.Range(0f, 1f);
@@ -296,7 +300,7 @@ namespace TacticsToolkit
                 case Stats.Mana:
                     return statsContainer.Mana;
                 case Stats.Strength:
-                    return statsContainer.Strenght;
+                    return statsContainer.Strength;
                 case Stats.Endurance:
                     return statsContainer.Endurance;
                 case Stats.Speed:

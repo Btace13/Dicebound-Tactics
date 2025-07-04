@@ -15,7 +15,7 @@ public class Dice : ScriptableObject
 
     public DiceSide Roll()
     {
-        int index = Random.Range(1, sides.Count);
+        int index = Random.Range(0, sides.Count - 1);
         LastRollValue = sides[index].value;
         LastRollModifier = sides[index].modifier;
         return sides[index];

@@ -3,6 +3,17 @@ using UnityEngine;
 public class CharacterCardsHandler : MonoBehaviour
 {
   [SerializeField] GameObject characterCardPrefab;
+
+  private void Start()
+  {
+    if (characterCardPrefab == null)
+    {
+      Debug.LogError("Character card prefab is not assigned in the inspector.");
+      return;
+    }
+
+    InitializeCharacterCards();
+  }
   
   public void InitializeCharacterCards()
   {

@@ -14,7 +14,7 @@ namespace TacticsToolkit
         [Header("Base Stats")]
         public BaseStat Health;
         public BaseStat Mana;
-        public BaseStat Strenght;
+        public BaseStat Strength;
         public BaseStat Endurance;
         public BaseStat Speed;
         public BaseStat Intelligence;
