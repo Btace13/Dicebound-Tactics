@@ -19,7 +19,7 @@ namespace TacticsToolkit
         //StatValue is the BaseStatValue that can be changed by effects/damage. 
         public int statValue;
         public bool isModified;
-        public List<StatModifier> statMods;
+        public List<StatModifier> statMods = new();
 
         public Stat(Stats statKey, int statValue, Entity character)
         {
@@ -58,19 +58,22 @@ namespace TacticsToolkit
         //Reduce the duration of a statMod and remove it if it hits zero
         public void TickStatMods()
         {
-            foreach (var statMod in statMods)
+            if(statMods != null && statMods.Count > 0)
             {
-                if (statMod != null)
+                foreach (var statMod in statMods)
                 {
-                    statMod.duration--;
+                    if (statMod != null)
+                    {
+                        statMod.duration--;
+                    }
                 }
 
-            }
-            statMods.RemoveAll(x => x.duration <= 0);
+                statMods.RemoveAll(x => x.duration <= 0);
 
-            if (statMods.Count == 0)
-            {
-                isModified = false;
+                if (statMods.Count == 0)
+                {
+                    isModified = false;
+                }
             }
         }
 

@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEditor;
 using TacticsToolkit;
 using System.Linq;
+using System.Collections.Generic;
 
 public class TurnDebuggerWindow : EditorWindow
 {
@@ -61,7 +62,8 @@ public class TurnDebuggerWindow : EditorWindow
 
         EditorGUILayout.Space();
         EditorGUILayout.LabelField("Current Turn Info", EditorStyles.boldLabel);
-        EditorGUILayout.LabelField("Turn Side", turnManager.playerTurn ? "Player" : "Enemies");
+        EditorGUILayout.LabelField("Current Unit", turnManager.GetCurrentUnit()?.name ?? "None");
+        EditorGUILayout.LabelField("Turns Remaining", turnManager.GetRemainingTurns().ToString());
         EditorGUILayout.Space();
 
         if (GUILayout.Button("Next Turn"))
@@ -76,7 +78,7 @@ public class TurnDebuggerWindow : EditorWindow
 
         if (GUILayout.Button("Toggle Selection Mode"))
         {
-            selectionController.ChangeSelectionType(!selectionController.cyclingEnemies);
+            selectionController?.ChangeSelectionType(!selectionController.cyclingEnemies);
         }
 
         autoAdvance = EditorGUILayout.Toggle("Auto Advance", autoAdvance);
@@ -84,7 +86,13 @@ public class TurnDebuggerWindow : EditorWindow
         EditorGUILayout.Space();
         scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
 
-        // Player Characters Row
+        EditorGUILayout.LabelField("Full Turn Order", EditorStyles.boldLabel);
+        foreach (var entity in turnManager.GetFullTurnOrder())
+        {
+            EditorGUILayout.LabelField(entity.name, EditorStyles.label);
+        }
+
+        EditorGUILayout.Space();
         EditorGUILayout.LabelField("Player Characters", EditorStyles.boldLabel);
         EditorGUILayout.BeginHorizontal();
         foreach (var character in turnManager.playerUnits)
@@ -94,8 +102,6 @@ public class TurnDebuggerWindow : EditorWindow
         EditorGUILayout.EndHorizontal();
 
         EditorGUILayout.Space();
-
-        // Enemies Row
         EditorGUILayout.LabelField("Enemies", EditorStyles.boldLabel);
         EditorGUILayout.BeginHorizontal();
         foreach (var enemy in turnManager.enemyUnits)
@@ -109,18 +115,21 @@ public class TurnDebuggerWindow : EditorWindow
 
     private void DrawEntityBox(Entity entity)
     {
-        EditorGUILayout.BeginVertical("box", GUILayout.Width(150));
+        EditorGUILayout.BeginVertical("box", GUILayout.Width(180));
 
         if (entity.statsContainer != null)
-        { 
+        {
             EditorGUILayout.LabelField(entity.name, EditorStyles.boldLabel);
-            EditorGUILayout.LabelField("HP: " + entity.GetStat(Stats.CurrentHealth).statValue + "/" + entity.GetStat(Stats.Health).statValue);
-            EditorGUILayout.LabelField("Last Roll: " + entity.equippedDice.LastRollValue);
-            EditorGUILayout.LabelField("AP: " + entity.GetStat(Stats.ActionPoints).statValue);
-            EditorGUILayout.LabelField("Rollover AP: " + entity.GetStat(Stats.CarriedOverActionPoints).statValue);
-            EditorGUILayout.LabelField("Alive: " + (entity.isAlive ? "Yes" : "No"));
+            EditorGUILayout.LabelField($"Speed: {entity.GetStat(Stats.Speed).statValue}");
+            EditorGUILayout.LabelField($"HP: {entity.GetStat(Stats.CurrentHealth).statValue}/{entity.GetStat(Stats.Health).statValue}");
+            EditorGUILayout.LabelField($"Last Roll: {entity.equippedDice?.LastRollValue ?? 0}");
+            EditorGUILayout.LabelField($"AP: {entity.GetStat(Stats.ActionPoints).statValue}");
+            EditorGUILayout.LabelField($"Rollover AP: {entity.GetStat(Stats.CarriedOverActionPoints).statValue}");
+            EditorGUILayout.LabelField($"Alive: {(entity.isAlive ? "Yes" : "No")}");
         }
+
         EditorGUILayout.Space();
+
         if (entity.equippedDice != null)
         {
             EditorGUILayout.LabelField("Dice Sides:");
@@ -130,7 +139,6 @@ public class TurnDebuggerWindow : EditorWindow
                 string label = $"[{i + 1}] Value: {side.value}";
                 if (side.modifier != null)
                     label += $" | {side.modifier.Name}";
-
                 EditorGUILayout.LabelField(label);
             }
 
@@ -153,32 +161,15 @@ public class TurnDebuggerWindow : EditorWindow
 
                 if (GUILayout.Button($"Use {ability.abilityName}"))
                 {
-                    if (turnManager.playerTurn)
+                    var targets = (entity is CharacterManager)
+                        ? turnManager.enemyUnits.Where(p => p != null && p.isAlive).Cast<Entity>().ToList()
+                        : turnManager.playerUnits.Where(p => p != null && p.isAlive).Cast<Entity>().ToList();
+
+                    foreach (var target in selectionController.SelectedEntities)
                     {
-                        var targets = turnManager.enemyUnits.Where(p => p != null && p.isAlive).ToList();
-                        if (targets.Count > 0)
+                        if (target != null && target.isAlive)
                         {
-                            selectionController.SelectedEntities.ForEach(target => 
-                            {
-                                if (target != null && target.isAlive)
-                                {
-                                    ability.Execute(entity, target);
-                                }
-                            });
-                        }
-                    }
-                    else
-                    {
-                        var targets = turnManager.playerUnits.Where(e => e != null && e.isAlive).ToList();
-                        if (targets.Count > 0)
-                        {
-                            selectionController.SelectedEntities.ForEach(target => 
-                            {
-                                if (target != null && target.isAlive)
-                                {
-                                    ability.Execute(entity, target);
-                                }
-                            });
+                            ability.Execute(entity, target);
                         }
                     }
                 }
@@ -189,22 +180,20 @@ public class TurnDebuggerWindow : EditorWindow
         EditorGUILayout.Space();
         EditorGUILayout.LabelField("Health Management", EditorStyles.boldLabel);
         GUI.enabled = entity.isAlive;
+
         if (GUILayout.Button("Damage 10"))
         {
             entity.TakeDamage(10);
         }
-
         if (GUILayout.Button("Heal 10"))
         {
             entity.HealEntity(10);
         }
-
         if (GUILayout.Button("Kill"))
         {
             entity.TakeDamage(9999);
         }
 
-        // Only show "End Turn" if this entity is the current unit
         if (turnManager.GetCurrentUnit() == entity && entity.isAlive)
         {
             GUI.color = Color.cyan;

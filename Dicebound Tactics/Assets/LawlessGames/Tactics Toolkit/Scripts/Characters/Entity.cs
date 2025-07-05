@@ -554,6 +554,12 @@ namespace TacticsToolkit
             }
         }
 
+        public void ResetActionPoints()
+        {
+            statsContainer.ActionPoints.statValue = 0;
+            statsContainer.CarriedOverActionPoints.statValue = 0;
+        }
+
         public void RollDice()
         {
             if (equippedDice == null)

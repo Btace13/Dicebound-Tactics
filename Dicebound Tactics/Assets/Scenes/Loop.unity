@@ -994,18 +994,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1373306195}
-        m_TargetAssemblyTypeName: CharacterCardsHandler, Assembly-CSharp
-        m_MethodName: InitializeCharacterCards
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!1 &643496129
 GameObject:
   m_ObjectHideFlags: 0
@@ -2544,17 +2532,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1371381550}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &1373306195 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5874347826634806040, guid: e1f9a69a4cedf46829057740ee818a5d, type: 3}
-  m_PrefabInstance: {fileID: 5051335181305866653}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 99996a40dd27b429e96bdb2b827e640a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1395460344
 GameObject:
   m_ObjectHideFlags: 0
@@ -3348,7 +3325,6 @@ MonoBehaviour:
   - {fileID: 1371381552}
   - {fileID: 499237563}
   - {fileID: 836372356}
-  playerTurn: 1
   GameIsPlaying: 0
   BattleStarted: {fileID: 11400000, guid: 268e6d8ada6fc4c418ed24a4f446609c, type: 2}
   startNewTurn: {fileID: 11400000, guid: c4e0d453d72137543842d48f73e3a632, type: 2}

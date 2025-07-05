@@ -3,256 +3,207 @@ using System.Collections.Generic;
 using UnityEngine;
 using TacticsToolkit;
 using Sirenix.OdinInspector;
+using System.Linq;
 
 public class TurnManager : MonoBehaviour
 {
-  public static TurnManager Instance { get; private set; }
+    public static TurnManager Instance { get; private set; }
 
-  public List<CharacterManager> playerUnits = new();
-  public List<EnemyManager> enemyUnits = new();
-  public bool playerTurn = true;
-  public bool GameIsPlaying;
+    public List<CharacterManager> playerUnits = new();
+    public List<EnemyManager> enemyUnits = new();
+    public bool GameIsPlaying;
 
-  [Header("Events")]
-  public GameEvent BattleStarted;
-  public GameEventGameObject startNewTurn;
-  public GameEventCharacterManager startNewCharacterTurn;
-  public GameEventEnemyManager startNewEnemyTurn;
+    [Header("Events")]
+    public GameEvent BattleStarted;
+    public GameEventGameObject startNewTurn;
+    public GameEventCharacterManager startNewCharacterTurn;
+    public GameEventEnemyManager startNewEnemyTurn;
+    public GameEvent GameEnded;
 
-  public GameEvent GameEnded;
+    private List<Entity> turnOrder = new();
+    private int currentTurnIndex = 0;
+    private Entity currentUnit;
 
-  private int currentPlayerIndex = 0;
-  private int currentEnemyIndex = 0;
-  private Entity currentUnit;
-
-  private void Awake()
-  {
-      if (Instance != null && Instance != this)
-      {
-          Destroy(gameObject);
-          return;
-      }
-      Instance = this;
-  }
-
-  private void Update()
-  {
-    if (!GameIsPlaying)
+    private void Awake()
     {
-      return;
-    }
-
-    bool allEnemiesDefeated = enemyUnits.TrueForAll(e => !e.isAlive);
-    if (allEnemiesDefeated)
-    {
-      // Player wins, handle victory logic here
-      Debug.Log("All enemies defeated! Player wins!");
-      GameIsPlaying = false;
-      GameEnded.Raise();
-      return;
-    }
-
-    bool allPlayersDead = playerUnits.TrueForAll(p => !p.isAlive);
-    if (allPlayersDead)
-    {
-      // Player loses, handle defeat logic here
-      Debug.Log("All player units defeated! Player loses!");
-      GameIsPlaying = false;
-      GameEnded.Raise();
-      return;
-    }
-  }
-
-  [Button("Start Battle", ButtonSizes.Medium, ButtonStyle.CompactBox)]
-  public void StartBattle()
-  {
-    currentPlayerIndex = 0;
-    currentEnemyIndex = 0;
-    playerTurn = true;
-    GameIsPlaying = true;
-
-    BattleStarted?.Raise();
-    Debug.Log("Battle started!");
-
-    BeginPlayerTurn();
-    StartNextTurn();
-  }
-
-  private void StartNextTurn()
-  {
-    if (!GameIsPlaying)
-    {
-      Debug.Log("Game is not currently playing. Cannot start next turn.");
-      return;
-    }
-
-    if (playerTurn)
-    {
-      while (currentPlayerIndex < playerUnits.Count)
-      {
-        var unit = playerUnits[currentPlayerIndex];
-        currentPlayerIndex++;
-
-        if (unit != null && unit.isAlive)
+        if (Instance != null && Instance != this)
         {
-          unit.StartTurn();
-          startNewTurn.Raise(unit.gameObject);
-
-          if (startNewCharacterTurn != null)
-          {
-            startNewCharacterTurn.Raise(unit);
-          }
-
-          currentUnit = unit;
-          return;
+            Destroy(gameObject);
+            return;
         }
-      }
-
-      // All player units finished or dead, switch to enemy turn
-      currentEnemyIndex = 0;
-      playerTurn = false;
-      StartNextTurn();
+        Instance = this;
     }
-    else
-    {
-      while (currentEnemyIndex < enemyUnits.Count)
-      {
-        var unit = enemyUnits[currentEnemyIndex];
-        currentEnemyIndex++;
 
-        if (unit != null && unit.isAlive)
+    private void Update()
+    {
+        if (!GameIsPlaying)
+            return;
+
+        if (enemyUnits.All(e => !e.isAlive))
         {
-          unit.StartTurn();
-          startNewTurn.Raise(unit.gameObject);
-
-          if (startNewEnemyTurn != null)
-          {
-            startNewEnemyTurn.Raise(unit);
-          }
-
-          currentUnit = unit;
-
-          if (unit != null)
-          {
-            unit.BeginAITurn();
-          }
-
-          return;
+            Debug.Log("All enemies defeated! Player wins!");
+            GameIsPlaying = false;
+            GameEnded.Raise();
+            return;
         }
-      }
 
-      // All enemies finished or dead, switch back to player turn
-      currentPlayerIndex = 0;
-      playerTurn = true;
-      BeginPlayerTurn();
-      StartNextTurn();
-    }
-  }
-
-  private void BeginPlayerTurn()
-  {
-    foreach (var character in playerUnits)
-    {
-      if (!character.isAlive) continue;
-
-      if (character.statsContainer == null)
-      {
-        Debug.LogError($"StatsContainer is not assigned for {character.name}");
-        continue;
-      }
-
-      character.ResetTempModifiers();
-      character.RollDice();
-
-      Debug.Log($"{character.name} rolled a {character.LastRollValue} and now has {character.CurrentAP} AP.");
-    }
-
-    foreach (var enemy in enemyUnits)
-    {
-      if (enemy == null)
-      {
-        Debug.LogWarning("Enemy unit is null, skipping.");
-        continue;
-      }
-
-      if (!enemy.isAlive) continue;
-
-      if (enemy.statsContainer == null)
-      {
-        Debug.LogError($"StatsContainer is not assigned for {enemy.name}");
-        continue;
-      }
-
-      enemy.ResetTempModifiers();
-      enemy.RollDice();
-      Debug.Log($"{enemy.name} rolled a {enemy.LastRollValue} and now has {enemy.CurrentAP} AP.");
-    }
-  }
-
-  public void EndCharacterTurn(Entity character)
-  {
-    int leftover = character.GetStat(Stats.ActionPoints).statValue;
-    character.statsContainer.CarriedOverActionPoints.statValue = leftover;
-    character.statsContainer.ActionPoints.statValue = 0;
-  }
-
-  public void EndTurn()
-  {
-    StartNextTurn();
-  }
-
-  [Button("Reset Battle", ButtonSizes.Medium, ButtonStyle.CompactBox)]
-  public void ResetBattle()
-  {
-    currentPlayerIndex = 0;
-    currentEnemyIndex = 0;
-    playerTurn = true;
-
-    foreach (var unit in playerUnits)
-    {
-      if (unit != null)
-        unit.Reset();
-    }
-
-    foreach (var unit in enemyUnits)
-    {
-      if (unit != null)
-        unit.Reset();
-    }
-
-    StartNextTurn();
-  }
-
-  public void AdvanceTurn()
-  {
-    if (playerTurn)
-    {
-      if (currentPlayerIndex < playerUnits.Count)
-      {
-        var unit = playerUnits[currentPlayerIndex];
-        if (unit != null && unit.isAlive)
+        if (playerUnits.All(p => !p.isAlive))
         {
-          unit.endTurn.Raise();
+            Debug.Log("All player units defeated! Player loses!");
+            GameIsPlaying = false;
+            GameEnded.Raise();
+            return;
         }
-      }
     }
-    else
+
+    [Button("Start Battle", ButtonSizes.Medium, ButtonStyle.CompactBox)]
+    public void StartBattle()
     {
-      if (currentEnemyIndex < enemyUnits.Count)
-      {
-        var unit = enemyUnits[currentEnemyIndex];
-        if (unit != null && unit.isAlive)
+        GameIsPlaying = true;
+        BattleStarted?.Raise();
+
+        foreach (var character in playerUnits)
         {
-          unit.endTurn.Raise();
+            if (character.isAlive)
+            {
+                character.ResetActionPoints();
+                character.ResetTempModifiers();
+                character.RollDice();
+            }
         }
-      }
+
+        foreach (var enemy in enemyUnits)
+        {
+            if (enemy.isAlive)
+            {
+                enemy.ResetActionPoints();
+                enemy.ResetTempModifiers();
+                enemy.RollDice();
+            }
+        }
+
+        BuildTurnOrder();
+        StartNextTurn();
     }
 
-    EndTurn();
-  }
+    private void BuildTurnOrder()
+    {
+        turnOrder.Clear();
+        var allUnits = new List<Entity>();
+        allUnits.AddRange(playerUnits);
+        allUnits.AddRange(enemyUnits);
 
-  public Entity GetCurrentUnit()
-  {
-    return currentUnit;
-  }
-}
+        turnOrder = allUnits
+            .Where(u => u != null && u.isAlive)
+            .OrderByDescending(u => u.GetStat(Stats.Speed).statValue)
+            .ThenByDescending(u => Random.value) // Simple tiebreaker
+            .ToList();
+
+        currentTurnIndex = 0;
+    }
+
+    private void StartNextTurn()
+    {
+        if (!GameIsPlaying || turnOrder.Count == 0)
+            return;
+
+        while (currentTurnIndex < turnOrder.Count)
+        {
+            var unit = turnOrder[currentTurnIndex];
+            currentTurnIndex++;
+
+            if (unit != null && unit.isAlive)
+            {
+                currentUnit = unit;
+                unit.StartTurn();
+                startNewTurn.Raise(unit.gameObject);
+
+                if (unit is CharacterManager character)
+                    startNewCharacterTurn?.Raise(character);
+                else if (unit is EnemyManager enemy)
+                {
+                    startNewEnemyTurn?.Raise(enemy);
+                    enemy.BeginAITurn();
+                }
+                return;
+            }
+        }
+
+        BuildTurnOrder();
+        StartNextTurn();
+    }
+
+    public void EndCharacterTurn(Entity character)
+    {
+        int leftover = character.GetStat(Stats.ActionPoints).statValue;
+        character.statsContainer.CarriedOverActionPoints.statValue = leftover;
+        character.statsContainer.ActionPoints.statValue = 0;
+    }
+
+    public void EndTurn()
+    {
+        StartNextTurn();
+    }
+
+    [Button("Reset Battle", ButtonSizes.Medium, ButtonStyle.CompactBox)]
+    public void ResetBattle()
+    {
+        GameIsPlaying = false;
+        currentTurnIndex = 0;
+        turnOrder.Clear();
+
+        foreach (var unit in playerUnits)
+        {
+            unit?.Reset();
+        }
+
+        foreach (var unit in enemyUnits)
+        {
+            unit?.Reset();
+        }
+
+        StartBattle();
+    }
+
+    public void AdvanceTurn()
+    {
+        if (currentUnit != null && currentUnit.isAlive)
+        {
+            currentUnit.endTurn?.Raise();
+        }
+
+        EndTurn();
+    }
+
+    public Entity GetCurrentUnit() => currentUnit;
+
+    public List<Entity> GetFullTurnOrder() => new List<Entity>(turnOrder);
+
+    public int GetRemainingTurns() => turnOrder.Count - currentTurnIndex;
+
+    public void DelayEntity(Entity entity, int positions)
+    {
+        if (!turnOrder.Contains(entity)) return;
+        int currentIndex = turnOrder.IndexOf(entity);
+        int newIndex = Mathf.Min(currentIndex + positions, turnOrder.Count - 1);
+        turnOrder.RemoveAt(currentIndex);
+        turnOrder.Insert(newIndex, entity);
+    }
+
+    public void HasteEntity(Entity entity, int positions)
+    {
+        if (!turnOrder.Contains(entity)) return;
+        int currentIndex = turnOrder.IndexOf(entity);
+        int newIndex = Mathf.Max(currentIndex - positions, currentTurnIndex);
+        turnOrder.RemoveAt(currentIndex);
+        turnOrder.Insert(newIndex, entity);
+    }
+
+    public void RemoveFromTurnOrder(Entity entity)
+    {
+        if (turnOrder.Contains(entity))
+        {
+            turnOrder.Remove(entity);
+        }
+    }
+} 
