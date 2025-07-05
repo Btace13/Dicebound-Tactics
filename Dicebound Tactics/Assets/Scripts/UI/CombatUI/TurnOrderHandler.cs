@@ -3,6 +3,9 @@ using UnityEngine.UI;
 
 public class TurnOrderHandler : MonoBehaviour
 {
+    [SerializeField] GameObject ImageContainer;
+    [SerializeField] GameObject CurrentTurnHolderImage;
+
     void Start()
     {
         CreateTurnOrderPortraits();
@@ -14,12 +17,14 @@ public class TurnOrderHandler : MonoBehaviour
         {
             CreateTurnOrderPortraits();
         }
+
+        UpdateCurrentTurnHolder();
     }
 
     private void CreateTurnOrderPortraits()
     {
         // Clear existing portraits
-        foreach (Transform child in transform)
+        foreach (Transform child in ImageContainer.transform)
         {
             Destroy(child.gameObject);
         }
@@ -31,14 +36,26 @@ public class TurnOrderHandler : MonoBehaviour
             {
                 // instantiate a new image for the portrait
                 GameObject portraitObject = new(entity.name + " Portrait");
-                portraitObject.transform.SetParent(transform);
+                portraitObject.transform.SetParent(ImageContainer.transform, false);
                 portraitObject.AddComponent<Image>().sprite = entity.portrait;
             }
         }
     }
-    
+
     public void UpdateTurnOrder()
     {
         CreateTurnOrderPortraits();
+    }
+    
+    private void UpdateCurrentTurnHolder()
+    {
+        if (TurnManager.Instance == null || TurnManager.Instance.GetCurrentUnit() == null)
+        {
+            CurrentTurnHolderImage.SetActive(false);
+            return;
+        }
+
+        CurrentTurnHolderImage.SetActive(true);
+        CurrentTurnHolderImage.GetComponent<Image>().sprite = TurnManager.Instance.GetCurrentUnit().portrait;
     }
 }

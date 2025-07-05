@@ -4369,6 +4369,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7062730838055741096, guid: e1f9a69a4cedf46829057740ee818a5d, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -90.12
+      objectReference: {fileID: 0}
     - target: {fileID: 7963288218640992928, guid: e1f9a69a4cedf46829057740ee818a5d, type: 3}
       propertyPath: m_Name
       value: BattleUI
