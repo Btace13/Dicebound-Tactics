@@ -180,15 +180,24 @@ public class TurnManager : MonoBehaviour
     public List<Entity> GetFullTurnOrder() => new List<Entity>(turnOrder);
 
     public int GetRemainingTurns() => turnOrder.Count - currentTurnIndex;
+    
+    public List<Entity> GetRemainingEntitiesThisRound()
+    {
+        return turnOrder
+            .Skip(currentTurnIndex)
+            .Where(e => e != null && e.isAlive)
+            .ToList();
+    }
+
 
     public void DelayEntity(Entity entity, int positions)
-    {
-        if (!turnOrder.Contains(entity)) return;
-        int currentIndex = turnOrder.IndexOf(entity);
-        int newIndex = Mathf.Min(currentIndex + positions, turnOrder.Count - 1);
-        turnOrder.RemoveAt(currentIndex);
-        turnOrder.Insert(newIndex, entity);
-    }
+  {
+    if (!turnOrder.Contains(entity)) return;
+    int currentIndex = turnOrder.IndexOf(entity);
+    int newIndex = Mathf.Min(currentIndex + positions, turnOrder.Count - 1);
+    turnOrder.RemoveAt(currentIndex);
+    turnOrder.Insert(newIndex, entity);
+  }
 
     public void HasteEntity(Entity entity, int positions)
     {
