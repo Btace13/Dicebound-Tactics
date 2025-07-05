@@ -1,0 +1,73 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aad61d9748e586f4ca545a2053ce64f6, type: 3}
+  m_Name: DiceAnimationData
+  m_EditorClassIdentifier: 
+  movementAnimations:
+    _FadeDuration: 0.25
+    _Events:
+      _NormalizedTimes: []
+      _Callbacks: []
+      _Names: []
+    _Speed: 1
+    _Animations:
+    - {fileID: 7267397709382041070, guid: 182c15c2b84e63d4cac2882583308858, type: 3}
+    - {fileID: 7602356537705950700, guid: 182c15c2b84e63d4cac2882583308858, type: 3}
+    _Speeds: []
+    _SynchronizeChildren: 
+    _Thresholds:
+    - {x: 0, y: 0}
+    - {x: 0, y: 0.5}
+    _DefaultParameter: {x: 0, y: 0}
+    _Type: 0
+  idleAnimations:
+  - {fileID: 7267397709382041070, guid: 182c15c2b84e63d4cac2882583308858, type: 3}
+  CanSwim: 0
+  swimmingAnimations:
+    _FadeDuration: 0.25
+    _Events:
+      _NormalizedTimes: []
+      _Callbacks: []
+      _Names: []
+    _Speed: 1
+    _Animations: []
+    _Speeds: []
+    _SynchronizeChildren: 
+    _Thresholds: []
+    _DefaultParameter: {x: 0, y: 0}
+    _Type: 0
+  CanFly: 0
+  flyingAnimations:
+    _FadeDuration: 0.25
+    _Events:
+      _NormalizedTimes: []
+      _Callbacks: []
+      _Names: []
+    _Speed: 1
+    _Animations: []
+    _Speeds: []
+    _SynchronizeChildren: 
+    _Thresholds: []
+    _DefaultParameter: {x: 0, y: 0}
+    _Type: 0
+  CanJump: 0
+  jumpAnimation: {fileID: 0}
+  fallingAnimation: {fileID: 0}
+  landingAnimation: {fileID: 0}
+  CanFight: 1
+  combatAnimations:
+    keys:
+    - {fileID: 11400000, guid: 00d22f65aba9aab4eb460cc5caee1c7d, type: 2}
+    values:
+    - {fileID: 11400000, guid: b2492bda72d5f4b42baa7455a05f7dce, type: 2}
+  hitAnimation: {fileID: 0}
+  deathAnimation: {fileID: 0}

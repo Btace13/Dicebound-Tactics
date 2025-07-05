@@ -59,6 +59,9 @@ public class CharacterCard : MonoBehaviour
       apAmountText.text = character.GetStat(Stats.ActionPoints).statValue.ToString();
 
     if (modifierText != null)
-      modifierText.text = character.equippedDice.LastRollModifier.Name;
+      if (character.equippedDice == null || character.equippedDice.LastRollModifier == null)
+        modifierText.text = "No Modifier";
+      else
+        modifierText.text = character.equippedDice.LastRollModifier.Name;
   }
 }
