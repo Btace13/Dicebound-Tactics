@@ -13,8 +13,28 @@ public class CharacterCard : MonoBehaviour
   [SerializeField] private TextMeshProUGUI apAmountText;
   [SerializeField] private TextMeshProUGUI modifierText;
 
-  public void SetCharacterInfo(Entity character)
+  private string characterId;
+
+  private void Update()
   {
+    SetCharacterInfo(TurnManager.Instance.playerUnits.Find(c => c.characterId == characterId));
+  }
+
+  public void SetCharacterInfo(CharacterManager character)
+  {
+    if (character == null)
+    {
+      characterPortrait.sprite = null;
+      characterNameText.text = string.Empty;
+      healthBar.fillAmount = 0f;
+      healthText.text = string.Empty;
+      apAmountText.text = string.Empty;
+      modifierText.text = string.Empty;
+      return;
+    }
+
+    characterId = character.characterId;
+
     if (characterPortrait != null)
       characterPortrait.sprite = character.portrait;
 
@@ -23,7 +43,7 @@ public class CharacterCard : MonoBehaviour
 
     if (healthBar != null)
     {
-      healthBar.fillAmount = character.GetStat(Stats.CurrentHealth).statValue / character.GetStat(Stats.Health).statValue;
+      healthBar.fillAmount = (float)character.GetStat(Stats.CurrentHealth).statValue / character.GetStat(Stats.Health).statValue;
     }
 
     if (healthText != null)

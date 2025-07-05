@@ -311,7 +311,6 @@ namespace TacticsToolkit
             activeCharacter.StartTurn();
             startNewCharacterTurn.Raise(activeCharacter.gameObject);
         }
-
     }
 
     public class TurnOrderPreviewObject
