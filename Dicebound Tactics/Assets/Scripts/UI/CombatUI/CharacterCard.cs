@@ -12,12 +12,18 @@ public class CharacterCard : MonoBehaviour
   [SerializeField] private TextMeshProUGUI healthText;
   [SerializeField] private TextMeshProUGUI apAmountText;
   [SerializeField] private TextMeshProUGUI modifierText;
+  [SerializeField] private GameObject CurrentTurnIndicator;
 
   private string characterId;
 
   private void Update()
   {
     SetCharacterInfo(TurnManager.Instance.playerUnits.Find(c => c.characterId == characterId));
+
+    if (CurrentTurnIndicator != null)
+    {
+      CurrentTurnIndicator.SetActive(TurnManager.Instance.IsThisPlayersTurn(characterId));
+    }
   }
 
   public void SetCharacterInfo(CharacterManager character)
