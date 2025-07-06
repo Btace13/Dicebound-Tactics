@@ -24,6 +24,7 @@ public class CustomRichAI : RichAI
     {
         if (shouldRotateAtEnd)
         {
+            bool tmpRotation = enableRotation;
             enableRotation = false;
 
             rotation = Quaternion.RotateTowards(
@@ -35,7 +36,7 @@ public class CustomRichAI : RichAI
             if (Mathf.Abs(Quaternion.Angle(rotation, desiredFinalRotation)) < 1f)
             {
                 shouldRotateAtEnd = false;
-                enableRotation = true; // Re-enable rotation after reaching the target
+                enableRotation = tmpRotation; // Re-enable rotation after reaching the target
             }
         }
     }

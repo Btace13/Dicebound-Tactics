@@ -22,6 +22,14 @@ public class UnitAnimationHandler : MonoBehaviour
 	private GameObject _weaponObject = null;
 	private Transform _lookAt = null;
 
+	private void Awake()
+	{
+		if (AnimationData != null)
+		{
+			AnimationData = ScriptableObject.Instantiate(AnimationData);
+		}
+	}
+
 	private void Start()
 	{
 		AnimationData.movementAnimations.CreateState();
