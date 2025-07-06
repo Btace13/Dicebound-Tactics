@@ -848,6 +848,7 @@ MonoBehaviour:
   myRenderer: {fileID: 0}
   gameConfig: {fileID: 11400000, guid: eaeab84eb6b1df54eb4c6951b5ec44ae, type: 2}
   diceProfile: {fileID: 11400000, guid: 22d593f9d0fc74833ae292890888b6e8, type: 2}
+  overworldController: {fileID: 0}
 --- !u!65 &499237564
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1481,6 +1482,7 @@ MonoBehaviour:
   myRenderer: {fileID: 0}
   gameConfig: {fileID: 11400000, guid: eaeab84eb6b1df54eb4c6951b5ec44ae, type: 2}
   diceProfile: {fileID: 11400000, guid: 22d593f9d0fc74833ae292890888b6e8, type: 2}
+  overworldController: {fileID: 0}
 --- !u!65 &836372357
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2332,7 +2334,6 @@ MonoBehaviour:
   rotationSpeed: 720
   isControlled: 0
   aiFollowDistance: 4
-  nextWaypointDistance: 0.1
   repathRate: 0.5
 --- !u!114 &1148619199
 MonoBehaviour:
@@ -2458,6 +2459,7 @@ MonoBehaviour:
   myRenderer: {fileID: 0}
   gameConfig: {fileID: 11400000, guid: eaeab84eb6b1df54eb4c6951b5ec44ae, type: 2}
   diceProfile: {fileID: 11400000, guid: 22d593f9d0fc74833ae292890888b6e8, type: 2}
+  overworldController: {fileID: 0}
 --- !u!65 &1371381553
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2938,7 +2940,6 @@ MonoBehaviour:
   rotationSpeed: 720
   isControlled: 0
   aiFollowDistance: 4
-  nextWaypointDistance: 0.1
   repathRate: 0.5
 --- !u!114 &1470602818
 MonoBehaviour:
@@ -4224,7 +4225,6 @@ MonoBehaviour:
   rotationSpeed: 720
   isControlled: 0
   aiFollowDistance: 4
-  nextWaypointDistance: 0.1
   repathRate: 0.5
 --- !u!114 &2062490681
 MonoBehaviour:
@@ -4368,10 +4368,6 @@ PrefabInstance:
     - target: {fileID: 370013063791602259, guid: e1f9a69a4cedf46829057740ee818a5d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7062730838055741096, guid: e1f9a69a4cedf46829057740ee818a5d, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -90.12
       objectReference: {fileID: 0}
     - target: {fileID: 7963288218640992928, guid: e1f9a69a4cedf46829057740ee818a5d, type: 3}
       propertyPath: m_Name
