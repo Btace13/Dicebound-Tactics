@@ -65,7 +65,12 @@ public class CombatEncounter : MonoBehaviour
                 _timeSinceLastAction[enemy] = 0f;
             }
 
-            HandleEnemyWanderBehavior(enemy);
+            HandleEnemyChaseBehavior(enemy);
+
+            if (!enemy.overworldController.IsChasingTarget)
+            {
+                HandleEnemyWanderBehavior(enemy);
+            }
         }
     }
 
@@ -228,6 +233,45 @@ public class CombatEncounter : MonoBehaviour
                 _timeSinceLastAction[enemy] += Time.deltaTime;
             }
         }
+    }
+
+    public void HandleEnemyChaseBehavior(EnemyManager enemy)
+    {
+        if (enemy == null || enemy.overworldController == null)
+        {
+            Debug.LogWarning($"Enemy, OverworldController, or target is null for {enemy?.name}");
+            return;
+        }
+        Transform target = PartyManager.Instance.PartyLeader.transform;
+
+        if (target == null)
+        {
+            Debug.LogWarning("Target Transform is null.");
+            return;
+        }
+
+        if (enemy.overworldController.CanSeeTarget(target))
+        {
+            enemy.overworldController.UpdateLastKnownTargetPosition(target.position);
+        }
+
+        if (enemy.overworldController.LastKnownTargetPosition == Vector3.positiveInfinity)
+        {
+            return;
+        }
+
+        enemy.overworldController.MoveToLastKnownTargetPosition(() =>
+        {
+            if (enemy.overworldController.CanSeeTarget(target))
+            {
+                enemy.overworldController.UpdateLastKnownTargetPosition(target.position);
+            }
+            else
+            {
+                enemy.overworldController.ClearLastKnownTargetPosition();
+                enemy.overworldController.CancelPath();
+            }
+        });
     }
 
     #endregion

@@ -14,12 +14,14 @@ public class OverworldEnemyController : MonoBehaviour
 
     [BoxGroup("Control Settings"), SerializeField] protected float rotationSpeed = 720f;
 
-    [BoxGroup("AI Movement Settings"), SerializeField] protected float aiFollowDistance = 5f;
-    [BoxGroup("AI Movement Settings"), SerializeField] public float nextWaypointDistance = 0.1f;
+    [BoxGroup("AI Movement Settings"), SerializeField] protected float viewDistance = 5f;
+    [BoxGroup("AI Movement Settings"), SerializeField] protected float fovAngle = 120f;
     [BoxGroup("AI Movement Settings"), SerializeField] public float repathRate = 0.5f;
 
     public bool HasPath => pathfindingAI.hasPath;
     public bool HasReachedDestination => pathfindingAI.reachedEndOfPath;
+    public Vector3 LastKnownTargetPosition { get; private set; }
+    public bool IsChasingTarget => LastKnownTargetPosition != Vector3.positiveInfinity && !HasReachedDestination;
 
     private CustomRichAI pathfindingAI;
     private RVOController rvoController;
@@ -120,6 +122,14 @@ public class OverworldEnemyController : MonoBehaviour
             pathfindingAI.SearchPath(); // Force a search to update the AI state
         }
     }
+
+    public void MoveToLastKnownTargetPosition(UnityAction onTargetReached = null)
+    {
+        if (LastKnownTargetPosition != Vector3.positiveInfinity)
+        {
+            MoveToPosition(LastKnownTargetPosition, false, onTargetReached);
+        }
+    }
     #endregion
 
     #region ANIMATION HANDLING
@@ -136,5 +146,50 @@ public class OverworldEnemyController : MonoBehaviour
 
         unitAnimationHandler.OnUnitVelocityChange(new Vector2(_currentVelocity.x, _currentVelocity.z) / pathfindingAI.maxSpeed);
     }
+    #endregion
+
+    #region SENSORS
+    public bool CanSeeTarget(Transform target)
+    {
+        if (target == null)
+        {
+            Debug.LogWarning("Target Transform is null.");
+            return false;
+        }
+
+        Vector3 directionToTarget = (target.position - transform.position).normalized;
+        float distanceToTarget = Vector3.Distance(transform.position, target.position);
+
+        if (distanceToTarget <= viewDistance)
+        {
+            float angleToTarget = Vector3.Angle(transform.forward, directionToTarget);
+            if (angleToTarget > fovAngle / 2f)
+            {
+                return false; // Target is outside field of view
+            }
+
+            if (Physics.Raycast(transform.position + Vector3.up * 1.5f, directionToTarget, out RaycastHit hit, viewDistance))
+            {
+                if (hit.transform == target)
+                {
+                    UpdateLastKnownTargetPosition(target.position);
+                    return true; // Target is visible
+                }
+            }
+        }
+
+        return false; // Target is not visible
+    }
+
+    public void UpdateLastKnownTargetPosition(Vector3 position)
+    {
+        LastKnownTargetPosition = position;
+    }
+
+    public void ClearLastKnownTargetPosition()
+    {
+        LastKnownTargetPosition = Vector3.positiveInfinity;
+    }
+
     #endregion
 }

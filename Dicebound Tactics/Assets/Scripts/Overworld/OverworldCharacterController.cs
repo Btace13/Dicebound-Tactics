@@ -16,7 +16,6 @@ public class OverworldCharacterController : MonoBehaviour
     [BoxGroup("Control Settings"), SerializeField] protected bool isControlled = false;
 
     [BoxGroup("AI Movement Settings"), SerializeField] protected float aiFollowDistance = 5f;
-    [BoxGroup("AI Movement Settings"), SerializeField] public float nextWaypointDistance = 0.1f;
     [BoxGroup("AI Movement Settings"), SerializeField] public float repathRate = 0.5f;
 
     private CustomRichAI pathfindingAI;
