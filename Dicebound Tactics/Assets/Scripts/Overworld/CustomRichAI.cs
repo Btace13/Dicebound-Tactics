@@ -32,7 +32,7 @@ public class CustomRichAI : RichAI
                 rotationSpeed * Time.deltaTime
             );
 
-            if (Quaternion.Angle(rotation, desiredFinalRotation) < 1f)
+            if (Mathf.Abs(Quaternion.Angle(rotation, desiredFinalRotation)) < 1f)
             {
                 shouldRotateAtEnd = false;
                 enableRotation = true; // Re-enable rotation after reaching the target
