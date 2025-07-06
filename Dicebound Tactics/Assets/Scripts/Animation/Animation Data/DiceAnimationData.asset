@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DiceAnimationData
   m_EditorClassIdentifier: 
   movementAnimations:
-    _FadeDuration: 0.25
+    _FadeDuration: 0.1
     _Events:
       _NormalizedTimes: []
       _Callbacks: []
@@ -21,11 +21,16 @@ MonoBehaviour:
     _Speed: 1
     _Animations:
     - {fileID: 7267397709382041070, guid: 182c15c2b84e63d4cac2882583308858, type: 3}
+    - {fileID: 7400000, guid: 302d516f76f68634683cbe34c7dcf5ce, type: 2}
     - {fileID: 7602356537705950700, guid: 182c15c2b84e63d4cac2882583308858, type: 3}
-    _Speeds: []
+    _Speeds:
+    - 1.1662766
+    - 0.89713573
+    - 0.65789956
     _SynchronizeChildren: 
     _Thresholds:
     - {x: 0, y: 0}
+    - {x: 0, y: 0.2}
     - {x: 0, y: 0.5}
     _DefaultParameter: {x: 0, y: 0}
     _Type: 0

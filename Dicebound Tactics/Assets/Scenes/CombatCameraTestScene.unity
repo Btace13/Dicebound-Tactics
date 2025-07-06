@@ -2328,7 +2328,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 5
-  defaultAcceleration: 10
+  defaultAcceleration: 40
   sprintSpeed: 25
   sprintAcceleration: 200
   rotationSpeed: 720
@@ -2411,7 +2411,7 @@ MonoBehaviour:
   gravity: {x: NaN, y: NaN, z: NaN}
   groundMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 64
   endReachedDistance: 0.1
   whenCloseToDestination: 0
   rvoDensityBehavior:
@@ -3320,7 +3320,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 5
-  defaultAcceleration: 10
+  defaultAcceleration: 40
   sprintSpeed: 25
   sprintAcceleration: 200
   rotationSpeed: 720
@@ -3403,7 +3403,7 @@ MonoBehaviour:
   gravity: {x: NaN, y: NaN, z: NaN}
   groundMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 64
   endReachedDistance: 0.1
   whenCloseToDestination: 0
   rvoDensityBehavior:
@@ -4508,7 +4508,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 5
-  defaultAcceleration: 10
+  defaultAcceleration: 100
   sprintSpeed: 25
   sprintAcceleration: 200
   rotationSpeed: 720
@@ -4591,7 +4591,7 @@ MonoBehaviour:
   gravity: {x: NaN, y: NaN, z: NaN}
   groundMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 64
   endReachedDistance: 0.1
   whenCloseToDestination: 0
   rvoDensityBehavior:

@@ -23,7 +23,7 @@ public class OverworldCharacterController : MonoBehaviour
     private RVOController rvoController;
     private UnitAnimationHandler unitAnimationHandler;
     private float lastRepath = float.NegativeInfinity;
-    private Vector3 _currentVelocity;
+    [ShowInInspector, ReadOnly] private Vector3 _currentVelocity;
     private Vector3 _previousPosition;
 
     public bool IsControlled { get { return isControlled; } private set { isControlled = value; } }
@@ -101,19 +101,26 @@ public class OverworldCharacterController : MonoBehaviour
             rvoController.locked = false; // Unlock RVO controller if it is locked
         }
 
-        Vector3 moveDirection = new Vector3(input.x, 0, input.y).normalized;
+        // Calculate movement directions relative to the camera
+        var forward = Camera.main.transform.forward;
+        forward.y = 0;
+        forward.Normalize();
+        var right = Camera.main.transform.right;
+        right.y = 0;
+        right.Normalize();
 
-        if (moveDirection.magnitude < 0.01f)
+        if (input.magnitude < 0.01f)
         {
             // If the input is too small, stop the character
-            rvoController.velocity = Vector3.zero;
+            //rvoController.velocity = Vector3.zero;
             pathfindingAI.destination = transform.position; // Stop moving
             return;
         }
 
-        rvoController.velocity = moveDirection * moveSpeed;
-        pathfindingAI.destination = transform.position + moveDirection * moveSpeed * Time.deltaTime;
-        Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
+
+        //rvoController.velocity = moveDirection * moveSpeed;
+        pathfindingAI.destination = transform.position + (input.x * right + input.y * forward) * pathfindingAI.maxSpeed;
+        Quaternion targetRotation = Quaternion.LookRotation(pathfindingAI.velocity.normalized, Vector3.up);
         //transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
         pathfindingAI.desiredFinalRotation = targetRotation;
     }
@@ -124,11 +131,13 @@ public class OverworldCharacterController : MonoBehaviour
         if (newState == GameState.Overworld)
         {
             isControlled = true;
+            rvoController.collidesWith = 0 << 0; // Disable RVO collisions when controlled
             SetShouldSprint(false);
         }
         else
         {
             isControlled = false;
+            rvoController.collidesWith = 0 << 1; // Enable RVO collisions when not controlled
             SetShouldSprint(true);
         }
     }
@@ -229,10 +238,9 @@ public class OverworldCharacterController : MonoBehaviour
             return;
         }
 
-        Vector3 delta = transform.position - _previousPosition;
-        _currentVelocity = transform.InverseTransformDirection(delta / Time.deltaTime);
+        _currentVelocity = transform.InverseTransformDirection((transform.position - _previousPosition));
 
-        unitAnimationHandler.OnUnitVelocityChange(new Vector2(_currentVelocity.x, _currentVelocity.z) / pathfindingAI.maxSpeed);
+        unitAnimationHandler.OnUnitVelocityChange(new Vector2(_currentVelocity.x, _currentVelocity.z) / (pathfindingAI.maxSpeed * Time.deltaTime));
         _previousPosition = transform.position;
     }
 

@@ -54,14 +54,14 @@ public class UnitAnimationHandler : MonoBehaviour
 		{
 			// If no weapon is equipped, play the movement animation
 			AnimationData.movementAnimations.State.Parameter = velocity;
-			_Animancer.Play(AnimationData.movementAnimations, 0.1f);
+			_Animancer.Play(AnimationData.movementAnimations, 0.1f, FadeMode.FixedDuration);
 		}
 		else if (AnimationData.CanFight && AnimationData.combatAnimations.ContainsKey(_equippedWeapon))
 		{
 			MixerTransition2D mixer = AnimationData.combatAnimations[_equippedWeapon].equippedMovement;
 
 			mixer.State.Parameter = velocity;
-			_Animancer.Play(mixer, 0.1f);
+			_Animancer.Play(mixer, 0.1f, FadeMode.FixedDuration);
 		}
 	}
 
