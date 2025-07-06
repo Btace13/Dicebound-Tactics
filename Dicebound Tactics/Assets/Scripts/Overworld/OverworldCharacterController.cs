@@ -41,14 +41,14 @@ public class OverworldCharacterController : MonoBehaviour
 
     public void Update()
     {
-        if (InputManager.Instance == null || InputManager.Instance.InputActions == null)
-        {
-            Debug.LogWarning("InputManager or InputActions is not initialized.");
-            return;
-        }
-
         if (IsControlled)
         {
+            if (InputManager.Instance == null || InputManager.Instance.InputActions == null)
+            {
+                Debug.LogWarning("InputManager or InputActions is not initialized.");
+                return;
+            }
+
             HandleMovement(InputManager.Instance.InputActions.Player.Move.ReadValue<Vector2>());
         }
         else
@@ -120,7 +120,7 @@ public class OverworldCharacterController : MonoBehaviour
 
         //rvoController.velocity = moveDirection * moveSpeed;
         pathfindingAI.destination = transform.position + (input.x * right + input.y * forward) * pathfindingAI.maxSpeed;
-        Quaternion targetRotation = Quaternion.LookRotation(pathfindingAI.velocity.normalized, Vector3.up);
+        Quaternion targetRotation = Quaternion.LookRotation(pathfindingAI.desiredVelocity.normalized, Vector3.up);
         //transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
         pathfindingAI.desiredFinalRotation = targetRotation;
     }
@@ -238,9 +238,9 @@ public class OverworldCharacterController : MonoBehaviour
             return;
         }
 
-        _currentVelocity = transform.InverseTransformDirection((transform.position - _previousPosition));
+        _currentVelocity = transform.InverseTransformDirection(pathfindingAI.velocity / Time.deltaTime);
 
-        unitAnimationHandler.OnUnitVelocityChange(new Vector2(_currentVelocity.x, _currentVelocity.z) / (pathfindingAI.maxSpeed * Time.deltaTime));
+        unitAnimationHandler.OnUnitVelocityChange(new Vector2(_currentVelocity.x, _currentVelocity.z) / pathfindingAI.maxSpeed);
         _previousPosition = transform.position;
     }
 

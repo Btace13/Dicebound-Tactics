@@ -8,13 +8,23 @@ public class EnemyManager : Entity
 {
     [Header("Enemy Specifics")]
     public EnemyDiceProfile diceProfile;
+    public OverworldEnemyController overworldController;
     private TurnManager turnManager;
+
+    private void Awake()
+    {
+        overworldController = GetComponent<OverworldEnemyController>();
+        if (overworldController == null)
+        {
+            Debug.LogWarning($"No OverworldEnemyController found on {name}. Please ensure it is added for proper overworld functionality.");
+        }
+    }
 
     private void Start()
     {
         turnManager = FindFirstObjectByType<TurnManager>();
 
-        if(diceProfile != null)
+        if (diceProfile != null)
         {
             equippedDice = CreateDiceFromProfile(diceProfile);
         }
@@ -23,7 +33,7 @@ public class EnemyManager : Entity
             Debug.LogWarning($"No dice profile assigned for {name}. Using default dice.");
             equippedDice = new Dice(new List<DiceSide> { new(1, null) });
         }
-        
+
     }
 
     public void BeginAITurn()

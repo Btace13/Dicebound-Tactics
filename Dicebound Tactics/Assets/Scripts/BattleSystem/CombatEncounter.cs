@@ -37,6 +37,15 @@ public class CombatEncounter : MonoBehaviour
         }
     }
 
+    public bool IsActive { get; private set; } = false;
+    public bool IsCompleted { get; private set; } = false;
+
+    private Dictionary<EnemyManager, float> _timeSinceLastAction = new Dictionary<EnemyManager, float>();
+
+    [Header("Encounter Settings")]
+    public float encounterRadius = 8f;
+    public float timeBetweenEnemyActions = 2f;
+
     [Header("Encounter References")]
     [SerializeField] private EncounterSide[] encounterSides = new EncounterSide[2];
     public List<EnemyManager> Enemies = new List<EnemyManager>();
@@ -44,6 +53,21 @@ public class CombatEncounter : MonoBehaviour
     [Header("Events")]
     public GameEventCombatEncounter OnEncounterStarted;
     public GameEventCombatEncounter OnEncounterEnded;
+
+    public void Update()
+    {
+        if (IsCompleted) return;
+
+        foreach (EnemyManager enemy in Enemies)
+        {
+            if (!_timeSinceLastAction.ContainsKey(enemy))
+            {
+                _timeSinceLastAction[enemy] = 0f;
+            }
+
+            HandleEnemyWanderBehavior(enemy);
+        }
+    }
 
     public EncounterSide GetClosestEncounterSide(Vector3 position)
     {
@@ -94,6 +118,8 @@ public class CombatEncounter : MonoBehaviour
         {
             OnEncounterStarted.Raise(this);
         }
+
+        IsActive = true;
 
         EncounterSide closestSide = GetClosestEncounterSide(PartyManager.Instance.PartyLeader.transform.position);
 
@@ -153,4 +179,56 @@ public class CombatEncounter : MonoBehaviour
         // Cleanup encounter logic here, such as removing enemies, resetting UI, etc.
         Debug.Log("Combat Encounter Ended");
     }
+
+    #region OVERWORLD ENEMY MANAGEMENT
+
+    public Vector3 GetRandomPointInEncounterArea()
+    {
+        Vector2 randomCircle = Random.insideUnitCircle * encounterRadius;
+        Vector3 point = transform.position + new Vector3(randomCircle.x, 0, randomCircle.y);
+
+        if (Physics.Raycast(point + Vector3.up * 10f, Vector3.down, out RaycastHit hit, 20f, LayerMask.GetMask("Ground")))
+        {
+            point = hit.point;
+        }
+        else
+        {
+            point = transform.position; // Fallback to the center if no ground found
+        }
+
+        return point;
+    }
+
+    public void HandleEnemyWanderBehavior(EnemyManager enemy)
+    {
+        if (enemy == null || enemy.overworldController == null)
+        {
+            Debug.LogWarning($"Enemy or OverworldController is null for {enemy?.name}");
+            return;
+        }
+
+        // Only handle wandering if the enemy is not currently moving
+        if (!enemy.overworldController.HasPath || enemy.overworldController.HasReachedDestination)
+        {
+            if (_timeSinceLastAction[enemy] > timeBetweenEnemyActions)
+            {
+
+                Vector3 randomPoint = GetRandomPointInEncounterArea();
+                enemy.overworldController.MoveToPosition(randomPoint, true);
+
+                // Handle enemy wandering behavior here
+                if (Vector3.Distance(enemy.transform.position, randomPoint) > 1f)
+                {
+                    Debug.Log($"{enemy.name} is wandering to {randomPoint}");
+                    _timeSinceLastAction[enemy] = 0f;
+                }
+            }
+            else
+            {
+                _timeSinceLastAction[enemy] += Time.deltaTime;
+            }
+        }
+    }
+
+    #endregion
 }
