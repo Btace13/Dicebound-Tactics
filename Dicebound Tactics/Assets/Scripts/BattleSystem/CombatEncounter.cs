@@ -46,6 +46,7 @@ public class CombatEncounter : MonoBehaviour
     [Header("Encounter Settings")]
     public float encounterRadius = 8f;
     public float timeBetweenEnemyActions = 2f;
+    public bool IsAntagonistic = true;
 
     [Header("Encounter References")]
     [SerializeField] private EncounterSide[] encounterSides = new EncounterSide[2];
@@ -75,7 +76,10 @@ public class CombatEncounter : MonoBehaviour
                 _timeSinceLastAction[enemy] = 0f;
             }
 
-            HandleEnemyChaseBehavior(enemy);
+            if (IsAntagonistic)
+            {
+                HandleEnemyChaseBehavior(enemy);
+            }
 
             if (!enemy.overworldController.IsChasingTarget)
             {

@@ -78,7 +78,10 @@ public class OverworldEnemyController : MonoBehaviour
     {
         if (other.transform == PartyManager.Instance.PartyLeader.transform)
         {
-            Encounter?.StartEncounter();
+            if (Encounter != null && !Encounter.IsAntagonistic && !Encounter.IsActive)
+            {
+                Encounter.StartEncounter();
+            }
         }
     }
 
