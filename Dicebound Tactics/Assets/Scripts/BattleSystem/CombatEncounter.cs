@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TacticsToolkit;
 using Sirenix.OdinInspector;
 using System.Threading.Tasks;
+using System.Linq;
 
 public class CombatEncounter : MonoBehaviour
 {
@@ -58,8 +59,17 @@ public class CombatEncounter : MonoBehaviour
     {
         if (IsCompleted) return;
 
+        // Only update enemy behavior if the encounter is not active
+        if (IsActive) return;
+
         foreach (EnemyManager enemy in Enemies)
         {
+            // Ensure the enemy's overworld controller is linked to this encounter
+            if (enemy.overworldController.Encounter == null)
+            {
+                enemy.overworldController.Encounter = this;
+            }
+
             if (!_timeSinceLastAction.ContainsKey(enemy))
             {
                 _timeSinceLastAction[enemy] = 0f;
@@ -162,7 +172,42 @@ public class CombatEncounter : MonoBehaviour
             }
         }
 
-        while (remainingMovingCharacters > 0)
+        int remainingMovingEnemies = Enemies.Count;
+
+        foreach (EnemyManager enemy in Enemies)
+        {
+            if (enemy.TryGetComponent(out OverworldEnemyController controller))
+            {
+                controller.CancelPath(); // Cancel any existing pathfinding
+                controller.SetShouldSprint(true); // Enable sprinting for combat movement
+
+                EncounterSide enemySide = encounterSides.Where(s => s != closestSide).FirstOrDefault();
+                EncounterSlot closestSlot = GetClosestSlot(enemy.transform.position, enemySide);
+
+                if (closestSlot == null)
+                {
+                    Debug.LogWarning($"No available slots for {enemy.name} in the opposite encounter side.");
+                    continue;
+                }
+                else
+                {
+                    Debug.Log($"{enemy.name} assigned to slot at {closestSlot.slotTransform.position}");
+                }
+
+                controller.MoveToTarget(closestSlot.slotTransform, true, () =>
+                {
+                    remainingMovingEnemies--;
+                    if (remainingMovingEnemies <= 0)
+                    {
+                        Debug.Log("All enemies have reached their combat slots.");
+                    }
+                });
+
+                closestSlot.isOccupied = true;
+            }
+        }
+
+        while (remainingMovingCharacters > 0 || remainingMovingEnemies > 0)
         {
             await Task.Yield(); // Wait until all units have moved to their slots
         }

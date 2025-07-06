@@ -30,6 +30,7 @@ public class OverworldEnemyController : MonoBehaviour
     private UnitAnimationHandler unitAnimationHandler;
     private float lastRepath = float.NegativeInfinity;
     private float _timeSinceSeen = 0;
+    public CombatEncounter Encounter { get; set; }
 
     [ShowInInspector, ReadOnly] private Vector3 _currentVelocity;
 
@@ -70,6 +71,14 @@ public class OverworldEnemyController : MonoBehaviour
         {
             pathfindingAI.maxSpeed = moveSpeed;
             pathfindingAI.acceleration = defaultAcceleration;
+        }
+    }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        if (other.transform == PartyManager.Instance.PartyLeader.transform)
+        {
+            Encounter?.StartEncounter();
         }
     }
 
