@@ -628,6 +628,7 @@ MonoBehaviour:
   myRenderer: {fileID: 0}
   gameConfig: {fileID: 11400000, guid: eaeab84eb6b1df54eb4c6951b5ec44ae, type: 2}
   diceProfile: {fileID: 11400000, guid: 22d593f9d0fc74833ae292890888b6e8, type: 2}
+  overworldController: {fileID: 0}
 --- !u!65 &113792148
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -666,8 +667,9 @@ MonoBehaviour:
   sprintSpeed: 20
   sprintAcceleration: 100
   rotationSpeed: 720
-  aiFollowDistance: 5
-  nextWaypointDistance: 0.1
+  viewDistance: 8
+  fovAngle: 120
+  chaseDelay: 1
   repathRate: 0.5
 --- !u!114 &113792152
 MonoBehaviour:
@@ -844,6 +846,7 @@ MonoBehaviour:
   myRenderer: {fileID: 0}
   gameConfig: {fileID: 11400000, guid: eaeab84eb6b1df54eb4c6951b5ec44ae, type: 2}
   diceProfile: {fileID: 11400000, guid: 22d593f9d0fc74833ae292890888b6e8, type: 2}
+  overworldController: {fileID: 0}
 --- !u!65 &116624054
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -882,8 +885,9 @@ MonoBehaviour:
   sprintSpeed: 20
   sprintAcceleration: 100
   rotationSpeed: 720
-  aiFollowDistance: 5
-  nextWaypointDistance: 0.1
+  viewDistance: 8
+  fovAngle: 120
+  chaseDelay: 1
   repathRate: 0.5
 --- !u!114 &116624058
 MonoBehaviour:
@@ -2480,7 +2484,6 @@ MonoBehaviour:
   rotationSpeed: 720
   isControlled: 0
   aiFollowDistance: 4
-  nextWaypointDistance: 0.1
   repathRate: 0.5
 --- !u!114 &561669396
 MonoBehaviour:
@@ -3559,7 +3562,6 @@ MonoBehaviour:
   rotationSpeed: 720
   isControlled: 0
   aiFollowDistance: 4
-  nextWaypointDistance: 0.1
   repathRate: 0.5
 --- !u!114 &896658391
 MonoBehaviour:
@@ -4751,7 +4753,6 @@ MonoBehaviour:
   rotationSpeed: 720
   isControlled: 0
   aiFollowDistance: 4
-  nextWaypointDistance: 0.1
   repathRate: 0.5
 --- !u!114 &1169327134
 MonoBehaviour:
@@ -5110,6 +5111,7 @@ MonoBehaviour:
   myRenderer: {fileID: 0}
   gameConfig: {fileID: 11400000, guid: eaeab84eb6b1df54eb4c6951b5ec44ae, type: 2}
   diceProfile: {fileID: 11400000, guid: 22d593f9d0fc74833ae292890888b6e8, type: 2}
+  overworldController: {fileID: 0}
 --- !u!65 &1269485937
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5148,8 +5150,9 @@ MonoBehaviour:
   sprintSpeed: 20
   sprintAcceleration: 100
   rotationSpeed: 720
-  aiFollowDistance: 5
-  nextWaypointDistance: 0.1
+  viewDistance: 8
+  fovAngle: 120
+  chaseDelay: 1
   repathRate: 0.5
 --- !u!114 &1269485941
 MonoBehaviour:

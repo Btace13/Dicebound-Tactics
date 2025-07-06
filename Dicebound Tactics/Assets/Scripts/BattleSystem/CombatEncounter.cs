@@ -212,6 +212,12 @@ public class CombatEncounter : MonoBehaviour
             return;
         }
 
+        if (enemy.overworldController.HasSpottedTarget)
+        {
+            // If the enemy is chasing or has spotted a target, do not wander
+            return;
+        }
+
         // Only handle wandering if the enemy is not currently moving
         if (!enemy.overworldController.HasPath || enemy.overworldController.HasReachedDestination)
         {

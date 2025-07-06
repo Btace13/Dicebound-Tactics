@@ -16,17 +16,20 @@ public class OverworldEnemyController : MonoBehaviour
 
     [BoxGroup("AI Movement Settings"), SerializeField] protected float viewDistance = 5f;
     [BoxGroup("AI Movement Settings"), SerializeField] protected float fovAngle = 120f;
+    [BoxGroup("AI Movement Settings"), SerializeField] protected float chaseDelay = 1f;
     [BoxGroup("AI Movement Settings"), SerializeField] public float repathRate = 0.5f;
 
     public bool HasPath => pathfindingAI.hasPath;
     public bool HasReachedDestination => pathfindingAI.reachedEndOfPath;
-    public Vector3 LastKnownTargetPosition { get; private set; }
+    public bool HasSpottedTarget { get; private set; } = false;
+    public Vector3 LastKnownTargetPosition { get; private set; } = Vector3.positiveInfinity;
     public bool IsChasingTarget => LastKnownTargetPosition != Vector3.positiveInfinity && !HasReachedDestination;
 
     private CustomRichAI pathfindingAI;
     private RVOController rvoController;
     private UnitAnimationHandler unitAnimationHandler;
     private float lastRepath = float.NegativeInfinity;
+    private float _timeSinceSeen = 0;
 
     [ShowInInspector, ReadOnly] private Vector3 _currentVelocity;
 
@@ -168,7 +171,7 @@ public class OverworldEnemyController : MonoBehaviour
                 return false; // Target is outside field of view
             }
 
-            if (Physics.Raycast(transform.position + Vector3.up * 1.5f, directionToTarget, out RaycastHit hit, viewDistance))
+            if (Physics.Raycast(transform.position + Vector3.up * 1f, directionToTarget, out RaycastHit hit, viewDistance))
             {
                 if (hit.transform == target)
                 {
@@ -183,12 +186,23 @@ public class OverworldEnemyController : MonoBehaviour
 
     public void UpdateLastKnownTargetPosition(Vector3 position)
     {
+        if (LastKnownTargetPosition == Vector3.positiveInfinity && _timeSinceSeen < chaseDelay)
+        {
+            CancelPath(); // Cancel path if we haven't seen the target for a while
+            HasSpottedTarget = true;
+            _timeSinceSeen += Time.deltaTime;
+            //print($"Spotted target, waiting {chaseDelay - _timeSinceSeen} seconds before updating last known position");
+            return; // Delay before updating last known position
+        }
+
         LastKnownTargetPosition = position;
     }
 
     public void ClearLastKnownTargetPosition()
     {
         LastKnownTargetPosition = Vector3.positiveInfinity;
+        _timeSinceSeen = 0f; // Reset the time since last seen
+        HasSpottedTarget = false; // Reset spotted state
     }
 
     #endregion
