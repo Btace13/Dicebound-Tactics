@@ -131,12 +131,14 @@ public class OverworldCharacterController : MonoBehaviour
         {
             isControlled = true;
             rvoController.collidesWith = 0 << 0; // Disable RVO collisions when controlled
+            rvoController.layer = RVOLayer.Layer30; // Set to layer 30 when controlled
             SetShouldSprint(false);
         }
         else
         {
             isControlled = false;
             rvoController.collidesWith = 0 << 1; // Enable RVO collisions when not controlled
+            rvoController.layer = RVOLayer.DefaultAgent; // Set to layer 31 when not controlled
             SetShouldSprint(true);
         }
     }

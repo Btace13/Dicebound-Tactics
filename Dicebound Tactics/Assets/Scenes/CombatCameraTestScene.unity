@@ -770,7 +770,7 @@ MonoBehaviour:
   obstacleTimeHorizon: 0.5
   maxNeighbours: 10
   layer: 1
-  collidesWith: -1
+  collidesWith: 1073741823
   wallAvoidForce: 1
   wallAvoidFalloff: 1
   priority: 0.5
@@ -1016,7 +1016,7 @@ MonoBehaviour:
   obstacleTimeHorizon: 0.5
   maxNeighbours: 10
   layer: 1
-  collidesWith: -1
+  collidesWith: 1073741823
   wallAvoidForce: 1
   wallAvoidFalloff: 1
   priority: 0.5
@@ -5393,7 +5393,7 @@ MonoBehaviour:
   obstacleTimeHorizon: 0.5
   maxNeighbours: 10
   layer: 1
-  collidesWith: -1
+  collidesWith: 1073741823
   wallAvoidForce: 1
   wallAvoidFalloff: 1
   priority: 0.5
