@@ -109,7 +109,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 5
-  defaultAcceleration: 50
+  defaultAcceleration: 10
   sprintSpeed: 25
   sprintAcceleration: 200
   rotationSpeed: 720

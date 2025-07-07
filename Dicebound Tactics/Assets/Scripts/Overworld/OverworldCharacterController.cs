@@ -23,7 +23,6 @@ public class OverworldCharacterController : MonoBehaviour
     private UnitAnimationHandler unitAnimationHandler;
     private float lastRepath = float.NegativeInfinity;
     [ShowInInspector, ReadOnly] private Vector3 _currentVelocity;
-    private Vector3 _previousPosition;
 
     public bool IsControlled { get { return isControlled; } private set { isControlled = value; } }
     public bool CanFollowLeader { get; set; } = true;
@@ -34,9 +33,7 @@ public class OverworldCharacterController : MonoBehaviour
         pathfindingAI = gameObject.GetOrAddComponent<CustomRichAI>();
         pathfindingAI.maxSpeed = moveSpeed;
         unitAnimationHandler = gameObject.GetComponentInChildren<UnitAnimationHandler>(true);
-        _previousPosition = transform.position;
     }
-
 
     public void Update()
     {
@@ -108,7 +105,7 @@ public class OverworldCharacterController : MonoBehaviour
         right.y = 0;
         right.Normalize();
 
-        if (input.magnitude < 0.01f)
+        if (pathfindingAI.updatePosition && input.magnitude < 0.01f)
         {
             // If the input is too small, stop the character
             //rvoController.velocity = Vector3.zero;
@@ -116,12 +113,32 @@ public class OverworldCharacterController : MonoBehaviour
             return;
         }
 
+        Vector3 movement = input.x * right + input.y * forward;
 
-        //rvoController.velocity = moveDirection * moveSpeed;
-        pathfindingAI.destination = transform.position + (input.x * right + input.y * forward) * pathfindingAI.maxSpeed;
-        Quaternion targetRotation = Quaternion.LookRotation(pathfindingAI.desiredVelocity.normalized, Vector3.up);
-        //transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
-        pathfindingAI.desiredFinalRotation = targetRotation;
+        Vector3 zeroedYVelocity = movement.normalized;
+        zeroedYVelocity.y = 0;
+
+        if (zeroedYVelocity.magnitude < 0.01f)
+        {
+            return; // Avoid setting rotation if there's no movement
+        }
+
+        if (!pathfindingAI.updatePosition)
+        {
+            rvoController.velocity = zeroedYVelocity * pathfindingAI.maxSpeed;
+            transform.position += rvoController.velocity * Time.deltaTime;
+        }
+        else
+        {
+            pathfindingAI.destination = transform.position + zeroedYVelocity * pathfindingAI.maxSpeed;
+        }
+
+        if (!pathfindingAI.enableRotation)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(zeroedYVelocity, Vector3.up);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+            pathfindingAI.desiredFinalRotation = targetRotation;
+        }
     }
     #endregion
 
@@ -219,14 +236,14 @@ public class OverworldCharacterController : MonoBehaviour
 
     public void CancelPath()
     {
-        print("Canceling path");
-
-        if (pathfindingAI != null)
+        if (pathfindingAI != null && pathfindingAI.hasPath && pathfindingAI.destination != transform.position)
         {
+            print("Canceling path");
             pathfindingAI.destination = transform.position; // Set destination to current position to stop moving
             pathfindingAI.SearchPath(); // Force a search to update the AI state
         }
     }
+
     #endregion
 
     #region ANIMATION HANDLING
@@ -239,10 +256,9 @@ public class OverworldCharacterController : MonoBehaviour
             return;
         }
 
-        _currentVelocity = transform.InverseTransformDirection(pathfindingAI.velocity / Time.deltaTime);
+        _currentVelocity = transform.InverseTransformDirection(rvoController.velocity / Time.deltaTime);
 
         unitAnimationHandler.OnUnitVelocityChange(new Vector2(_currentVelocity.x, _currentVelocity.z) / pathfindingAI.maxSpeed);
-        _previousPosition = transform.position;
     }
 
     #endregion

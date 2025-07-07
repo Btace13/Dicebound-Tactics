@@ -78,7 +78,7 @@ public class OverworldEnemyController : MonoBehaviour
     {
         if (other.transform == PartyManager.Instance.PartyLeader.transform)
         {
-            if (Encounter != null && !Encounter.IsAntagonistic && !Encounter.IsActive)
+            if (Encounter != null && Encounter.IsAntagonistic && !Encounter.IsActive)
             {
                 Encounter.StartEncounter();
             }
@@ -129,10 +129,9 @@ public class OverworldEnemyController : MonoBehaviour
 
     public void CancelPath()
     {
-        print("Canceling path");
-
-        if (pathfindingAI != null)
+        if (pathfindingAI != null && pathfindingAI.hasPath && pathfindingAI.destination != transform.position)
         {
+            print("Canceling path");
             pathfindingAI.destination = transform.position; // Set destination to current position to stop moving
             pathfindingAI.SearchPath(); // Force a search to update the AI state
         }
@@ -157,7 +156,7 @@ public class OverworldEnemyController : MonoBehaviour
             return;
         }
 
-        _currentVelocity = transform.InverseTransformDirection(pathfindingAI.velocity / Time.deltaTime);
+        _currentVelocity = transform.InverseTransformDirection(rvoController.velocity / Time.deltaTime);
 
         unitAnimationHandler.OnUnitVelocityChange(new Vector2(_currentVelocity.x, _currentVelocity.z) / pathfindingAI.maxSpeed);
     }

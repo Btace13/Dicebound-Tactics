@@ -22,22 +22,41 @@ public class CustomRichAI : RichAI
 
     void Update()
     {
-        if (shouldRotateAtEnd)
-        {
-            bool tmpRotation = enableRotation;
-            enableRotation = false;
+        // if (shouldRotateAtEnd)
+        // {
+        //     bool tmpRotation = enableRotation;
+        //     enableRotation = false;
 
+        //     rotation = Quaternion.RotateTowards(
+        //         rotation,
+        //         desiredFinalRotation,
+        //         rotationSpeed * Time.deltaTime
+        //     );
+
+        //     if (Mathf.Abs(Quaternion.Angle(rotation, desiredFinalRotation)) < 1f)
+        //     {
+        //         shouldRotateAtEnd = false;
+        //     }
+        // }
+        // else
+        // {
+        if (velocity.magnitude < 0.01f)
+        {
+            Vector3 rotationDirection = transform.forward;
+            rotationDirection.y = 0; // Keep only the horizontal direction
             rotation = Quaternion.RotateTowards(
                 rotation,
-                desiredFinalRotation,
+                Quaternion.LookRotation(rotationDirection, Vector3.up),
                 rotationSpeed * Time.deltaTime
             );
-
-            if (Mathf.Abs(Quaternion.Angle(rotation, desiredFinalRotation)) < 1f)
-            {
-                shouldRotateAtEnd = false;
-                enableRotation = tmpRotation; // Re-enable rotation after reaching the target
-            }
+        }
+        else
+        {
+            rotation = Quaternion.RotateTowards(
+                rotation,
+                Quaternion.LookRotation(velocity, Vector3.up),
+                rotationSpeed * Time.deltaTime
+            );
         }
     }
 }

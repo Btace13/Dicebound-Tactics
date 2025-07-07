@@ -7922,6 +7922,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8774146831466601329, guid: e669acb488d4d42da8cc45e9d8a0b3ee, type: 3}
+      propertyPath: enableRotation
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8288,6 +8292,10 @@ PrefabInstance:
     - target: {fileID: 210525986119920492, guid: 9e553778f72e0894cb7e70029cd9fb36, type: 3}
       propertyPath: m_Name
       value: Encounter
+      objectReference: {fileID: 0}
+    - target: {fileID: 5752600779834487987, guid: 9e553778f72e0894cb7e70029cd9fb36, type: 3}
+      propertyPath: IsAntagonistic
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5752600779834487987, guid: 9e553778f72e0894cb7e70029cd9fb36, type: 3}
       propertyPath: 'Enemies.Array.data[0]'
