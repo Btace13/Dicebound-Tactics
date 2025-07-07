@@ -85,10 +85,23 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 182c15c2b84e63d4cac2882583308858, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3099776234427511391}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 182c15c2b84e63d4cac2882583308858, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7841307654136888622}
   m_SourcePrefab: {fileID: 100100000, guid: 182c15c2b84e63d4cac2882583308858, type: 3}
 --- !u!95 &214040632166542893 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 182c15c2b84e63d4cac2882583308858, type: 3}
+  m_PrefabInstance: {fileID: 6022149962115699644}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &283179144269487000 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5799779343919122468, guid: 182c15c2b84e63d4cac2882583308858, type: 3}
+  m_PrefabInstance: {fileID: 6022149962115699644}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &295160299140228466 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6307968309698819790, guid: 182c15c2b84e63d4cac2882583308858, type: 3}
   m_PrefabInstance: {fileID: 6022149962115699644}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &2562982651264965263 stripped
@@ -96,9 +109,24 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -1151951325145413325, guid: 182c15c2b84e63d4cac2882583308858, type: 3}
   m_PrefabInstance: {fileID: 6022149962115699644}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &4704073202720029864 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -7864761746890264812, guid: 182c15c2b84e63d4cac2882583308858, type: 3}
+  m_PrefabInstance: {fileID: 6022149962115699644}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &4941470540539891307 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1657703158223855063, guid: 182c15c2b84e63d4cac2882583308858, type: 3}
+  m_PrefabInstance: {fileID: 6022149962115699644}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6059663695870735447 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 182c15c2b84e63d4cac2882583308858, type: 3}
+  m_PrefabInstance: {fileID: 6022149962115699644}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &6746725400007587175 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8199974674142632229, guid: 182c15c2b84e63d4cac2882583308858, type: 3}
   m_PrefabInstance: {fileID: 6022149962115699644}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &6868992917428825837 stripped
@@ -312,6 +340,142 @@ MonoBehaviour:
   _ActionOnDisable: 0
   _PlayAutomatically: 1
   _Animations: []
+--- !u!114 &7841307654136888622
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6868992917428825837}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 163d2c8446aa6ae42a718abaa805b8f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _EditorDrawSetup: 0
+  Leaning:
+    UpdateMode: 0
+    Calibrate: 1
+    SideSwayPower: 1
+    ClampSideSway: 25
+    ForwardSwayPower: 0.5
+    BrakeRapidity: 0.485
+    RootBlend: 1
+    FootsOrigin: {fileID: 7926417007304916931}
+    RootRapidity: 0.425
+    RootSideSway: 1
+    RootForwardSway: 0.5
+    RootStrafeSway: 0.75
+    RootBrakeSway: 0.5
+    RootBackwardSway: 0.5
+    SpineBlend: 0.5
+    ClampSpineSway: 25
+    SpineRapidity: 0.5
+    SpineForwardSway: {x: 5, y: 0, z: 0}
+    SpineSideLean: -0.125
+    SpineRightSway: {x: 0, y: -0.75, z: 1.25}
+    SpineBrakeSway: 0.85
+    StartRunPush: 1
+    NeckCompensation: 0.75
+    ConstantAddRotation: {x: 0, y: 0, z: 0}
+    ArmsBlend: 0.5
+    ArmsSideSway: 0.5
+    ArmsForwardSway: -0.225
+    ObjSpeedWhenBraking: 0.2
+    ObjSpeedWhenRunning: 5
+    AccelerationDetection: 1
+    TryAutoDetectGround: 1
+    UseMuscles: 0
+    MuscleSettings:
+      DesiredPosition: {x: 0, y: 0, z: 0}
+      Acceleration: 10000
+      AccelerationLimit: 5000
+      Damping: 10
+      BrakePower: 0.2
+    AllEffectsBlend: 1
+    IsMovingAnimatorParam: 
+    IsGroundedAnimatorParam: 
+    FadeOffLeaningParam: 
+    FadeOffSpeed: 0.5
+    AccelValueThreshold: 0.25
+    GroundAlignBlend: 0
+    GroundAlignRapidity: 0.6
+    AlignOnlyWhenMoving: 0
+    ClampGroundAlign: 25
+    MutiplyGroundAxisRotation: {x: 1, y: 1}
+    AlignAmountOnSpeed:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0.1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 0.3
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    GroundMask:
+      serializedVersion: 2
+      m_Bits: 4294967295
+    GroundCastLength: 0.2
+    BoxCastSize: 0
+    _UserUseCustomRaycast: 0
+    ResetOnUngrounded: 1
+    UpsideDownSupport: 0
+    BaseTransform: {fileID: 6059663695870735447}
+    SpineStart: {fileID: 283179144269487000}
+    SpineMiddle: {fileID: 8972279459292510051}
+    Chest: {fileID: 7564251834749196095}
+    Neck: {fileID: 4941470540539891307}
+    LeftUpperArm: {fileID: 6746725400007587175}
+    LeftForearm: {fileID: 4704073202720029864}
+    RightUpperArm: {fileID: 7158761973584410391}
+    RightForearm: {fileID: 295160299140228466}
+    SpineGroundAlign: 0
+    SpineGrAdjustDuration: 0.15
+    SlopeSpineLean:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 10
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 75
+        value: 1.25
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    AdjustForwAndSide: {x: 1, y: 0.75}
+--- !u!4 &7158761973584410391 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3516169388021212331, guid: 182c15c2b84e63d4cac2882583308858, type: 3}
+  m_PrefabInstance: {fileID: 6022149962115699644}
+  m_PrefabAsset: {fileID: 0}
 --- !u!137 &7219709970062542915 stripped
 SkinnedMeshRenderer:
   m_CorrespondingSourceObject: {fileID: 4009178439354768383, guid: 182c15c2b84e63d4cac2882583308858, type: 3}
@@ -320,5 +484,15 @@ SkinnedMeshRenderer:
 --- !u!4 &7564251834749196095 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4281629724655699075, guid: 182c15c2b84e63d4cac2882583308858, type: 3}
+  m_PrefabInstance: {fileID: 6022149962115699644}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &7926417007304916931 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4436805663696350335, guid: 182c15c2b84e63d4cac2882583308858, type: 3}
+  m_PrefabInstance: {fileID: 6022149962115699644}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8972279459292510051 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3391502827646887135, guid: 182c15c2b84e63d4cac2882583308858, type: 3}
   m_PrefabInstance: {fileID: 6022149962115699644}
   m_PrefabAsset: {fileID: 0}
