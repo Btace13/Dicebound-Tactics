@@ -148,6 +148,12 @@ public class CombatEncounter : MonoBehaviour
         {
             if (c.TryGetComponent(out OverworldCharacterController controller))
             {
+                // Ensure the character is linked to this encounter
+                if (controller.Encounter == null)
+                {
+                    controller.Encounter = this;
+                }
+
                 controller.CanFollowLeader = false; // Disable player control during combat
                 controller.CancelPath(); // Cancel any existing pathfinding
                 controller.SetShouldSprint(true); // Enable sprinting for combat movement
@@ -232,6 +238,13 @@ public class CombatEncounter : MonoBehaviour
 
         // Cleanup encounter logic here, such as removing enemies, resetting UI, etc.
         Debug.Log("Combat Encounter Ended");
+
+        // Reset encounter state
+        IsActive = false;
+        foreach (CharacterManager c in PartyManager.Instance.ActivePartyMembers)
+        {
+            c.OverworldCharacterController.Encounter = null;
+        }
     }
 
     #region OVERWORLD ENEMY MANAGEMENT

@@ -26,6 +26,7 @@ public class OverworldCharacterController : MonoBehaviour
 
     public bool IsControlled { get { return isControlled; } private set { isControlled = value; } }
     public bool CanFollowLeader { get; set; } = true;
+    public CombatEncounter Encounter { get; set; }
 
     private void Awake()
     {
@@ -37,7 +38,7 @@ public class OverworldCharacterController : MonoBehaviour
 
     public void Update()
     {
-        if (GameStateManager.Instance.CurrentGameState == GameState.Overworld)
+        if (GameStateManager.Instance.CurrentGameState == GameState.Overworld && (Encounter == null || !Encounter.IsActive))
         {
             if (IsControlled)
             {
