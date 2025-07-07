@@ -18,6 +18,7 @@ public abstract class AbilitySO : ScriptableObject
     public int apCost;
     public AbilityType abilityType = AbilityType.All;
     public bool requiresMovement = false;
+    public float range = 4f;
     public int unlockLevel = 1;
 
     public abstract void Execute(Entity user, Entity target);

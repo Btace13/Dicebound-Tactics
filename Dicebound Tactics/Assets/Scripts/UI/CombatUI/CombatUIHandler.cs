@@ -230,7 +230,7 @@ public class CombatUIHandler : MonoBehaviour
     {
         if (currentPanel == null)
         {
-            Debug.LogError("No current panel to close.");
+            Debug.LogWarning("No current panel to close.");
             return;
         }
 

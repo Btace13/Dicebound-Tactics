@@ -170,6 +170,8 @@ public class CombatEncounter : MonoBehaviour
                     Debug.Log($"{c.name} assigned to slot at {closestSlot.slotTransform.position}");
                 }
 
+                controller.AssignedEncounterSlot = closestSlot; // Assign the slot to the controller
+
                 controller.MoveToTarget(closestSlot.slotTransform, true, () =>
                 {
                     remainingMovingCharacters--;
@@ -203,6 +205,8 @@ public class CombatEncounter : MonoBehaviour
                 {
                     Debug.Log($"{enemy.name} assigned to slot at {closestSlot.slotTransform.position}");
                 }
+
+                controller.AssignedEncounterSlot = closestSlot; // Assign the slot to the controller
 
                 controller.MoveToTarget(closestSlot.slotTransform, true, () =>
                 {
@@ -241,9 +245,17 @@ public class CombatEncounter : MonoBehaviour
 
         // Reset encounter state
         IsActive = false;
+
         foreach (CharacterManager c in PartyManager.Instance.ActivePartyMembers)
         {
             c.OverworldCharacterController.Encounter = null;
+            c.OverworldCharacterController.AssignedEncounterSlot = null;
+        }
+
+        foreach (EnemyManager enemy in Enemies)
+        {
+            enemy.overworldController.Encounter = null;
+            enemy.overworldController.AssignedEncounterSlot = null;
         }
     }
 

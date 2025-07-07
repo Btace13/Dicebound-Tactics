@@ -668,10 +668,10 @@ MonoBehaviour:
   sprintSpeed: 20
   sprintAcceleration: 100
   rotationSpeed: 720
+  repathRate: 0.5
   viewDistance: 8
   fovAngle: 120
   chaseDelay: 1
-  repathRate: 0.5
 --- !u!114 &113792152
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -914,10 +914,10 @@ MonoBehaviour:
   sprintSpeed: 20
   sprintAcceleration: 100
   rotationSpeed: 720
+  repathRate: 0.5
   viewDistance: 8
   fovAngle: 120
   chaseDelay: 1
-  repathRate: 0.5
 --- !u!114 &116624058
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1332,6 +1332,18 @@ PrefabInstance:
       value: 2.98
       objectReference: {fileID: 0}
     - target: {fileID: 1874451854127577837, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1874451854127577837, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1874451854127577837, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Mode
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1874451854127577837, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 453086991}
@@ -1340,12 +1352,40 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 453086991}
     - target: {fileID: 1874451854127577837, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OpenPanel
+      objectReference: {fileID: 0}
+    - target: {fileID: 1874451854127577837, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
+      value: ShowConfirmButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 1874451854127577837, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName
+      value: CombatUIHandler, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1874451854127577837, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_BoolArgument
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1874451854127577837, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
       value: 
       objectReference: {fileID: 1081797067}
+    - target: {fileID: 1874451854127577837, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_StringArgument
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1874451854127577837, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: CombatPanel, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 4942958996491298561, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
       propertyPath: m_Name
       value: AbilitiesButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 6132562457352715467, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
+      propertyPath: m_text
+      value: Abilities
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2538,6 +2578,18 @@ MonoBehaviour:
   response:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 453086991}
+        m_TargetAssemblyTypeName: CombatUIHandler, Assembly-CSharp
+        m_MethodName: ShowConfirmButton
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 453086991}
         m_TargetAssemblyTypeName: CombatUIHandler, Assembly-CSharp
         m_MethodName: OpenPanel
@@ -3970,10 +4022,10 @@ MonoBehaviour:
   sprintSpeed: 20
   sprintAcceleration: 100
   rotationSpeed: 720
+  repathRate: 0.5
   viewDistance: 8
   fovAngle: 120
   chaseDelay: 1
-  repathRate: 0.5
 --- !u!114 &1269485941
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7176,16 +7228,84 @@ PrefabInstance:
       value: -0.67
       objectReference: {fileID: 0}
     - target: {fileID: 1874451854127577837, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1874451854127577837, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1874451854127577837, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Mode
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1874451854127577837, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 11400000, guid: e8c65a7bdcf624ce396e60bc962cc109, type: 2}
+    - target: {fileID: 1874451854127577837, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
       objectReference: {fileID: 453086991}
     - target: {fileID: 1874451854127577837, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Raise
+      objectReference: {fileID: 0}
+    - target: {fileID: 1874451854127577837, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: OpenPanel
+      objectReference: {fileID: 0}
+    - target: {fileID: 1874451854127577837, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
+      value: ShowConfirmButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 1874451854127577837, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: TacticsToolkit.GameEvent, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1874451854127577837, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: CombatUIHandler, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1874451854127577837, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName
+      value: CombatUIHandler, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1874451854127577837, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_BoolArgument
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1874451854127577837, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_BoolArgument
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1874451854127577837, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1874451854127577837, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgument
+      value: 
       objectReference: {fileID: 1393628035}
+    - target: {fileID: 1874451854127577837, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_StringArgument
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1874451854127577837, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_StringArgument
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1874451854127577837, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: CombatPanel, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 4942958996491298561, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
       propertyPath: m_Name
       value: ItemButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 6132562457352715467, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
+      propertyPath: m_text
+      value: Items
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -7286,12 +7406,48 @@ PrefabInstance:
       value: -5.4
       objectReference: {fileID: 0}
     - target: {fileID: 1874451854127577837, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1874451854127577837, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Mode
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1874451854127577837, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1957448905}
+    - target: {fileID: 1874451854127577837, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: EndTurn
+      objectReference: {fileID: 0}
+    - target: {fileID: 1874451854127577837, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
+      value: ShowConfirmButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 1874451854127577837, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: TurnManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1874451854127577837, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_TargetAssemblyTypeName
+      value: CombatUIHandler, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1874451854127577837, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_BoolArgument
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1874451854127577837, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_StringArgument
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 4942958996491298561, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
       propertyPath: m_Name
       value: PassButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 6132562457352715467, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
+      propertyPath: m_text
+      value: Pass Turn
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -7930,6 +8086,10 @@ PrefabInstance:
       value: 9.87
       objectReference: {fileID: 0}
     - target: {fileID: 1874451854127577837, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[3].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1874451854127577837, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 453086991}
@@ -7940,11 +8100,19 @@ PrefabInstance:
     - target: {fileID: 1874451854127577837, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[3].m_Target
       value: 
-      objectReference: {fileID: 453086991}
+      objectReference: {fileID: 1404614838}
     - target: {fileID: 1874451854127577837, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[4].m_Target
       value: 
       objectReference: {fileID: 453086991}
+    - target: {fileID: 1874451854127577837, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[3].m_MethodName
+      value: BasicAttackSelected
+      objectReference: {fileID: 0}
+    - target: {fileID: 1874451854127577837, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[3].m_TargetAssemblyTypeName
+      value: CombatManager, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 4942958996491298561, guid: 49fb6482f8f739349836953ed49606d6, type: 3}
       propertyPath: m_Name
       value: AttackButton

@@ -5,38 +5,20 @@ using Pathfinding;
 using Pathfinding.RVO;
 using UnityEngine.Events;
 
-public class OverworldCharacterController : MonoBehaviour
+public class OverworldCharacterController : OverworldEntityController
 {
-    [BoxGroup("Control Settings"), SerializeField] protected float moveSpeed = 5f;
-    [BoxGroup("Control Settings"), SerializeField] protected float defaultAcceleration = 10f;
-    [BoxGroup("Control Settings"), SerializeField] protected float sprintSpeed = 20f;
-    [BoxGroup("Control Settings"), SerializeField] protected float sprintAcceleration = 100f;
-
-    [BoxGroup("Control Settings"), SerializeField] protected float rotationSpeed = 720f;
     [BoxGroup("Control Settings"), SerializeField] protected bool isControlled = false;
-
     [BoxGroup("AI Movement Settings"), SerializeField] protected float aiFollowDistance = 5f;
-    [BoxGroup("AI Movement Settings"), SerializeField] public float repathRate = 0.5f;
-
-    private CustomRichAI pathfindingAI;
-    private RVOController rvoController;
-    private UnitAnimationHandler unitAnimationHandler;
-    private float lastRepath = float.NegativeInfinity;
-    [ShowInInspector, ReadOnly] private Vector3 _currentVelocity = Vector3.zero;
 
     public bool IsControlled { get { return isControlled; } private set { isControlled = value; } }
     public bool CanFollowLeader { get; set; } = true;
-    public CombatEncounter Encounter { get; set; }
 
-    private void Awake()
+    protected override void Awake()
     {
-        rvoController = gameObject.GetOrAddComponent<RVOController>();
-        pathfindingAI = gameObject.GetOrAddComponent<CustomRichAI>();
-        pathfindingAI.maxSpeed = moveSpeed;
-        unitAnimationHandler = gameObject.GetComponentInChildren<UnitAnimationHandler>(true);
+        base.Awake();
     }
 
-    public void Update()
+    protected override void Update()
     {
         if (GameStateManager.Instance.CurrentGameState == GameState.Overworld && (Encounter == null || !Encounter.IsActive))
         {
@@ -91,8 +73,7 @@ public class OverworldCharacterController : MonoBehaviour
             }
         }
 
-        // Update the animation state based on the current velocity
-        UpdateAnimationState();
+        base.Update();
     }
 
     #region PLAYER MOVEMENT
@@ -178,20 +159,6 @@ public class OverworldCharacterController : MonoBehaviour
         }
     }
 
-    public void SetShouldSprint(bool shouldSprint)
-    {
-        if (shouldSprint)
-        {
-            pathfindingAI.maxSpeed = sprintSpeed;
-            pathfindingAI.acceleration = sprintAcceleration;
-        }
-        else
-        {
-            pathfindingAI.maxSpeed = moveSpeed;
-            pathfindingAI.acceleration = defaultAcceleration;
-        }
-    }
-
     #region AI MOVEMENT
     public bool CheckShouldFollowLeader()
     {
@@ -209,73 +176,6 @@ public class OverworldCharacterController : MonoBehaviour
 
         // Check if the party leader is controlled and if following the leader is allowed
         return PartyManager.Instance.PartyLeader.OverworldCharacterController.IsControlled && CanFollowLeader;
-    }
-
-    public void MoveToTarget(Transform target, bool overrideTime = false, UnityAction onTargetReached = null)
-    {
-        if (pathfindingAI == null)
-        {
-            Debug.LogWarning("pathfindingAI is not initialized.");
-            return;
-        }
-
-        if (target == null)
-        {
-            Debug.LogWarning("Target is null. Cannot move to a null target.");
-            return;
-        }
-
-        pathfindingAI.desiredFinalRotation = target.rotation;
-        MoveToPosition(target.position, overrideTime, onTargetReached);
-    }
-
-    public void MoveToPosition(Vector3 targetPosition, bool overrideTime = false, UnityAction onTargetReached = null)
-    {
-        if (pathfindingAI == null)
-        {
-            Debug.LogWarning("pathfindingAI is not initialized.");
-            return;
-        }
-
-        if (rvoController.locked)
-        {
-            rvoController.locked = false;
-        }
-
-        if (overrideTime || Time.time > lastRepath + repathRate)
-        {
-            lastRepath = Time.time;
-
-            pathfindingAI.onTargetReached = onTargetReached;
-            pathfindingAI.destination = targetPosition;
-            pathfindingAI.SearchPath();
-        }
-    }
-
-    public void CancelPath()
-    {
-        if (pathfindingAI != null && pathfindingAI.hasPath)
-        {
-            print("Canceling path");
-            pathfindingAI.SetPath(null);
-        }
-    }
-
-    #endregion
-
-    #region ANIMATION HANDLING
-
-    private void UpdateAnimationState()
-    {
-        if (unitAnimationHandler == null)
-        {
-            Debug.LogWarning("UnitAnimationHandler is not assigned.");
-            return;
-        }
-
-        _currentVelocity = Vector3.LerpUnclamped(_currentVelocity, transform.InverseTransformDirection(rvoController.velocity), 10f * Time.deltaTime);
-
-        unitAnimationHandler.OnUnitVelocityChange(new Vector2(_currentVelocity.x, _currentVelocity.z) / pathfindingAI.maxSpeed);
     }
 
     #endregion
