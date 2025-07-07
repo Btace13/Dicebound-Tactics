@@ -13,6 +13,7 @@ public class CharacterCard : MonoBehaviour
   [SerializeField] private TextMeshProUGUI apAmountText;
   [SerializeField] private TextMeshProUGUI modifierText;
   [SerializeField] private GameObject CurrentTurnIndicator;
+  [SerializeField] private TextMeshProUGUI modifierTextContent;
 
   private string characterId;
 
@@ -36,6 +37,7 @@ public class CharacterCard : MonoBehaviour
       healthText.text = string.Empty;
       apAmountText.text = string.Empty;
       modifierText.text = string.Empty;
+      modifierTextContent.text = "";
       return;
     }
 
@@ -60,8 +62,14 @@ public class CharacterCard : MonoBehaviour
 
     if (modifierText != null)
       if (character.equippedDice == null || character.equippedDice.LastRollModifier == null)
-        modifierText.text = "No Modifier";
+        modifierText.text = "";
       else
         modifierText.text = character.equippedDice.LastRollModifier.Name;
+
+    if (modifierTextContent != null)
+      if( character.equippedDice == null || character.equippedDice.LastRollModifier == null)
+        modifierTextContent.text = "";
+      else
+        modifierTextContent.text = character.equippedDice.LastRollModifier.Description;
   }
 }
