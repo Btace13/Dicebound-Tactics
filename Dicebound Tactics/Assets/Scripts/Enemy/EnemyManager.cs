@@ -66,6 +66,8 @@ public class EnemyManager : Entity
                 .Where(p => p != null && p.isAlive)
                 .ToList();
 
+            Debug.Log($"Targets available for {ability.abilityName}: {string.Join(", ", targets.Select(t => t.name))}");
+
             if (targets.Count == 0)
                 break;
 

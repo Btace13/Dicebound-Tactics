@@ -610,7 +610,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   equippedDice: {fileID: 11400000, guid: 13934ccd0cd1b4e7bb563bac2bcb4735, type: 2}
   portrait: {fileID: 876784968147787122, guid: 3e5c6627436f52749bd3a5b2d7b4ad79, type: 3}
-  abilityLoadout: []
+  abilityLoadout:
+  - {fileID: 11400000, guid: 594f47a0dcaef4935b1b146f622cabb8, type: 2}
   inventory: {fileID: 0}
   level: 0
   experience: 0
@@ -856,7 +857,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   equippedDice: {fileID: 11400000, guid: 13934ccd0cd1b4e7bb563bac2bcb4735, type: 2}
   portrait: {fileID: 3229708652140166120, guid: 3e5c6627436f52749bd3a5b2d7b4ad79, type: 3}
-  abilityLoadout: []
+  abilityLoadout:
+  - {fileID: 11400000, guid: 7e911d070168540809fbadd791ad7ee7, type: 2}
   inventory: {fileID: 0}
   level: 0
   experience: 0
@@ -2633,7 +2635,19 @@ MonoBehaviour:
   eventGameObject: {fileID: 11400000, guid: c48b2e6f57cce334aaa20f4f36760ee3, type: 2}
   response:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 453086991}
+        m_TargetAssemblyTypeName: CombatUIHandler, Assembly-CSharp
+        m_MethodName: CloseAllPanels
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &650896117
 GameObject:
   m_ObjectHideFlags: 0
@@ -3968,7 +3982,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   equippedDice: {fileID: 11400000, guid: 13934ccd0cd1b4e7bb563bac2bcb4735, type: 2}
   portrait: {fileID: 2731795287329381114, guid: 3e5c6627436f52749bd3a5b2d7b4ad79, type: 3}
-  abilityLoadout: []
+  abilityLoadout:
+  - {fileID: 11400000, guid: 71895a1f9982b4faebb510e4a913cd15, type: 2}
   inventory: {fileID: 0}
   level: 0
   experience: 0
