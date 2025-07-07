@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 725bd759b9a83419ea3ebd7a449c94b8, type: 3}
   m_Name: AP Refund
   m_EditorClassIdentifier: 
-  modifierName: AP Refund
-  description: Next ability costs 0 AP.
+  Name: AP Refund
+  Description: Next ability costs 0 AP.

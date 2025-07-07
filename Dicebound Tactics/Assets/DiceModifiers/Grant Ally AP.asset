@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf03979b19cd34cc5b2ba33d72f7692c, type: 3}
   m_Name: Grant Ally AP
   m_EditorClassIdentifier: 
-  modifierName: Grant Ally AP
-  description: Grant 1 AP to a random ally.
+  Name: Grant Ally AP
+  Description: Grant 1 AP to a random ally.
   amount: 1

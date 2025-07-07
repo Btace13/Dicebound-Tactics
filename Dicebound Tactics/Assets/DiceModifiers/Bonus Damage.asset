@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c253f4e327aa4078993a51bb1a3c90d, type: 3}
   m_Name: Bonus Damage
   m_EditorClassIdentifier: 
-  modifierName: Bonus Damage
-  description: Next ability deals +10% damage.
+  Name: Bonus Damage
+  Description: Next ability deals +10% damage.
   bonusPercent: 10

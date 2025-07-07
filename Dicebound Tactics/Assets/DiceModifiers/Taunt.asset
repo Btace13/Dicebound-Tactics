@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: afa937328add44a32a22d0403d5f0f87, type: 3}
   m_Name: Taunt
   m_EditorClassIdentifier: 
-  modifierName: Taunt
-  description: Enemies prioritize you until next turn.
+  Name: Taunt
+  Description: Enemies prioritize you until next turn.

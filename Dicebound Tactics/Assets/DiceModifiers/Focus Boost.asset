@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 330edb2c83c0b469db295881a568c520, type: 3}
   m_Name: Focus Boost
   m_EditorClassIdentifier: 
-  modifierName: Focus Boost
-  description: Next ability +10% damage, -1 AP cost.
+  Name: Focus Boost
+  Description: Next ability +10% damage, -1 AP cost.

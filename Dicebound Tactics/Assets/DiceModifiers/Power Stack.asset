@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 201c081503b144c7095e08ae5435e675, type: 3}
   m_Name: Power Stack
   m_EditorClassIdentifier: 
-  modifierName: Power Stack
-  description: +5% damage bonus to each ability this turn.
+  Name: Power Stack
+  Description: +5% damage bonus to each ability this turn.
   percent: 5

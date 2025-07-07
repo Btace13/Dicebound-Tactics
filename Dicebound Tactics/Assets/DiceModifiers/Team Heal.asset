@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bca2b6f824c574dcd9592041e51b9228, type: 3}
   m_Name: Team Heal
   m_EditorClassIdentifier: 
-  modifierName: Team Heal
-  description: All allies restore %15 HP.
+  Name: Team Heal
+  Description: All allies restore 15 HP.
   percent: 15

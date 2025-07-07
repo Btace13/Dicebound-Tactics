@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4db0a9c961b034342b6d91cedfc149b7, type: 3}
   m_Name: Self Heal
   m_EditorClassIdentifier: 
-  modifierName: Self Heal
-  description: Restore 10% of max HP.
+  Name: Self Heal
+  Description: Restore 10% of max HP.
   percent: 10

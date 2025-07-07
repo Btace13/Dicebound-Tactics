@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1f0c56553da34fbcb8e3ba9bd0f0dfa, type: 3}
   m_Name: +3 AP
   m_EditorClassIdentifier: 
-  modifierName: +3 AP
-  description: Gain 3 additional Action Points.
+  Name: +3 AP
+  Description: Gain 3 additional Action Points.
   modifierValue: 3

@@ -23,6 +23,7 @@ namespace TacticsToolkit
             }
 
             LoadOrCreateStats();
+            LoadOrCreateDie();
         }
 
         private void LoadOrCreateStats()
@@ -55,6 +56,38 @@ namespace TacticsToolkit
             else
             {
                 Debug.Log($"Loaded existing stats for {characterId}.");
+            }
+        }
+
+        public void LoadOrCreateDie()
+        {
+            string path = $"CharacterDice/{characterId}Dice"; // Resources path (no extension)
+            equippedDice = Resources.Load<Dice>(path);
+
+            if (equippedDice == null)
+            {
+                Debug.Log($"No dice found for {characterId}. Creating new dice.");
+
+                equippedDice = ScriptableObject.CreateInstance<Dice>();
+
+#if UNITY_EDITOR
+                string fullPath = "Assets/Resources/CharacterDice";
+                if (!Directory.Exists(fullPath))
+                {
+                    Directory.CreateDirectory(fullPath);
+                }
+
+                string assetPath = $"{fullPath}/{characterId}Dice.asset";
+                AssetDatabase.CreateAsset(equippedDice, assetPath);
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
+#else
+                Debug.LogWarning("Cannot create ScriptableObject at runtime outside of the editor.");
+#endif
+            }
+            else
+            {
+                Debug.Log($"Loaded existing dice for {characterId}.");
             }
         }
 
