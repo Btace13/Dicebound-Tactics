@@ -390,7 +390,7 @@ MonoBehaviour:
     ArmsSideSway: 0.5
     ArmsForwardSway: -0.225
     ObjSpeedWhenBraking: 0.2
-    ObjSpeedWhenRunning: 5
+    ObjSpeedWhenRunning: 10
     AccelerationDetection: 1
     TryAutoDetectGround: 1
     UseMuscles: 0

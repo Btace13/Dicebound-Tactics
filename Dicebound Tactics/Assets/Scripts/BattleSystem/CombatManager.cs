@@ -7,17 +7,44 @@ using DG.Tweening;
 
 public class CombatManager : MonoBehaviour
 {
+    public static CombatManager Instance { get; private set; }
+
     [Space(10)]
     [Header("Component References")]
     [SerializeField] private SelectionController selectionController;
     [SerializeField] private TurnManager turnManager;
     [SerializeField] private CombatUIHandler combatUIHandler;
 
+    public SelectionController SelectionController => selectionController;
+    public TurnManager TurnManager => turnManager;
+    public CombatUIHandler CombatUIHandler => combatUIHandler;
+
     [Header("Events")]
     public GameEventEntity OnTargetSelected;
 
     private CombatItem _selectedItem;
     private AbilitySO _selectedAbility;
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            Instance = this;
+        }
+
+        if (selectionController == null)
+            Debug.LogError("SelectionController is not assigned in CombatManager.");
+
+        if (turnManager == null)
+            Debug.LogError("TurnManager is not assigned in CombatManager.");
+
+        if (combatUIHandler == null)
+            Debug.LogError("CombatUIHandler is not assigned in CombatManager.");
+    }
 
     public void OnGameStateChanged(GameState newState)
     {
@@ -163,7 +190,7 @@ public class CombatManager : MonoBehaviour
             //TODO: trigger animations / effects here
         });
         //TODO: the duration of the sequence should be based on the animation length
-        sequence.AppendInterval(0.5f);
+        sequence.AppendInterval(1f);
         sequence.AppendCallback(() =>
         {
 
@@ -181,16 +208,7 @@ public class CombatManager : MonoBehaviour
                         continue;
                     }
 
-                    bool isHealAbility = _selectedAbility.abilityType == AbilityType.Ally;
-
-                    int damage = isHealAbility ? -damageAbility.damageAmount : damageAbility.damageAmount;
-
-                    target.TakeDamage(damage);
-
-                    combatUIHandler.damageNumberUIHandler.ShowDamageNumber(damage, target.transform.position,
-                        isHealAbility ? DamageNumberType.Heal : DamageNumberType.Normal);
-
-                    CameraManager.Instance?.ShakeActiveCamera();
+                    damageAbility.Execute(currentUnit, target);
 
                     Debug.Log($"{currentUnit.name} uses {_selectedAbility.abilityName} on {target.name}");
                 }
@@ -209,14 +227,40 @@ public class CombatManager : MonoBehaviour
                 }
                 else // basic attack
                 {
-                    int damage = currentUnit.characterClass.Strength.baseStatValue;
-                    target.TakeDamage(damage);
+                    Vector3 dir = (target.transform.position - currentUnit.transform.position).normalized;
+                    dir.y = 0;
 
-                    combatUIHandler.damageNumberUIHandler.ShowDamageNumber(damage, target.transform.position, DamageNumberType.Normal);
+                    OverworldCharacterController cc = currentUnit.GetComponent<OverworldCharacterController>();
 
-                    CameraManager.Instance?.ShakeActiveCamera();
-
-                    Debug.Log($"{currentUnit.name} attacks {target.name} for {damage} damage.");
+                    if (cc != null)
+                    {
+                        cc.MoveToPosition(target.transform.position - dir * 3f, true, () =>
+                        {
+                            Sequence attackSequence = DOTween.Sequence();
+                            attackSequence.AppendCallback(() =>
+                            {
+                                int damage = currentUnit.characterClass.Strength.baseStatValue;
+                                target.TakeDamage(damage);
+                                CombatUIHandler.damageNumberUIHandler.ShowDamageNumber(damage, target.transform.position, DamageNumberType.Normal);
+                                CameraManager.Instance?.ShakeActiveCamera();
+                                Debug.Log($"{currentUnit.name} attacks {target.name} for {damage} damage.");
+                            });
+                            attackSequence.AppendInterval(0.5f);
+                            attackSequence.AppendCallback(() =>
+                            {
+                                // return to original position
+                                cc.MoveToPosition(cc.AssignedEncounterSlot.slotTransform.position, true);
+                            });
+                        });
+                    }
+                    else
+                    {
+                        int damage = currentUnit.characterClass.Strength.baseStatValue;
+                        target.TakeDamage(damage);
+                        CombatUIHandler.damageNumberUIHandler.ShowDamageNumber(damage, target.transform.position, DamageNumberType.Normal);
+                        CameraManager.Instance?.ShakeActiveCamera();
+                        Debug.Log($"{currentUnit.name} attacks {target.name} for {damage} damage.");
+                    }
                 }
             }
         });

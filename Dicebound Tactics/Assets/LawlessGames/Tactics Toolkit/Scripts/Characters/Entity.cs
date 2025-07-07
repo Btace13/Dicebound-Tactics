@@ -82,7 +82,7 @@ namespace TacticsToolkit
             myRenderer = gameObject.GetComponent<SpriteRenderer>();
 
             if (statsContainer != null)
-            { 
+            {
                 initiativeValue = Mathf.RoundToInt(initiativeBase / GetStat(Stats.Speed).statValue);
             }
         }
@@ -253,7 +253,10 @@ namespace TacticsToolkit
             if (damageToTake > 0)
             {
                 statsContainer.CurrentHealth.statValue -= damageToTake;
-                CameraShake.Shake(0.125f, 0.1f);
+                CombatManager.Instance.CombatUIHandler.damageNumberUIHandler.ShowDamageNumber(damageToTake, transform.position, DamageNumberType.Normal);
+                CameraManager.Instance?.ShakeActiveCamera();
+                //CameraShake.Shake(0.125f, 0.1f);
+
                 UpdateCharacterUI();
 
                 if (GetStat(Stats.CurrentHealth).statValue <= 0)

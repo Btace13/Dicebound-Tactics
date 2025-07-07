@@ -183,5 +183,22 @@ public class OverworldCharacterController : OverworldEntityController
         return PartyManager.Instance.PartyLeader.OverworldCharacterController.IsControlled && CanFollowLeader;
     }
 
+    public override void MoveToPosition(Vector3 targetPosition, bool overrideTime = false, UnityAction onTargetReached = null)
+    {
+        base.MoveToPosition(targetPosition, overrideTime, onTargetReached);
+
+        print("Moving to position: " + targetPosition);
+    }
+
+    public override void MoveToTarget(Transform target, bool overrideTime = false, UnityAction onTargetReached = null)
+    {
+        base.MoveToTarget(target, overrideTime, onTargetReached);
+
+        if (target != null)
+        {
+            print("Moving to target: " + target.name);
+        }
+    }
+
     #endregion
 }
