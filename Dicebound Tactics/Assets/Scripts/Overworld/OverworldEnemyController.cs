@@ -32,7 +32,7 @@ public class OverworldEnemyController : MonoBehaviour
     private float _timeSinceSeen = 0;
     public CombatEncounter Encounter { get; set; }
 
-    [ShowInInspector, ReadOnly] private Vector3 _currentVelocity;
+    [ShowInInspector, ReadOnly] private Vector3 _currentVelocity = Vector3.zero;
 
     private void Awake()
     {
@@ -156,7 +156,7 @@ public class OverworldEnemyController : MonoBehaviour
             return;
         }
 
-        _currentVelocity = transform.InverseTransformDirection(rvoController.velocity / Time.deltaTime);
+        _currentVelocity = Vector3.LerpUnclamped(_currentVelocity, transform.InverseTransformDirection(rvoController.velocity), 10f * Time.deltaTime);
 
         unitAnimationHandler.OnUnitVelocityChange(new Vector2(_currentVelocity.x, _currentVelocity.z) / pathfindingAI.maxSpeed);
     }

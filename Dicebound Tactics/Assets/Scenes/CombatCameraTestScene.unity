@@ -5660,7 +5660,7 @@ MonoBehaviour:
       Size: {x: 0.8, y: 0.8}
       Offset: {x: 0, y: 0}
   CenterOnActivate: 1
-  TargetOffset: {x: 0, y: 0, z: 0}
+  TargetOffset: {x: 0, y: 1, z: 0}
   Damping: {x: 0, y: 0}
   Lookahead:
     Enabled: 1
@@ -5685,7 +5685,7 @@ MonoBehaviour:
     AngularDampingMode: 0
     RotationDamping: {x: 1, y: 1, z: 1}
     QuaternionDamping: 1
-  FollowOffset: {x: 0.5, y: 0, z: 1.5}
+  FollowOffset: {x: 0.5, y: 1, z: 1.5}
 --- !u!1 &1579671565
 GameObject:
   m_ObjectHideFlags: 0
@@ -7920,10 +7920,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7962899781281117145, guid: e669acb488d4d42da8cc45e9d8a0b3ee, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8774146831466601329, guid: e669acb488d4d42da8cc45e9d8a0b3ee, type: 3}
-      propertyPath: enableRotation
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

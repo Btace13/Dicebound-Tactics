@@ -22,7 +22,7 @@ public class OverworldCharacterController : MonoBehaviour
     private RVOController rvoController;
     private UnitAnimationHandler unitAnimationHandler;
     private float lastRepath = float.NegativeInfinity;
-    [ShowInInspector, ReadOnly] private Vector3 _currentVelocity;
+    [ShowInInspector, ReadOnly] private Vector3 _currentVelocity = Vector3.zero;
 
     public bool IsControlled { get { return isControlled; } private set { isControlled = value; } }
     public bool CanFollowLeader { get; set; } = true;
@@ -37,45 +37,55 @@ public class OverworldCharacterController : MonoBehaviour
 
     public void Update()
     {
-        if (IsControlled)
+        if (GameStateManager.Instance.CurrentGameState == GameState.Overworld)
         {
-            if (InputManager.Instance == null || InputManager.Instance.InputActions == null)
+            if (IsControlled)
             {
-                Debug.LogWarning("InputManager or InputActions is not initialized.");
-                return;
-            }
-
-            HandleMovement(InputManager.Instance.InputActions.Player.Move.ReadValue<Vector2>());
-        }
-        else
-        {
-            // If not controlled, check if we should follow the leader
-            if (CheckShouldFollowLeader())
-            {
-                Vector3 leaderPosition = PartyManager.Instance.PartyLeader.transform.position;
-
-                float distanceToLeader = Vector3.Distance(transform.position, leaderPosition);
-
-                if (pathfindingAI.hasPath)
+                if (InputManager.Instance == null || InputManager.Instance.InputActions == null)
                 {
-                    float distanceFromDestination = Vector3.Distance(pathfindingAI.destination, leaderPosition);
+                    Debug.LogWarning("InputManager or InputActions is not initialized.");
+                    return;
+                }
 
-                    // Check if the leader is too far away
-                    if (distanceFromDestination > aiFollowDistance || distanceToLeader > aiFollowDistance)
+                if (InputManager.Instance.InputActions.Player.Move.IsPressed())
+                {
+                    HandleMovement(InputManager.Instance.InputActions.Player.Move.ReadValue<Vector2>());
+                }
+                else
+                {
+                    HandleMovement(Vector2.zero);
+                }
+            }
+            else
+            {
+                // If not controlled, check if we should follow the leader
+                if (CheckShouldFollowLeader())
+                {
+                    Vector3 leaderPosition = PartyManager.Instance.PartyLeader.transform.position;
+
+                    float distanceToLeader = Vector3.Distance(transform.position, leaderPosition);
+
+                    if (pathfindingAI.hasPath)
                     {
-                        // If the leader is too far away, we need to move towards the leader's position
+                        float distanceFromDestination = Vector3.Distance(pathfindingAI.destination, leaderPosition);
+
+                        // Check if the leader is too far away
+                        if (distanceFromDestination > aiFollowDistance || distanceToLeader > aiFollowDistance)
+                        {
+                            // If the leader is too far away, we need to move towards the leader's position
+                            MoveToPosition(leaderPosition);
+                        }
+                        else if (distanceToLeader <= aiFollowDistance)
+                        {
+                            // If the leader is within the follow distance, we can stop moving
+                            CancelPath();
+                        }
+                    }
+                    else if (distanceToLeader > aiFollowDistance)
+                    {
+                        // If no path exists, start a new path towards the leader
                         MoveToPosition(leaderPosition);
                     }
-                    else if (distanceToLeader <= aiFollowDistance)
-                    {
-                        // If the leader is within the follow distance, we can stop moving
-                        CancelPath();
-                    }
-                }
-                else if (distanceToLeader > aiFollowDistance)
-                {
-                    // If no path exists, start a new path towards the leader
-                    MoveToPosition(leaderPosition);
                 }
             }
         }
@@ -108,8 +118,8 @@ public class OverworldCharacterController : MonoBehaviour
         if (pathfindingAI.updatePosition && input.magnitude < 0.01f)
         {
             // If the input is too small, stop the character
-            //rvoController.velocity = Vector3.zero;
-            pathfindingAI.destination = transform.position; // Stop moving
+            rvoController.velocity = Vector3.zero;
+            pathfindingAI.SetPath(null);
             return;
         }
 
@@ -125,6 +135,11 @@ public class OverworldCharacterController : MonoBehaviour
 
         if (!pathfindingAI.updatePosition)
         {
+            if (pathfindingAI.hasPath)
+            {
+                pathfindingAI.SetPath(null);
+            }
+
             rvoController.velocity = zeroedYVelocity * pathfindingAI.maxSpeed;
             transform.position += rvoController.velocity * Time.deltaTime;
         }
@@ -136,7 +151,7 @@ public class OverworldCharacterController : MonoBehaviour
         if (!pathfindingAI.enableRotation)
         {
             Quaternion targetRotation = Quaternion.LookRotation(zeroedYVelocity, Vector3.up);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+            //transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
             pathfindingAI.desiredFinalRotation = targetRotation;
         }
     }
@@ -149,6 +164,7 @@ public class OverworldCharacterController : MonoBehaviour
             isControlled = true;
             rvoController.collidesWith = 0 << 0; // Disable RVO collisions when controlled
             rvoController.layer = RVOLayer.Layer30; // Set to layer 30 when controlled
+            pathfindingAI.enableRotation = false;
             SetShouldSprint(false);
         }
         else
@@ -156,6 +172,7 @@ public class OverworldCharacterController : MonoBehaviour
             isControlled = false;
             rvoController.collidesWith = 0 << 1; // Enable RVO collisions when not controlled
             rvoController.layer = RVOLayer.DefaultAgent; // Set to layer 31 when not controlled
+            pathfindingAI.enableRotation = true;
             SetShouldSprint(true);
         }
     }
@@ -236,11 +253,10 @@ public class OverworldCharacterController : MonoBehaviour
 
     public void CancelPath()
     {
-        if (pathfindingAI != null && pathfindingAI.hasPath && pathfindingAI.destination != transform.position)
+        if (pathfindingAI != null && pathfindingAI.hasPath)
         {
             print("Canceling path");
-            pathfindingAI.destination = transform.position; // Set destination to current position to stop moving
-            pathfindingAI.SearchPath(); // Force a search to update the AI state
+            pathfindingAI.SetPath(null);
         }
     }
 
@@ -256,7 +272,7 @@ public class OverworldCharacterController : MonoBehaviour
             return;
         }
 
-        _currentVelocity = transform.InverseTransformDirection(rvoController.velocity / Time.deltaTime);
+        _currentVelocity = Vector3.LerpUnclamped(_currentVelocity, transform.InverseTransformDirection(rvoController.velocity), 10f * Time.deltaTime);
 
         unitAnimationHandler.OnUnitVelocityChange(new Vector2(_currentVelocity.x, _currentVelocity.z) / pathfindingAI.maxSpeed);
     }
