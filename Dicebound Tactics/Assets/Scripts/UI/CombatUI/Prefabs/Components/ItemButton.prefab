@@ -136,7 +136,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3938458765883943269}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: e8c65a7bdcf624ce396e60bc962cc109, type: 2}
+        m_TargetAssemblyTypeName: TacticsToolkit.GameEvent, Assembly-CSharp
+        m_MethodName: Raise
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!225 &9069671805758848683
 CanvasGroup:
   m_ObjectHideFlags: 0
