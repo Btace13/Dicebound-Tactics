@@ -5,17 +5,20 @@ using UnityEditor.Overlays;
 using UnityEngine.UI;
 using Unity.VisualScripting;
 
-[RequireComponent(typeof(CanvasGroup))]
 public class CombatNotification : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI notificationText; // Assign this in the inspector
+    [SerializeField] private TextMeshProUGUI bigNotificationText;
+    [SerializeField] private CanvasGroup bigNotificationCanvasGroup;
+    [SerializeField] private TextMeshProUGUI notificationText;
+    [SerializeField] private CanvasGroup notificationCanvasGroup;
     [SerializeField] private float fadeDuration = 0.2f;
-    private CanvasGroup canvasGroup;
+    private CanvasGroup smallCanvasGroup;
+    private CanvasGroup bigCanvasGroup;
 
     private void Awake()
     {
-        canvasGroup = GetComponent<CanvasGroup>();
-        canvasGroup.alpha = 0f; // Start invisible
+        smallCanvasGroup.alpha = 0f; // Start invisible
+        bigCanvasGroup.alpha = 0f; // Start invisible
     }
 
     public void ShowNotification(string message, float notifcationDuration = 2f)
@@ -30,8 +33,14 @@ public class CombatNotification : MonoBehaviour
 
         LayoutRebuilder.ForceRebuildLayoutImmediate(notificationText.rectTransform);
 
+        // Ensure we have the CanvasGroup reference
+        if (smallCanvasGroup == null)
+        {
+            smallCanvasGroup = notificationText.transform.parent.GetComponent<CanvasGroup>();
+        }
+
         // Fade in the notification
-        canvasGroup.DOFade(1f, fadeDuration).OnComplete(() =>
+        smallCanvasGroup.DOFade(1f, fadeDuration).OnComplete(() =>
         {
             // Optionally, you can hide it after some time
             DOVirtual.DelayedCall(notifcationDuration, HideNotification);
@@ -40,6 +49,41 @@ public class CombatNotification : MonoBehaviour
 
     public void HideNotification()
     {
-        canvasGroup.DOFade(0f, fadeDuration);
+        smallCanvasGroup.DOFade(0f, fadeDuration);
+    }
+
+    public void ShowBigNotification(string message, float notifcationDuration = 2f)
+    {
+        if (bigNotificationText == null)
+        {
+            Debug.LogError("Big Notification TextMeshProUGUI is not assigned.");
+            return;
+        }
+
+        bigNotificationText.text = message;
+
+        LayoutRebuilder.ForceRebuildLayoutImmediate(bigNotificationText.rectTransform);
+
+        // Ensure we have the CanvasGroup reference
+        if (bigCanvasGroup == null)
+        {
+            bigCanvasGroup = bigNotificationText.transform.parent.GetComponent<CanvasGroup>();
+        }
+
+        //scale the canvas
+        bigCanvasGroup.transform.localScale = Vector3.one * 0.75f;
+        bigCanvasGroup.transform.DOScale(Vector3.one * 1.2f, fadeDuration).SetEase(Ease.OutBack);
+
+        // Fade in the notification
+        bigCanvasGroup.DOFade(1f, fadeDuration).OnComplete(() =>
+        {
+            // Optionally, you can hide it after some time
+            DOVirtual.DelayedCall(notifcationDuration, HideBigNotification);
+        });
+    }
+
+    public void HideBigNotification()
+    {
+        bigCanvasGroup.DOFade(0f, fadeDuration);
     }
 }

@@ -162,6 +162,11 @@ public class OverworldCharacterController : OverworldEntityController
     #region AI MOVEMENT
     public bool CheckShouldFollowLeader()
     {
+        if (GameStateManager.Instance == null || GameStateManager.Instance.CurrentGameState != GameState.Overworld)
+        {
+            return false; // Only follow leader in Overworld state
+        }
+
         if (PartyManager.Instance == null || PartyManager.Instance.PartyLeader == null)
         {
             Debug.LogWarning("PartyManager or PartyLeader is not initialized.");

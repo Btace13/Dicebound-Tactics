@@ -18,6 +18,7 @@ MonoBehaviour:
   icon: {fileID: -6941875414966023432, guid: bfe016ef2a04aa04d957b688986f78b9, type: 3}
   apCost: 2
   abilityType: 2
-  requiresMovement: 0
+  requiresMovement: 1
+  range: 3
   unlockLevel: 1
   damageAmount: 20

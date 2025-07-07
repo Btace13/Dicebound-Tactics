@@ -25,6 +25,7 @@ public class CombatManager : MonoBehaviour
         {
             turnManager.StartBattle();
             combatUIHandler.ShowCombatUI();
+            combatUIHandler.ShowBigNotification("Fight!", 0.5f);
         }
         else
         {

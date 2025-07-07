@@ -17,6 +17,7 @@ public class CustomRichAI : RichAI
         if (onTargetReached != null)
         {
             onTargetReached.Invoke();
+            onTargetReached = null; // Clear the callback after invoking
         }
     }
 

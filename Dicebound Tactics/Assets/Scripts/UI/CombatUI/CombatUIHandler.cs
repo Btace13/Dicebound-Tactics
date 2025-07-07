@@ -274,6 +274,17 @@ public class CombatUIHandler : MonoBehaviour
         confirmButton.gameObject.SetActive(enable);
     }
 
+    public void ShowBigNotification(string message, float duration = 2f)
+    {
+        if (notificationUI == null)
+        {
+            Debug.LogError("Notification UI is not set.");
+            return;
+        }
+
+        notificationUI.ShowBigNotification(message, duration);
+    }
+
     public void ShowNotification(string message, float duration = 2f)
     {
         if (notificationUI == null)
