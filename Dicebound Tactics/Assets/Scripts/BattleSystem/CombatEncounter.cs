@@ -228,6 +228,11 @@ public class CombatEncounter : MonoBehaviour
 
         GameStateManager.Instance.ChangeGameState(GameState.Combat);
 
+        foreach (CharacterManager c in PartyManager.Instance.ActivePartyMembers)
+        {
+            c.EquipWeapon(c.CurrentWeapon); // Ensure the character has their weapon equipped for combat
+        }
+
         // Initialize encounter logic here, such as spawning enemies, setting up UI, etc.
         Debug.Log("Combat Encounter Started");
     }

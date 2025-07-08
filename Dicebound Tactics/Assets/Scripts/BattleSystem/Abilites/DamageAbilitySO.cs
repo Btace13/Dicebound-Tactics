@@ -36,6 +36,12 @@ public class DamageAbilitySO : AbilitySO
                     seq.AppendInterval(0.1f); // Small delay to ensure the look rotation is applied before the attack
                     seq.AppendCallback(() =>
                     {
+                        // Play attack animation
+                        UnitAnimationHandler animationHandler = userController.GetComponentInChildren<UnitAnimationHandler>(true);
+                        animationHandler?.UseAbility(this, null, () => { Debug.Log($"{user.name} finished {this.abilityName} animation."); });
+                    });
+                    seq.AppendCallback(() =>
+                    {
                         ApplyDamage(amount, user, target);
                     });
                     seq.AppendInterval(1); // Wait for a moment to let the player see the attack

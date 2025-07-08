@@ -16,7 +16,11 @@ MonoBehaviour:
   unequipWeapon: {fileID: 0}
   aimWeapon: {fileID: 0}
   reloadWeapon: {fileID: 0}
-  attack: {fileID: 0}
+  abilities:
+    keys:
+    - {fileID: 11400000, guid: 7e911d070168540809fbadd791ad7ee7, type: 2}
+    values:
+    - {fileID: 7400000, guid: 40b533a571fe92f40bb03dc44ce86661, type: 3}
   equippedMovement:
     _FadeDuration: 0.25
     _Events:
@@ -24,10 +28,18 @@ MonoBehaviour:
       _Callbacks: []
       _Names: []
     _Speed: 1
-    _Animations: []
+    _Animations:
+    - {fileID: 7400000, guid: 013ae146cf4e48b458933dc8e788350c, type: 3}
+    - {fileID: 7400016, guid: 743906c385160ed4bb6d8f89255c0028, type: 3}
+    - {fileID: 7400018, guid: b2d0e67be191562458e880101638cf48, type: 3}
+    - {fileID: 7400000, guid: 525f86aace5b37d4cb9ad1db9ae88542, type: 3}
     _Speeds: []
     _SynchronizeChildren: 
-    _Thresholds: []
+    _Thresholds:
+    - {x: 0, y: 0}
+    - {x: 0, y: 0.1}
+    - {x: 0, y: 0.5}
+    - {x: 0, y: 0.9}
     _DefaultParameter: {x: 0, y: 0}
     _Type: 0
   normalizedEquipTime: 0.4

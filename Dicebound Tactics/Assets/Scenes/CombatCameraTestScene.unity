@@ -8176,6 +8176,10 @@ PrefabInstance:
       propertyPath: inventory
       value: 
       objectReference: {fileID: 1229161592}
+    - target: {fileID: 484317405324075932, guid: d8c30de4e48b94564b5964eb287c6249, type: 3}
+      propertyPath: StartingWeapon
+      value: 
+      objectReference: {fileID: 11400000, guid: 00d22f65aba9aab4eb460cc5caee1c7d, type: 2}
     - target: {fileID: 5475917019711313092, guid: d8c30de4e48b94564b5964eb287c6249, type: 3}
       propertyPath: m_Name
       value: CharacterOne
@@ -8285,6 +8289,10 @@ PrefabInstance:
       propertyPath: inventory
       value: 
       objectReference: {fileID: 1229161592}
+    - target: {fileID: 8052718447517918033, guid: 17230f4ae22f4427a9e2f2ef723a854a, type: 3}
+      propertyPath: StartingWeapon
+      value: 
+      objectReference: {fileID: 11400000, guid: 00d22f65aba9aab4eb460cc5caee1c7d, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8414,6 +8422,10 @@ PrefabInstance:
       propertyPath: inventory
       value: 
       objectReference: {fileID: 1229161592}
+    - target: {fileID: 2002588848888832617, guid: e669acb488d4d42da8cc45e9d8a0b3ee, type: 3}
+      propertyPath: StartingWeapon
+      value: 
+      objectReference: {fileID: 11400000, guid: 00d22f65aba9aab4eb460cc5caee1c7d, type: 2}
     - target: {fileID: 5179019300147648176, guid: e669acb488d4d42da8cc45e9d8a0b3ee, type: 3}
       propertyPath: m_Name
       value: CharacterTwo

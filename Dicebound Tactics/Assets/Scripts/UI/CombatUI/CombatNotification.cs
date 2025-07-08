@@ -17,6 +17,17 @@ public class CombatNotification : MonoBehaviour
 
     private void Awake()
     {
+        // Ensure we have the CanvasGroup reference
+        if (smallCanvasGroup == null)
+        {
+            smallCanvasGroup = notificationText.transform.parent.GetComponent<CanvasGroup>();
+        }
+
+        if (bigCanvasGroup == null)
+        {
+            bigCanvasGroup = bigNotificationText.transform.parent.GetComponent<CanvasGroup>();
+        }
+
         smallCanvasGroup.alpha = 0f; // Start invisible
         bigCanvasGroup.alpha = 0f; // Start invisible
     }

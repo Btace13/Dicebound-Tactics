@@ -14,8 +14,8 @@ public class CombatAnimationData : ScriptableObject
 	public AnimationClip aimWeapon;
 	[BoxGroup("References"), Tooltip("Animation to play when reloading your weapon")]
 	public AnimationClip reloadWeapon;
-	[BoxGroup("References"), Tooltip("Animation to play when an attack is triggered")]
-	public AnimationClip attack;
+	[BoxGroup("References"), Tooltip("Animations to play when an ability is triggered")]
+	public UDictionary<AbilitySO, AnimationClip> abilities = new UDictionary<AbilitySO, AnimationClip>();
 	[BoxGroup("References"), Tooltip("Transition group to play while moving when this weapon is equipped")]
 	public MixerTransition2D equippedMovement;
 	[BoxGroup("Settings"), Tooltip("Normalized time which weapon is equipped to player during the animation")] public float normalizedEquipTime = 0.4f;

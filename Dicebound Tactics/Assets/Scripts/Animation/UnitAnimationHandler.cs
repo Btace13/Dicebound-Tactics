@@ -53,8 +53,6 @@ public class UnitAnimationHandler : MonoBehaviour
 
 	public void OnUnitVelocityChange(Vector2 velocity)
 	{
-		if (IsAiming) return;
-
 		if (debug)
 			print($"OnVelocityChanged: {velocity}");
 
@@ -64,7 +62,7 @@ public class UnitAnimationHandler : MonoBehaviour
 			AnimationData.movementAnimations.State.Parameter = velocity;
 			_Animancer.Play(AnimationData.movementAnimations, 0.1f, FadeMode.FixedDuration);
 		}
-		else if (AnimationData.CanFight && AnimationData.combatAnimations.ContainsKey(_equippedWeapon))
+		else if (AnimationData.combatAnimations.ContainsKey(_equippedWeapon))
 		{
 			MixerTransition2D mixer = AnimationData.combatAnimations[_equippedWeapon].equippedMovement;
 
@@ -129,7 +127,7 @@ public class UnitAnimationHandler : MonoBehaviour
 		}
 	}
 
-	public void Attack(Action<float> OnAttackAnimationPlayed = null, Action OnAttackAnimationComplete = null)
+	public void UseAbility(AbilitySO ability, Action<float> OnAttackAnimationPlayed = null, Action OnAttackAnimationComplete = null)
 	{
 		if (_equippedWeapon == null)
 		{
@@ -137,7 +135,7 @@ public class UnitAnimationHandler : MonoBehaviour
 			return;
 		}
 
-		if (AnimationData.combatAnimations.ContainsKey(_equippedWeapon))
+		if (AnimationData.combatAnimations.ContainsKey(_equippedWeapon) && AnimationData.combatAnimations[_equippedWeapon].abilities.ContainsKey(ability))
 		{
 			AnimancerEvent.Sequence events = new AnimancerEvent.Sequence(1 + AnimationData.combatAnimations[_equippedWeapon].normalizedAttackTriggerTimes.Count);
 			foreach (float t in AnimationData.combatAnimations[_equippedWeapon].normalizedAttackTriggerTimes)
@@ -146,7 +144,7 @@ public class UnitAnimationHandler : MonoBehaviour
 			}
 			events.Add(1, OnAttackAnimationComplete);
 
-			AnimancerState state = _Animancer.Play(AnimationData.combatAnimations[_equippedWeapon].attack, 0.1f, FadeMode.FixedDuration);
+			AnimancerState state = _Animancer.Play(AnimationData.combatAnimations[_equippedWeapon].abilities[ability], 0.1f, FadeMode.FixedDuration);
 			state.Events = events;
 			state.NormalizedTime = 0;
 			state.NormalizedEndTime = 1;
@@ -181,6 +179,12 @@ public class UnitAnimationHandler : MonoBehaviour
 
 		if (equipped)
 		{
+			if (weaponData == null)
+			{
+				Debug.LogError("No weapon data provided to equip weapon.");
+				yield break;
+			}
+
 			_weaponObject = Instantiate(weaponData.ItemPrefab, rightHandTransform);
 			_weaponObject.transform.localPosition = weaponData.PositionOffset;
 			_weaponObject.transform.localEulerAngles = weaponData.RotationOffset;
