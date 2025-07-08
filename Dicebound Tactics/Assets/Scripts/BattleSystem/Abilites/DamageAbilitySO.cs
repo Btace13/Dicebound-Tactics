@@ -2,6 +2,7 @@ using Unity;
 using UnityEngine;
 using TacticsToolkit;
 using DG.Tweening;
+using UnityEngine.Events;
 
 [CreateAssetMenu(menuName = "Abilities/DamageAbility")]
 public class DamageAbilitySO : AbilitySO
@@ -31,42 +32,81 @@ public class DamageAbilitySO : AbilitySO
 
                 userController.MoveToPosition(destination, true, () =>
                 {
-                    Sequence seq = DOTween.Sequence();
-                    seq.Append(userController.transform.DOLookAt(target.transform.position, 0.2f));
-                    seq.AppendInterval(0.1f); // Small delay to ensure the look rotation is applied before the attack
-                    seq.AppendCallback(() =>
+                    TriggerAbilityAnimationSequence(user, target, () =>
                     {
-                        // Play attack animation
-                        UnitAnimationHandler animationHandler = userController.GetComponentInChildren<UnitAnimationHandler>(true);
-                        if (animationHandler == null)
-                        {
-                            Debug.LogWarning("No UnitAnimationHandler found on the user.");
-                            return;
-                        }
-
-                        animationHandler.UseAbility(this, null, () => { Debug.Log($"{user.name} finished {this.abilityName} animation."); });
-                    });
-                    seq.AppendCallback(() =>
-                    {
+                        // This callback is called when the ability hits the target
                         ApplyDamage(amount, user, target);
-                    });
-                    seq.AppendInterval(1); // Wait for a moment to let the player see the attack
-                    seq.AppendCallback(() =>
+                    }, () =>
                     {
-                        // Move back to original position
+                        // Animation complete
+                        // Move the user back to their assigned encounter slot
                         userController.MoveToTarget(userController.AssignedEncounterSlot.slotTransform, true);
                     });
                 });
             }
             else
             {
-                ApplyDamage(amount, user, target);
+                TriggerAbilityAnimationSequence(user, target, () =>
+                {
+                    // This callback is called when the ability hits the target
+                    ApplyDamage(amount, user, target);
+                });
             }
         }
         else
         {
             Debug.Log($"{user.name} does not have enough AP for {abilityName}.");
         }
+    }
+
+    public void TriggerAbilityAnimationSequence(Entity user, Entity target, UnityAction OnHitTarget, UnityAction OnAbilityAnimationComplete = null)
+    {
+        OverworldEntityController enemyController = target.GetComponent<OverworldEntityController>();
+        OverworldEntityController userController = user.GetComponent<OverworldEntityController>();
+
+        UnitAnimationHandler animationHandler = userController.GetComponentInChildren<UnitAnimationHandler>(true);
+        float clipTime = 0;
+
+        if (animationHandler != null && animationHandler.AnimationData != null)
+        {
+            if (user.TryGetComponent(out CharacterManager characterManager))
+            {
+                clipTime = animationHandler.AnimationData.combatAnimations[animationHandler.EquippedWeapon].abilities[this].length;
+            }
+        }
+        else
+        {
+            Debug.LogWarning("No combat animations found for the equipped weapon or UnitAnimationHandler is missing.");
+        }
+
+        Sequence seq = DOTween.Sequence();
+        seq.Append(userController.transform.DOLookAt(target.transform.position, 0.2f));
+        seq.AppendInterval(0.2f); // Small delay to ensure the look rotation is applied before the attack
+        seq.AppendCallback(() =>
+        {
+            // Play attack animation
+            if (animationHandler == null)
+            {
+                Debug.LogWarning("No UnitAnimationHandler found on the user.");
+                OnHitTarget?.Invoke();
+                return;
+            }
+            else
+            {
+                animationHandler.UseAbility(this, time =>
+                {
+                    OnHitTarget?.Invoke();
+                }, () =>
+                {
+                    Debug.Log($"{user.name} finished {this.abilityName} animation.");
+                });
+            }
+        });
+        seq.AppendInterval(clipTime + 1f); // Wait for a moment to let the player see the attack
+        seq.AppendCallback(() =>
+        {
+            OnAbilityAnimationComplete?.Invoke();
+        });
     }
 
     public void ApplyDamage(int amount, Entity user, Entity target)

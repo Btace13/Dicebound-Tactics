@@ -19,6 +19,18 @@ public class UnitAnimationHandler : MonoBehaviour
 	public bool IsAiming { get; private set; } = false;
 
 	private WeaponData _equippedWeapon = null;
+	public WeaponData EquippedWeapon
+	{
+		get { return _equippedWeapon; }
+		set
+		{
+			if (_equippedWeapon != value)
+			{
+				ToggleEquipWeapon(value);
+			}
+		}
+	}
+
 	private GameObject _weaponObject = null;
 	private Transform _lookAt = null;
 
@@ -144,7 +156,9 @@ public class UnitAnimationHandler : MonoBehaviour
 			}
 			events.Add(1, OnAttackAnimationComplete);
 
-			AnimancerState state = _Animancer.Play(AnimationData.combatAnimations[_equippedWeapon].abilities[ability], 0.1f, FadeMode.FixedDuration);
+			// play on the 3rd layer so we can override any other animations
+			AnimancerState state = _Animancer.Layers[2].Play(AnimationData.combatAnimations[_equippedWeapon].abilities[ability], 0.1f, FadeMode.FixedDuration);
+
 			state.Events = events;
 			state.NormalizedTime = 0;
 			state.NormalizedEndTime = 1;
