@@ -38,7 +38,13 @@ public class DamageAbilitySO : AbilitySO
                     {
                         // Play attack animation
                         UnitAnimationHandler animationHandler = userController.GetComponentInChildren<UnitAnimationHandler>(true);
-                        animationHandler?.UseAbility(this, null, () => { Debug.Log($"{user.name} finished {this.abilityName} animation."); });
+                        if (animationHandler == null)
+                        {
+                            Debug.LogWarning("No UnitAnimationHandler found on the user.");
+                            return;
+                        }
+
+                        animationHandler.UseAbility(this, null, () => { Debug.Log($"{user.name} finished {this.abilityName} animation."); });
                     });
                     seq.AppendCallback(() =>
                     {

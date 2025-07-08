@@ -166,7 +166,7 @@ MonoBehaviour:
   abilityLoadout:
   - {fileID: 11400000, guid: 7e911d070168540809fbadd791ad7ee7, type: 2}
   inventory: {fileID: 0}
-  level: 0
+  level: 1
   experience: 0
   requiredExperience: 0
   isStunned: 0
@@ -183,6 +183,7 @@ MonoBehaviour:
   myRenderer: {fileID: 0}
   gameConfig: {fileID: 11400000, guid: eaeab84eb6b1df54eb4c6951b5ec44ae, type: 2}
   characterId: CharacterOne
+  StartingWeapon: {fileID: 11400000, guid: 00d22f65aba9aab4eb460cc5caee1c7d, type: 2}
 --- !u!114 &7227452953740530858
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -200,9 +201,9 @@ MonoBehaviour:
   sprintSpeed: 25
   sprintAcceleration: 200
   rotationSpeed: 720
+  repathRate: 0.5
   isControlled: 0
   aiFollowDistance: 4
-  repathRate: 0.5
 --- !u!114 &8202891839428552335
 MonoBehaviour:
   m_ObjectHideFlags: 0

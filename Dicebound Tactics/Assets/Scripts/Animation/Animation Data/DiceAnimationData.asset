@@ -71,7 +71,11 @@ MonoBehaviour:
   combatAnimations:
     keys:
     - {fileID: 11400000, guid: 00d22f65aba9aab4eb460cc5caee1c7d, type: 2}
+    - {fileID: 11400000, guid: f7008429e75d2a74ca1ec020bf30fcf1, type: 2}
+    - {fileID: 11400000, guid: 7a451a5cbc8ea3f42a4207b8862fbda4, type: 2}
     values:
     - {fileID: 11400000, guid: b2492bda72d5f4b42baa7455a05f7dce, type: 2}
+    - {fileID: 11400000, guid: 0017d249e1f11cd42bfd26e4d97fca22, type: 2}
+    - {fileID: 11400000, guid: b851d0475c58e5f4c88175bc02405e05, type: 2}
   hitAnimation: {fileID: 0}
   deathAnimation: {fileID: 0}
