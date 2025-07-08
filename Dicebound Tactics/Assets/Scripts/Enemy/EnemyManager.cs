@@ -20,8 +20,10 @@ public class EnemyManager : Entity
         }
     }
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
+
         turnManager = FindFirstObjectByType<TurnManager>();
 
         if (diceProfile != null)

@@ -41,17 +41,13 @@ public class TurnManager : MonoBehaviour
 
         if (enemyUnits.All(e => !e.isAlive))
         {
-            Debug.Log("All enemies defeated! Player wins!");
-            GameIsPlaying = false;
-            GameEnded.Raise();
+            ShowBattleEndedDialog(true);
             return;
         }
 
         if (playerUnits.All(p => !p.isAlive))
         {
-            Debug.Log("All player units defeated! Player loses!");
-            GameIsPlaying = false;
-            GameEnded.Raise();
+            ShowBattleEndedDialog(false);
             return;
         }
     }
@@ -180,7 +176,7 @@ public class TurnManager : MonoBehaviour
     public List<Entity> GetFullTurnOrder() => new List<Entity>(turnOrder);
 
     public int GetRemainingTurns() => turnOrder.Count - currentTurnIndex;
-    
+
     public List<Entity> GetRemainingEntitiesThisRound()
     {
         return turnOrder
@@ -188,7 +184,7 @@ public class TurnManager : MonoBehaviour
             .Where(e => e != null && e.isAlive)
             .ToList();
     }
-    
+
     public bool IsThisPlayersTurn(string characterId)
     {
         if (currentUnit is CharacterManager character)
@@ -223,5 +219,23 @@ public class TurnManager : MonoBehaviour
         {
             turnOrder.Remove(entity);
         }
+    }
+
+    public void ShowBattleEndedDialog(bool PlayerWon = false)
+    {
+        GameIsPlaying = false;
+
+        if (PlayerWon)
+        {
+            Debug.Log("All enemies defeated! Player wins!");
+            BattleEndedDialogManager.Instance.Show(true);
+        }
+        else
+        {
+            Debug.Log("All player units defeated! Player loses!");
+            BattleEndedDialogManager.Instance.Show(false);
+        }
+
+        GameEnded?.Raise();
     }
 } 

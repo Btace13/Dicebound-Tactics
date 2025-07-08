@@ -15,16 +15,16 @@ MonoBehaviour:
   Health:
     statKey: 2
     character: {fileID: 0}
-    baseStatValue: 100
+    baseStatValue: 109
     baseStatModifier: 0
-    statValue: 100
+    statValue: 109
     isModified: 0
   Mana:
     statKey: 3
     character: {fileID: 0}
-    baseStatValue: 50
+    baseStatValue: 58
     baseStatModifier: 0
-    statValue: 50
+    statValue: 58
     isModified: 0
   Strength:
     statKey: 4
@@ -36,23 +36,23 @@ MonoBehaviour:
   Endurance:
     statKey: 5
     character: {fileID: 0}
-    baseStatValue: 7
+    baseStatValue: 17
     baseStatModifier: 0
-    statValue: 7
+    statValue: 17
     isModified: 0
   Speed:
     statKey: 6
     character: {fileID: 0}
-    baseStatValue: 5
+    baseStatValue: 8
     baseStatModifier: 0
-    statValue: 5
+    statValue: 8
     isModified: 0
   Intelligence:
     statKey: 7
     character: {fileID: 0}
-    baseStatValue: 10
+    baseStatValue: 13
     baseStatModifier: 0
-    statValue: 10
+    statValue: 13
     isModified: 0
   MoveRange:
     statKey: 8
@@ -71,16 +71,16 @@ MonoBehaviour:
   CurrentHealth:
     statKey: 10
     character: {fileID: 0}
-    baseStatValue: 100
+    baseStatValue: 109
     baseStatModifier: 0
-    statValue: 100
+    statValue: 109
     isModified: 0
   CurrentMana:
     statKey: 11
     character: {fileID: 0}
-    baseStatValue: 50
+    baseStatValue: 58
     baseStatModifier: 0
-    statValue: 50
+    statValue: 58
     isModified: 0
   ActionPoints:
     statKey: 0

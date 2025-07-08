@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using System.Linq;
+using Sirenix.OdinInspector;
 
 namespace TacticsToolkit
 {
@@ -66,8 +66,16 @@ namespace TacticsToolkit
         private int tauntTurnsRemaining = 0;
         private bool isOverloaded = false;
 
+#if UNITY_EDITOR
+    [Sirenix.OdinInspector.Button("Add EXP", ButtonSizes.Medium)]
+    public void AddTestExp([Sirenix.OdinInspector.MinValue(1)] int expAmount = 50)
+    {
+        IncreaseExp(expAmount);
+        Debug.Log($"{name} gained {expAmount} EXP.");
+    }
+#endif
 
-        private void Start()
+        protected virtual void Start()
         {
             SpawnCharacter();
         }
@@ -76,7 +84,7 @@ namespace TacticsToolkit
         {
             SetAbilityList();
             SetDefaultAbilityList();
-            // SetStats();
+            SetStats();
             requiredExperience = gameConfig.GetRequiredExp(level);
 
             myRenderer = gameObject.GetComponent<SpriteRenderer>();
