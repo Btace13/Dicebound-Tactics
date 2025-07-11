@@ -113,4 +113,23 @@ public class EnemyManager : Entity
     {
         turnManager.EndTurn();
     }
+
+    public override void Die()
+    {
+        base.Die();
+
+        if (overworldController != null && overworldController.Encounter != null)
+        {
+            Debug.Log($"[EnemyManager] {name} has been defeated. Checking if should end encounter.");
+            // Check if the encounter should end
+            if (overworldController.Encounter.ShouldEndEncounter())
+            {
+                overworldController.Encounter.EndEncounter();
+            }
+        }
+        else
+        {
+            Debug.LogWarning($"No OverworldEnemyController found on {name}. Cannot handle enemy defeat logic.");
+        }
+    }
 }

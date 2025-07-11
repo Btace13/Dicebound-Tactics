@@ -133,11 +133,6 @@ public class CombatEncounter : MonoBehaviour
     [Button("Start Encounter")]
     public async void StartEncounter()
     {
-        if (OnEncounterStarted != null)
-        {
-            OnEncounterStarted.Raise(this);
-        }
-
         IsActive = true;
 
         EncounterSide closestSide = GetClosestEncounterSide(PartyManager.Instance.PartyLeader.transform.position);
@@ -226,11 +221,14 @@ public class CombatEncounter : MonoBehaviour
             await Task.Yield(); // Wait until all units have moved to their slots
         }
 
-        GameStateManager.Instance.ChangeGameState(GameState.Combat);
-
         foreach (CharacterManager c in PartyManager.Instance.ActivePartyMembers)
         {
             c.EquipWeapon(c.CurrentWeapon); // Ensure the character has their weapon equipped for combat
+        }
+
+        if (OnEncounterStarted != null)
+        {
+            OnEncounterStarted.Raise(this);
         }
 
         // Initialize encounter logic here, such as spawning enemies, setting up UI, etc.
@@ -240,11 +238,6 @@ public class CombatEncounter : MonoBehaviour
     [Button("End Encounter")]
     public void EndEncounter()
     {
-        if (OnEncounterEnded != null)
-        {
-            OnEncounterEnded.Raise(this);
-        }
-
         // Cleanup encounter logic here, such as removing enemies, resetting UI, etc.
         Debug.Log("Combat Encounter Ended");
 
@@ -255,13 +248,31 @@ public class CombatEncounter : MonoBehaviour
         {
             c.OverworldCharacterController.Encounter = null;
             c.OverworldCharacterController.AssignedEncounterSlot = null;
+
+            c.OverworldCharacterController.CanFollowLeader = true; // Re-enable player control after combat
+            c.OverworldCharacterController.CancelPath(); // Cancel any existing pathfinding
+            c.OverworldCharacterController.SetShouldSprint(false); // Disable sprinting for combat movement
+            c.EquipWeapon(null); // Put away the weapon after combat
         }
 
         foreach (EnemyManager enemy in Enemies)
         {
             enemy.overworldController.Encounter = null;
             enemy.overworldController.AssignedEncounterSlot = null;
+            enemy.overworldController.CancelPath(); // Cancel any existing pathfinding
+            enemy.overworldController.SetShouldSprint(false); // Disable sprinting for combat movement
         }
+
+        if (OnEncounterEnded != null)
+        {
+            OnEncounterEnded.Raise(this);
+        }
+    }
+
+    public bool ShouldEndEncounter()
+    {
+        bool allEnemiesDefeated = Enemies.All(e => e == null || e.CurrentHealth <= 0);
+        return allEnemiesDefeated;
     }
 
     #region OVERWORLD ENEMY MANAGEMENT

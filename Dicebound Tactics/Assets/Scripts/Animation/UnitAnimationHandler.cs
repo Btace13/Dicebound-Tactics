@@ -124,14 +124,21 @@ public class UnitAnimationHandler : MonoBehaviour
 
 	public void ToggleEquipWeapon(WeaponData weaponData = null)
 	{
+		WeaponData previousWeapon = _equippedWeapon;
+
 		_equippedWeapon = weaponData;
 
 		print("Weapon Type: " + _equippedWeapon);
 
-		if (AnimationData.combatAnimations.ContainsKey(_equippedWeapon))
+		if (_equippedWeapon != null && AnimationData.combatAnimations.ContainsKey(_equippedWeapon))
 		{
-			_Animancer.TryPlay(weaponData != null ? AnimationData.combatAnimations[weaponData].equipWeapon : AnimationData.combatAnimations[weaponData].unequipWeapon, 0.25f, FadeMode.FixedDuration);
+			_Animancer.TryPlay(AnimationData.combatAnimations[weaponData].equipWeapon, 0.25f, FadeMode.FixedDuration);
 			StartCoroutine(ToggleWeaponParented(weaponData != null, AnimationData.combatAnimations[weaponData].normalizedEquipTime, weaponData));
+		}
+		else if (previousWeapon != null && AnimationData.combatAnimations.ContainsKey(previousWeapon))
+		{
+			_Animancer.TryPlay(AnimationData.combatAnimations[previousWeapon].unequipWeapon, 0.25f, FadeMode.FixedDuration);
+			StartCoroutine(ToggleWeaponParented(false, AnimationData.combatAnimations[previousWeapon].normalizedEquipTime));
 		}
 		else
 		{

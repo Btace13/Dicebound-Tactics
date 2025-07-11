@@ -13,6 +13,7 @@ namespace TacticsToolkit
         public Dice equippedDice;
         public List<AbilityContainer> abilitiesForUse;
         public Sprite portrait;
+        public int CurrentHealth => statsContainer.CurrentHealth.statValue;
         public int CurrentAP => statsContainer.ActionPoints.statValue;
         public int LastRollValue => equippedDice.LastRollValue;
         public bool HasFreeAbility => nextAbilityFree;
@@ -67,12 +68,12 @@ namespace TacticsToolkit
         private bool isOverloaded = false;
 
 #if UNITY_EDITOR
-    [Sirenix.OdinInspector.Button("Add EXP", ButtonSizes.Medium)]
-    public void AddTestExp([Sirenix.OdinInspector.MinValue(1)] int expAmount = 50)
-    {
-        IncreaseExp(expAmount);
-        Debug.Log($"{name} gained {expAmount} EXP.");
-    }
+        [Sirenix.OdinInspector.Button("Add EXP", ButtonSizes.Medium)]
+        public void AddTestExp([Sirenix.OdinInspector.MinValue(1)] int expAmount = 50)
+        {
+            IncreaseExp(expAmount);
+            Debug.Log($"{name} gained {expAmount} EXP.");
+        }
 #endif
 
         protected virtual void Start()
@@ -269,14 +270,19 @@ namespace TacticsToolkit
 
                 if (GetStat(Stats.CurrentHealth).statValue <= 0)
                 {
-                    isAlive = false;
-                    StartCoroutine(Die());
-                    UnlinkCharacterToTile();
-
-                    if (isActive)
-                        endTurn.Raise();
+                    Die();
                 }
             }
+        }
+
+        public virtual void Die()
+        {
+            isAlive = false;
+            StartCoroutine(DieCoroutine());
+            UnlinkCharacterToTile();
+
+            if (isActive)
+                endTurn.Raise();
         }
 
         public void HealEntity(int value)
@@ -336,7 +342,7 @@ namespace TacticsToolkit
         }
 
         //What happens when a character dies. 
-        public IEnumerator Die()
+        public IEnumerator DieCoroutine()
         {
             float DegreesPerSecond = 360f;
             Vector3 currentRot, targetRot = new Vector3();

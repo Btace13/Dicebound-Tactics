@@ -51,4 +51,18 @@ public class GameStateManager : MonoBehaviour
         OnGameStateChanged?.Raise(currentGameState);
         Debug.Log($"Game state changed to: {currentGameState}");
     }
+
+    public void OnCombatEncounterStarted(CombatEncounter encounter)
+    {
+        // Handle logic when a combat encounter starts
+        Debug.Log("Combat encounter started. Switching to combat state.");
+        ChangeGameState(GameState.Combat);
+    }
+
+    public void OnCombatEncounterEnded(CombatEncounter encounter)
+    {
+        // Handle logic when a combat encounter ends
+        Debug.Log("Combat encounter ended. Returning to overworld.");
+        ChangeGameState(GameState.Overworld);
+    }
 }

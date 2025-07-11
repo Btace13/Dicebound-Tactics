@@ -16,9 +16,11 @@ public class ActionListenerButton : Button, IIconUpdater
 
     protected bool isBeingInvoked = false;
 
-    public new void Start()
+    private CanvasGroup canvasGroup;
+
+    public new void OnEnable()
     {
-        base.Start();
+        base.OnEnable();
 
         if (InputManager.Instance == null)
         {
@@ -49,11 +51,13 @@ public class ActionListenerButton : Button, IIconUpdater
         {
             Debug.LogWarning("InputActions is not initialized in InputManager. Please ensure it is set up correctly.");
         }
+
+        canvasGroup = GetComponentInParent<CanvasGroup>(true);
     }
 
-    public new void OnDestroy()
+    public new void OnDisable()
     {
-        base.OnDestroy();
+        base.OnDisable();
 
         if (InputManager.Instance == null)
         {
@@ -76,6 +80,8 @@ public class ActionListenerButton : Button, IIconUpdater
         {
             Debug.LogWarning($"Input action for button {name} is not assigned. Please assign an action in the inspector.");
         }
+
+        canvasGroup = null;
     }
 
     public void UpdateIcon()
@@ -108,6 +114,24 @@ public class ActionListenerButton : Button, IIconUpdater
 
     private void UpdateButton(InputAction.CallbackContext context)
     {
+        if (canvasGroup != null && !canvasGroup.interactable)
+        {
+            Debug.LogWarning($"Button {name} is not interactable due to CanvasGroup settings. Ignoring input action.");
+            return;
+        }
+
+        if (context.action != inputAction.action)
+        {
+            Debug.LogWarning($"Input action {context.action.name} does not match the assigned action {inputAction.action.name} for button {name}. Ignoring input.");
+            return;
+        }
+
+        if (gameObject.activeInHierarchy == false)
+        {
+            Debug.LogWarning($"Button {name} is not active in the hierarchy. Ignoring input action.");
+            return;
+        }
+
         if (context.performed)
         {
             DoStateTransition(SelectionState.Pressed, false);

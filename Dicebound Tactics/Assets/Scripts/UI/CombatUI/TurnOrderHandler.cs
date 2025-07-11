@@ -1,33 +1,35 @@
+using TacticsToolkit;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Threading.Tasks;
 
 public class TurnOrderHandler : MonoBehaviour
 {
     [SerializeField] GameObject ImageContainer;
     [SerializeField] GameObject CurrentTurnHolderImage;
 
-    void Start()
+    public async void OnTurnStarted()
     {
-        CreateTurnOrderPortraits();
-    }
+        ImageContainer.SetActive(true);
 
-    void Update()
-    {
-        if (TurnManager.Instance != null && TurnManager.Instance.GameIsPlaying)
+        if (ImageContainer.transform.childCount == 0)
         {
-            CreateTurnOrderPortraits();
+            // If there are no portraits, create them
+            await CreateTurnOrderPortraits();
         }
 
         UpdateCurrentTurnHolder();
     }
 
-    private void CreateTurnOrderPortraits()
+    public void OnCombatEncounterEnded(CombatEncounter encounter)
     {
-        // Clear existing portraits
-        foreach (Transform child in ImageContainer.transform)
-        {
-            Destroy(child.gameObject);
-        }
+        // Handle the end of the combat encounter
+        ClearTurnOrder();
+    }
+
+    private async Task CreateTurnOrderPortraits()
+    {
+        await ClearTurnOrder();
 
         // Create new portraits for each character in the turn order
         foreach (var entity in TurnManager.Instance.GetRemainingEntitiesThisRound())
@@ -42,11 +44,6 @@ public class TurnOrderHandler : MonoBehaviour
         }
     }
 
-    public void UpdateTurnOrder()
-    {
-        CreateTurnOrderPortraits();
-    }
-    
     private void UpdateCurrentTurnHolder()
     {
         if (TurnManager.Instance == null || TurnManager.Instance.GetCurrentUnit() == null)
@@ -57,5 +54,21 @@ public class TurnOrderHandler : MonoBehaviour
 
         CurrentTurnHolderImage.SetActive(true);
         CurrentTurnHolderImage.GetComponent<Image>().sprite = TurnManager.Instance.GetCurrentUnit().portrait;
+    }
+
+    public async Task ClearTurnOrder()
+    {
+        // Clear the turn order UI
+        foreach (Transform child in ImageContainer.transform)
+        {
+            Destroy(child.gameObject);
+        }
+
+        while (ImageContainer.transform.childCount > 0)
+        {
+            await Task.Yield(); // Wait for the UI to update
+        }
+
+        CurrentTurnHolderImage.SetActive(false);
     }
 }

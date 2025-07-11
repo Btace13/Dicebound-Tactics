@@ -148,7 +148,11 @@ namespace TacticsToolkit
             }
             else
             {
-                Debug.LogWarning("Attempted to equip a null weapon.");
+                Debug.Log("Attempting to unequip weapon.");
+                equippedWeapon = null;
+
+                UnitAnimationHandler animationHandler = GetComponentInChildren<UnitAnimationHandler>(true);
+                animationHandler.ToggleEquipWeapon(null);
             }
         }
     }
