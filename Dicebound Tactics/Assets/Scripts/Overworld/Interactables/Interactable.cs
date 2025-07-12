@@ -5,6 +5,9 @@ using System.Collections.Generic;
 public class Interactable : MonoBehaviour
 {
     public bool CanInteract = true;
+    [SerializeField] private bool isSingleUse = true;
+    public bool IsSingleUse => isSingleUse;
+
     [SerializeReference]
     public List<InteractionAction> actions = new();
 
