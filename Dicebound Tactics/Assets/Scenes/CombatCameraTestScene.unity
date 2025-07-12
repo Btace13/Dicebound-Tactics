@@ -1168,8 +1168,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 187291647}
-  - component: {fileID: 187291646}
   - component: {fileID: 187291648}
+  - component: {fileID: 187291649}
   m_Layer: 7
   m_Name: TreasureChest
   m_TagString: Untagged
@@ -1177,19 +1177,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &187291646
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 187291645}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f14a85516a6dcc40ae323d9a1e8fe2f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CanInteract: 1
 --- !u!4 &187291647
 Transform:
   m_ObjectHideFlags: 0
@@ -1228,6 +1215,29 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.5921402, y: 0.87116235, z: 1}
   m_Center: {x: 0, y: 0.3719571, z: 0}
+--- !u!114 &187291649
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 187291645}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f14a85516a6dcc40ae323d9a1e8fe2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CanInteract: 1
+  actions:
+  - rid: 5441011593960226897
+  references:
+    version: 2
+    RefIds:
+    - rid: 5441011593960226897
+      type: {class: GiveItemAction, ns: , asm: Assembly-CSharp}
+      data:
+        item: {fileID: 11400000, guid: 35f67e1a5a2330048b5dafdf0d7b6472, type: 2}
+        quantity: 1
 --- !u!1 &230757219
 GameObject:
   m_ObjectHideFlags: 0
