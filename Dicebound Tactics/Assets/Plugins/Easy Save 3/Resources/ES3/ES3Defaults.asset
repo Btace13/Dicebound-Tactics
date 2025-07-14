@@ -50,6 +50,7 @@ MonoBehaviour:
     - sc.utilities.selectionhistory.editor
     - ShapesRuntime
     - ShapesSamples
+    - Unified.Universal.Blur
     showAdvancedSettings: 0
   addMgrToSceneAutomatically: 0
   autoUpdateReferences: 1
