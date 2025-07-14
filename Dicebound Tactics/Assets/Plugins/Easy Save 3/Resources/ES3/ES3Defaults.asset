@@ -44,6 +44,8 @@ MonoBehaviour:
     - AstarPathfindingProject
     - DamageNumbersPro
     - Drawing
+    - LeTai.TrueShadow
+    - LeTai.TrueShadow.Demo
     - PackageTools
     - sc.utilities.selectionhistory.editor
     - ShapesRuntime
