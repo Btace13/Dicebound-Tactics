@@ -14,6 +14,8 @@
         _ColorMask ("Color Mask", Float) = 15
 
         [Toggle(UNITY_UI_ALPHACLIP)] _UseUIAlphaClip ("Use Alpha Clip", Float) = 0
+        [Toggle(USE_BLUR)] _UseBlur ("Use Blur", Float) = 0
+        _BlurStrength ("Blur Strength", Range(0,1)) = 1
     }
 
 	SubShader
@@ -55,6 +57,7 @@
 
             #pragma multi_compile __ UNITY_UI_CLIP_RECT
             #pragma multi_compile __ UNITY_UI_ALPHACLIP
+            #pragma multi_compile __ USE_BLUR
 			
 			struct appdata_t
 			{
@@ -77,6 +80,7 @@
 				float2 wh : TEXCOORD3;
 				float lineWeight : TEXCOORD4;
 				float pixelWorldScale : TEXCOORD5;
+				float4 screenPos : TEXCOORD6;
                 UNITY_VERTEX_OUTPUT_STEREO
 			};
 			
@@ -85,6 +89,10 @@
             fixed4 _TextureSampleAdd;
             float4 _ClipRect;
             float4 _MainTex_ST;
+            // Blur
+            sampler2D _GlobalUniversalBlurTexture;
+            float _UseBlur;
+            float _BlurStrength;
 
 			float2 decode2(float value) {
 				float2 kEncodeMul = float2(1.0, 65535.0f);
@@ -114,6 +122,7 @@
 				OUT.pixelWorldScale = clamp(IN.uv3.y,1/2048,2048);
 				
                 OUT.color = IN.color * _Color;
+				OUT.screenPos = ComputeScreenPos(OUT.vertex);
 				return OUT;
 			}
 			
@@ -142,8 +151,13 @@
 				half v = visible(IN.texcoord*IN.wh,IN.radius,IN.wh);
 				float l = (IN.lineWeight+1/IN.pixelWorldScale)/2;
 				color.a *= saturate((l-distance(v,l))*IN.pixelWorldScale);
-				
-				if(color.a <= 0){
+
+                #if defined(USE_BLUR)
+                half4 blurColor = (tex2D(_GlobalUniversalBlurTexture, IN.screenPos.xy / IN.screenPos.w) + _TextureSampleAdd) * IN.color;
+                color.rgb = lerp(color.rgb, blurColor.rgb, _BlurStrength);
+                #endif
+
+                if(color.a <= 0){
 					discard;
 				}
 

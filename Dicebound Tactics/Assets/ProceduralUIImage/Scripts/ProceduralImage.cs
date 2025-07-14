@@ -16,6 +16,8 @@ namespace UnityEngine.UI.ProceduralImage
     public class ProceduralImage : Image
     {
         [SerializeField] private float borderWidth;
+        [SerializeField] private bool useBlur = false;
+        [SerializeField, Range(0, 1)] private float blurStrength = 1f;
         private ProceduralImageModifier modifier;
         private static Material materialInstance;
         private static Material DefaultProceduralImageMaterial
@@ -59,6 +61,17 @@ namespace UnityEngine.UI.ProceduralImage
                 falloffDistance = value;
                 this.SetVerticesDirty();
             }
+        }
+
+        public bool UseBlur
+        {
+            get { return useBlur; }
+            set { useBlur = value; SetMaterialProperties(); }
+        }
+        public float BlurStrength
+        {
+            get { return blurStrength; }
+            set { blurStrength = Mathf.Clamp01(value); SetMaterialProperties(); }
         }
 
         protected ProceduralImageModifier Modifier
@@ -119,6 +132,7 @@ namespace UnityEngine.UI.ProceduralImage
         {
             base.OnEnable();
             this.Init();
+            SetMaterialProperties();
         }
 
         override protected void OnDisable()
@@ -170,6 +184,7 @@ namespace UnityEngine.UI.ProceduralImage
             if (!Application.isPlaying)
             {
                 this.UpdateGeometry();
+                SetMaterialProperties();
             }
         }
 #endif
@@ -187,7 +202,7 @@ namespace UnityEngine.UI.ProceduralImage
             //Allocates mem
             //float scaleFactor = Mathf.Min(r.width / (vec.x + vec.y), r.width / (vec.z + vec.w), r.height / (vec.x + vec.w), r.height / (vec.z + vec.y), 1);
             //Allocation free:
-            float scaleFactor = Mathf.Min (Mathf.Min (Mathf.Min (Mathf.Min (r.width / (vec.x + vec.y), r.width / (vec.z + vec.w)), r.height / (vec.x + vec.w)), r.height / (vec.z + vec.y)), 1f);
+            float scaleFactor = Mathf.Min(Mathf.Min(Mathf.Min(Mathf.Min(r.width / (vec.x + vec.y), r.width / (vec.z + vec.w)), r.height / (vec.x + vec.w)), r.height / (vec.z + vec.y)), 1f);
             return vec * scaleFactor;
         }
 
@@ -195,6 +210,7 @@ namespace UnityEngine.UI.ProceduralImage
         {
             base.OnPopulateMesh(toFill);
             EncodeAllInfoIntoVertices(toFill, CalculateInfo());
+            SetMaterialProperties();
         }
 
         protected override void OnTransformParentChanged()
@@ -212,7 +228,7 @@ namespace UnityEngine.UI.ProceduralImage
 
             float minside = Mathf.Min(r.width, r.height);
 
-            ProceduralImageInfo info = new ProceduralImageInfo(r.width + falloffDistance, r.height + falloffDistance, falloffDistance, pixelSize, radius / minside, borderWidth / minside * 2);
+            ProceduralImageInfo info = new ProceduralImageInfo(r.width + falloffDistance, r.height + falloffDistance, falloffDistance, pixelSize, radius / minside, borderWidth / minside * 2, useBlur, blurStrength);
 
             return info;
         }
@@ -251,23 +267,53 @@ namespace UnityEngine.UI.ProceduralImage
             return Vector2.Dot(new Vector2(Mathf.Floor(a * 65534) / 65535f, Mathf.Floor(b * 65534) / 65535f), kDecodeDot);
         }
 
+        private Material _instanceMaterial;
         public override Material material
         {
             get
             {
-                if (base.m_Material == null)
-                {
-                    return DefaultProceduralImageMaterial;
-                }
-                else
+                if (base.m_Material != null)
                 {
                     return base.material;
                 }
+                if (_instanceMaterial == null)
+                {
+                    _instanceMaterial = new Material(DefaultProceduralImageMaterial);
+                    _instanceMaterial.name = "ProceduralImage_InstanceMaterial";
+                }
+                return _instanceMaterial;
             }
-
             set
             {
                 base.material = value;
+                _instanceMaterial = null;
+            }
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            if (_instanceMaterial != null)
+            {
+                if (Application.isPlaying)
+                    Destroy(_instanceMaterial);
+                else
+                    DestroyImmediate(_instanceMaterial);
+                _instanceMaterial = null;
+            }
+        }
+
+        private void SetMaterialProperties()
+        {
+            var mat = material;
+            if (mat != null)
+            {
+                if (useBlur)
+                    mat.EnableKeyword("USE_BLUR");
+                else
+                    mat.DisableKeyword("USE_BLUR");
+                mat.SetFloat("_UseBlur", useBlur ? 1f : 0f);
+                mat.SetFloat("_BlurStrength", blurStrength);
             }
         }
 
@@ -291,6 +337,8 @@ namespace UnityEngine.UI.ProceduralImage
 
             //Don't allow negative numbers for fall off distance
             borderWidth = Mathf.Max(0, borderWidth);
+            blurStrength = Mathf.Clamp01(blurStrength);
+            SetMaterialProperties();
         }
 #endif
     }
@@ -306,8 +354,10 @@ namespace UnityEngine.UI.ProceduralImage
         public Vector4 radius;
         public float borderWidth;
         public float pixelSize;
+        public bool useBlur;
+        public float blurStrength;
 
-        public ProceduralImageInfo(float width, float height, float fallOffDistance, float pixelSize, Vector4 radius, float borderWidth)
+        public ProceduralImageInfo(float width, float height, float fallOffDistance, float pixelSize, Vector4 radius, float borderWidth, bool useBlur, float blurStrength = 1f)
         {
             this.width = Mathf.Abs(width);
             this.height = Mathf.Abs(height);
@@ -315,6 +365,8 @@ namespace UnityEngine.UI.ProceduralImage
             this.radius = radius;
             this.borderWidth = Mathf.Max(borderWidth, 0);
             this.pixelSize = Mathf.Max(0, pixelSize);
+            this.useBlur = useBlur;
+            this.blurStrength = Mathf.Clamp01(blurStrength);
         }
     }
 }

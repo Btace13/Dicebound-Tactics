@@ -28,3 +28,8 @@ MonoBehaviour:
     xboxControllerSprite: {fileID: 21300000, guid: d460753b0bc9f4c77b78f61cde97fd17, type: 3}
     playstationControllerSprite: {fileID: 21300000, guid: ab4c3cc16ec9f4e8c9c468f070af023b, type: 3}
     switchControllerSprite: {fileID: 21300000, guid: 052b632a4eea64b9cb3b94974e74e182, type: 3}
+  - actionName: Player/Cycle
+    keyboardSprite: {fileID: 21300000, guid: 13647765acf1447a6ab5b854d051e44e, type: 3}
+    xboxControllerSprite: {fileID: 21300000, guid: 1cf998ae2d7f14b298965f53280ecb1e, type: 3}
+    playstationControllerSprite: {fileID: 21300000, guid: 31f7de987959d432bbe56be428b6c5de, type: 3}
+    switchControllerSprite: {fileID: 21300000, guid: 61f35ecb9d8d543679788e0c0215e430, type: 3}

@@ -15,6 +15,8 @@ namespace UnityEditor.UI
 
         SerializedProperty m_borderWidth;
         SerializedProperty m_falloffDist;
+        SerializedProperty m_useBlur;
+        SerializedProperty m_blurStrength;
 
         SerializedProperty m_FillMethod;
         SerializedProperty m_FillOrigin;
@@ -50,6 +52,8 @@ namespace UnityEditor.UI
 
             m_borderWidth = serializedObject.FindProperty("borderWidth");
             m_falloffDist = serializedObject.FindProperty("falloffDistance");
+            m_useBlur = serializedObject.FindProperty("useBlur");
+            m_blurStrength = serializedObject.FindProperty("blurStrength");
 
             if ((target as ProceduralImage).GetComponent<ProceduralImageModifier>() != null)
             {
@@ -93,6 +97,11 @@ namespace UnityEditor.UI
             ModifierGUI();
             EditorGUILayout.PropertyField(m_borderWidth);
             EditorGUILayout.PropertyField(m_falloffDist);
+            EditorGUILayout.PropertyField(m_useBlur, new GUIContent("Use Blur"));
+            if (m_useBlur.boolValue)
+            {
+                EditorGUILayout.PropertyField(m_blurStrength, new GUIContent("Blur Strength"));
+            }
             serializedObject.ApplyModifiedProperties();
         }
 
