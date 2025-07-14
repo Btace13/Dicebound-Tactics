@@ -4,12 +4,23 @@ using System;
 
 public class SaveableObject : MonoBehaviour
 {
-    public Guid guid = Guid.NewGuid();
+    public string instanceID => gameObject.GetInstanceID().ToString();
 
-    [SerializeReference]
-    public List<SaveData> saveDataModules = new();
+    [SerializeField] public List<SaveData> saveDataModules = new();
 
-    public List<SaveData> CollectSaveData() => saveDataModules;
+    public List<SaveData> CollectSaveData()
+    {
+        // Collect all SaveData modules attached to this GameObject
+        foreach (var module in saveDataModules)
+        {
+            if (module != null)
+            {
+                module.Capture(gameObject);
+            }
+        }
+
+        return saveDataModules;
+    }
 
     public void LoadSaveData(List<SaveData> loadedData = null)
     {
@@ -17,13 +28,18 @@ public class SaveableObject : MonoBehaviour
         {
             try
             {
-                loadedData = ES3.Load<List<SaveData>>(guid.ToString(), "saveData.es3");
+                loadedData = ES3.Load<List<SaveData>>(instanceID.ToString(), "saveData.es3");
             }
             catch (Exception ex)
             {
-                Debug.LogWarning($"No save data found for {name} with GUID: {guid}. Exception: {ex.Message}");
+                Debug.LogWarning($"No save data found for {name} with GUID: {instanceID}. Exception: {ex.Message}");
                 return;
             }
+        }
+        else if (loadedData.Count == 0)
+        {
+            Debug.LogWarning($"No save data found for {name} with GUID: {instanceID}. Using empty data.");
+            return;
         }
 
         saveDataModules = loadedData;

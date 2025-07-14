@@ -1,6 +1,7 @@
 using System.Linq;
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "InventorySaveData", menuName = "Save System/InventorySaveData")]
 public class InventorySaveData : SaveData
 {
     public CombatItem[] items; // Array of items in the inventory

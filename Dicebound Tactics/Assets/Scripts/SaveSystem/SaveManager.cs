@@ -20,8 +20,14 @@ public class SaveManager : MonoBehaviour
         {
             var data = saveable.CollectSaveData();
 
-            ES3.Save(saveable.guid.ToString(), data, "saveData.es3");
-            Debug.Log($"Saved {data.Count} data modules for {saveable.name} with GUID: {saveable.guid}");
+            if (data == null || data.Count == 0)
+            {
+                Debug.LogWarning($"No save data found for {saveable.name} with GUID: {saveable.instanceID}");
+                continue;
+            }
+
+            ES3.Save(saveable.instanceID.ToString(), data, "saveData.es3");
+            Debug.Log($"Saved {data.Count} data modules for {saveable.name} with GUID: {saveable.instanceID}");
         }
     }
 
@@ -33,15 +39,15 @@ public class SaveManager : MonoBehaviour
         {
             try
             {
-                var data = ES3.Load<List<SaveData>>(saveable.guid.ToString(), "saveData.es3");
+                var data = ES3.Load<List<SaveData>>(saveable.instanceID.ToString(), "saveData.es3");
                 // Apply the loaded data to the saveable object
                 saveable.LoadSaveData(data);
 
-                Debug.Log($"Loaded {data.Count} data modules for {saveable.name} with GUID: {saveable.guid}");
+                Debug.Log($"Loaded {data.Count} data modules for {saveable.name} with GUID: {saveable.instanceID}");
             }
             catch (Exception ex)
             {
-                Debug.LogError($"Error loading save data for {saveable.name} with GUID: {saveable.guid}. Exception: {ex.Message}");
+                Debug.LogError($"Error loading save data for {saveable.name} with GUID: {saveable.instanceID}. Exception: {ex.Message}");
                 continue;
             }
         }

@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[CreateAssetMenu(menuName = "Save System/Active State Save Data")]
 public class ActiveStateSaveData : SaveData
 {
     // This class is used to save the active state of a GameObject
