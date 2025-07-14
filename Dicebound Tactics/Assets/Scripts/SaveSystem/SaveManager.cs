@@ -29,6 +29,11 @@ public class SaveManager : MonoBehaviour
             ES3.Save(saveable.instanceID.ToString(), data, "saveData.es3");
             Debug.Log($"Saved {data.Count} data modules for {saveable.name} with GUID: {saveable.instanceID}");
         }
+
+        UDictionary<string, bool> flags = GameStateManager.Instance.GetAll();
+
+        ES3.Save("flags", flags, "saveData.es3");
+        Debug.Log("Game state flags saved successfully.");
     }
 
     [Button("Load Game")]
@@ -51,6 +56,15 @@ public class SaveManager : MonoBehaviour
                 continue;
             }
         }
+
+        try
+        {
+            LoadGameStateFlags();
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"Error loading game state flags: {ex.Message}");
+        }
     }
 
     [Button("Clear Saves")]
@@ -59,5 +73,13 @@ public class SaveManager : MonoBehaviour
         // Clear all saved data
         ES3.DeleteFile("saveData.es3");
         Debug.Log("All save data cleared.");
+    }
+
+    public void LoadGameStateFlags()
+    {
+        // Load game state flags from disk
+        UDictionary<string, bool> flags = ES3.Load<UDictionary<string, bool>>("flags", "saveData.es3");
+        GameStateManager.Instance.LoadAll(flags);
+        Debug.Log("Game state flags loaded successfully.");
     }
 }

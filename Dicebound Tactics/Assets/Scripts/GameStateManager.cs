@@ -2,6 +2,8 @@ using TacticsToolkit;
 using UnityEngine;
 using DG.Tweening;
 using Sirenix.OdinInspector;
+using System.Collections.Generic;
+using System.Linq;
 
 public enum GameState
 {
@@ -25,6 +27,7 @@ public class GameStateManager : MonoBehaviour
     public GameEventGameState OnGameStateChanged;
 
     public GameState CurrentGameState => currentGameState;
+    private UDictionary<string, bool> flags = new();
 
     private void Awake()
     {
@@ -103,4 +106,32 @@ public class GameStateManager : MonoBehaviour
             });
         });
     }
+
+    #region Flag Management
+    public void Set(string key, bool value = true) => flags[key] = value;
+    public bool Get(string key) => flags.TryGetValue(key, out bool value) && value;
+    public void Clear(string key) => flags.Remove(key);
+
+    public UDictionary<string, bool> GetAll()
+    {
+        var copy = new UDictionary<string, bool>();
+        foreach (var kvp in flags)
+        {
+            copy.Add(kvp.Key, kvp.Value);
+        }
+        return copy;
+    } // for serialization
+    public void LoadAll(UDictionary<string, bool> loadedFlags)
+    {
+        flags.Clear();
+        foreach (var kvp in loadedFlags)
+        {
+            flags.Add(kvp.Key, kvp.Value);
+        }
+    }
+    public List<string> GetAllKeys()
+    {
+        return flags.Keys.ToList();
+    }
+    #endregion
 }
