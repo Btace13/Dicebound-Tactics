@@ -10,7 +10,9 @@ public class InteractUIHandler : MonoBehaviour
 
     private float normalizedFadeValue = 0f;
     private Tween fadeTween;
+
     private Interactable currentInteractable;
+    private Interactable previousInteractable;
 
     private void Awake()
     {
@@ -89,14 +91,20 @@ public class InteractUIHandler : MonoBehaviour
     public void HideInteractUI()
     {
         SetInteractUIVisibility(false);
+        previousInteractable = currentInteractable;
         currentInteractable = null;
     }
 
     private void UpdateScreenPosition(Interactable interactable)
     {
-        if (interactable == null || interactCanvasGroup == null)
+        if (interactCanvasGroup == null)
         {
             return;
+        }
+
+        if (interactable == null)
+        {
+            interactable = previousInteractable;
         }
 
         float extentsY = 1.5f;
@@ -110,9 +118,14 @@ public class InteractUIHandler : MonoBehaviour
             extentsY = rend.bounds.extents.y;
         }
 
-        Vector3 worldTargetPosition = interactable.transform.position + Vector3.up * (extentsY + 0.5f); // Adjust height for UI display
+        Vector3 worldTargetPosition = interactable.transform.position + Vector3.up * (extentsY + interactCanvasGroup.alpha); // Adjust height for UI display
         Vector3 screenTargetPosition = Camera.main.WorldToScreenPoint(worldTargetPosition);
 
         interactCanvasGroup.transform.position = screenTargetPosition;
+
+        if (interactCanvasGroup.alpha <= 0f)
+        {
+            previousInteractable = null;
+        }
     }
 }
