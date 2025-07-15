@@ -15,6 +15,8 @@ public class Interactor : MonoBehaviour
     private float nextCheckTime = 0f;
     public List<Interactable> Interactables = new List<Interactable>();
 
+    private Interactable closestInteractable;
+
     private void Start()
     {
         if (InputManager.Instance == null)
@@ -64,7 +66,6 @@ public class Interactor : MonoBehaviour
             // Check if there are any interactables in range
             if (Interactables.Count > 0)
             {
-                Interactable closestInteractable = GetClosestInteractable();
                 if (closestInteractable != null)
                 {
                     // Perform interaction with the closest interactable
@@ -86,7 +87,27 @@ public class Interactor : MonoBehaviour
         if (Time.time >= nextCheckTime)
         {
             Interactables = GetInteractables();
+
+            var newInteractable = GetClosestInteractable();
+
             nextCheckTime = Time.time + checkForInteractablesInterval;
+
+            if (newInteractable == closestInteractable)
+            {
+                // If the closest interactable hasn't changed, no need to update the UI
+                return;
+            }
+
+            closestInteractable = GetClosestInteractable();
+
+            if (closestInteractable != null)
+            {
+                InteractUIHandler.Instance.ShowInteractUI(closestInteractable);
+            }
+            else
+            {
+                InteractUIHandler.Instance.HideInteractUI();
+            }
         }
     }
 
