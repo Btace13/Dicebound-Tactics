@@ -159,7 +159,9 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      mdi_sword-cross_0: 8616336316225982206
+      mdi_sword-cross_1: 608107486315885883
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

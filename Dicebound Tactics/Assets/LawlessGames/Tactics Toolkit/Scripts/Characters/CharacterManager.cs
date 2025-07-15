@@ -155,5 +155,14 @@ namespace TacticsToolkit
                 animationHandler.ToggleEquipWeapon(null);
             }
         }
+
+        public bool HasEnoughApToUseAbility(AbilitySO ability)
+        {
+            if (ability != null)
+            {
+                return CurrentAP >= ability.apCost;
+            }
+            return false;
+        }
     }
 }

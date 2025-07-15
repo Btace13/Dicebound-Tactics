@@ -209,7 +209,11 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      fluent_people-12-filled_0: 7299540704817707604
+      fluent_people-12-filled_1: 1131383456567952223
+      fluent_people-12-filled_2: 4751349744368991513
+      fluent_people-12-filled_3: -1320249350266791958
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

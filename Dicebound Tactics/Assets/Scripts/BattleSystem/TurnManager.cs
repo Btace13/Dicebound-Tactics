@@ -64,7 +64,6 @@ public class TurnManager : MonoBehaviour
             {
                 character.ResetActionPoints();
                 character.ResetTempModifiers();
-                character.RollDice();
             }
         }
 
@@ -74,7 +73,6 @@ public class TurnManager : MonoBehaviour
             {
                 enemy.ResetActionPoints();
                 enemy.ResetTempModifiers();
-                enemy.RollDice();
             }
         }
 
@@ -96,6 +94,8 @@ public class TurnManager : MonoBehaviour
             .ToList();
 
         currentTurnIndex = 0;
+
+        turnOrder.ForEach(unit => unit.RollDice());
     }
 
     private void StartNextTurn()

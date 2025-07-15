@@ -13,12 +13,14 @@ public class AbilityButton : CombatButton
         // Additional animation logic specific to AbilityButton
     }
 
-    public void SetupAbilityButton(AbilitySO ability, UnityAction onClickAction)
+    public void SetupAbilityButton(AbilitySO ability, UnityAction onClickAction, bool canUse = false)
     {
         this.ability = ability;
         abilityCostText.SetText(ability.apCost.ToString());
 
         SetupButton(ability.abilityName, onClickAction);
+
+        Button.interactable = canUse;
     }
 
     public override void SetupButton(string text, UnityAction onClickAction)

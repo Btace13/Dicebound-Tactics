@@ -35,7 +35,7 @@ public class AbilityPanel : CombatPanel
             {
                 print("Using ability: " + ability.abilityName);
                 OnAbilitySelected?.Invoke(ability);
-            });
+            }, character.HasEnoughApToUseAbility(ability));
             abilityButtons[i].AnimateIn();
         }
     }
