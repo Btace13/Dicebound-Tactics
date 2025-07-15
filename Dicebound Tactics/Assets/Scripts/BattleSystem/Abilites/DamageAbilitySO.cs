@@ -99,13 +99,9 @@ public class DamageAbilitySO : AbilitySO
                 }, () =>
                 {
                     Debug.Log($"{user.name} finished {this.abilityName} animation.");
+                    OnAbilityAnimationComplete?.Invoke();
                 });
             }
-        });
-        seq.AppendInterval(clipTime + 1f); // Wait for a moment to let the player see the attack
-        seq.AppendCallback(() =>
-        {
-            OnAbilityAnimationComplete?.Invoke();
         });
     }
 

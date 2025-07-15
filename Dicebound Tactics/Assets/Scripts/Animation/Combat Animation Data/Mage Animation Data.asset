@@ -41,4 +41,5 @@ MonoBehaviour:
     _DefaultParameter: {x: 0, y: 0}
     _Type: 0
   normalizedEquipTime: 0.4
-  normalizedAttackTriggerTimes: []
+  normalizedAttackTriggerTimes:
+  - 0.75
