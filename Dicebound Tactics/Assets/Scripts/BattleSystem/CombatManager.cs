@@ -21,6 +21,7 @@ public class CombatManager : MonoBehaviour
 
     [Header("Events")]
     public GameEventEntity OnTargetSelected;
+    public GameEventCharacterManager startNewCharacterTurn;
 
     private CombatItem _selectedItem;
     private AbilitySO _selectedAbility;
@@ -270,7 +271,7 @@ public class CombatManager : MonoBehaviour
             _selectedAbility = null;
             _selectedItem = null;
 
-            turnManager.AdvanceTurn();
+            startNewCharacterTurn?.Raise(currentUnit as CharacterManager);
         });
     }
 }
