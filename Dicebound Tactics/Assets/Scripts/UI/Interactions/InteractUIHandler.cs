@@ -10,6 +10,7 @@ public class InteractUIHandler : MonoBehaviour
 
     private float normalizedFadeValue = 0f;
     private Tween fadeTween;
+    private Interactable currentInteractable;
 
     private void Awake()
     {
@@ -55,11 +56,46 @@ public class InteractUIHandler : MonoBehaviour
             });
     }
 
+    private void Update()
+    {
+        if (interactCanvasGroup == null || interactCanvasGroup.alpha <= 0f)
+        {
+            return; // No need to update if the UI is not visible
+        }
+
+        if (currentInteractable != null)
+        {
+            UpdateScreenPosition(currentInteractable);
+        }
+    }
+
     public void ShowInteractUI(Interactable interactable)
     {
         if (interactable == null)
         {
             Debug.LogWarning("Interactable is null.");
+            return;
+        }
+
+        UpdateScreenPosition(interactable);
+
+        interactCanvasGroup.alpha = 0f; // Reset alpha before showing
+        interactCanvasGroup.gameObject.SetActive(true);
+        SetInteractUIVisibility(true);
+
+        currentInteractable = interactable;
+    }
+
+    public void HideInteractUI()
+    {
+        SetInteractUIVisibility(false);
+        currentInteractable = null;
+    }
+
+    private void UpdateScreenPosition(Interactable interactable)
+    {
+        if (interactable == null || interactCanvasGroup == null)
+        {
             return;
         }
 
@@ -76,15 +112,7 @@ public class InteractUIHandler : MonoBehaviour
 
         Vector3 worldTargetPosition = interactable.transform.position + Vector3.up * (extentsY + 0.5f); // Adjust height for UI display
         Vector3 screenTargetPosition = Camera.main.WorldToScreenPoint(worldTargetPosition);
+
         interactCanvasGroup.transform.position = screenTargetPosition;
-
-        interactCanvasGroup.alpha = 0f; // Reset alpha before showing
-        interactCanvasGroup.gameObject.SetActive(true);
-        SetInteractUIVisibility(true);
-    }
-
-    public void HideInteractUI()
-    {
-        SetInteractUIVisibility(false);
     }
 }
