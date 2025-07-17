@@ -226,6 +226,11 @@ public class CombatEncounter : MonoBehaviour
             c.EquipWeapon(c.CurrentWeapon); // Ensure the character has their weapon equipped for combat
         }
 
+        foreach (EnemyManager enemy in Enemies)
+        {
+            enemy.EquipWeapon(enemy.CurrentWeapon); // Ensure the enemy has their weapon equipped for combat
+        }
+
         if (OnEncounterStarted != null)
         {
             OnEncounterStarted.Raise(this);
