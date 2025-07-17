@@ -14,27 +14,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputIcons:
   - actionName: Player/BottomGamepad
-    keyboardSprite: {fileID: 21300000, guid: 4789e236c7871438999424ef6458e92a, type: 3}
-    xboxControllerSprite: {fileID: 21300000, guid: b0c5051b63928453e8e28fff904f72b9, type: 3}
-    playstationControllerSprite: {fileID: 21300000, guid: 4ceadec3b87c84a58b6d87f6e1fa32fe, type: 3}
-    switchControllerSprite: {fileID: 21300000, guid: c857710ff39b04c2ebe92fb9fd9132a1, type: 3}
+    keyboardSprite: {fileID: 1179216485070693450, guid: ffa2bad4da1fc47eb8112c9c4c3271b8, type: 3}
+    xboxControllerSprite: {fileID: -7956427973557797689, guid: 88ff628b7616948a399ee8a65e049606, type: 3}
+    playstationControllerSprite: {fileID: 390555981594730966, guid: 4fc9d170fd84044d2b08daeb7be9eb8e, type: 3}
+    switchControllerSprite: {fileID: -679083064054180673, guid: f13e217b7239b48f4aa87e0cd3fec7c0, type: 3}
   - actionName: Player/LeftGamepad
-    keyboardSprite: {fileID: 21300000, guid: f29661a30c39547b58fd0c87d74567d6, type: 3}
-    xboxControllerSprite: {fileID: 21300000, guid: 590ff31d509bb41d5982a7d6d07a48f2, type: 3}
-    playstationControllerSprite: {fileID: 21300000, guid: c0421c17554ad4ebd89271858ae1b00f, type: 3}
-    switchControllerSprite: {fileID: 21300000, guid: 2be5addb1e00a44cf9eaf6df1fdbfee4, type: 3}
+    keyboardSprite: {fileID: -9125861541802950594, guid: bacc72b8d0d944823a04b53a20f70600, type: 3}
+    xboxControllerSprite: {fileID: 7183707057315010591, guid: a5dea466c7a7b4152919645a10b6f2d6, type: 3}
+    playstationControllerSprite: {fileID: 265468883692527984, guid: 78ad0d5178697478689a148cbde0846a, type: 3}
+    switchControllerSprite: {fileID: 6336310393044179604, guid: 0411c80813e7e4c23a1014db69dc5150, type: 3}
   - actionName: Player/TopGamepad
-    keyboardSprite: {fileID: 21300000, guid: 609495502a2d24a0a9478e4f95b6b74b, type: 3}
-    xboxControllerSprite: {fileID: 21300000, guid: d460753b0bc9f4c77b78f61cde97fd17, type: 3}
-    playstationControllerSprite: {fileID: 21300000, guid: ab4c3cc16ec9f4e8c9c468f070af023b, type: 3}
-    switchControllerSprite: {fileID: 21300000, guid: 052b632a4eea64b9cb3b94974e74e182, type: 3}
+    keyboardSprite: {fileID: 1622727937493990531, guid: 029f4f459d38e45d9b680186c75609dd, type: 3}
+    xboxControllerSprite: {fileID: -1236389414660901761, guid: e01700ca784b04d85a5d439c0b55ea04, type: 3}
+    playstationControllerSprite: {fileID: -6428336804260667672, guid: aa1963e99aeac409d8b8187870980809, type: 3}
+    switchControllerSprite: {fileID: -1042983111052659530, guid: c47020cc246e84dadb0a7356ab2e0edb, type: 3}
   - actionName: Player/Cycle
-    keyboardSprite: {fileID: 21300000, guid: 13647765acf1447a6ab5b854d051e44e, type: 3}
-    xboxControllerSprite: {fileID: 21300000, guid: 1cf998ae2d7f14b298965f53280ecb1e, type: 3}
-    playstationControllerSprite: {fileID: 21300000, guid: 31f7de987959d432bbe56be428b6c5de, type: 3}
-    switchControllerSprite: {fileID: 21300000, guid: 61f35ecb9d8d543679788e0c0215e430, type: 3}
+    keyboardSprite: {fileID: 3804896374830911662, guid: c229c8ef5df094f63909b18b288e52a6, type: 3}
+    xboxControllerSprite: {fileID: -5313271606796292114, guid: b38ebb555a62f440e9766e3ce894f41a, type: 3}
+    playstationControllerSprite: {fileID: -6514671347812767465, guid: 66513cf9d03fb42d286e6fb3ec65d283, type: 3}
+    switchControllerSprite: {fileID: -2615466989162533860, guid: c9b0e3d3c9ff7436b9bbd4405144cf09, type: 3}
   - actionName: Player/Interact
-    keyboardSprite: {fileID: 21300000, guid: 986a5635b7b9045cbafe55c78c50de2f, type: 3}
-    xboxControllerSprite: {fileID: 21300000, guid: b0c5051b63928453e8e28fff904f72b9, type: 3}
-    playstationControllerSprite: {fileID: 21300000, guid: 4ceadec3b87c84a58b6d87f6e1fa32fe, type: 3}
-    switchControllerSprite: {fileID: 21300000, guid: c857710ff39b04c2ebe92fb9fd9132a1, type: 3}
+    keyboardSprite: {fileID: 1622727937493990531, guid: 029f4f459d38e45d9b680186c75609dd, type: 3}
+    xboxControllerSprite: {fileID: -7956427973557797689, guid: 88ff628b7616948a399ee8a65e049606, type: 3}
+    playstationControllerSprite: {fileID: 390555981594730966, guid: 4fc9d170fd84044d2b08daeb7be9eb8e, type: 3}
+    switchControllerSprite: {fileID: -679083064054180673, guid: f13e217b7239b48f4aa87e0cd3fec7c0, type: 3}

@@ -36,5 +36,10 @@ namespace TacticsToolkit
             return null;
         }
         
+        public void ResetAP()
+        {
+            ActionPoints.statValue = 0;
+            CarriedOverActionPoints.statValue = 0;
+        }
     }
 }

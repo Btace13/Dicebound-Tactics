@@ -61,6 +61,8 @@ namespace TacticsToolkit
             {
                 Debug.Log($"Loaded existing stats for {characterId}.");
             }
+
+            statsContainer.ResetAP();
         }
 
         public void LoadOrCreateDie()
