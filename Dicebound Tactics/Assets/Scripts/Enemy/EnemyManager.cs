@@ -84,11 +84,11 @@ public class EnemyManager : Entity
             CameraManager.Instance.TrySetActiveCamera("EnemyAttackCamera");
             yield return new WaitForSeconds(1f);
 
-            ability.Execute(this, target);
-            CameraManager.Instance.ShakeActiveCamera();
-            statsContainer.ActionPoints.statValue -= ability.apCost;
+            // Wait for ability animation/logic to complete using coroutine
+            yield return StartCoroutine(ability.Execute(this, target));
 
-            yield return new WaitForSeconds(0.5f);
+            CameraManager.Instance.ShakeActiveCamera();
+            yield return new WaitForSeconds(.2f);
         }
 
         Debug.Log($"[AI] {name} ends turn with {CurrentAP} AP");

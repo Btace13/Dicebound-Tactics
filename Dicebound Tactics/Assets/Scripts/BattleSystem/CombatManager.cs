@@ -209,7 +209,7 @@ public class CombatManager : MonoBehaviour
                         continue;
                     }
 
-                    damageAbility.Execute(currentUnit, target);
+                    StartCoroutine(damageAbility.Execute(currentUnit, target));
 
                     Debug.Log($"{currentUnit.name} uses {_selectedAbility.abilityName} on {target.name}");
                 }

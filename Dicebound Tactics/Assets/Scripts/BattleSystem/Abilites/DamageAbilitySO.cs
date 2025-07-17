@@ -1,3 +1,4 @@
+using System.Collections;
 using Unity;
 using UnityEngine;
 using TacticsToolkit;
@@ -9,7 +10,7 @@ public class DamageAbilitySO : AbilitySO
 {
     public int damageAmount;
 
-    public override void Execute(Entity user, Entity target)
+    public override IEnumerator Execute(Entity user, Entity target)
     {
         if (user.SpendAP(apCost))
         {
@@ -24,31 +25,30 @@ public class DamageAbilitySO : AbilitySO
                 {
                     Debug.LogWarning("Either the user or target does not have an OverworldEntityController component.");
                     ApplyDamage(amount, user, target);
-                    return;
+                    yield break;
                 }
 
                 Vector3 direction = (target.transform.position - user.transform.position).normalized;
                 Vector3 destination = target.transform.position - direction * range; // Stop 'range' units away from the target
 
-                userController.MoveToPosition(destination, true, () =>
+                bool moveDone = false;
+                userController.MoveToPosition(destination, true, () => { moveDone = true; });
+                while (!moveDone) yield return null;
+
+                yield return TriggerAbilityAnimationSequenceCoroutine(user, target, () =>
                 {
-                    TriggerAbilityAnimationSequence(user, target, () =>
-                    {
-                        // This callback is called when the ability hits the target
-                        ApplyDamage(amount, user, target);
-                    }, () =>
-                    {
-                        // Animation complete
-                        // Move the user back to their assigned encounter slot
-                        userController.MoveToTarget(userController.AssignedEncounterSlot.slotTransform, true);
-                    });
+                    ApplyDamage(amount, user, target);
                 });
+
+                // Move back to slot
+                bool moveBackDone = false;
+                userController.MoveToTarget(userController.AssignedEncounterSlot.slotTransform, true, () => { moveBackDone = true; });
+                while (!moveBackDone) yield return null;
             }
             else
             {
-                TriggerAbilityAnimationSequence(user, target, () =>
+                yield return TriggerAbilityAnimationSequenceCoroutine(user, target, () =>
                 {
-                    // This callback is called when the ability hits the target
                     ApplyDamage(amount, user, target);
                 });
             }
@@ -59,7 +59,7 @@ public class DamageAbilitySO : AbilitySO
         }
     }
 
-    public void TriggerAbilityAnimationSequence(Entity user, Entity target, UnityAction OnHitTarget, UnityAction OnAbilityAnimationComplete = null)
+    private IEnumerator TriggerAbilityAnimationSequenceCoroutine(Entity user, Entity target, UnityAction OnHitTarget)
     {
         OverworldEntityController enemyController = target.GetComponent<OverworldEntityController>();
         OverworldEntityController userController = user.GetComponent<OverworldEntityController>();
@@ -79,30 +79,40 @@ public class DamageAbilitySO : AbilitySO
             Debug.LogWarning("No combat animations found for the equipped weapon or UnitAnimationHandler is missing.");
         }
 
-        Sequence seq = DOTween.Sequence();
-        seq.Append(userController.transform.DOLookAt(target.transform.position, 0.2f));
-        seq.AppendInterval(0.2f); // Small delay to ensure the look rotation is applied before the attack
-        seq.AppendCallback(() =>
+        // Look at target
+        userController.transform.DOLookAt(target.transform.position, 0.2f);
+        yield return new WaitForSeconds(0.2f);
+
+        // Play attack animation and wait for completion
+        bool animDone = false;
+        bool hitTriggered = false;
+        if (animationHandler == null)
         {
-            // Play attack animation
-            if (animationHandler == null)
-            {
-                Debug.LogWarning("No UnitAnimationHandler found on the user.");
-                OnHitTarget?.Invoke();
-                return;
-            }
-            else
-            {
-                animationHandler.UseAbility(this, time =>
-                {
+            Debug.LogWarning("No UnitAnimationHandler found on the user.");
+            OnHitTarget?.Invoke();
+            hitTriggered = true;
+            animDone = true;
+        }
+        else
+        {
+            animationHandler.UseAbility(this, time => {
+                if (!hitTriggered) {
                     OnHitTarget?.Invoke();
-                }, () =>
-                {
-                    Debug.Log($"{user.name} finished {this.abilityName} animation.");
-                    OnAbilityAnimationComplete?.Invoke();
-                });
-            }
-        });
+                    hitTriggered = true;
+                }
+            }, () => { animDone = true; });
+        }
+        // Failsafe: if animation never completes, force exit after a timeout
+        float timeout = Mathf.Max(clipTime, 2f);
+        float timer = 0f;
+        while (!animDone && timer < timeout) {
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        if (!animDone) {
+            Debug.LogWarning($"Animation did not complete in time for {user.name} using {this.abilityName}. Forcing completion.");
+            if (!hitTriggered) OnHitTarget?.Invoke();
+        }
     }
 
     public void ApplyDamage(int amount, Entity user, Entity target)

@@ -161,7 +161,7 @@ public class UnitAnimationHandler : MonoBehaviour
 			{
 				events.Add(t, () => OnAttackAnimationPlayed(t));
 			}
-			events.Add(1, OnAttackAnimationComplete);
+			events.Add(1, () => OnAttackAnimationComplete?.Invoke());
 
 			// play on the 3rd layer so we can override any other animations
 			AnimancerState state = _Animancer.Layers[2].Play(AnimationData.combatAnimations[_equippedWeapon].abilities[ability], 0.1f, FadeMode.FixedDuration);
@@ -206,9 +206,12 @@ public class UnitAnimationHandler : MonoBehaviour
 				yield break;
 			}
 
-			_weaponObject = Instantiate(weaponData.ItemPrefab, rightHandTransform);
-			_weaponObject.transform.localPosition = weaponData.PositionOffset;
-			_weaponObject.transform.localEulerAngles = weaponData.RotationOffset;
+			if (weaponData.ItemPrefab)
+			{ 
+				_weaponObject = Instantiate(weaponData.ItemPrefab, rightHandTransform);
+				_weaponObject.transform.localPosition = weaponData.PositionOffset;
+				_weaponObject.transform.localEulerAngles = weaponData.RotationOffset;
+			}
 		}
 		else
 		{

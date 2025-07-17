@@ -1,5 +1,6 @@
 using UnityEngine;
 using TacticsToolkit;
+using System.Collections;
 
 public enum AbilityType
 {
@@ -21,5 +22,5 @@ public abstract class AbilitySO : ScriptableObject
     public float range = 4f;
     public int unlockLevel = 1;
 
-    public abstract void Execute(Entity user, Entity target);
+    public abstract IEnumerator Execute(Entity user, Entity target);
 }
