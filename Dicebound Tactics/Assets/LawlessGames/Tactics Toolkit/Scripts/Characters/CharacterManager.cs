@@ -12,10 +12,6 @@ namespace TacticsToolkit
         public bool IsControllable { get; set; } = true;
         public bool IsControlled { get; set; } = false;
         public OverworldCharacterController OverworldCharacterController { get; set; }
-        [SerializeField] private WeaponData StartingWeapon;
-        public WeaponData CurrentWeapon { get; set; }
-        private WeaponData equippedWeapon;
-        public WeaponData EquippedWeapon { get { return equippedWeapon; } }
         private void Awake()
         {
             OverworldCharacterController = GetComponent<OverworldCharacterController>();
@@ -24,8 +20,7 @@ namespace TacticsToolkit
             {
                 Debug.LogError("OverworldCharacterController component is missing on the CharacterManager.");
             }
-
-            SetupWeapon();
+            
             LoadOrCreateStats();
             LoadOrCreateDie();
         }
@@ -122,39 +117,6 @@ namespace TacticsToolkit
             else
             {
                 Debug.LogError("Stats container is null, cannot set stats.");
-            }
-        }
-
-        private void SetupWeapon()
-        {
-            if (StartingWeapon != null)
-            {
-                CurrentWeapon = StartingWeapon;
-
-                if (GameStateManager.Instance != null && GameStateManager.Instance.CurrentGameState == GameState.Combat)
-                {
-                    EquipWeapon(CurrentWeapon);
-                }
-            }
-        }
-
-        public void EquipWeapon(WeaponData weapon)
-        {
-            if (weapon != null)
-            {
-                equippedWeapon = weapon;
-                Debug.Log($"{characterId} equipped weapon: {weapon.WeaponName}");
-
-                UnitAnimationHandler animationHandler = GetComponentInChildren<UnitAnimationHandler>(true);
-                animationHandler.ToggleEquipWeapon(weapon);
-            }
-            else
-            {
-                Debug.Log("Attempting to unequip weapon.");
-                equippedWeapon = null;
-
-                UnitAnimationHandler animationHandler = GetComponentInChildren<UnitAnimationHandler>(true);
-                animationHandler.ToggleEquipWeapon(null);
             }
         }
 

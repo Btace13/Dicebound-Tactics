@@ -20,6 +20,12 @@ namespace TacticsToolkit
         public bool IsTaunting => isTaunting;
         public bool IsOverloaded => isOverloaded;
 
+        [Header("Weapon")]
+        [SerializeField] private WeaponData StartingWeapon;
+        public WeaponData CurrentWeapon { get; set; }
+        private WeaponData equippedWeapon;
+        public WeaponData EquippedWeapon { get { return equippedWeapon; } }
+
         [Header("Abilities")]
         public List<AbilitySO> abilityLoadout = new();
 
@@ -78,6 +84,7 @@ namespace TacticsToolkit
 
         protected virtual void Start()
         {
+            SetupWeapon();
             SpawnCharacter();
         }
 
@@ -362,6 +369,38 @@ namespace TacticsToolkit
             }
 
             GetComponent<SpriteRenderer>().color = new Color(0.35f, 0.35f, 0.35f, 1);
+        }
+
+        private void SetupWeapon()
+        {
+            if (StartingWeapon != null)
+            {
+                CurrentWeapon = StartingWeapon;
+
+                if (GameStateManager.Instance != null && GameStateManager.Instance.CurrentGameState == GameState.Combat)
+                {
+                    EquipWeapon(CurrentWeapon);
+                }
+            }
+        }
+
+        public void EquipWeapon(WeaponData weapon)
+        {
+            if (weapon != null)
+            {
+                equippedWeapon = weapon;
+
+                UnitAnimationHandler animationHandler = GetComponentInChildren<UnitAnimationHandler>(true);
+                animationHandler.ToggleEquipWeapon(weapon);
+            }
+            else
+            {
+                Debug.Log("Attempting to unequip weapon.");
+                equippedWeapon = null;
+
+                UnitAnimationHandler animationHandler = GetComponentInChildren<UnitAnimationHandler>(true);
+                animationHandler.ToggleEquipWeapon(null);
+            }
         }
 
         //Updates the characters healthbar. 
