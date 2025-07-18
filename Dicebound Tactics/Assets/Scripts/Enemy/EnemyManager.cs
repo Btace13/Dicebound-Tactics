@@ -85,7 +85,7 @@ public class EnemyManager : Entity
             yield return new WaitForSeconds(1f);
 
             // Wait for ability animation/logic to complete using coroutine
-            yield return StartCoroutine(ability.Execute(this, target));
+            yield return ability.Execute(this, target);
 
             CameraManager.Instance.ShakeActiveCamera();
             yield return new WaitForSeconds(.2f);
@@ -111,7 +111,7 @@ public class EnemyManager : Entity
 
     private void EndAITurn()
     {
-        turnManager.EndTurn();
+        turnManager.AdvanceTurn();
     }
 
     public override void Die()

@@ -54,6 +54,12 @@ public class TurnOrderHandler : MonoBehaviour
 
         CurrentTurnHolderImage.SetActive(true);
         CurrentTurnHolderImage.GetComponent<Image>().sprite = TurnManager.Instance.GetCurrentUnit().portrait;
+        // get textmeshpro component in child and update it with the name of the current unit
+        var textMeshPro = CurrentTurnHolderImage.GetComponentInChildren<TMPro.TextMeshProUGUI>();
+        if (textMeshPro != null)
+        {
+            textMeshPro.text = TurnManager.Instance.GetCurrentUnit().name;
+        }
     }
 
     public async Task ClearTurnOrder()
