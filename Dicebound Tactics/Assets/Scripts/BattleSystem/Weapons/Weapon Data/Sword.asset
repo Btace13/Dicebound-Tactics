@@ -18,3 +18,7 @@ MonoBehaviour:
   PositionOffset: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0}
   EquipTime: 0.5
+  Icon: {fileID: 21300000, guid: 5233e35143e44994d857d4edb5fbc157, type: 3}
+  WeaponTypeIcon: {fileID: 21300000, guid: 37d951af76b142d4980dfdcfbaa054f3, type: 3}
+  RarityColor: {r: 0.7686275, g: 0.45098042, b: 0.45098042, a: 1}
+  rarityAmount: 3

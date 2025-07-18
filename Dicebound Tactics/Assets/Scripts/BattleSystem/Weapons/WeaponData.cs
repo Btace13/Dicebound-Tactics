@@ -9,4 +9,11 @@ public class WeaponData : ScriptableObject
     public Vector3 PositionOffset;
     public Vector3 RotationOffset;
     public float EquipTime = 0.5f; // Time taken to equip the weapon
+
+    [Header("UI Settings")]
+    public Sprite Icon;
+    public Sprite WeaponTypeIcon;
+    public Color RarityColor;
+    [Range(0, 5)]
+    public int rarityAmount = 1; // Number of times the rarity color is applied
 }
