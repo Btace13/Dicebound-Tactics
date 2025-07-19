@@ -51,11 +51,6 @@ public class CombatEncounter : MonoBehaviour
     [Header("Encounter References")]
     [SerializeField] private EncounterSide[] encounterSides = new EncounterSide[2];
     public List<EnemyManager> Enemies = new List<EnemyManager>();
-
-    [Header("Events")]
-    public GameEventCombatEncounter OnEncounterStarted;
-    public GameEventCombatEncounter OnEncounterEnded;
-
     public void Update()
     {
         if (IsCompleted) return;
@@ -231,10 +226,7 @@ public class CombatEncounter : MonoBehaviour
             enemy.EquipWeapon(enemy.CurrentWeapon); // Ensure the enemy has their weapon equipped for combat
         }
 
-        if (OnEncounterStarted != null)
-        {
-            EventManager.TriggerCombatEncounterStarted(this);
-        }
+        EventManager.TriggerCombatEncounterStarted(this);
 
         // Initialize encounter logic here, such as spawning enemies, setting up UI, etc.
         Debug.Log("Combat Encounter Started");
@@ -268,10 +260,7 @@ public class CombatEncounter : MonoBehaviour
             enemy.overworldController.SetShouldSprint(false); // Disable sprinting for combat movement
         }
 
-        if (OnEncounterEnded != null)
-        {
-            EventManager.TriggerCombatEncounterEnded(this);
-        }
+        EventManager.TriggerCombatEncounterEnded(this);
     }
 
     public bool ShouldEndEncounter()
