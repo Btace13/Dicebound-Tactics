@@ -5,5 +5,6 @@ using TMPro;
 public class ColumnDefinition
 {
     public string Header;
-    public TextAlignmentOptions Alignment;
+    public float Flex = 1f; // Flex value for proportional width
+    public TextAlignmentOptions Alignment = TextAlignmentOptions.Left;
 }

@@ -9,7 +9,20 @@ public class TabUI : MonoBehaviour
     [BoxGroup("References"), SerializeField] private Image tabIcon;
     [BoxGroup("References"), SerializeField] private Image tabBackground;
 
-    public string TabName { get; private set; }
+    private string _tabName;
+    public string TabName
+    {
+        get => _tabName;
+        set
+        {
+            _tabName = value;
+            if (tabText != null)
+            {
+                tabText.text = value;
+            }
+        }
+    }
+
     public bool IsSelected
     {
         get

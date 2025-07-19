@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using Sirenix.OdinInspector;
+using System.Collections.Generic;
 
 public class TabController : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class TabController : MonoBehaviour
 
     public event Action<string> OnTabSelected;
 
+    public List<TabUI> Tabs { get; private set; } = new List<TabUI>();
     public TabUI SelectedTab { get; private set; }
 
     public void TabClicked(Button button)
@@ -30,9 +32,18 @@ public class TabController : MonoBehaviour
 #if UNITY_EDITOR
     private void OnValidate()
     {
-        TabUI[] tabs = GetComponentsInChildren<TabUI>(true);
+        if (Tabs.Count == 0)
+        {
+            Tabs = new List<TabUI>(GetComponentsInChildren<TabUI>(true));
+        }
 
-        foreach (var tab in tabs)
+        if (Tabs == null || Tabs.Count == 0)
+        {
+            Debug.LogWarning("No tabs found in TabController.");
+            return;
+        }
+
+        foreach (var tab in Tabs)
         {
             if (tab == null) continue;
 
@@ -44,6 +55,13 @@ public class TabController : MonoBehaviour
             {
                 tab.UpdateTabColor(unselectedTabColor, unselectedTextColor);
             }
+        }
+
+        // Set the first tab as selected if none is selected
+        if (SelectedTab == null && Tabs.Count > 0)
+        {
+            SelectedTab = Tabs[0];
+            SelectedTab.UpdateTabColor(selectedTabColor, selectedTextColor);
         }
     }
 #endif

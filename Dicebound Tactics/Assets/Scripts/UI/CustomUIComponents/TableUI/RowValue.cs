@@ -4,6 +4,5 @@ using TMPro;
 public class RowValue
 {
     public string Value;
-    public float Width;
     public TextAlignmentOptions Alignment = TextAlignmentOptions.Left;
 }

@@ -9,7 +9,7 @@ public class PageView : MonoBehaviour
     public string PageName;
 
     [BoxGroup("Page Info")]
-    [SerializeField] private TextMeshProUGUI headerText;
+    [SerializeField] private TabUI tab;
 
     [BoxGroup("Table")]
     [SerializeField] private TableUI table;
@@ -17,10 +17,26 @@ public class PageView : MonoBehaviour
     [BoxGroup("Table")]
     [SerializeField] private List<RowData> mockData;
 
+    [BoxGroup("Table")]
+    [SerializeField] private ColumnDefinitionsSO columnDefinitionsSO;
+
     [Button("Initialize Page With Mock Data")]
-    public void InitializePage()
+    public void InitializePage(List<RowData> rowData = null)
     {
-        headerText.text = PageName.ToUpper();
-        table.BuildTable(mockData);
+        tab.TabName = PageName.ToUpper();
+        var data = rowData ?? mockData;
+        table.BuildTable(columnDefinitionsSO.Columns, data);
     }
+
+    public void SetHeader(string text)
+    {
+        tab.TabName = text;
+    }
+
+#if UNITY_EDITOR
+    private void OnValidate()
+    {
+        tab.TabName = PageName.ToUpper();
+    }
+#endif
 }
