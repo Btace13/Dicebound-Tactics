@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3158b409121b27a46ab321e38b83339b, type: 3}
+  m_Name: TableData
+  m_EditorClassIdentifier: 
+  ColumnDefinitions: {fileID: 11400000, guid: 46db98f38a32db24c8193d4e0a7358b6, type: 2}
+  Rows:
+  - Values:
+    - Value: Bob Kavinski
+      Alignment: 513
+    - Value: Soldier
+      Alignment: 513
+    - Value: 12
+      Alignment: 513
+    - Value: C
+      Alignment: 513
+    Icon: {fileID: 608107486315885883, guid: 30e6bd799b8af5c4887ef95c0b264a16, type: 3}
+  - Values:
+    - Value: Rodrigo Paz
+      Alignment: 513
+    - Value: Guard
+      Alignment: 513
+    - Value: 11
+      Alignment: 513
+    - Value: D
+      Alignment: 513
+    Icon: {fileID: 608107486315885883, guid: 30e6bd799b8af5c4887ef95c0b264a16, type: 3}
