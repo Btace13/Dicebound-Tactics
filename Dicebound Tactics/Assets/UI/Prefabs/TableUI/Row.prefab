@@ -52,6 +52,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textColumnPrefab: {fileID: 7698521815804814714, guid: 49c8506baf5d4c240a9d289593dcfd04, type: 3}
+  rowBackground: {fileID: 2819288716446747289}
+  rowText: {fileID: 0}
+  layoutGroup: {fileID: 468773326525953374}
 --- !u!114 &468773326525953374
 MonoBehaviour:
   m_ObjectHideFlags: 0

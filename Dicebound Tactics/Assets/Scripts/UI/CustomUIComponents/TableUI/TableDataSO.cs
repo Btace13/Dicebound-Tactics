@@ -6,6 +6,9 @@ using System.Collections.Generic;
 public class TableDataSO : ScriptableObject
 {
     [Required]
+    public string TableName = "New Table";
+
+    [Required]
     public ColumnDefinitionsSO ColumnDefinitions;
 
     [TableList]

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,26 +13,41 @@ public class ModularTableUI : MonoBehaviour
     [BoxGroup("References")]
     [SerializeField] private TabController tabController;
 
+    [BoxGroup("References")]
+    [SerializeField] private GameObject pageViewPrefab;
+
+    [BoxGroup("References")]
+    [SerializeField] private Transform pageContainer;
+
+    [BoxGroup("Table Data")]
+    [SerializeField] private List<TableDataSO> tableDataList;
+
     [BoxGroup("Pages")]
-    [SerializeField] private List<PageView> allPages;
+    private List<PageView> allPages = new List<PageView>();
 
-    private Coroutine syncTabsCoroutine;
 
-    private void Start()
+    private IEnumerator Start()
     {
-        SyncTabsWithPages();
-        tabController.OnTabSelected += ShowPage;
-        ShowPage("Weapons"); // Default
-    }
-
-    [Button("Sync Tabs with Pages")]
-    public void SyncTabsWithPages()
-    {
-        if (syncTabsCoroutine != null)
+        // Instantiate PageViews for each TableDataSO
+        foreach (var tableData in tableDataList)
         {
-            StopCoroutine(syncTabsCoroutine);
+            var pageGO = Instantiate(pageViewPrefab, pageContainer);
+            var pageView = pageGO.GetComponent<PageView>();
+            pageView.PageName = tableData.name;
+
+            LayoutRebuilder.ForceRebuildLayoutImmediate(pageGO.GetComponent<RectTransform>());
+            yield return new WaitForEndOfFrame(); // Ensure UI updates before initializing
+
+            yield return StartCoroutine(pageView.InitializePage(tableData.Rows, tableData.ColumnDefinitions));
+
+            pageGO.SetActive(false);
+            allPages.Add(pageView);
         }
-        syncTabsCoroutine = StartCoroutine(SyncTabsWithPagesCoroutine());
+
+        yield return StartCoroutine(SyncTabsWithPagesCoroutine());
+        tabController.OnTabSelected += ShowPage;
+
+        ShowPage(0); // Default
     }
 
     private IEnumerator SyncTabsWithPagesCoroutine()
@@ -42,8 +58,6 @@ public class ModularTableUI : MonoBehaviour
             yield break;
         }
 
-        print($"Syncing {tabController.Tabs.Count} tabs with {allPages.Count} pages.");
-
         yield return StartCoroutine(tabController.SyncTabsWithPages(allPages));
 
         print($"Final tab count: {tabController.Tabs.Count}");
@@ -52,6 +66,8 @@ public class ModularTableUI : MonoBehaviour
         for (int i = 0; i < allPages.Count; i++)
         {
             var page = allPages[i];
+            page.Tab = tabController.Tabs[i];
+
             if (page != null && page.Tab != null)
             {
                 page.Tab.TabName = page.PageName;
@@ -59,24 +75,31 @@ public class ModularTableUI : MonoBehaviour
         }
     }
 
-    [Button("Force Show Page: Weapons")]
-    public void ForceShowWeaponsPage()
+    public void ShowPage(int pageIndex)
     {
-        ShowPage("Weapons");
+        if (pageIndex < 0 || pageIndex >= allPages.Count)
+        {
+            Debug.LogWarning($"Page index {pageIndex} is out of range. Total pages: {allPages.Count}");
+            return;
+        }
+
+        ShowPage(allPages[pageIndex].PageName);
     }
 
     public void ShowPage(string pageName)
     {
         foreach (var page in allPages)
         {
-            bool isActive = page.PageName == pageName;
+            bool isActive = page.PageName.ToLower() == pageName.ToLower();
             page.gameObject.SetActive(isActive);
+
             if (isActive)
             {
                 titleText.text = page.PageName;
                 page.SetHeader(page.PageName.ToUpper());
-                page.InitializePage();
             }
         }
+
+        tabController.UpdateTabColors();
     }
 }
