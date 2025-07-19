@@ -10,6 +10,7 @@ public class PageView : MonoBehaviour
 
     [BoxGroup("Page Info")]
     [SerializeField] private TabUI tab;
+    public TabUI Tab { get { return tab; } set { tab = value; } }
 
     [BoxGroup("Table")]
     [SerializeField] private TableUI table;
