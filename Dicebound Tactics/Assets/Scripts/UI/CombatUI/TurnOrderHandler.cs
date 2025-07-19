@@ -8,7 +8,20 @@ public class TurnOrderHandler : MonoBehaviour
     [SerializeField] GameObject ImageContainer;
     [SerializeField] GameObject CurrentTurnHolderImage;
 
-    public async void OnTurnStarted()
+    private void Awake()
+    {
+        // Event Listeners
+        EventManager.OnNewActiveEntity += OnTurnStarted;
+        EventManager.OnCombatEncounterEnded += OnCombatEncounterEnded;
+    }
+
+    void OnDisable()
+    {
+        EventManager.OnNewActiveEntity -= OnTurnStarted;
+        EventManager.OnCombatEncounterEnded -= OnCombatEncounterEnded;
+    }
+
+    public async void OnTurnStarted(Entity entity)
     {
         ImageContainer.SetActive(true);
 
@@ -18,12 +31,11 @@ public class TurnOrderHandler : MonoBehaviour
             await CreateTurnOrderPortraits();
         }
 
-        UpdateCurrentTurnHolder();
+        UpdateCurrentTurnHolder(entity);
     }
 
     public void OnCombatEncounterEnded(CombatEncounter encounter)
     {
-        // Handle the end of the combat encounter
         ClearTurnOrder();
     }
 
@@ -44,21 +56,23 @@ public class TurnOrderHandler : MonoBehaviour
         }
     }
 
-    private void UpdateCurrentTurnHolder()
+    private void UpdateCurrentTurnHolder(Entity entity = null)
     {
-        if (TurnManager.Instance == null || TurnManager.Instance.GetCurrentUnit() == null)
+        Entity turnHolder = entity ?? TurnManager.Instance.GetCurrentUnit();
+
+        if (turnHolder == null || turnHolder.portrait == null)
         {
             CurrentTurnHolderImage.SetActive(false);
             return;
         }
 
         CurrentTurnHolderImage.SetActive(true);
-        CurrentTurnHolderImage.GetComponent<Image>().sprite = TurnManager.Instance.GetCurrentUnit().portrait;
+        CurrentTurnHolderImage.GetComponent<Image>().sprite = turnHolder.portrait;
         // get textmeshpro component in child and update it with the name of the current unit
         var textMeshPro = CurrentTurnHolderImage.GetComponentInChildren<TMPro.TextMeshProUGUI>();
         if (textMeshPro != null)
         {
-            textMeshPro.text = TurnManager.Instance.GetCurrentUnit().name;
+            textMeshPro.text = turnHolder.name;
         }
     }
 

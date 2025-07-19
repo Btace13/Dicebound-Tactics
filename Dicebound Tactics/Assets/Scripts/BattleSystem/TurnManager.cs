@@ -13,13 +13,6 @@ public class TurnManager : MonoBehaviour
     public List<EnemyManager> enemyUnits = new();
     public bool GameIsPlaying;
 
-    [Header("Events")]
-    public GameEvent BattleStarted;
-    public GameEventGameObject startNewTurn;
-    public GameEventCharacterManager startNewCharacterTurn;
-    public GameEventEnemyManager startNewEnemyTurn;
-    public GameEvent GameEnded;
-
     private List<Entity> turnOrder = new();
     private int currentTurnIndex = 0;
     private Entity currentUnit;
@@ -56,7 +49,7 @@ public class TurnManager : MonoBehaviour
     public void StartBattle()
     {
         GameIsPlaying = true;
-        BattleStarted?.Raise();
+        EventManager.TriggerBattleStarted();
 
         foreach (var character in playerUnits)
         {
@@ -112,13 +105,13 @@ public class TurnManager : MonoBehaviour
             {
                 currentUnit = unit;
                 unit.StartTurn();
-                startNewTurn.Raise(unit.gameObject);
+                EventManager.TriggerNewActiveEntity(unit);
 
                 if (unit is CharacterManager character)
-                    startNewCharacterTurn?.Raise(character);
+                    EventManager.TriggerCharacterTurnStarted(character);
                 else if (unit is EnemyManager enemy)
                 {
-                    startNewEnemyTurn?.Raise(enemy);
+                    EventManager.TriggerEnemyTurnStarted(enemy);
                     enemy.BeginAITurn();
                 }
                 return;
@@ -163,11 +156,6 @@ public class TurnManager : MonoBehaviour
 
     public void AdvanceTurn()
     {
-        if (currentUnit != null && currentUnit.isAlive)
-        {
-            currentUnit.endTurn?.Raise();
-        }
-
         EndTurn();
     }
 
@@ -236,6 +224,6 @@ public class TurnManager : MonoBehaviour
             BattleEndedDialogManager.Instance.Show(false);
         }
 
-        GameEnded?.Raise();
+        EventManager.TriggerGameOver();
     }
 } 

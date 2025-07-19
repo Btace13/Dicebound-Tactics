@@ -5,6 +5,7 @@ using DG.Tweening;
 using Unity.VisualScripting;
 using System.Linq;
 using TacticsToolkit;
+using andywiecko.BurstTriangulator;
 
 // Camera state class to store camera position data
 public class CameraState
@@ -65,6 +66,18 @@ public class CameraManager : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(this.gameObject);
         }
+
+        // Event Listeners
+        EventManager.OnNewActiveEntity += SetActiveCombatCharacter;
+        EventManager.OnTargetChanged += SetCombatTarget;
+        EventManager.OnCombatEncounterEnded += HandleCombatEncounterEnded;
+    }
+
+    private void OnDisable()
+    {
+        EventManager.OnNewActiveEntity -= SetActiveCombatCharacter;
+        EventManager.OnTargetChanged -= SetCombatTarget;
+        EventManager.OnCombatEncounterEnded -= HandleCombatEncounterEnded;
     }
 
     public void RegisterCamera(string cameraName, BaseCameraController cameraController)
@@ -96,6 +109,11 @@ public class CameraManager : MonoBehaviour
         {
             Debug.LogWarning($"Camera with name {cameraName} not found.");
         }
+    }
+
+    private void HandleCombatEncounterEnded(CombatEncounter encounter)
+    {
+        TrySetActiveCamera("OverworldCamera");
     }
 
     public void SetActiveCamera(BaseCameraController cameraController)
@@ -353,8 +371,8 @@ public class CameraManager : MonoBehaviour
         activeCharacter = character;
     }
 
-    public void SetActiveCombatCharacter(GameObject characterObject)
+    public void SetActiveCombatCharacter(Entity entity)
     {
-        SetActiveCombatCharacter(characterObject.transform);
+        SetActiveCombatCharacter(entity.transform);
     }
 }

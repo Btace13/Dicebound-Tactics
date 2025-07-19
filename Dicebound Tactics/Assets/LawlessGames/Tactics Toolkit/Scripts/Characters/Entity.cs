@@ -53,7 +53,6 @@ namespace TacticsToolkit
         public bool isAlive = true;
         [HideInInspector]
         public bool isActive;
-        public GameEvent endTurn;
         public HealthBarUI healthBar;
         [HideInInspector]
         public int previousTurnCost = -1;
@@ -287,9 +286,6 @@ namespace TacticsToolkit
             isAlive = false;
             StartCoroutine(DieCoroutine());
             UnlinkCharacterToTile();
-
-            if (isActive)
-                endTurn.Raise();
         }
 
         public void HealEntity(int value)

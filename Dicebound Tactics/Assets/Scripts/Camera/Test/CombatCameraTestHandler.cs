@@ -12,7 +12,6 @@ public class CombatCameraTestHandler : MonoBehaviour
 
     [Header("Event Handlers")]
     public UnityEvent<Transform> OnTargetChanged;
-    public GameEventGameObject OnActiveCharacterChanged;
 
     private int currentTargetIndex = 0;
     private int currentActiveCharacterIndex = 0;
@@ -42,7 +41,7 @@ public class CombatCameraTestHandler : MonoBehaviour
         }
         currentActiveCharacterIndex = index;
 
-        OnActiveCharacterChanged?.Raise(turnManager.playerUnits[currentActiveCharacterIndex].gameObject);
+        EventManager.TriggerNewActiveEntity(turnManager.playerUnits[currentActiveCharacterIndex]);
     }
 
     [Button("Previous Target", ButtonSizes.Medium, ButtonStyle.CompactBox)]

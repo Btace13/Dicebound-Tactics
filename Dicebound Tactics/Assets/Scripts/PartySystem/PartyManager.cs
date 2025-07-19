@@ -28,9 +28,17 @@ public class PartyManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        // Event Listeners
+        EventManager.OnGameStateChanged += OnGameStateChanged;
     }
 
-    public void InitializeParty(List<CharacterManager> initialMembers)
+  void OnDisable()
+  {
+      EventManager.OnGameStateChanged -= OnGameStateChanged;
+  }
+
+  public void InitializeParty(List<CharacterManager> initialMembers)
     {
         if (initialMembers == null || initialMembers.Count == 0)
         {

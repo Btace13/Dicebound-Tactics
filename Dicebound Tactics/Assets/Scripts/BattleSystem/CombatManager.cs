@@ -19,10 +19,6 @@ public class CombatManager : MonoBehaviour
     public TurnManager TurnManager => turnManager;
     public CombatUIHandler CombatUIHandler => combatUIHandler;
 
-    [Header("Events")]
-    public GameEventEntity OnTargetSelected;
-    public GameEventCharacterManager startNewCharacterTurn;
-
     private CombatItem _selectedItem;
     private AbilitySO _selectedAbility;
 
@@ -45,6 +41,14 @@ public class CombatManager : MonoBehaviour
 
         if (combatUIHandler == null)
             Debug.LogError("CombatUIHandler is not assigned in CombatManager.");
+
+        // Event Listeners
+        EventManager.OnGameStateChanged += OnGameStateChanged;
+    }
+
+    void OnDisable()
+    {
+        EventManager.OnGameStateChanged -= OnGameStateChanged;
     }
 
     public void OnGameStateChanged(GameState newState)
@@ -271,7 +275,7 @@ public class CombatManager : MonoBehaviour
             _selectedAbility = null;
             _selectedItem = null;
 
-            startNewCharacterTurn?.Raise(currentUnit as CharacterManager);
+            EventManager.TriggerCharacterTurnStarted(currentUnit as CharacterManager);
         });
     }
 }

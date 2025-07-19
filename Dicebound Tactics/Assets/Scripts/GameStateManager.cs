@@ -23,9 +23,6 @@ public class GameStateManager : MonoBehaviour
     [SerializeField] private CanvasGroup gameOverScreenCanvasGroup;
     [SerializeField] private CanvasGroup gameOverTextCanvasGroup;
 
-    [Header("Game State Events")]
-    public GameEventGameState OnGameStateChanged;
-
     public GameState CurrentGameState => currentGameState;
     private UDictionary<string, bool> flags = new();
 
@@ -40,6 +37,18 @@ public class GameStateManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        // Event Listeners
+        EventManager.OnGameOver += ShowGameOverScreen;
+        EventManager.OnCombatEncounterStarted += OnCombatEncounterStarted;
+        EventManager.OnCombatEncounterEnded += OnCombatEncounterEnded;
+    }
+
+    void OnDisable()
+    {
+        EventManager.OnGameOver -= ShowGameOverScreen;
+        EventManager.OnCombatEncounterStarted -= OnCombatEncounterStarted;
+        EventManager.OnCombatEncounterEnded -= OnCombatEncounterEnded;
     }
 
     private void Start()
@@ -50,14 +59,14 @@ public class GameStateManager : MonoBehaviour
     public void InitializeGameState(GameState initialState)
     {
         currentGameState = initialState;
-        OnGameStateChanged?.Raise(currentGameState);
+        EventManager.TriggerGameStateChanged(currentGameState);
         Debug.Log($"Game state initialized to: {currentGameState}");
     }
 
     public void ChangeGameState(GameState newState)
     {
         currentGameState = newState;
-        OnGameStateChanged?.Raise(currentGameState);
+        EventManager.TriggerGameStateChanged(currentGameState);
         Debug.Log($"Game state changed to: {currentGameState}");
     }
 

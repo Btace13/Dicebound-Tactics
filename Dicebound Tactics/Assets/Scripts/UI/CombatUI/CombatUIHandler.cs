@@ -76,6 +76,18 @@ public class CombatUIHandler : MonoBehaviour
         {
             Debug.LogError("ItemPanel is not set in CombatUIHandler.");
         }
+
+        // Event Listeners
+        EventManager.OnBattleStarted += OpenActionPanel;
+        EventManager.OnCharacterTurnStarted += HandleNewCharacterTurn;
+        EventManager.OnEnemyTurnStarted += HandleNewEnemyTurn;
+    }
+
+    private void OnDisable()
+    {
+        EventManager.OnBattleStarted -= OpenActionPanel;
+        EventManager.OnCharacterTurnStarted -= HandleNewCharacterTurn;
+        EventManager.OnEnemyTurnStarted -= HandleNewEnemyTurn;
     }
 
     public void MoveCanvasToCharacter(CharacterManager character)
@@ -172,6 +184,17 @@ public class CombatUIHandler : MonoBehaviour
                 Debug.LogError($"No camera found for panel: {panel.name}");
             }
         }
+    }
+
+    public void OpenActionPanel()
+    {
+        if (ActionPanel == null)
+        {
+            Debug.LogError("ActionPanel is not set in CombatUIHandler.");
+            return;
+        }
+
+        OpenPanel(ActionPanel);
     }
 
     public void CloseCurrentPanel()
@@ -328,5 +351,17 @@ public class CombatUIHandler : MonoBehaviour
                 screenSpaceCanvasGroup.interactable = false;
                 screenSpaceCanvasGroup.blocksRaycasts = false;
             });
+    }
+
+    private void HandleNewCharacterTurn(CharacterManager character)
+    {
+        ShowConfirmButton(true);
+        MoveCanvasToCharacter(character);
+        OpenActionPanel();
+    }
+
+    public void HandleNewEnemyTurn(EnemyManager enemy)
+    {
+        CloseAllPanels();
     }
 }

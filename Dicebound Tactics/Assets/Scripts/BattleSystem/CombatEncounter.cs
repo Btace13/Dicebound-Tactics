@@ -233,7 +233,7 @@ public class CombatEncounter : MonoBehaviour
 
         if (OnEncounterStarted != null)
         {
-            OnEncounterStarted.Raise(this);
+            EventManager.TriggerCombatEncounterStarted(this);
         }
 
         // Initialize encounter logic here, such as spawning enemies, setting up UI, etc.
@@ -270,7 +270,7 @@ public class CombatEncounter : MonoBehaviour
 
         if (OnEncounterEnded != null)
         {
-            OnEncounterEnded.Raise(this);
+            EventManager.TriggerCombatEncounterEnded(this);
         }
     }
 

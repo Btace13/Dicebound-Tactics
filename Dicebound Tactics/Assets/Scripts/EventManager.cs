@@ -7,8 +7,8 @@ using TacticsToolkit;
 public class EventManager : MonoBehaviour
 {
   // Combat Events
-  public static event Action<GameEventCombatEncounter> OnCombatEncounterStarted;
-  public static event Action<GameEventCombatEncounter> OnCombatEncounterEnded;
+  public static event Action<CombatEncounter> OnCombatEncounterStarted;
+  public static event Action<CombatEncounter> OnCombatEncounterEnded;
   public static event Action OnBattleStarted;
   public static event Action OnBattleEnded;
   public static event Action OnGameOver;
@@ -16,7 +16,7 @@ public class EventManager : MonoBehaviour
   public static event Action<EnemyManager> OnEnemyTurnStarted;
   public static event Action<Entity> OnNewActiveEntity;
   public static event Action<Entity> OnTargetChanged;
-  public static event Action<GameEventGameState> OnGameStateChanged;
+  public static event Action<GameState> OnGameStateChanged;
 
   // UI Events
   public static event Action OnMenuButtonPressed;
@@ -26,11 +26,11 @@ public class EventManager : MonoBehaviour
 
 
   // Methods
-  public static void TriggerCombatEncounterStarted(GameEventCombatEncounter encounter)
+  public static void TriggerCombatEncounterStarted(CombatEncounter encounter)
   {
     OnCombatEncounterStarted?.Invoke(encounter);
   }
-  public static void TriggerCombatEncounterEnded(GameEventCombatEncounter encounter)
+  public static void TriggerCombatEncounterEnded(CombatEncounter encounter)
   {
     OnCombatEncounterEnded?.Invoke(encounter);
   }
@@ -55,7 +55,7 @@ public class EventManager : MonoBehaviour
   public static void TriggerTargetChanged(Entity entity) {
     OnTargetChanged?.Invoke(entity);
   }
-  public static void TriggerGameStateChanged(GameEventGameState state) {
+  public static void TriggerGameStateChanged(GameState state) {
     OnGameStateChanged?.Invoke(state);
   }
   public static void TriggerMenuButtonPressed() {

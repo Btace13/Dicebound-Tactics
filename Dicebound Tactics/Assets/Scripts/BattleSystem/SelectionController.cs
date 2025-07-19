@@ -8,7 +8,6 @@ public class SelectionController : MonoBehaviour
   public GameObject highlightIndicatorPrefab;
 
   public bool canUseMouseSelection = false;
-  public GameEventEntity onEntitySelected;
   public List<Entity> SelectedEntities = new();
 
   [Header("Selection Settings")]
@@ -150,7 +149,7 @@ public class SelectionController : MonoBehaviour
         indicator.transform.SetParent(entity.transform);
         indicators[entity] = indicator;
       }
-      onEntitySelected?.Raise(entity);
+      EventManager.TriggerTargetChanged(entity);
     }
     else if (additive && SelectedEntities.Contains(entity))
     {

@@ -305,8 +305,6 @@ namespace TacticsToolkit
             yield return new WaitForSeconds(0.25f);
             OverlayController.Instance.ClearTiles();
             logAction.Raise(gameObject.name + ": End Turn");
-
-            endTurn.Raise();
         }
 
         //Need to find best senario
