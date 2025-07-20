@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Sirenix.OdinInspector;
+using UnityEngine.Events;
 
 public class TabUI : MonoBehaviour
 {
@@ -32,6 +33,28 @@ public class TabUI : MonoBehaviour
     }
 
     private TabController _tabController;
+
+    public UnityAction OnTabClicked;
+
+    private void Awake()
+    {
+        if (TryGetComponent(out Button button))
+        {
+            button.onClick.AddListener(() =>
+            {
+                OnTabClicked?.Invoke();
+
+                if (_tabController != null)
+                {
+                    _tabController.TabClicked(this);
+                }
+            });
+        }
+        else
+        {
+            Debug.LogWarning("TabUI requires a Button component to function properly.");
+        }
+    }
 
     public void Initialize(string tabName, Sprite icon)
     {

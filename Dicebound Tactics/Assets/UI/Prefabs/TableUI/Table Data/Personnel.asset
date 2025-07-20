@@ -10,8 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3158b409121b27a46ab321e38b83339b, type: 3}
-  m_Name: TableData
+  m_Name: Personnel
   m_EditorClassIdentifier: 
+  TableName: Personnel
   ColumnDefinitions: {fileID: 11400000, guid: 46db98f38a32db24c8193d4e0a7358b6, type: 2}
   Rows:
   - Values:

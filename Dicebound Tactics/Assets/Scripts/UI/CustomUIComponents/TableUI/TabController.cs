@@ -19,16 +19,16 @@ public class TabController : MonoBehaviour
     public List<TabUI> Tabs { get; private set; } = new List<TabUI>();
     public TabUI SelectedTab { get; private set; }
 
-    public void TabClicked(Button button)
+    public void TabClicked(TabUI tab)
     {
-        OnTabSelected?.Invoke(button.name);
+        OnTabSelected?.Invoke(tab.TabName);
 
         if (SelectedTab != null)
         {
             SelectedTab.UpdateTabColor(unselectedTabColor, unselectedTextColor);
         }
 
-        SelectedTab = button.GetComponent<TabUI>();
+        SelectedTab = tab;
         SelectedTab.UpdateTabColor(selectedTabColor, selectedTextColor);
     }
 
@@ -67,26 +67,18 @@ public class TabController : MonoBehaviour
                 }
                 if (page.Tab != null)
                 {
+                    page.Tab.Initialize(page.PageName, null); // Assuming no icon is set, pass null
                     Tabs.Add(page.Tab);
                 }
             }
         }
     }
 
-#if UNITY_EDITOR
-    private void OnValidate()
+    public void UpdateTabColors()
     {
-        if (Tabs == null || Tabs.Count == 0)
-        {
-            Debug.LogWarning("No tabs found in TabController.");
-            return;
-        }
-
         foreach (var tab in Tabs)
         {
-            if (tab == null) continue;
-
-            if (tab.IsSelected)
+            if (tab == SelectedTab)
             {
                 tab.UpdateTabColor(selectedTabColor, selectedTextColor);
             }
@@ -95,13 +87,5 @@ public class TabController : MonoBehaviour
                 tab.UpdateTabColor(unselectedTabColor, unselectedTextColor);
             }
         }
-
-        // Set the first tab as selected if none is selected
-        if (SelectedTab == null && Tabs.Count > 0)
-        {
-            SelectedTab = Tabs[0];
-            SelectedTab.UpdateTabColor(selectedTabColor, selectedTextColor);
-        }
     }
-#endif
 }
