@@ -13,7 +13,9 @@ public class EventManager : MonoBehaviour
   public static event Action OnBattleEnded;
   public static event Action OnGameOver;
   public static event Action<CharacterManager> OnCharacterTurnStarted;
+  public static event Action<CharacterManager> OnCharacterTurnEnded;
   public static event Action<EnemyManager> OnEnemyTurnStarted;
+  public static event Action<EnemyManager> OnEnemyTurnEnded;
   public static event Action<Entity> OnNewActiveEntity;
   public static event Action<Entity> OnTargetChanged;
   public static event Action<GameState> OnGameStateChanged;
@@ -46,8 +48,14 @@ public class EventManager : MonoBehaviour
   public static void TriggerCharacterTurnStarted(CharacterManager character) {
     OnCharacterTurnStarted?.Invoke(character);
   }
+  public static void TriggerCharacterTurnEnded(CharacterManager character) {
+    OnCharacterTurnEnded?.Invoke(character);
+  }
   public static void TriggerEnemyTurnStarted(EnemyManager enemy) {
     OnEnemyTurnStarted?.Invoke(enemy);
+  }
+  public static void TriggerEnemyTurnEnded(EnemyManager enemy) {
+    OnEnemyTurnEnded?.Invoke(enemy);
   }
   public static void TriggerNewActiveEntity(Entity entity) {
     OnNewActiveEntity?.Invoke(entity);

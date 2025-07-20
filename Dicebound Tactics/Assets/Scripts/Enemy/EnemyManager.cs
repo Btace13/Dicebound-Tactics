@@ -11,6 +11,7 @@ public class EnemyManager : Entity
     public OverworldEnemyController overworldController;
     private TurnManager turnManager;
 
+
     private void Awake()
     {
         overworldController = GetComponent<OverworldEnemyController>();
@@ -18,6 +19,9 @@ public class EnemyManager : Entity
         {
             Debug.LogWarning($"No OverworldEnemyController found on {name}. Please ensure it is added for proper overworld functionality.");
         }
+
+        // Event Listeners
+        EventManager.OnEnemyTurnStarted += HandleEnemyTurnStarted;
     }
 
     protected override void Start()
@@ -38,14 +42,16 @@ public class EnemyManager : Entity
 
     }
 
+    private void HandleEnemyTurnStarted(EnemyManager enemy)
+    {
+        if (enemy == this)
+        {
+            BeginAITurn();
+        }
+    }
+
     public void BeginAITurn()
     {
-        if (!isAlive || CurrentAP <= 0)
-        {
-            EndAITurn();
-            return;
-        }
-
         StartCoroutine(ExecuteAITurn());
     }
 
@@ -53,47 +59,59 @@ public class EnemyManager : Entity
     {
         Debug.Log($"[AI] {name} begins turn with {CurrentAP} AP");
 
-        while (CurrentAP > 0)
+        while (true)
         {
             var usableAbilities = abilityLoadout
                 .Where(a => a.apCost <= CurrentAP)
                 .ToList();
 
             if (usableAbilities.Count == 0)
+            {
+                Debug.Log($"[AI] {name} has no abilities it can afford with {CurrentAP} AP.");
                 break;
+            }
 
-            AbilitySO ability = usableAbilities[Random.Range(0, usableAbilities.Count)];
+            var ability = usableAbilities[Random.Range(0, usableAbilities.Count)];
 
             var targets = turnManager.playerUnits
                 .Where(p => p != null && p.isAlive)
                 .ToList();
 
-            Debug.Log($"Targets available for {ability.abilityName}: {string.Join(", ", targets.Select(t => t.name))}");
-
             if (targets.Count == 0)
+            {
+                Debug.Log("[AI] No valid targets remain.");
                 break;
+            }
 
             var target = targets[Random.Range(0, targets.Count)];
 
-            Debug.Log($"[AI] {name} uses {ability.abilityName} on {target.name}");
+            Debug.Log($"[AI] {name} using {ability.abilityName} (cost {ability.apCost}) on {target.name}");
 
-            //need to add logic for timing and animations here
+            // Spend AP immediately to prevent double usage
+            if (!SpendAP(ability.apCost))
+            {
+                Debug.LogWarning($"[AI] Failed to spend AP for {ability.abilityName}. Skipping turn.");
+                break;
+            }
+
+            // Camera setup
             CameraManager.Instance.SetActiveCombatCharacter(target.transform);
             CameraManager.Instance.SetCombatTarget(transform);
-
             CameraManager.Instance.TrySetActiveCamera("EnemyAttackCamera");
-            yield return new WaitForSeconds(1f);
 
-            // Wait for ability animation/logic to complete using coroutine
+            // Wait for ability execution to finish
             yield return ability.Execute(this, target);
 
+            // Optional shake or visual cue
             CameraManager.Instance.ShakeActiveCamera();
-            yield return new WaitForSeconds(.2f);
+
+            yield return new WaitForSeconds(0.5f); // slight pacing delay between abilities
         }
 
-        Debug.Log($"[AI] {name} ends turn with {CurrentAP} AP");
+        Debug.Log($"[AI] {name} ends turn with {CurrentAP} AP remaining");
         EndAITurn();
     }
+
 
     public static Dice CreateDiceFromProfile(EnemyDiceProfile profile)
     {
@@ -111,7 +129,7 @@ public class EnemyManager : Entity
 
     private void EndAITurn()
     {
-        turnManager.AdvanceTurn();
+        EventManager.TriggerEnemyTurnEnded(this);
     }
 
     public override void Die()

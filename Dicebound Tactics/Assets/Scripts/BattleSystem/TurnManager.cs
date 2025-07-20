@@ -25,6 +25,10 @@ public class TurnManager : MonoBehaviour
             return;
         }
         Instance = this;
+
+        // Event Listeners
+        EventManager.OnCharacterTurnEnded += HandleCharacterTurnEnded;
+        EventManager.OnEnemyTurnEnded += HandleEnemyTurnEnded;
     }
 
     private void Update()
@@ -43,6 +47,16 @@ public class TurnManager : MonoBehaviour
             ShowBattleEndedDialog(false);
             return;
         }
+    }
+
+    private void HandleCharacterTurnEnded(CharacterManager character = null)
+    {
+        StartNextTurn();
+    }
+
+    private void HandleEnemyTurnEnded(EnemyManager enemy = null)
+    {
+        StartNextTurn();
     }
 
     [Button("Start Battle", ButtonSizes.Medium, ButtonStyle.CompactBox)]
@@ -86,40 +100,42 @@ public class TurnManager : MonoBehaviour
             .ThenByDescending(u => Random.value) // Simple tiebreaker
             .ToList();
 
-        currentTurnIndex = 0;
-
         turnOrder.ForEach(unit => unit.RollDice());
     }
 
-    private void StartNextTurn()
+    public void StartNextTurn()
     {
         if (!GameIsPlaying || turnOrder.Count == 0)
             return;
 
-        while (currentTurnIndex < turnOrder.Count)
+        if (currentTurnIndex >= turnOrder.Count)
         {
-            var unit = turnOrder[currentTurnIndex];
-            currentTurnIndex++;
-
-            if (unit != null && unit.isAlive)
-            {
-                currentUnit = unit;
-                unit.StartTurn();
-                EventManager.TriggerNewActiveEntity(unit);
-
-                if (unit is CharacterManager character)
-                    EventManager.TriggerCharacterTurnStarted(character);
-                else if (unit is EnemyManager enemy)
-                {
-                    EventManager.TriggerEnemyTurnStarted(enemy);
-                    enemy.BeginAITurn();
-                }
-                return;
-            }
+            // End of round, rebuild turn order and start again
+            BuildTurnOrder();
+            currentTurnIndex = 0;
         }
 
-        BuildTurnOrder();
-        StartNextTurn();
+        var unit = currentUnit ? turnOrder[currentTurnIndex] : turnOrder.FirstOrDefault();
+        currentTurnIndex++;
+
+        if (unit != null && unit.isAlive)
+        {
+            currentUnit = unit;
+            Debug.Log("Starting next turn for " + (currentUnit != null ? currentUnit.name : "null"));
+            unit.StartTurn();
+            EventManager.TriggerNewActiveEntity(unit);
+
+            if (unit is CharacterManager character)
+            {
+                EventManager.TriggerCharacterTurnStarted(character);
+                // Wait for EventManager.OnCharacterTurnEnded to advance turn
+            }
+            else if (unit is EnemyManager enemy)
+            {
+                EventManager.TriggerEnemyTurnStarted(enemy);
+                // Wait for EventManager.OnEnemyTurnEnded to advance turn
+            }
+        }
     }
 
     public void EndCharacterTurn(Entity character)
@@ -127,11 +143,6 @@ public class TurnManager : MonoBehaviour
         int leftover = character.GetStat(Stats.ActionPoints).statValue;
         character.statsContainer.CarriedOverActionPoints.statValue = leftover;
         character.statsContainer.ActionPoints.statValue = 0;
-    }
-
-    public void EndTurn()
-    {
-        StartNextTurn();
     }
 
     [Button("Reset Battle", ButtonSizes.Medium, ButtonStyle.CompactBox)]
@@ -152,11 +163,6 @@ public class TurnManager : MonoBehaviour
         }
 
         StartBattle();
-    }
-
-    public void AdvanceTurn()
-    {
-        EndTurn();
     }
 
     public Entity GetCurrentUnit() => currentUnit;
@@ -226,4 +232,4 @@ public class TurnManager : MonoBehaviour
 
         EventManager.TriggerGameOver();
     }
-} 
+}

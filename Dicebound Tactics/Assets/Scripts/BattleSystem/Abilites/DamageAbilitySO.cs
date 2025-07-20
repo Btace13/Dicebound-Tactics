@@ -12,50 +12,46 @@ public class DamageAbilitySO : AbilitySO
 
     public override IEnumerator Execute(Entity user, Entity target)
     {
-        if (user.SpendAP(apCost))
+        int amount = user.CalculateDamageWithModifiers(damageAmount);
+
+        OverworldEntityController userController = user.GetComponent<OverworldEntityController>();
+        OverworldEntityController enemyController = target.GetComponent<OverworldEntityController>();
+
+        if (requiresMovement)
         {
-            int amount = user.CalculateDamageWithModifiers(damageAmount);
-
-            if (requiresMovement)
+            if (userController == null || enemyController == null)
             {
-                OverworldEntityController enemyController = target.GetComponent<OverworldEntityController>();
-                OverworldEntityController userController = user.GetComponent<OverworldEntityController>();
-
-                if (enemyController == null || userController == null)
-                {
-                    Debug.LogWarning("Either the user or target does not have an OverworldEntityController component.");
-                    ApplyDamage(amount, user, target);
-                    yield break;
-                }
-
-                Vector3 direction = (target.transform.position - user.transform.position).normalized;
-                Vector3 destination = target.transform.position - direction * range; // Stop 'range' units away from the target
-
-                bool moveDone = false;
-                userController.MoveToPosition(destination, true, () => { moveDone = true; });
-                while (!moveDone) yield return null;
-
-                yield return TriggerAbilityAnimationSequenceCoroutine(user, target, () =>
-                {
-                    ApplyDamage(amount, user, target);
-                });
-
-                // Move back to slot
-                bool moveBackDone = false;
-                userController.MoveToTarget(userController.AssignedEncounterSlot.slotTransform, true, () => { moveBackDone = true; });
-                while (!moveBackDone) yield return null;
+                Debug.LogWarning("Missing controller — applying damage without animation.");
+                ApplyDamage(amount, user, target);
+                yield return new WaitForSeconds(0.5f);
+                yield break;
             }
-            else
+
+            // Move toward target
+            Vector3 direction = (target.transform.position - user.transform.position).normalized;
+            Vector3 destination = target.transform.position - direction * range;
+
+            bool moveDone = false;
+            userController.MoveToPosition(destination, true, () => moveDone = true);
+            while (!moveDone) yield return null;
+
+            // Play attack animation and apply damage
+            yield return TriggerAbilityAnimationSequenceCoroutine(user, target, () =>
             {
-                yield return TriggerAbilityAnimationSequenceCoroutine(user, target, () =>
-                {
-                    ApplyDamage(amount, user, target);
-                });
-            }
+                ApplyDamage(amount, user, target);
+            });
+
+            // Return to origin
+            bool returnDone = false;
+            userController.MoveToTarget(userController.AssignedEncounterSlot.slotTransform, true, () => returnDone = true);
+            while (!returnDone) yield return null;
         }
         else
         {
-            Debug.Log($"{user.name} does not have enough AP for {abilityName}.");
+            yield return TriggerAbilityAnimationSequenceCoroutine(user, target, () =>
+            {
+                ApplyDamage(amount, user, target);
+            });
         }
     }
 

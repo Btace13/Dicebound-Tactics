@@ -68,7 +68,7 @@ public class TurnDebuggerWindow : EditorWindow
 
         if (GUILayout.Button("Next Turn"))
         {
-            turnManager.AdvanceTurn();
+            turnManager.StartNextTurn();
         }
 
         if (GUILayout.Button("Reset Turn Order"))
@@ -199,7 +199,7 @@ public class TurnDebuggerWindow : EditorWindow
             GUI.color = Color.cyan;
             if (GUILayout.Button("End Turn"))
             {
-                turnManager.AdvanceTurn();
+                turnManager.StartNextTurn();
             }
             GUI.color = Color.white;
         }

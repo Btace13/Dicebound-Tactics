@@ -146,36 +146,65 @@ public class UnitAnimationHandler : MonoBehaviour
 		}
 	}
 
+	private IEnumerator ForceCompleteAfterDelay(float delay, Action callback)
+	{
+			yield return new WaitForSeconds(delay);
+			callback?.Invoke();
+	}
+
 	public void UseAbility(AbilitySO ability, Action<float> OnAttackAnimationPlayed = null, Action OnAttackAnimationComplete = null)
 	{
-		if (_equippedWeapon == null)
-		{
-			Debug.LogWarning("No weapon equipped. Not playing 'Attack' animation.");
-			return;
-		}
-
-		if (AnimationData.combatAnimations.ContainsKey(_equippedWeapon) && AnimationData.combatAnimations[_equippedWeapon].abilities.ContainsKey(ability))
-		{
-			AnimancerEvent.Sequence events = new AnimancerEvent.Sequence(1 + AnimationData.combatAnimations[_equippedWeapon].normalizedAttackTriggerTimes.Count);
-			foreach (float t in AnimationData.combatAnimations[_equippedWeapon].normalizedAttackTriggerTimes)
+			if (_equippedWeapon == null)
 			{
-				events.Add(t, () => OnAttackAnimationPlayed(t));
+					Debug.LogWarning("No weapon equipped. Not playing 'Attack' animation.");
+					return;
 			}
-			events.Add(1, () => OnAttackAnimationComplete?.Invoke());
 
-			// play on the 3rd layer so we can override any other animations
-			AnimancerState state = _Animancer.Layers[2].Play(AnimationData.combatAnimations[_equippedWeapon].abilities[ability], 0.1f, FadeMode.FixedDuration);
+			if (AnimationData.combatAnimations.ContainsKey(_equippedWeapon) && AnimationData.combatAnimations[_equippedWeapon].abilities.ContainsKey(ability))
+			{
+					var clip = AnimationData.combatAnimations[_equippedWeapon].abilities[ability];
+					float duration = clip.length / _Animancer.Play(clip).Speed;
 
-			state.Events = events;
-			state.NormalizedTime = 0;
-			state.NormalizedEndTime = 1;
-		}
-		else // we want to trigger the events regardless if the animation exists or not
-		{
-			Debug.LogError("Weapon type animation not found");
-			OnAttackAnimationPlayed?.Invoke(1);
-			OnAttackAnimationComplete();
-		}
+					AnimancerEvent.Sequence events = new AnimancerEvent.Sequence(
+							1 + AnimationData.combatAnimations[_equippedWeapon].normalizedAttackTriggerTimes.Count
+					);
+
+					foreach (float t in AnimationData.combatAnimations[_equippedWeapon].normalizedAttackTriggerTimes)
+					{
+							events.Add(t, () => OnAttackAnimationPlayed?.Invoke(t));
+					}
+
+					bool finished = false;
+					events.Add(1, () => {
+							if (!finished)
+							{
+									finished = true;
+									OnAttackAnimationComplete?.Invoke();
+							}
+					});
+
+					AnimancerState state = _Animancer.Layers[2].Play(clip, 0.1f, FadeMode.FixedDuration);
+					state.Events = events;
+					state.NormalizedTime = 0;
+					state.NormalizedEndTime = 1;
+
+					// fallback timeout in case OnAttackAnimationComplete doesn't fire
+					StartCoroutine(ForceCompleteAfterDelay(duration + 0.2f, () =>
+					{
+							if (!finished)
+							{
+									Debug.LogWarning("Forcing ability animation completion due to timeout.");
+									finished = true;
+									OnAttackAnimationComplete?.Invoke();
+							}
+					}));
+			}
+			else
+			{
+					Debug.LogError("Weapon type animation not found");
+					OnAttackAnimationPlayed?.Invoke(1);
+					OnAttackAnimationComplete?.Invoke();
+			}
 	}
 
 	public void Damage()
