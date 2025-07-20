@@ -13,6 +13,7 @@ public class RowUI : MonoBehaviour, IPointerExitHandler, IPointerEnterHandler
     [SerializeField, ReadOnly] private List<TextMeshProUGUI> rowTexts = new List<TextMeshProUGUI>();
 
     private RowStyle _rowStyle;
+    private Button _button;
 
     // Accept columnWidths as a parameter
     public void Initialize(RowData data, List<float> columnWidths, RowStyle rowStyle)
@@ -35,6 +36,20 @@ public class RowUI : MonoBehaviour, IPointerExitHandler, IPointerEnterHandler
 
         // Build the row with the provided data and column widths
         BuildRow(data, columnWidths, rowStyle);
+
+        if (_button == null)
+        {
+            _button = gameObject.AddComponent<Button>();
+            _button.onClick.AddListener(() =>
+            {
+                Debug.Log($"Row {transform.GetSiblingIndex()} clicked!");
+                if (data != null)
+                {
+                    var page = GetComponentInParent<PageView>(true);
+                    page.OnRowSelected?.Invoke(data);
+                }
+            });
+        }
     }
 
     private void ClearChildren()

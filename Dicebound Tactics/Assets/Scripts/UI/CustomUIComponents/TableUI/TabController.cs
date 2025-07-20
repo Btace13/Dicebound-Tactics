@@ -72,6 +72,8 @@ public class TabController : MonoBehaviour
                 }
             }
         }
+
+        UpdateTabColors();
     }
 
     public void UpdateTabColors()

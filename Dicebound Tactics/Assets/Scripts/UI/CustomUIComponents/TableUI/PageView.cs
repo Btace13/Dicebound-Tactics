@@ -3,6 +3,7 @@ using TMPro;
 using System.Collections;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
+using UnityEngine.Events;
 
 public class PageView : MonoBehaviour
 {
@@ -27,6 +28,8 @@ public class PageView : MonoBehaviour
 
     [BoxGroup("Table")]
     [SerializeField] private RowStyle rowStyleSO;
+
+    public UnityAction<RowData> OnRowSelected;
 
     public IEnumerator InitializePage(List<RowData> rowData, ColumnDefinitionsSO columnDefinitionsSO)
     {
