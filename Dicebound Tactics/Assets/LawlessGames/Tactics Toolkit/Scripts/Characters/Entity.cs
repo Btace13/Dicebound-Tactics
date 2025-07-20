@@ -77,7 +77,7 @@ namespace TacticsToolkit
         public void AddTestExp([Sirenix.OdinInspector.MinValue(1)] int expAmount = 50)
         {
             IncreaseExp(expAmount);
-            Debug.Log($"{name} gained {expAmount} EXP.");
+            // Debug.Log($"{name} gained {expAmount} EXP.");
         }
 #endif
 
@@ -123,7 +123,6 @@ namespace TacticsToolkit
                 statsContainer.ActionPoints = new Stat(Stats.ActionPoints, 0, this);
                 statsContainer.CarriedOverActionPoints = new Stat(Stats.CarriedOverActionPoints, 0, this);
             }
-
             for (int i = 0; i < level; i++)
             {
                 LevelUpStats();
@@ -135,7 +134,6 @@ namespace TacticsToolkit
         {
             if (statsContainer == null)
                 SetStats();
-
             if (isTargetted)
             {
                 //Just a Color Lerp for when a character is targetted for an attack. 
@@ -291,7 +289,7 @@ namespace TacticsToolkit
         public void HealEntity(int value)
         {
             statsContainer.CurrentHealth.statValue += value;
-            Debug.Log($"{name} healed for {value} HP.");
+            // Debug.Log($"{name} healed for {value} HP.");
             UpdateCharacterUI();
         }
 
@@ -391,7 +389,7 @@ namespace TacticsToolkit
             }
             else
             {
-                Debug.Log("Attempting to unequip weapon.");
+                // Debug.Log("Attempting to unequip weapon.");
                 equippedWeapon = null;
 
                 UnitAnimationHandler animationHandler = GetComponentInChildren<UnitAnimationHandler>(true);
@@ -475,7 +473,7 @@ namespace TacticsToolkit
             {
                 if (statsContainer == null)
                 {
-                    Debug.LogError("StatsContainer is not assigned for " + name);
+                    // Debug.LogError("StatsContainer is not assigned for " + name);
                     continue;
                 }
 
@@ -526,7 +524,7 @@ namespace TacticsToolkit
                         modifiedDamage += (baseDamage * (modifier.Value / 100f));
                         break;
                     default:
-                        Debug.LogWarning($"Unknown damage modifier key: {modifier.Key}");
+                        // Debug.LogWarning($"Unknown damage modifier key: {modifier.Key}");
                         break;
                 }
             }
@@ -544,10 +542,10 @@ namespace TacticsToolkit
                 {
                     case "DamageReduction":
                         modifiedDamage -= ((modifier.Value / 100f) * baseDamage);
-                        Debug.Log($"Damage reduced by {modifier.Value}%");
+                        // Debug.Log($"Damage reduced by {modifier.Value}%");
                         break;
                     default:
-                        Debug.LogWarning($"Unknown damage taken modifier key: {modifier.Key}");
+                        // Debug.LogWarning($"Unknown damage taken modifier key: {modifier.Key}");
                         break;
                 }
             }
@@ -601,7 +599,7 @@ namespace TacticsToolkit
             }
             else
             {
-                Debug.LogWarning("Not enough Action Points to perform this action.");
+                // Debug.LogWarning("Not enough Action Points to perform this action.");
                 return false;
             }
         }
@@ -616,13 +614,13 @@ namespace TacticsToolkit
         {
             if (equippedDice == null)
             {
-                Debug.LogError("Character Dice is not assigned for " + name);
+                // Debug.LogError("Character Dice is not assigned for " + name);
                 return;
             }
 
             if (statsContainer == null)
             {
-                Debug.LogError("StatsContainer is not assigned for " + name);
+                // Debug.LogError("StatsContainer is not assigned for " + name);
                 return;
             }
 
@@ -720,7 +718,7 @@ namespace TacticsToolkit
                     } while (randomEnemy == originalTarget);
                 }
                 randomEnemy.TakeDamage(damageDealt);
-                Debug.Log($"{name} overloads and hits {randomEnemy.name} for {damageDealt} damage.");
+                // Debug.Log($"{name} overloads and hits {randomEnemy.name} for {damageDealt} damage.");
                 isOverloaded = false;
             }
         }

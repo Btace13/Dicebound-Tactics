@@ -169,13 +169,13 @@ public class OverworldCharacterController : OverworldEntityController
 
         if (PartyManager.Instance == null || PartyManager.Instance.PartyLeader == null)
         {
-            Debug.LogWarning("PartyManager or PartyLeader is not initialized.");
+            // Debug.LogWarning("PartyManager or PartyLeader is not initialized.");
             return false;
         }
 
         if (PartyManager.Instance.PartyLeader.GetComponent<OverworldCharacterController>() == null)
         {
-            Debug.LogWarning("PartyLeader does not have an OverworldCharacterController component.");
+            // Debug.LogWarning("PartyLeader does not have an OverworldCharacterController component.");
             return false;
         }
 
@@ -186,17 +186,15 @@ public class OverworldCharacterController : OverworldEntityController
     public override void MoveToPosition(Vector3 targetPosition, bool overrideTime = false, UnityAction onTargetReached = null)
     {
         base.MoveToPosition(targetPosition, overrideTime, onTargetReached);
-
-        print("Moving to position: " + targetPosition);
+        // print("Moving to position: " + targetPosition);
     }
 
     public override void MoveToTarget(Transform target, bool overrideTime = false, UnityAction onTargetReached = null)
     {
         base.MoveToTarget(target, overrideTime, onTargetReached);
-
         if (target != null)
         {
-            print("Moving to target: " + target.name);
+            // print("Moving to target: " + target.name);
         }
     }
 

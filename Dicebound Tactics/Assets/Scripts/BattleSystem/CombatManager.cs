@@ -33,15 +33,6 @@ public class CombatManager : MonoBehaviour
             Instance = this;
         }
 
-        if (selectionController == null)
-            Debug.LogError("SelectionController is not assigned in CombatManager.");
-
-        if (turnManager == null)
-            Debug.LogError("TurnManager is not assigned in CombatManager.");
-
-        if (combatUIHandler == null)
-            Debug.LogError("CombatUIHandler is not assigned in CombatManager.");
-
         // Event Listeners
         EventManager.OnGameStateChanged += OnGameStateChanged;
     }
@@ -72,7 +63,6 @@ public class CombatManager : MonoBehaviour
 
         if (currentUnit == null)
         {
-            Debug.LogError("No active character to use the basic attack.");
             return;
         }
 
@@ -87,19 +77,16 @@ public class CombatManager : MonoBehaviour
 
         if (currentUnit == null)
         {
-            Debug.LogError("No active character to use the ability.");
             return;
         }
 
         if (selectionController == null)
         {
-            Debug.LogError("SelectionController is not assigned.");
             return;
         }
 
         if (ability == null)
         {
-            Debug.LogError("Ability is null.");
             return;
         }
 
@@ -113,7 +100,6 @@ public class CombatManager : MonoBehaviour
         selectionController.ToggleEntitySelection(targetsEnemy ? turnManager.enemyUnits[0] : turnManager.playerUnits[0], false);
 
         _selectedAbility = ability;
-        Debug.Log($"Selected ability: {_selectedAbility.abilityName}");
     }
 
     public void ItemSelected(CombatItem item)
@@ -149,13 +135,11 @@ public class CombatManager : MonoBehaviour
 
         if (currentUnit == null)
         {
-            Debug.LogError("No active character to execute action.");
             return;
         }
 
         if (selectionController == null)
         {
-            Debug.LogError("SelectionController is not assigned.");
             return;
         }
 
@@ -163,7 +147,6 @@ public class CombatManager : MonoBehaviour
 
         if (selectedTargets.Count == 0)
         {
-            Debug.LogError("No targets selected.");
             return;
         }
 
@@ -209,13 +192,10 @@ public class CombatManager : MonoBehaviour
 
                     if (damageAbility == null)
                     {
-                        Debug.LogError("Selected ability is not a DamageAbilitySO.");
                         continue;
                     }
 
                     StartCoroutine(damageAbility.Execute(currentUnit, target));
-
-                    Debug.Log($"{currentUnit.name} uses {_selectedAbility.abilityName} on {target.name}");
                 }
                 else if (_selectedItem != null)
                 {
@@ -223,11 +203,6 @@ public class CombatManager : MonoBehaviour
                     if (target is CharacterManager character)
                     {
                         //character.UseItem(_selectedItem);
-                        Debug.Log($"{currentUnit.name} uses {_selectedItem.ItemName} on {character.name}.");
-                    }
-                    else
-                    {
-                        Debug.LogError("Selected target is not a character.");
                     }
                 }
                 else // basic attack
@@ -248,7 +223,6 @@ public class CombatManager : MonoBehaviour
                                 target.TakeDamage(damage);
                                 CombatUIHandler.damageNumberUIHandler.ShowDamageNumber(damage, target.transform.position, DamageNumberType.Normal);
                                 CameraManager.Instance?.ShakeActiveCamera();
-                                Debug.Log($"{currentUnit.name} attacks {target.name} for {damage} damage.");
                             });
                             attackSequence.AppendInterval(0.5f);
                             attackSequence.AppendCallback(() =>
@@ -264,7 +238,6 @@ public class CombatManager : MonoBehaviour
                         target.TakeDamage(damage);
                         CombatUIHandler.damageNumberUIHandler.ShowDamageNumber(damage, target.transform.position, DamageNumberType.Normal);
                         CameraManager.Instance?.ShakeActiveCamera();
-                        Debug.Log($"{currentUnit.name} attacks {target.name} for {damage} damage.");
                     }
                 }
             }

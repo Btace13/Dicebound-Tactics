@@ -15,11 +15,6 @@ namespace TacticsToolkit
         private void Awake()
         {
             OverworldCharacterController = GetComponent<OverworldCharacterController>();
-
-            if (OverworldCharacterController == null)
-            {
-                Debug.LogError("OverworldCharacterController component is missing on the CharacterManager.");
-            }
             
             LoadOrCreateStats();
             LoadOrCreateDie();
@@ -32,8 +27,6 @@ namespace TacticsToolkit
 
             if (statsContainer == null)
             {
-                Debug.Log($"No stats found for {characterId}. Creating new stats.");
-
                 statsContainer = ScriptableObject.CreateInstance<CharacterStats>();
                 SetupStats();
 
@@ -49,12 +42,8 @@ namespace TacticsToolkit
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
 #else
-                Debug.LogWarning("Cannot create ScriptableObject at runtime outside of the editor.");
+                // Debug.LogWarning("Cannot create ScriptableObject at runtime outside of the editor.");
 #endif
-            }
-            else
-            {
-                Debug.Log($"Loaded existing stats for {characterId}.");
             }
 
             statsContainer.ResetAP();
@@ -67,8 +56,6 @@ namespace TacticsToolkit
 
             if (equippedDice == null)
             {
-                Debug.Log($"No dice found for {characterId}. Creating new dice.");
-
                 equippedDice = ScriptableObject.CreateInstance<Dice>();
 
 #if UNITY_EDITOR
@@ -83,12 +70,8 @@ namespace TacticsToolkit
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
 #else
-                Debug.LogWarning("Cannot create ScriptableObject at runtime outside of the editor.");
+                // Debug.LogWarning("Cannot create ScriptableObject at runtime outside of the editor.");
 #endif
-            }
-            else
-            {
-                Debug.Log($"Loaded existing dice for {characterId}.");
             }
         }
 
@@ -113,10 +96,6 @@ namespace TacticsToolkit
                 {
                     LevelUpStats();
                 }
-            }
-            else
-            {
-                Debug.LogError("Stats container is null, cannot set stats.");
             }
         }
 

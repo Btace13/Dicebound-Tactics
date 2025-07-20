@@ -18,10 +18,6 @@ public class CombatUIHandler : MonoBehaviour
             {
                 currentPanel = value;
             }
-            else
-            {
-                Debug.LogError("Attempted to set CurrentPanel to null.");
-            }
         }
     }
 
@@ -45,36 +41,19 @@ public class CombatUIHandler : MonoBehaviour
 
     private void Awake()
     {
-        if (currentPanel == null)
-        {
-            Debug.LogError("Current Panel is not set in CombatUIHandler.");
-        }
-
         if (ActionPanel)
         {
             ActionPanel.gameObject.SetActive(false);
-        }
-        else
-        {
-            Debug.LogError("ActionPanel is not set in CombatUIHandler.");
         }
 
         if (AbilityPanel)
         {
             AbilityPanel.gameObject.SetActive(false);
         }
-        else
-        {
-            Debug.LogError("AbilityPanel is not set in CombatUIHandler.");
-        }
 
         if (ItemPanel)
         {
             ItemPanel.gameObject.SetActive(false);
-        }
-        else
-        {
-            Debug.LogError("ItemPanel is not set in CombatUIHandler.");
         }
 
         // Event Listeners
@@ -94,7 +73,6 @@ public class CombatUIHandler : MonoBehaviour
     {
         if (character == null)
         {
-            Debug.LogError("Character is null. Cannot move canvas.");
             return;
         }
 
@@ -105,7 +83,6 @@ public class CombatUIHandler : MonoBehaviour
     {
         if (currentPanel == null || target == null)
         {
-            Debug.LogError("Current Panel or target is not set.");
             return;
         }
 
@@ -119,18 +96,10 @@ public class CombatUIHandler : MonoBehaviour
             {
                 AbilityPanel.PopulateAbilityPanel(character);
             }
-            else
-            {
-                Debug.LogError("AbilityPanel is not set in CombatUIHandler.");
-            }
 
             if (ItemPanel != null)
             {
                 ItemPanel.PopulateItemPanel(character);
-            }
-            else
-            {
-                Debug.LogError("ItemPanel is not set in CombatUIHandler.");
             }
         }
 
@@ -141,7 +110,6 @@ public class CombatUIHandler : MonoBehaviour
     {
         if (panel == null)
         {
-            Debug.LogError("Panel to open is not set.");
             return;
         }
 
@@ -179,10 +147,6 @@ public class CombatUIHandler : MonoBehaviour
             {
                 cameraManager.TrySetActiveCamera(cameraName);
             }
-            else
-            {
-                Debug.LogError($"No camera found for panel: {panel.name}");
-            }
         }
     }
 
@@ -190,7 +154,6 @@ public class CombatUIHandler : MonoBehaviour
     {
         if (ActionPanel == null)
         {
-            Debug.LogError("ActionPanel is not set in CombatUIHandler.");
             return;
         }
 
@@ -201,7 +164,6 @@ public class CombatUIHandler : MonoBehaviour
     {
         if (currentPanel == null)
         {
-            Debug.LogError("No current panel to close.");
             OpenPanel(ActionPanel);
             return;
         }
@@ -234,10 +196,6 @@ public class CombatUIHandler : MonoBehaviour
                         {
                             cameraManager.TrySetActiveCamera(cameraName);
                         }
-                        else
-                        {
-                            Debug.LogError($"No camera found for panel: {currentPanel.name}");
-                        }
                     }
                 }, _fadeDuration, Ease.InOutQuad);
             }
@@ -253,7 +211,6 @@ public class CombatUIHandler : MonoBehaviour
     {
         if (currentPanel == null)
         {
-            Debug.LogWarning("No current panel to close.");
             return;
         }
 
@@ -268,7 +225,6 @@ public class CombatUIHandler : MonoBehaviour
     {
         if (panelInputsCanvasGroup == null)
         {
-            Debug.LogError("Panel Inputs Canvas Group is not set.");
             return;
         }
 
@@ -284,7 +240,6 @@ public class CombatUIHandler : MonoBehaviour
     {
         if (confirmButton == null)
         {
-            Debug.LogError("Confirm Button is not set.");
             return;
         }
 
@@ -301,7 +256,6 @@ public class CombatUIHandler : MonoBehaviour
     {
         if (notificationUI == null)
         {
-            Debug.LogError("Notification UI is not set.");
             return;
         }
 
@@ -312,7 +266,6 @@ public class CombatUIHandler : MonoBehaviour
     {
         if (notificationUI == null)
         {
-            Debug.LogError("Notification UI is not set.");
             return;
         }
 
@@ -323,7 +276,6 @@ public class CombatUIHandler : MonoBehaviour
     {
         if (screenSpaceCanvasGroup == null)
         {
-            Debug.LogError("Screen Space Canvas Group is not set.");
             return;
         }
 
@@ -339,7 +291,6 @@ public class CombatUIHandler : MonoBehaviour
     {
         if (screenSpaceCanvasGroup == null)
         {
-            Debug.LogError("Screen Space Canvas Group is not set.");
             return;
         }
 

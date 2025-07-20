@@ -17,7 +17,7 @@ public class EnemyManager : Entity
         overworldController = GetComponent<OverworldEnemyController>();
         if (overworldController == null)
         {
-            Debug.LogWarning($"No OverworldEnemyController found on {name}. Please ensure it is added for proper overworld functionality.");
+            // Debug.LogWarning($"No OverworldEnemyController found on {name}. Please ensure it is added for proper overworld functionality.");
         }
 
         // Event Listeners
@@ -36,7 +36,7 @@ public class EnemyManager : Entity
         }
         else
         {
-            Debug.LogWarning($"No dice profile assigned for {name}. Using default dice.");
+            // Debug.LogWarning($"No dice profile assigned for {name}. Using default dice.");
             equippedDice = new Dice(new List<DiceSide> { new(1, null) });
         }
 
@@ -57,7 +57,7 @@ public class EnemyManager : Entity
 
     private IEnumerator ExecuteAITurn()
     {
-        Debug.Log($"[AI] {name} begins turn with {CurrentAP} AP");
+        // Debug.Log($"[AI] {name} begins turn with {CurrentAP} AP");
 
         while (true)
         {
@@ -67,7 +67,7 @@ public class EnemyManager : Entity
 
             if (usableAbilities.Count == 0)
             {
-                Debug.Log($"[AI] {name} has no abilities it can afford with {CurrentAP} AP.");
+                // Debug.Log($"[AI] {name} has no abilities it can afford with {CurrentAP} AP.");
                 break;
             }
 
@@ -79,18 +79,18 @@ public class EnemyManager : Entity
 
             if (targets.Count == 0)
             {
-                Debug.Log("[AI] No valid targets remain.");
+                // Debug.Log("[AI] No valid targets remain.");
                 break;
             }
 
             var target = targets[Random.Range(0, targets.Count)];
 
-            Debug.Log($"[AI] {name} using {ability.abilityName} (cost {ability.apCost}) on {target.name}");
+            // Debug.Log($"[AI] {name} using {ability.abilityName} (cost {ability.apCost}) on {target.name}");
 
             // Spend AP immediately to prevent double usage
             if (!SpendAP(ability.apCost))
             {
-                Debug.LogWarning($"[AI] Failed to spend AP for {ability.abilityName}. Skipping turn.");
+                // Debug.LogWarning($"[AI] Failed to spend AP for {ability.abilityName}. Skipping turn.");
                 break;
             }
 
@@ -108,7 +108,7 @@ public class EnemyManager : Entity
             yield return new WaitForSeconds(0.5f); // slight pacing delay between abilities
         }
 
-        Debug.Log($"[AI] {name} ends turn with {CurrentAP} AP remaining");
+        // Debug.Log($"[AI] {name} ends turn with {CurrentAP} AP remaining");
         EndAITurn();
     }
 
@@ -138,7 +138,7 @@ public class EnemyManager : Entity
 
         if (overworldController != null && overworldController.Encounter != null)
         {
-            Debug.Log($"[EnemyManager] {name} has been defeated. Checking if should end encounter.");
+            // Debug.Log($"[EnemyManager] {name} has been defeated. Checking if should end encounter.");
             // Check if the encounter should end
             if (overworldController.Encounter.ShouldEndEncounter())
             {
@@ -147,7 +147,7 @@ public class EnemyManager : Entity
         }
         else
         {
-            Debug.LogWarning($"No OverworldEnemyController found on {name}. Cannot handle enemy defeat logic.");
+            // Debug.LogWarning($"No OverworldEnemyController found on {name}. Cannot handle enemy defeat logic.");
         }
     }
 }

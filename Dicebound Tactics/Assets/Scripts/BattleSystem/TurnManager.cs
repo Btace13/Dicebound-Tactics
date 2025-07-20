@@ -121,7 +121,6 @@ public class TurnManager : MonoBehaviour
         if (unit != null && unit.isAlive)
         {
             currentUnit = unit;
-            Debug.Log("Starting next turn for " + (currentUnit != null ? currentUnit.name : "null"));
             unit.StartTurn();
             EventManager.TriggerNewActiveEntity(unit);
 
@@ -221,12 +220,10 @@ public class TurnManager : MonoBehaviour
 
         if (PlayerWon)
         {
-            Debug.Log("All enemies defeated! Player wins!");
             BattleEndedDialogManager.Instance.Show(true);
         }
         else
         {
-            Debug.Log("All player units defeated! Player loses!");
             BattleEndedDialogManager.Instance.Show(false);
         }
 

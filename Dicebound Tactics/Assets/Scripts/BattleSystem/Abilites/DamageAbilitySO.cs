@@ -21,7 +21,6 @@ public class DamageAbilitySO : AbilitySO
         {
             if (userController == null || enemyController == null)
             {
-                Debug.LogWarning("Missing controller — applying damage without animation.");
                 ApplyDamage(amount, user, target);
                 yield return new WaitForSeconds(0.5f);
                 yield break;
@@ -70,10 +69,6 @@ public class DamageAbilitySO : AbilitySO
                 clipTime = animationHandler.AnimationData.combatAnimations[animationHandler.EquippedWeapon].abilities[this].length;
             }
         }
-        else
-        {
-            Debug.LogWarning("No combat animations found for the equipped weapon or UnitAnimationHandler is missing.");
-        }
 
         // Look at target
         userController.transform.DOLookAt(target.transform.position, 0.2f);
@@ -84,7 +79,6 @@ public class DamageAbilitySO : AbilitySO
         bool hitTriggered = false;
         if (animationHandler == null)
         {
-            Debug.LogWarning("No UnitAnimationHandler found on the user.");
             OnHitTarget?.Invoke();
             hitTriggered = true;
             animDone = true;
@@ -106,7 +100,6 @@ public class DamageAbilitySO : AbilitySO
             yield return null;
         }
         if (!animDone) {
-            Debug.LogWarning($"Animation did not complete in time for {user.name} using {this.abilityName}. Forcing completion.");
             if (!hitTriggered) OnHitTarget?.Invoke();
         }
     }
@@ -116,6 +109,5 @@ public class DamageAbilitySO : AbilitySO
         target.TakeDamage(amount);
         user.ApplyOverloadHit(amount, target);
         user.HealOnHit(amount);
-        Debug.Log($"{user.name} used {abilityName} on {target.name} for {amount} damage.");
     }
 }

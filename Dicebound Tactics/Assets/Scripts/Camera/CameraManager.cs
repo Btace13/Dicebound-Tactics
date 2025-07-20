@@ -82,12 +82,10 @@ public class CameraManager : MonoBehaviour
 
     public void RegisterCamera(string cameraName, BaseCameraController cameraController)
     {
-        print($"Attempting to register camera: {cameraName}");
-
+        // print($"Attempting to register camera: {cameraName}");
         if (!Cameras.ContainsKey(cameraName))
         {
             Cameras.Add(cameraName, cameraController);
-
             if (ActiveCamera == null)
             {
                 SetActiveCamera(cameraController);
@@ -95,7 +93,7 @@ public class CameraManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning($"Camera with name {cameraName} is already registered.");
+            // Debug.LogWarning($"Camera with name {cameraName} is already registered.");
         }
     }
 
@@ -107,7 +105,7 @@ public class CameraManager : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning($"Camera with name {cameraName} not found.");
+            // Debug.LogWarning($"Camera with name {cameraName} not found.");
         }
     }
 
@@ -148,51 +146,39 @@ public class CameraManager : MonoBehaviour
     {
         if (ActiveCamera == null)
         {
-            Debug.LogWarning("No active camera to shake.");
+            // Debug.LogWarning("No active camera to shake.");
             return;
         }
-
         BaseCameraController cameraToShake = ActiveCamera;
-
         if (cameraShakeSettings == null)
         {
             cameraShakeSettings = defaultCameraShakeSettings;
-            print("Using default camera shake settings.");
+            // print("Using default camera shake settings.");
         }
-
         if (cameraShakeSettings.Intensity <= 0 || cameraShakeSettings.Duration <= 0)
         {
-            Debug.LogWarning("Intensity and duration must be greater than zero for camera shake.");
+            // Debug.LogWarning("Intensity and duration must be greater than zero for camera shake.");
             return;
         }
-
         CinemachineBasicMultiChannelPerlin noise = cameraToShake.CinemachineCam.GetOrAddComponent<CinemachineBasicMultiChannelPerlin>();
-
         noise.NoiseProfile = cameraShakeSettings.NoiseSettings;
         noise.enabled = true; // Ensure noise is enabled
-
-        // Setup the sequence to sample the animation curve over time
         float initialAmplitude = noise.AmplitudeGain;
         float initialFrequency = noise.FrequencyGain;
-
         float x = 0f;
-
-        // Add tween that updates the noise parameters based on the animation curve
         DOTween.To(value => x = value, 0f, 1f, cameraShakeSettings.Duration)
         .OnUpdate(() =>
         {
-            // Use the animation curve to control the intensity over time
             float curveValue = cameraShakeSettings.ShakeCurve.Evaluate(x);
             noise.AmplitudeGain = cameraShakeSettings.Intensity * curveValue;
             noise.FrequencyGain = cameraShakeSettings.Frequency * curveValue;
         })
         .OnComplete(() =>
         {
-            // Reset the noise parameters to their initial values
             noise.AmplitudeGain = initialAmplitude;
             noise.FrequencyGain = initialFrequency;
             noise.enabled = false; // Disable noise after shaking
-            print("Camera shake completed and noise disabled.");
+            // print("Camera shake completed and noise disabled.");
         });
     }
 
@@ -295,36 +281,30 @@ public class CameraManager : MonoBehaviour
     {
         if (target == null)
         {
-            Debug.LogError("Target is null. Cannot set combat target.");
+            // Debug.LogError("Target is null. Cannot set combat target.");
             return;
         }
-
-        print("Setting combat target: " + target.name);
-
+        // print("Setting combat target: " + target.name);
         foreach (CombatCameraController combatCameraController in Cameras.Values.OfType<CombatCameraController>())
         {
             if (combatCameraController == null)
             {
-                Debug.LogWarning("Active camera is not a CombatCameraController.");
+                // Debug.LogWarning("Active camera is not a CombatCameraController.");
                 continue;
             }
-
             if (combatCameraController.TargetGroup == null)
             {
-                Debug.LogError("Target group is not initialized in CombatCameraController.");
+                // Debug.LogError("Target group is not initialized in CombatCameraController.");
                 continue;
             }
-
             if (combatCameraController.cameraTarget == CameraTarget.ActivePlayer)
             {
-                Debug.LogWarning("Camera target is set to ActivePlayer. Cannot set target.");
+                // Debug.LogWarning("Camera target is set to ActivePlayer. Cannot set target.");
                 continue;
             }
-
             combatCameraController.TargetGroup.Targets.Clear();
             combatCameraController.AddTarget(target);
         }
-
         activeTarget = target;
     }
 
@@ -339,35 +319,29 @@ public class CameraManager : MonoBehaviour
         {
             if (combatCamera == null)
             {
-                Debug.LogWarning("Active camera is not a CombatCameraController.");
+                // Debug.LogWarning("Active camera is not a CombatCameraController.");
                 continue;
             }
-
             if (combatCamera.TargetGroup == null)
             {
-                Debug.LogError("Target group is not initialized in CombatCameraController.");
+                // Debug.LogError("Target group is not initialized in CombatCameraController.");
                 continue;
             }
-
             if (combatCamera.cameraTarget == CameraTarget.Target)
             {
-                Debug.LogWarning("Camera target is set to Target. Cannot set active character.");
+                // Debug.LogWarning("Camera target is set to Target. Cannot set active character.");
                 continue;
             }
-
             if (combatCamera.TargetGroup.Targets.Count == 0)
             {
                 combatCamera.AddTarget(character);
             }
             else
             {
-                // Update the first target in the group
                 combatCamera.UpdateTargetAtIndex(character, 0);
             }
-
             combatCamera.UpdateFollowTarget(character);
         }
-
         activeCharacter = character;
     }
 

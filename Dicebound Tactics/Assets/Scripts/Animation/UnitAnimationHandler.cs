@@ -140,10 +140,6 @@ public class UnitAnimationHandler : MonoBehaviour
 			_Animancer.TryPlay(AnimationData.combatAnimations[previousWeapon].unequipWeapon, 0.25f, FadeMode.FixedDuration);
 			StartCoroutine(ToggleWeaponParented(false, AnimationData.combatAnimations[previousWeapon].normalizedEquipTime));
 		}
-		else
-		{
-			Debug.LogError("Could not find weapon type in animations");
-		}
 	}
 
 	private IEnumerator ForceCompleteAfterDelay(float delay, Action callback)
@@ -156,7 +152,6 @@ public class UnitAnimationHandler : MonoBehaviour
 	{
 			if (_equippedWeapon == null)
 			{
-					Debug.LogWarning("No weapon equipped. Not playing 'Attack' animation.");
 					return;
 			}
 
@@ -193,7 +188,6 @@ public class UnitAnimationHandler : MonoBehaviour
 					{
 							if (!finished)
 							{
-									Debug.LogWarning("Forcing ability animation completion due to timeout.");
 									finished = true;
 									OnAttackAnimationComplete?.Invoke();
 							}
@@ -201,7 +195,6 @@ public class UnitAnimationHandler : MonoBehaviour
 			}
 			else
 			{
-					Debug.LogError("Weapon type animation not found");
 					OnAttackAnimationPlayed?.Invoke(1);
 					OnAttackAnimationComplete?.Invoke();
 			}
@@ -212,7 +205,6 @@ public class UnitAnimationHandler : MonoBehaviour
 		if (!AnimationData.CanFight) return;
 		if (AnimationData.hitAnimation == null)
 		{
-			Debug.LogWarning("No hit animation defined. Not playing 'Damage' animation.");
 			return;
 		}
 
@@ -231,7 +223,6 @@ public class UnitAnimationHandler : MonoBehaviour
 		{
 			if (weaponData == null)
 			{
-				Debug.LogError("No weapon data provided to equip weapon.");
 				yield break;
 			}
 

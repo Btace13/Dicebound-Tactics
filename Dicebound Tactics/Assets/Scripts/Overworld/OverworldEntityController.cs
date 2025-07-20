@@ -55,13 +55,11 @@ public class OverworldEntityController : MonoBehaviour
     {
         if (pathfindingAI == null)
         {
-            Debug.LogWarning("pathfindingAI is not initialized.");
             return;
         }
 
         if (target == null)
         {
-            Debug.LogWarning("Target is null. Cannot move to a null target.");
             return;
         }
 
@@ -73,7 +71,6 @@ public class OverworldEntityController : MonoBehaviour
     {
         if (pathfindingAI == null)
         {
-            Debug.LogWarning("pathfindingAI is not initialized.");
             return;
         }
 
@@ -96,7 +93,6 @@ public class OverworldEntityController : MonoBehaviour
     {
         if (pathfindingAI != null && pathfindingAI.hasPath)
         {
-            print("Canceling path");
             pathfindingAI.SetPath(null);
         }
     }
@@ -105,7 +101,6 @@ public class OverworldEntityController : MonoBehaviour
     {
         if (unitAnimationHandler == null)
         {
-            Debug.LogWarning("UnitAnimationHandler is not assigned.");
             return;
         }
 
