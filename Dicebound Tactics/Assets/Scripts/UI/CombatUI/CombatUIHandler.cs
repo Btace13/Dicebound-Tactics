@@ -86,7 +86,7 @@ public class CombatUIHandler : MonoBehaviour
             return;
         }
 
-        print($"Moving canvas to target: {target.name}");
+        // print($"Moving canvas to target: {target.name}");
 
         // Check if the target is a CharacterManager
         // If it is, populate the AbilityPanel with the character's abilities
@@ -306,9 +306,10 @@ public class CombatUIHandler : MonoBehaviour
 
     private void HandleNewCharacterTurn(CharacterManager character)
     {
+        //Debug.Log($"New character turn started for {character.name}");
+        OpenActionPanel();
         ShowConfirmButton(true);
         MoveCanvasToCharacter(character);
-        OpenActionPanel();
     }
 
     public void HandleNewEnemyTurn(EnemyManager enemy)
