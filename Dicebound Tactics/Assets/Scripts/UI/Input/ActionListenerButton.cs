@@ -136,6 +136,7 @@ public class ActionListenerButton : Button, IIconUpdater
         {
             DoStateTransition(SelectionState.Pressed, false);
             OnButtonClick();
+            onClick?.Invoke();
         }
         else if (context.canceled)
         {
@@ -164,8 +165,6 @@ public class ActionListenerButton : Button, IIconUpdater
         {
             Debug.Log($"Button {name} clicked but not hovered.");
         }
-
-        this.onClick?.Invoke();
     }
 
     public bool IsOverButton()
