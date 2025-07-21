@@ -73,6 +73,9 @@ public class TabController : MonoBehaviour
             }
         }
 
+        LayoutRebuilder.ForceRebuildLayoutImmediate(GetComponent<RectTransform>());
+        yield return new WaitForEndOfFrame(); // Ensure UI updates before initializing
+
         UpdateTabColors();
     }
 
