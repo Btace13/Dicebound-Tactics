@@ -12,6 +12,13 @@ public class DamageAbilitySO : AbilitySO
 
     public override IEnumerator Execute(Entity user, Entity target)
     {
+        if (!user.SpendAP(apCost))
+        {
+            yield break; // Not enough AP, exit early
+        }
+
+        user.InvokeCharacterStatChanged();
+
         int amount = user.CalculateDamageWithModifiers(damageAmount);
 
         OverworldEntityController userController = user.GetComponent<OverworldEntityController>();

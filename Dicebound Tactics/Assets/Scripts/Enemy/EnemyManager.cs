@@ -87,13 +87,6 @@ public class EnemyManager : Entity
 
             // Debug.Log($"[AI] {name} using {ability.abilityName} (cost {ability.apCost}) on {target.name}");
 
-            // Spend AP immediately to prevent double usage
-            if (!SpendAP(ability.apCost))
-            {
-                // Debug.LogWarning($"[AI] Failed to spend AP for {ability.abilityName}. Skipping turn.");
-                break;
-            }
-
             // Camera setup
             CameraManager.Instance.SetActiveCombatCharacter(target.transform);
             CameraManager.Instance.SetCombatTarget(transform);

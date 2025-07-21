@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -71,6 +72,9 @@ namespace TacticsToolkit
         private bool isTaunting = false;
         private int tauntTurnsRemaining = 0;
         private bool isOverloaded = false;
+
+        public event Action OnLevelChanged;
+        public event Action<CharacterManager> OnCharacterStatChanged;
 
 #if UNITY_EDITOR
         [Sirenix.OdinInspector.Button("Add EXP", ButtonSizes.Medium)]
@@ -169,17 +173,17 @@ namespace TacticsToolkit
         //Scale up attributes based on a weighted random.
         public void LevelUpStats()
         {
-            float v = Random.Range(0f, 1f);
+            float v = UnityEngine.Random.Range(0f, 1f);
             statsContainer.Health.ChangeStatValue(statsContainer.Health.statValue + Mathf.RoundToInt(characterClass.Health.baseStatModifier.Evaluate(v) * 10));
-            v = Random.Range(0f, 1f);
+            v = UnityEngine.Random.Range(0f, 1f);
             statsContainer.Mana.ChangeStatValue(statsContainer.Mana.statValue + Mathf.RoundToInt(characterClass.Mana.baseStatModifier.Evaluate(v) * 10));
-            v = Random.Range(0f, 1f);
+            v = UnityEngine.Random.Range(0f, 1f);
             statsContainer.Strength.ChangeStatValue(statsContainer.Strength.statValue + Mathf.RoundToInt(characterClass.Strength.baseStatModifier.Evaluate(v) * 10));
-            v = Random.Range(0f, 1f);
+            v = UnityEngine.Random.Range(0f, 1f);
             statsContainer.Endurance.ChangeStatValue(statsContainer.Endurance.statValue + Mathf.RoundToInt(characterClass.Endurance.baseStatModifier.Evaluate(v) * 10));
-            v = Random.Range(0f, 1f);
+            v = UnityEngine.Random.Range(0f, 1f);
             statsContainer.Speed.ChangeStatValue(statsContainer.Speed.statValue + Mathf.RoundToInt(characterClass.Speed.baseStatModifier.Evaluate(v) * 10));
-            v = Random.Range(0f, 1f);
+            v = UnityEngine.Random.Range(0f, 1f);
             statsContainer.Intelligence.ChangeStatValue(statsContainer.Intelligence.statValue + Mathf.RoundToInt(characterClass.Intelligence.baseStatModifier.Evaluate(v) * 10));
 
             statsContainer.CurrentHealth.ChangeStatValue(statsContainer.Health.statValue);
@@ -189,17 +193,17 @@ namespace TacticsToolkit
         //Scale down attributes based on a weighted random. 
         public void LevelDownStats()
         {
-            float v = Random.Range(0f, 1f);
+            float v = UnityEngine.Random.Range(0f, 1f);
             statsContainer.Health.ChangeStatValue(statsContainer.Health.statValue - Mathf.RoundToInt(characterClass.Health.baseStatModifier.Evaluate(v) * 10));
-            v = Random.Range(0f, 1f);
+            v = UnityEngine.Random.Range(0f, 1f);
             statsContainer.Mana.ChangeStatValue(statsContainer.Mana.statValue - Mathf.RoundToInt(characterClass.Mana.baseStatModifier.Evaluate(v) * 10));
-            v = Random.Range(0f, 1f);
+            v = UnityEngine.Random.Range(0f, 1f);
             statsContainer.Strength.ChangeStatValue(statsContainer.Strength.statValue - Mathf.RoundToInt(characterClass.Strength.baseStatModifier.Evaluate(v) * 10));
-            v = Random.Range(0f, 1f);
+            v = UnityEngine.Random.Range(0f, 1f);
             statsContainer.Endurance.ChangeStatValue(statsContainer.Endurance.statValue - Mathf.RoundToInt(characterClass.Endurance.baseStatModifier.Evaluate(v) * 10));
-            v = Random.Range(0f, 1f);
+            v = UnityEngine.Random.Range(0f, 1f);
             statsContainer.Speed.ChangeStatValue(statsContainer.Speed.statValue - Mathf.RoundToInt(characterClass.Speed.baseStatModifier.Evaluate(v) * 10));
-            v = Random.Range(0f, 1f);
+            v = UnityEngine.Random.Range(0f, 1f);
             statsContainer.Intelligence.ChangeStatValue(statsContainer.Intelligence.statValue - Mathf.RoundToInt(characterClass.Intelligence.baseStatModifier.Evaluate(v) * 10));
 
             statsContainer.CurrentHealth.ChangeStatValue(statsContainer.Health.statValue);
@@ -212,6 +216,7 @@ namespace TacticsToolkit
             level++;
             LevelUpStats();
             requiredExperience = gameConfig.GetRequiredExp(level);
+            OnLevelChanged?.Invoke();
         }
 
         public void IncreaseExp(int value)
@@ -231,6 +236,7 @@ namespace TacticsToolkit
             level--;
             LevelDownStats();
             requiredExperience = gameConfig.GetRequiredExp(level);
+            OnLevelChanged?.Invoke();
         }
 
         //Update the characters initiative after the perform an action. This is used for Dynamic Turn Order. 
@@ -238,6 +244,11 @@ namespace TacticsToolkit
         {
             initiativeValue += Mathf.RoundToInt(turnValue / GetStat(Stats.Speed).statValue);
             previousTurnCost = turnValue;
+        }
+
+        public void InvokeCharacterStatChanged()
+        {
+            OnCharacterStatChanged?.Invoke(this as CharacterManager);
         }
 
         //Entity is being targets for an attack. 
@@ -402,6 +413,8 @@ namespace TacticsToolkit
         {
             if (healthBar)
                 healthBar.SetHealth((float)statsContainer.CurrentHealth.statValue, statsContainer.Health.statValue);
+
+            InvokeCharacterStatChanged();
         }
 
         //Change characters mana
@@ -572,6 +585,7 @@ namespace TacticsToolkit
             statsContainer.CurrentMana.statValue = statsContainer.Mana.statValue;
             statsContainer.ActionPoints.statValue = 0;
             statsContainer.CarriedOverActionPoints.statValue = 0;
+            OnCharacterStatChanged?.Invoke(this as CharacterManager);
             UpdateCharacterUI();
         }
 
@@ -608,6 +622,7 @@ namespace TacticsToolkit
         {
             statsContainer.ActionPoints.statValue = 0;
             statsContainer.CarriedOverActionPoints.statValue = 0;
+            OnCharacterStatChanged?.Invoke(this as CharacterManager);
         }
 
         public void RollDice()
@@ -630,6 +645,7 @@ namespace TacticsToolkit
             statsContainer.ActionPoints.statValue = statsContainer.ActionPoints.statValue += totalAP;
             statsContainer.CarriedOverActionPoints.statValue = 0;
             diceRoll.modifier.Apply(this);
+            OnCharacterStatChanged?.Invoke(this as CharacterManager);
         }
 
         public void ResetTempModifiers()
@@ -714,7 +730,7 @@ namespace TacticsToolkit
                 {
                     do
                     {
-                        randomEnemy = enemies[Random.Range(0, enemies.Count)];
+                        randomEnemy = enemies[UnityEngine.Random.Range(0, enemies.Count)];
                     } while (randomEnemy == originalTarget);
                 }
                 randomEnemy.TakeDamage(damageDealt);

@@ -142,6 +142,7 @@ public class TurnManager : MonoBehaviour
         int leftover = character.GetStat(Stats.ActionPoints).statValue;
         character.statsContainer.CarriedOverActionPoints.statValue = leftover;
         character.statsContainer.ActionPoints.statValue = 0;
+        character.InvokeCharacterStatChanged();
     }
 
     [Button("Reset Battle", ButtonSizes.Medium, ButtonStyle.CompactBox)]

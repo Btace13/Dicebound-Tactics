@@ -47,6 +47,7 @@ namespace TacticsToolkit
             }
 
             statsContainer.ResetAP();
+            InvokeCharacterStatChanged();
         }
 
         public void LoadOrCreateDie()

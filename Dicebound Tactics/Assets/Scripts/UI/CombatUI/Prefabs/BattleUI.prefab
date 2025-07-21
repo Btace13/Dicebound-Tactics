@@ -1139,9 +1139,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dialogPanel: {fileID: 2009709268327158849}
   resultText: {fileID: 6581201186591325538}
-  closeButton: {fileID: 2849245538388642085}
   characterBattleCardContainer: {fileID: 5079947116999332928}
   battleCardPrefab: {fileID: 1616083377960610341, guid: 566300e565d13433b9d684f0d16b1666, type: 3}
+  characterCards: {fileID: 0}
 --- !u!1 &8000426466127187747
 GameObject:
   m_ObjectHideFlags: 0

@@ -2,29 +2,45 @@ using TacticsToolkit;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections;
+using DG.Tweening;
 
 public class CharacterCard : MonoBehaviour
 {
   [Header("UI References")]
   [SerializeField] private Image characterPortrait;
   [SerializeField] private TextMeshProUGUI characterNameText;
-  [SerializeField] private Image healthBar;
+  [SerializeField] private TextMeshProUGUI lvlText;
+  [SerializeField] private Slider healthBar;
   [SerializeField] private TextMeshProUGUI healthText;
   [SerializeField] private TextMeshProUGUI apAmountText;
   [SerializeField] private TextMeshProUGUI modifierText;
   [SerializeField] private GameObject CurrentTurnIndicator;
   [SerializeField] private TextMeshProUGUI modifierTextContent;
 
-  private string characterId;
+  private CharacterManager character;
+  public float rollSpeed = 18f; // higher = faster
+  private Coroutine rollingCoroutine;
 
-  private void Update()
+  private void Awake()
   {
-    SetCharacterInfo(TurnManager.Instance.playerUnits.Find(c => c.characterId == characterId));
+    // Event Listeners
+    EventManager.OnCharacterTurnStarted += UpdateCurrentTurnIndicator;
+  }
 
-    if (CurrentTurnIndicator != null)
+  void OnDestroy()
+  {
+    if (character != null)
     {
-      CurrentTurnIndicator.SetActive(TurnManager.Instance.IsThisPlayersTurn(characterId));
+      character.OnCharacterStatChanged -= HandleUpdatingCharacterInfo;
+      character.OnLevelChanged -= UpdateLevelText;
     }
+  }
+
+  private void HandleUpdatingCharacterInfo(CharacterManager character)
+  {
+    SetCharacterInfo(character);
+    CurrentTurnIndicator.SetActive(CombatManager.Instance.TurnManager.GetCurrentUnit() == character);
   }
 
   public void SetCharacterInfo(CharacterManager character)
@@ -33,15 +49,20 @@ public class CharacterCard : MonoBehaviour
     {
       characterPortrait.sprite = null;
       characterNameText.text = string.Empty;
-      healthBar.fillAmount = 0f;
+      healthBar.value = 0f;
       healthText.text = string.Empty;
       apAmountText.text = string.Empty;
       modifierText.text = string.Empty;
       modifierTextContent.text = "";
+      lvlText.text = string.Empty;
       return;
     }
 
-    characterId = character.characterId;
+    this.character = character;
+
+    // Event Listeners
+    this.character.OnCharacterStatChanged += HandleUpdatingCharacterInfo;
+    this.character.OnLevelChanged += UpdateLevelText;
 
     if (characterPortrait != null)
       characterPortrait.sprite = character.portrait;
@@ -49,16 +70,36 @@ public class CharacterCard : MonoBehaviour
     if (characterNameText != null)
       characterNameText.text = character.name;
 
+    if (lvlText != null)
+      lvlText.text = $"Lvl: {character.level}";
+
     if (healthBar != null)
     {
-      healthBar.fillAmount = (float)character.GetStat(Stats.CurrentHealth).statValue / character.GetStat(Stats.Health).statValue;
+      healthBar.maxValue = character.GetStat(Stats.Health).statValue;
+      healthBar.DOValue(character.GetStat(Stats.CurrentHealth).statValue, 0.5f).SetEase(Ease.OutCubic);
     }
 
     if (healthText != null)
-      healthText.text = $"{character.GetStat(Stats.CurrentHealth).statValue} / {character.GetStat(Stats.Health).statValue}";
+    {
+      int from = 0;
+      if (!string.IsNullOrEmpty(healthText.text) && healthText.text.Contains("/"))
+      {
+        int.TryParse(healthText.text.Split('/')[0].Trim(), out from);
+      }
+      int to = character.GetStat(Stats.CurrentHealth).statValue;
+      int max = character.GetStat(Stats.Health).statValue;
+
+      // Animate health number
+      int currentHealth = from;
+      DOTween.To(() => currentHealth, x =>
+      {
+          currentHealth = x;
+          healthText.text = $"{currentHealth} / {max}";
+      }, to, 0.5f).SetEase(Ease.OutCubic);
+    }
 
     if (apAmountText != null)
-      apAmountText.text = character.GetStat(Stats.ActionPoints).statValue.ToString();
+      SetNumber(character.GetStat(Stats.ActionPoints).statValue, apAmountText);
 
     if (modifierText != null)
       if (character.equippedDice == null || character.equippedDice.LastRollModifier == null)
@@ -67,9 +108,53 @@ public class CharacterCard : MonoBehaviour
         modifierText.text = character.equippedDice.LastRollModifier.Name;
 
     if (modifierTextContent != null)
-      if( character.equippedDice == null || character.equippedDice.LastRollModifier == null)
+      if (character.equippedDice == null || character.equippedDice.LastRollModifier == null)
         modifierTextContent.text = "";
       else
         modifierTextContent.text = character.equippedDice.LastRollModifier.Description;
+  }
+
+  private void UpdateLevelText()
+  {
+    if (lvlText != null)
+    {
+      lvlText.text = $"Lvl: {character.level}";
+    }
+  }
+
+  private void UpdateCurrentTurnIndicator(Entity c)
+  {
+    if (CurrentTurnIndicator != null)
+    {
+      CurrentTurnIndicator.SetActive(CombatManager.Instance.TurnManager.GetCurrentUnit() == character);
+    }
+  }
+
+  public void SetNumber(int newValue, TextMeshProUGUI numberText)
+  {
+    // Stop previous animation if any
+    if (rollingCoroutine != null)
+      StopCoroutine(rollingCoroutine);
+
+    int currentValue = int.Parse(numberText.text);
+    rollingCoroutine = StartCoroutine(RollToValue(currentValue, newValue, numberText));
+  }
+
+  private IEnumerator RollToValue(int from, int to, TextMeshProUGUI numberText)
+  {
+    float duration = Mathf.Abs(to - from) / rollSpeed;
+    float elapsed = 0f;
+
+    while (elapsed < duration)
+    {
+      elapsed += Time.deltaTime;
+      float t = Mathf.Clamp01(elapsed / duration);
+      int value = Mathf.RoundToInt(Mathf.Lerp(from, to, t));
+      numberText.text = value.ToString();
+      yield return null;
+    }
+
+    numberText.text = to.ToString();
+    rollingCoroutine = null;
   }
 }
