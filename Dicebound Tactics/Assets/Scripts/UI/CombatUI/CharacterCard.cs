@@ -26,6 +26,7 @@ public class CharacterCard : MonoBehaviour
   {
     // Event Listeners
     EventManager.OnCharacterTurnStarted += UpdateCurrentTurnIndicator;
+    EventManager.OnCharacterTurnEnded += RemoveCurrentTurnIndicator;
   }
 
   void OnDestroy()
@@ -35,6 +36,9 @@ public class CharacterCard : MonoBehaviour
       character.OnCharacterStatChanged -= HandleUpdatingCharacterInfo;
       character.OnLevelChanged -= UpdateLevelText;
     }
+
+    EventManager.OnCharacterTurnStarted -= UpdateCurrentTurnIndicator;
+    EventManager.OnCharacterTurnEnded -= RemoveCurrentTurnIndicator;
   }
 
   private void HandleUpdatingCharacterInfo(CharacterManager character)
@@ -93,8 +97,8 @@ public class CharacterCard : MonoBehaviour
       int currentHealth = from;
       DOTween.To(() => currentHealth, x =>
       {
-          currentHealth = x;
-          healthText.text = $"{currentHealth} / {max}";
+        currentHealth = x;
+        healthText.text = $"{currentHealth} / {max}";
       }, to, 0.5f).SetEase(Ease.OutCubic);
     }
 
@@ -102,10 +106,15 @@ public class CharacterCard : MonoBehaviour
       SetNumber(character.GetStat(Stats.ActionPoints).statValue, apAmountText);
 
     if (modifierText != null)
+    {
+      if (!TurnManager.Instance.BattlePlaying)
+        modifierText.text = "";
+
       if (character.equippedDice == null || character.equippedDice.LastRollModifier == null)
         modifierText.text = "";
       else
         modifierText.text = character.equippedDice.LastRollModifier.Name;
+    }
 
     if (modifierTextContent != null)
       if (character.equippedDice == null || character.equippedDice.LastRollModifier == null)
@@ -156,5 +165,13 @@ public class CharacterCard : MonoBehaviour
 
     numberText.text = to.ToString();
     rollingCoroutine = null;
+  }
+  
+  private void RemoveCurrentTurnIndicator(CharacterManager character)
+  {
+    if (CurrentTurnIndicator != null && character == CombatManager.Instance.TurnManager.GetCurrentUnit())
+    {
+      CurrentTurnIndicator.SetActive(false);
+    }
   }
 }

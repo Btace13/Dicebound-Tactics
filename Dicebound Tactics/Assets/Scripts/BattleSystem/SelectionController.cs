@@ -34,7 +34,7 @@ public class SelectionController : MonoBehaviour
 
   private void Update()
   {
-    if (turnManager == null || !turnManager.GameIsPlaying)
+    if (turnManager == null || !turnManager.BattlePlaying)
     {
       ClearAllSelections();
       return;

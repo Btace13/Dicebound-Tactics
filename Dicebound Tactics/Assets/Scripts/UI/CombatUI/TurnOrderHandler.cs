@@ -2,10 +2,12 @@ using TacticsToolkit;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Threading.Tasks;
+using Unity.VisualScripting;
 
 public class TurnOrderHandler : MonoBehaviour
 {
     [SerializeField] GameObject ImageContainer;
+    [SerializeField] GameObject PortraitPrefab;
     [SerializeField] GameObject CurrentTurnHolderImage;
 
     private void Awake()
@@ -25,7 +27,7 @@ public class TurnOrderHandler : MonoBehaviour
     {
         ImageContainer.SetActive(true);
 
-        if (ImageContainer.transform.childCount == 0)
+        if (ImageContainer.transform.childCount == 1)
         {
             // If there are no portraits, create them
             await CreateTurnOrderPortraits();
@@ -49,9 +51,8 @@ public class TurnOrderHandler : MonoBehaviour
             if (entity.portrait != null)
             {
                 // instantiate a new image for the portrait
-                GameObject portraitObject = new(entity.name + " Portrait");
-                portraitObject.transform.SetParent(ImageContainer.transform, false);
-                portraitObject.AddComponent<Image>().sprite = entity.portrait;
+                GameObject portraitObject = Instantiate(PortraitPrefab, ImageContainer.transform);
+                portraitObject.transform.GetChild(0).GetComponent<Image>().sprite = entity.portrait;
             }
         }
     }
@@ -67,7 +68,7 @@ public class TurnOrderHandler : MonoBehaviour
         }
 
         CurrentTurnHolderImage.SetActive(true);
-        CurrentTurnHolderImage.GetComponent<Image>().sprite = turnHolder.portrait;
+        CurrentTurnHolderImage.transform.GetChild(0).GetComponent<Image>().sprite = turnHolder.portrait;
         // get textmeshpro component in child and update it with the name of the current unit
         var textMeshPro = CurrentTurnHolderImage.GetComponentInChildren<TMPro.TextMeshProUGUI>();
         if (textMeshPro != null)
@@ -78,13 +79,14 @@ public class TurnOrderHandler : MonoBehaviour
 
     public async Task ClearTurnOrder()
     {
-        // Clear the turn order UI
+        // Clear the turn order UI minus the first child (which is the current turn holder)
         foreach (Transform child in ImageContainer.transform)
         {
+            if (child.gameObject == CurrentTurnHolderImage) continue; // Skip the current turn holder
             Destroy(child.gameObject);
         }
 
-        while (ImageContainer.transform.childCount > 0)
+        while (ImageContainer.transform.childCount > 1)
         {
             await Task.Yield(); // Wait for the UI to update
         }

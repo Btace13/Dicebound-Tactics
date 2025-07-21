@@ -11,7 +11,7 @@ public class TurnManager : MonoBehaviour
 
     public List<CharacterManager> playerUnits = new();
     public List<EnemyManager> enemyUnits = new();
-    public bool GameIsPlaying;
+    public bool BattlePlaying;
 
     private List<Entity> turnOrder = new();
     private int currentTurnIndex = 0;
@@ -33,7 +33,7 @@ public class TurnManager : MonoBehaviour
 
     private void Update()
     {
-        if (!GameIsPlaying)
+        if (!BattlePlaying)
             return;
 
         if (enemyUnits.All(e => !e.isAlive))
@@ -62,7 +62,7 @@ public class TurnManager : MonoBehaviour
     [Button("Start Battle", ButtonSizes.Medium, ButtonStyle.CompactBox)]
     public void StartBattle()
     {
-        GameIsPlaying = true;
+        BattlePlaying = true;
         EventManager.TriggerBattleStarted();
 
         foreach (var character in playerUnits)
@@ -105,7 +105,7 @@ public class TurnManager : MonoBehaviour
 
     public void StartNextTurn()
     {
-        if (!GameIsPlaying || turnOrder.Count == 0)
+        if (!BattlePlaying || turnOrder.Count == 0)
             return;
 
         if (currentTurnIndex >= turnOrder.Count)
@@ -148,7 +148,7 @@ public class TurnManager : MonoBehaviour
     [Button("Reset Battle", ButtonSizes.Medium, ButtonStyle.CompactBox)]
     public void ResetBattle()
     {
-        GameIsPlaying = false;
+        BattlePlaying = false;
         currentTurnIndex = 0;
         turnOrder.Clear();
 
@@ -217,7 +217,7 @@ public class TurnManager : MonoBehaviour
 
     public void ShowBattleEndedDialog(bool PlayerWon = false)
     {
-        GameIsPlaying = false;
+        BattlePlaying = false;
 
         if (PlayerWon)
         {
