@@ -47,6 +47,7 @@ public class CombatEncounter : MonoBehaviour
     public float encounterRadius = 8f;
     public float timeBetweenEnemyActions = 2f;
     public bool IsAntagonistic = true;
+    public AudioClip encounterMusic;
 
     [Header("Encounter References")]
     [SerializeField] private EncounterSide[] encounterSides = new EncounterSide[2];
