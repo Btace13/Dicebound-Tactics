@@ -12,9 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01d5638418b737d4ba5b78d80ca61013, type: 3}
   m_Name: FireMagic
   m_EditorClassIdentifier: 
-  ItemPrefab: {fileID: 0}
+  ItemPrefab: {fileID: 4414483768842071979, guid: c3f7c27d51e561d4995f54d210d9f213, type: 3}
   WeaponName: Fire
   Damage: 20
   PositionOffset: {x: 0, y: 0, z: 0}
   RotationOffset: {x: 0, y: 0, z: 0}
   EquipTime: 0.5
+  Icon: {fileID: 0}
+  WeaponTypeIcon: {fileID: 0}
+  RarityColor: {r: 0, g: 0, b: 0, a: 0}
+  rarityAmount: 1

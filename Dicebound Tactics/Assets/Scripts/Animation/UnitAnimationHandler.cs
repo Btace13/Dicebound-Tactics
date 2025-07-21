@@ -130,74 +130,89 @@ public class UnitAnimationHandler : MonoBehaviour
 
 		print("Weapon Type: " + _equippedWeapon);
 
-		if (_equippedWeapon != null && AnimationData.combatAnimations.ContainsKey(_equippedWeapon))
+		if (_equippedWeapon != null)
 		{
-			_Animancer.TryPlay(AnimationData.combatAnimations[weaponData].equipWeapon, 0.25f, FadeMode.FixedDuration);
-			StartCoroutine(ToggleWeaponParented(weaponData != null, AnimationData.combatAnimations[weaponData].normalizedEquipTime, weaponData));
+			if (AnimationData.combatAnimations.ContainsKey(_equippedWeapon))
+			{
+				_Animancer.TryPlay(AnimationData.combatAnimations[weaponData].equipWeapon, 0.25f, FadeMode.FixedDuration);
+				StartCoroutine(ToggleWeaponParented(weaponData != null, AnimationData.combatAnimations[weaponData].normalizedEquipTime, weaponData));
+			}
+			else
+			{
+				StartCoroutine(ToggleWeaponParented(weaponData != null, 0f, weaponData));
+			}
 		}
-		else if (previousWeapon != null && AnimationData.combatAnimations.ContainsKey(previousWeapon))
+		else if (previousWeapon != null)
 		{
-			_Animancer.TryPlay(AnimationData.combatAnimations[previousWeapon].unequipWeapon, 0.25f, FadeMode.FixedDuration);
-			StartCoroutine(ToggleWeaponParented(false, AnimationData.combatAnimations[previousWeapon].normalizedEquipTime));
+			if (AnimationData.combatAnimations.ContainsKey(previousWeapon))
+			{
+				_Animancer.TryPlay(AnimationData.combatAnimations[previousWeapon].unequipWeapon, 0.25f, FadeMode.FixedDuration);
+				StartCoroutine(ToggleWeaponParented(false, AnimationData.combatAnimations[previousWeapon].normalizedEquipTime));
+			}
+			else
+			{
+				StartCoroutine(ToggleWeaponParented(false, 0f));
+			}
 		}
 	}
 
 	private IEnumerator ForceCompleteAfterDelay(float delay, Action callback)
 	{
-			yield return new WaitForSeconds(delay);
-			callback?.Invoke();
+		yield return new WaitForSeconds(delay);
+		callback?.Invoke();
 	}
 
 	public void UseAbility(AbilitySO ability, Action<float> OnAttackAnimationPlayed = null, Action OnAttackAnimationComplete = null)
 	{
-			if (_equippedWeapon == null)
+		if (_equippedWeapon == null)
+		{
+			return;
+		}
+
+		if (AnimationData.combatAnimations.ContainsKey(_equippedWeapon) && AnimationData.combatAnimations[_equippedWeapon].abilities.ContainsKey(ability))
+		{
+			var clip = AnimationData.combatAnimations[_equippedWeapon].abilities[ability];
+			float duration = clip.length / _Animancer.Play(clip).Speed;
+
+			AnimancerEvent.Sequence events = new AnimancerEvent.Sequence(
+					1 + AnimationData.combatAnimations[_equippedWeapon].normalizedAttackTriggerTimes.Count
+			);
+
+			foreach (float t in AnimationData.combatAnimations[_equippedWeapon].normalizedAttackTriggerTimes)
 			{
-					return;
+				events.Add(t, () => OnAttackAnimationPlayed?.Invoke(t));
 			}
 
-			if (AnimationData.combatAnimations.ContainsKey(_equippedWeapon) && AnimationData.combatAnimations[_equippedWeapon].abilities.ContainsKey(ability))
+			bool finished = false;
+			events.Add(1, () =>
 			{
-					var clip = AnimationData.combatAnimations[_equippedWeapon].abilities[ability];
-					float duration = clip.length / _Animancer.Play(clip).Speed;
-
-					AnimancerEvent.Sequence events = new AnimancerEvent.Sequence(
-							1 + AnimationData.combatAnimations[_equippedWeapon].normalizedAttackTriggerTimes.Count
-					);
-
-					foreach (float t in AnimationData.combatAnimations[_equippedWeapon].normalizedAttackTriggerTimes)
-					{
-							events.Add(t, () => OnAttackAnimationPlayed?.Invoke(t));
-					}
-
-					bool finished = false;
-					events.Add(1, () => {
-							if (!finished)
-							{
-									finished = true;
-									OnAttackAnimationComplete?.Invoke();
-							}
-					});
-
-					AnimancerState state = _Animancer.Layers[2].Play(clip, 0.1f, FadeMode.FixedDuration);
-					state.Events = events;
-					state.NormalizedTime = 0;
-					state.NormalizedEndTime = 1;
-
-					// fallback timeout in case OnAttackAnimationComplete doesn't fire
-					StartCoroutine(ForceCompleteAfterDelay(duration + 0.2f, () =>
-					{
-							if (!finished)
-							{
-									finished = true;
-									OnAttackAnimationComplete?.Invoke();
-							}
-					}));
-			}
-			else
-			{
-					OnAttackAnimationPlayed?.Invoke(1);
+				if (!finished)
+				{
+					finished = true;
 					OnAttackAnimationComplete?.Invoke();
-			}
+				}
+			});
+
+			AnimancerState state = _Animancer.Layers[2].Play(clip, 0.1f, FadeMode.FixedDuration);
+			state.Events = events;
+			state.NormalizedTime = 0;
+			state.NormalizedEndTime = 1;
+
+			// fallback timeout in case OnAttackAnimationComplete doesn't fire
+			StartCoroutine(ForceCompleteAfterDelay(duration + 0.2f, () =>
+			{
+				if (!finished)
+				{
+					finished = true;
+					OnAttackAnimationComplete?.Invoke();
+				}
+			}));
+		}
+		else
+		{
+			OnAttackAnimationPlayed?.Invoke(1);
+			OnAttackAnimationComplete?.Invoke();
+		}
 	}
 
 	public void Damage()
@@ -227,7 +242,7 @@ public class UnitAnimationHandler : MonoBehaviour
 			}
 
 			if (weaponData.ItemPrefab)
-			{ 
+			{
 				_weaponObject = Instantiate(weaponData.ItemPrefab, rightHandTransform);
 				_weaponObject.transform.localPosition = weaponData.PositionOffset;
 				_weaponObject.transform.localEulerAngles = weaponData.RotationOffset;
