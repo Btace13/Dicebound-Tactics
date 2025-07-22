@@ -47,6 +47,7 @@ MonoBehaviour:
     - LeTai.TrueShadow
     - LeTai.TrueShadow.Demo
     - PackageTools
+    - sc.stylizedwater3.runtime
     - sc.utilities.selectionhistory.editor
     - ShapesRuntime
     - ShapesSamples

@@ -297,7 +297,7 @@ public class CombatEncounter : MonoBehaviour
             return;
         }
 
-        if (enemy.overworldController.HasSpottedTarget)
+        if (enemy.overworldController.HasSpottedTarget && IsAntagonistic)
         {
             // If the enemy is chasing or has spotted a target, do not wander
             return;
