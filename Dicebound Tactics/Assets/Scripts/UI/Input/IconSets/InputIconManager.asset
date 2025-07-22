@@ -38,3 +38,18 @@ MonoBehaviour:
     xboxControllerSprite: {fileID: -7956427973557797689, guid: 88ff628b7616948a399ee8a65e049606, type: 3}
     playstationControllerSprite: {fileID: 390555981594730966, guid: 4fc9d170fd84044d2b08daeb7be9eb8e, type: 3}
     switchControllerSprite: {fileID: -679083064054180673, guid: f13e217b7239b48f4aa87e0cd3fec7c0, type: 3}
+  - actionName: Player/BattleAbilities
+    keyboardSprite: {fileID: 2285120093584573513, guid: f087c55d3b5db4a4da8cd6d0cd72e584, type: 3}
+    xboxControllerSprite: {fileID: 7183707057315010591, guid: a5dea466c7a7b4152919645a10b6f2d6, type: 3}
+    playstationControllerSprite: {fileID: 265468883692527984, guid: 78ad0d5178697478689a148cbde0846a, type: 3}
+    switchControllerSprite: {fileID: 6336310393044179604, guid: 0411c80813e7e4c23a1014db69dc5150, type: 3}
+  - actionName: Player/BattleItems
+    keyboardSprite: {fileID: -4842122482347598607, guid: 2850e8bf20f9445ccaf34daa4b009d5f, type: 3}
+    xboxControllerSprite: {fileID: -1236389414660901761, guid: e01700ca784b04d85a5d439c0b55ea04, type: 3}
+    playstationControllerSprite: {fileID: -6428336804260667672, guid: aa1963e99aeac409d8b8187870980809, type: 3}
+    switchControllerSprite: {fileID: -1042983111052659530, guid: c47020cc246e84dadb0a7356ab2e0edb, type: 3}
+  - actionName: Player/BattlePass
+    keyboardSprite: {fileID: -7699723923551181482, guid: 27e3b4472c08d4b99bfe92e9206f611b, type: 3}
+    xboxControllerSprite: {fileID: 643402748272714948, guid: 5f3569d4dba2b4ea797f661ed8c819ec, type: 3}
+    playstationControllerSprite: {fileID: -5433958992158819592, guid: 95f90cef880d04619bb2771c692bfcaa, type: 3}
+    switchControllerSprite: {fileID: -679083064054180673, guid: f13e217b7239b48f4aa87e0cd3fec7c0, type: 3}

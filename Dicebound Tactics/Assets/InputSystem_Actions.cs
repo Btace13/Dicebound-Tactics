@@ -25,49 +25,49 @@ using UnityEngine.InputSystem.Utilities;
 /// <code>
 /// using namespace UnityEngine;
 /// using UnityEngine.InputSystem;
-/// 
+///
 /// // Example of using an InputActionMap named "Player" from a UnityEngine.MonoBehaviour implementing callback interface.
 /// public class Example : MonoBehaviour, MyActions.IPlayerActions
 /// {
 ///     private MyActions_Actions m_Actions;                  // Source code representation of asset.
 ///     private MyActions_Actions.PlayerActions m_Player;     // Source code representation of action map.
-/// 
+///
 ///     void Awake()
 ///     {
 ///         m_Actions = new MyActions_Actions();              // Create asset object.
 ///         m_Player = m_Actions.Player;                      // Extract action map object.
 ///         m_Player.AddCallbacks(this);                      // Register callback interface IPlayerActions.
 ///     }
-/// 
+///
 ///     void OnDestroy()
 ///     {
 ///         m_Actions.Dispose();                              // Destroy asset object.
 ///     }
-/// 
+///
 ///     void OnEnable()
 ///     {
 ///         m_Player.Enable();                                // Enable all actions within map.
 ///     }
-/// 
+///
 ///     void OnDisable()
 ///     {
 ///         m_Player.Disable();                               // Disable all actions within map.
 ///     }
-/// 
+///
 ///     #region Interface implementation of MyActions.IPlayerActions
-/// 
+///
 ///     // Invoked when "Move" action is either started, performed or canceled.
 ///     public void OnMove(InputAction.CallbackContext context)
 ///     {
 ///         Debug.Log($"OnMove: {context.ReadValue&lt;Vector2&gt;()}");
 ///     }
-/// 
+///
 ///     // Invoked when "Attack" action is either started, performed or canceled.
 ///     public void OnAttack(InputAction.CallbackContext context)
 ///     {
 ///         Debug.Log($"OnAttack: {context.ReadValue&lt;float&gt;()}");
 ///     }
-/// 
+///
 ///     #endregion
 /// }
 /// </code>
@@ -212,6 +212,33 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""name"": ""Cycle"",
                     ""type"": ""Button"",
                     ""id"": ""2b79d6ee-dcc3-4bf5-9a18-edce4ef1ed3f"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""BattleAbilities"",
+                    ""type"": ""Button"",
+                    ""id"": ""512caa6f-db01-4739-a829-6f1f531f2eb4"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""BattleItems"",
+                    ""type"": ""Button"",
+                    ""id"": ""fb15b007-9799-4653-b79b-2511b6175a39"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""BattlePass"",
+                    ""type"": ""Button"",
+                    ""id"": ""9de0e317-ea9d-4f42-9179-bbd3683311df"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -618,7 +645,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""2e982e8f-441f-4211-8850-4db6fa94b0be"",
-                    ""path"": ""<Keyboard>/q"",
+                    ""path"": ""<Keyboard>/4"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
@@ -629,7 +656,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""6c545f34-3b4d-4265-b831-4625b5ce1e06"",
-                    ""path"": ""<Keyboard>/f"",
+                    ""path"": ""<Keyboard>/1"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
@@ -651,7 +678,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""6850a498-52ec-470a-aade-77d24ba27d9c"",
-                    ""path"": ""<Keyboard>/e"",
+                    ""path"": ""<Keyboard>/2"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
@@ -673,7 +700,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""053f4a06-c0c0-4702-bb6e-e4caa3f54ac3"",
-                    ""path"": ""<Keyboard>/h"",
+                    ""path"": ""<Keyboard>/3"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
@@ -711,6 +738,72 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
                     ""action"": ""Cycle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""19c808fd-4933-4f3d-bea5-969d049b3f09"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BattleAbilities"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1af1f68a-73ce-4a21-8f3b-6936a42d7ff9"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BattleAbilities"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3ef63360-0c56-4171-a21d-4fc8050b4909"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BattleItems"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0fe82cb9-c7c8-461c-9c73-ef5238de75cb"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BattleItems"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""deb73efb-2957-408b-8f3b-a936b7f6eabe"",
+                    ""path"": ""<Keyboard>/3"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BattlePass"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e6b70843-dcab-4ba5-91a1-727606bc8fd2"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""BattlePass"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1312,6 +1405,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Player_TopGamepad = m_Player.FindAction("TopGamepad", throwIfNotFound: true);
         m_Player_RightGamepad = m_Player.FindAction("RightGamepad", throwIfNotFound: true);
         m_Player_Cycle = m_Player.FindAction("Cycle", throwIfNotFound: true);
+        m_Player_BattleAbilities = m_Player.FindAction("BattleAbilities", throwIfNotFound: true);
+        m_Player_BattleItems = m_Player.FindAction("BattleItems", throwIfNotFound: true);
+        m_Player_BattlePass = m_Player.FindAction("BattlePass", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1419,6 +1515,9 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_TopGamepad;
     private readonly InputAction m_Player_RightGamepad;
     private readonly InputAction m_Player_Cycle;
+    private readonly InputAction m_Player_BattleAbilities;
+    private readonly InputAction m_Player_BattleItems;
+    private readonly InputAction m_Player_BattlePass;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -1487,6 +1586,18 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @Cycle => m_Wrapper.m_Player_Cycle;
         /// <summary>
+        /// Provides access to the underlying input action "Player/BattleAbilities".
+        /// </summary>
+        public InputAction @BattleAbilities => m_Wrapper.m_Player_BattleAbilities;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/BattleItems".
+        /// </summary>
+        public InputAction @BattleItems => m_Wrapper.m_Player_BattleItems;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/BattlePass".
+        /// </summary>
+        public InputAction @BattlePass => m_Wrapper.m_Player_BattlePass;
+        /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
         public InputActionMap Get() { return m_Wrapper.m_Player; }
@@ -1554,6 +1665,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Cycle.started += instance.OnCycle;
             @Cycle.performed += instance.OnCycle;
             @Cycle.canceled += instance.OnCycle;
+            @BattleAbilities.started += instance.OnBattleAbilities;
+            @BattleAbilities.performed += instance.OnBattleAbilities;
+            @BattleAbilities.canceled += instance.OnBattleAbilities;
+            @BattleItems.started += instance.OnBattleItems;
+            @BattleItems.performed += instance.OnBattleItems;
+            @BattleItems.canceled += instance.OnBattleItems;
+            @BattlePass.started += instance.OnBattlePass;
+            @BattlePass.performed += instance.OnBattlePass;
+            @BattlePass.canceled += instance.OnBattlePass;
         }
 
         /// <summary>
@@ -1607,6 +1727,15 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Cycle.started -= instance.OnCycle;
             @Cycle.performed -= instance.OnCycle;
             @Cycle.canceled -= instance.OnCycle;
+            @BattleAbilities.started -= instance.OnBattleAbilities;
+            @BattleAbilities.performed -= instance.OnBattleAbilities;
+            @BattleAbilities.canceled -= instance.OnBattleAbilities;
+            @BattleItems.started -= instance.OnBattleItems;
+            @BattleItems.performed -= instance.OnBattleItems;
+            @BattleItems.canceled -= instance.OnBattleItems;
+            @BattlePass.started -= instance.OnBattlePass;
+            @BattlePass.performed -= instance.OnBattlePass;
+            @BattlePass.canceled -= instance.OnBattlePass;
         }
 
         /// <summary>
@@ -2005,6 +2134,27 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnCycle(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "BattleAbilities" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnBattleAbilities(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "BattleItems" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnBattleItems(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "BattlePass" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnBattlePass(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.

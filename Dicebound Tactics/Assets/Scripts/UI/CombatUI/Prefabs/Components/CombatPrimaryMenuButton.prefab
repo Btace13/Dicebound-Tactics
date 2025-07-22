@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 92004721207607513}
   - component: {fileID: 6957126958678878329}
   - component: {fileID: 8270356801906596088}
-  - component: {fileID: 5042608641572742342}
+  - component: {fileID: 8575679213916491844}
   m_Layer: 5
   m_Name: ButtonToPress
   m_TagString: Untagged
@@ -29,7 +29,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 7191335652771740935}
   m_Father: {fileID: 157320588904468180}
@@ -60,7 +60,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.21698111, g: 0.21698111, b: 0.21698111, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -68,7 +68,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: 3f91331724a9da84197e9b6d94f0483c, type: 3}
-  m_Type: 0
+  m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -81,7 +81,7 @@ MonoBehaviour:
   useBlur: 1
   blurStrength: 1
   falloffDistance: 1
---- !u!114 &5042608641572742342
+--- !u!114 &8575679213916491844
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -104,7 +104,7 @@ GameObject:
   - component: {fileID: 157320588904468180}
   - component: {fileID: 8845802130605075741}
   - component: {fileID: 9099982565569082888}
-  - component: {fileID: 7792289364200644307}
+  - component: {fileID: 7301464132611937839}
   - component: {fileID: 1874451854127577837}
   - component: {fileID: 6384717707347663355}
   m_Layer: 5
@@ -157,7 +157,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.8396226, g: 0.8396226, b: 0.8396226, a: 1}
+  m_Color: {r: 0.8396226, g: 0.8396226, b: 0.8396226, a: 0.23921569}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -178,7 +178,7 @@ MonoBehaviour:
   useBlur: 1
   blurStrength: 1
   falloffDistance: 1
---- !u!114 &7792289364200644307
+--- !u!114 &7301464132611937839
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -190,7 +190,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68356c3764ad390429ddad9e48ce8c31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: {x: 0, y: 60, z: 60, w: 0}
+  radius: {x: 0, y: 0, z: 20, w: 0}
 --- !u!114 &1874451854127577837
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -340,7 +340,7 @@ GameObject:
   - component: {fileID: 7191335652771740935}
   - component: {fileID: 8479370109296588872}
   - component: {fileID: 6229694567569570431}
-  - component: {fileID: 8981581648198166856}
+  - component: {fileID: 211668188837336327}
   m_Layer: 5
   m_Name: Icon
   m_TagString: Untagged
@@ -357,7 +357,7 @@ RectTransform:
   m_GameObject: {fileID: 6006757123959747079}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.05, y: 1.05, z: 1.05}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 92004721207607513}
@@ -395,7 +395,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 50fa8ecb494c6400e981c12bcd241057, type: 3}
+  m_Sprite: {fileID: 8988070500663906562, guid: a129d4b0de7134a82b080f733596aaed, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -409,7 +409,7 @@ MonoBehaviour:
   useBlur: 0
   blurStrength: 1
   falloffDistance: 1
---- !u!114 &8981581648198166856
+--- !u!114 &211668188837336327
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -432,7 +432,7 @@ GameObject:
   - component: {fileID: 3888831555442880867}
   - component: {fileID: 5946404899500291534}
   - component: {fileID: 2818072082133842825}
-  - component: {fileID: 224466240861147040}
+  - component: {fileID: 1788994574915931755}
   m_Layer: 5
   m_Name: Outline
   m_TagString: Untagged
@@ -501,7 +501,7 @@ MonoBehaviour:
   useBlur: 0
   blurStrength: 1
   falloffDistance: 1
---- !u!114 &224466240861147040
+--- !u!114 &1788994574915931755
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -513,7 +513,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68356c3764ad390429ddad9e48ce8c31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: {x: 0, y: 60, z: 50, w: 0}
+  radius: {x: 0, y: 0, z: 20, w: 0}
 --- !u!1 &8980108689777752483
 GameObject:
   m_ObjectHideFlags: 0

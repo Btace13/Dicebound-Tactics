@@ -130,6 +130,33 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "BattleAbilities",
+                    "type": "Button",
+                    "id": "512caa6f-db01-4739-a829-6f1f531f2eb4",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "BattleItems",
+                    "type": "Button",
+                    "id": "fb15b007-9799-4653-b79b-2511b6175a39",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "BattlePass",
+                    "type": "Button",
+                    "id": "9de0e317-ea9d-4f42-9179-bbd3683311df",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -532,7 +559,7 @@
                 {
                     "name": "",
                     "id": "2e982e8f-441f-4211-8850-4db6fa94b0be",
-                    "path": "<Keyboard>/q",
+                    "path": "<Keyboard>/4",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
@@ -543,7 +570,7 @@
                 {
                     "name": "",
                     "id": "6c545f34-3b4d-4265-b831-4625b5ce1e06",
-                    "path": "<Keyboard>/f",
+                    "path": "<Keyboard>/1",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
@@ -565,7 +592,7 @@
                 {
                     "name": "",
                     "id": "6850a498-52ec-470a-aade-77d24ba27d9c",
-                    "path": "<Keyboard>/e",
+                    "path": "<Keyboard>/2",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
@@ -587,7 +614,7 @@
                 {
                     "name": "",
                     "id": "053f4a06-c0c0-4702-bb6e-e4caa3f54ac3",
-                    "path": "<Keyboard>/h",
+                    "path": "<Keyboard>/3",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
@@ -625,6 +652,72 @@
                     "processors": "",
                     "groups": ";Gamepad",
                     "action": "Cycle",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "19c808fd-4933-4f3d-bea5-969d049b3f09",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "BattleAbilities",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1af1f68a-73ce-4a21-8f3b-6936a42d7ff9",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "BattleAbilities",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3ef63360-0c56-4171-a21d-4fc8050b4909",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "BattleItems",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0fe82cb9-c7c8-461c-9c73-ef5238de75cb",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "BattleItems",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "deb73efb-2957-408b-8f3b-a936b7f6eabe",
+                    "path": "<Keyboard>/3",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "BattlePass",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e6b70843-dcab-4ba5-91a1-727606bc8fd2",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "BattlePass",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
