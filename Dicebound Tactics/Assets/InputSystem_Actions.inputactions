@@ -132,7 +132,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "BattleAbilities",
+                    "name": "Battle1",
                     "type": "Button",
                     "id": "512caa6f-db01-4739-a829-6f1f531f2eb4",
                     "expectedControlType": "",
@@ -141,7 +141,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "BattleItems",
+                    "name": "Battle2",
                     "type": "Button",
                     "id": "fb15b007-9799-4653-b79b-2511b6175a39",
                     "expectedControlType": "",
@@ -150,9 +150,18 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "BattlePass",
+                    "name": "Battle3",
                     "type": "Button",
                     "id": "9de0e317-ea9d-4f42-9179-bbd3683311df",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Battle4",
+                    "type": "Button",
+                    "id": "3feac18d-3853-40bb-ab17-58c5e6ce5cad",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -559,7 +568,7 @@
                 {
                     "name": "",
                     "id": "2e982e8f-441f-4211-8850-4db6fa94b0be",
-                    "path": "<Keyboard>/4",
+                    "path": "<Keyboard>/e",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
@@ -581,7 +590,7 @@
                 {
                     "name": "",
                     "id": "ac15af46-5d0b-44df-a859-bce6c18d8c6f",
-                    "path": "<Gamepad>/buttonWest",
+                    "path": "<Keyboard>/r",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
@@ -592,7 +601,7 @@
                 {
                     "name": "",
                     "id": "6850a498-52ec-470a-aade-77d24ba27d9c",
-                    "path": "<Keyboard>/2",
+                    "path": "<Keyboard>/f",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
@@ -614,7 +623,7 @@
                 {
                     "name": "",
                     "id": "053f4a06-c0c0-4702-bb6e-e4caa3f54ac3",
-                    "path": "<Keyboard>/3",
+                    "path": "<Keyboard>/q",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
@@ -662,7 +671,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "BattleAbilities",
+                    "action": "Battle1",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -673,7 +682,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "BattleAbilities",
+                    "action": "Battle1",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -684,7 +693,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "BattleItems",
+                    "action": "Battle2",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -695,7 +704,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "BattleItems",
+                    "action": "Battle2",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -706,7 +715,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "BattlePass",
+                    "action": "Battle3",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -717,7 +726,29 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "BattlePass",
+                    "action": "Battle3",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f92ca37a-2dbe-4215-9d33-933564e9cb26",
+                    "path": "<Keyboard>/4",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Battle4",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "db56968c-47f0-4176-b4c0-a416e81f69d4",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Battle4",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

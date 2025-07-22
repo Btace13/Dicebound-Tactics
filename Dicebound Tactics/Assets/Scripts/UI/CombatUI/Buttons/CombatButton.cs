@@ -11,7 +11,7 @@ public class CombatButton : MonoBehaviour
     [SerializeField] private TextMeshProUGUI buttonText;
 
     private CanvasGroup canvasGroup;
-    private Button button;
+    protected Button button;
     public Button Button
     {
         get

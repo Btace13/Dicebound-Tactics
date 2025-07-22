@@ -15,7 +15,6 @@ public class AbilityButton : CombatButton, IIconUpdater
     [SerializeField] TextMeshProUGUI abilityCostText;
     [SerializeField] TextMeshProUGUI abilityDescriptionText;
     public InputActionReference inputAction;
-    private Button button;
 
     public void OnEnable()
     {

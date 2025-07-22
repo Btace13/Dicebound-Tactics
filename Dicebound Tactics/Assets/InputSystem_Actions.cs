@@ -218,7 +218,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""BattleAbilities"",
+                    ""name"": ""Battle1"",
                     ""type"": ""Button"",
                     ""id"": ""512caa6f-db01-4739-a829-6f1f531f2eb4"",
                     ""expectedControlType"": """",
@@ -227,7 +227,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""BattleItems"",
+                    ""name"": ""Battle2"",
                     ""type"": ""Button"",
                     ""id"": ""fb15b007-9799-4653-b79b-2511b6175a39"",
                     ""expectedControlType"": """",
@@ -236,9 +236,18 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""BattlePass"",
+                    ""name"": ""Battle3"",
                     ""type"": ""Button"",
                     ""id"": ""9de0e317-ea9d-4f42-9179-bbd3683311df"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Battle4"",
+                    ""type"": ""Button"",
+                    ""id"": ""3feac18d-3853-40bb-ab17-58c5e6ce5cad"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -645,7 +654,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""2e982e8f-441f-4211-8850-4db6fa94b0be"",
-                    ""path"": ""<Keyboard>/4"",
+                    ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
@@ -667,7 +676,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""ac15af46-5d0b-44df-a859-bce6c18d8c6f"",
-                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""path"": ""<Keyboard>/r"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
@@ -678,7 +687,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""6850a498-52ec-470a-aade-77d24ba27d9c"",
-                    ""path"": ""<Keyboard>/2"",
+                    ""path"": ""<Keyboard>/f"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
@@ -700,7 +709,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""053f4a06-c0c0-4702-bb6e-e4caa3f54ac3"",
-                    ""path"": ""<Keyboard>/3"",
+                    ""path"": ""<Keyboard>/q"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Keyboard&Mouse"",
@@ -748,7 +757,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""BattleAbilities"",
+                    ""action"": ""Battle1"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -759,7 +768,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""BattleAbilities"",
+                    ""action"": ""Battle1"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -770,7 +779,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""BattleItems"",
+                    ""action"": ""Battle2"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -781,7 +790,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""BattleItems"",
+                    ""action"": ""Battle2"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -792,7 +801,7 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""BattlePass"",
+                    ""action"": ""Battle3"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -803,7 +812,29 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""BattlePass"",
+                    ""action"": ""Battle3"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f92ca37a-2dbe-4215-9d33-933564e9cb26"",
+                    ""path"": ""<Keyboard>/4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Battle4"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""db56968c-47f0-4176-b4c0-a416e81f69d4"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Battle4"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1405,9 +1436,10 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         m_Player_TopGamepad = m_Player.FindAction("TopGamepad", throwIfNotFound: true);
         m_Player_RightGamepad = m_Player.FindAction("RightGamepad", throwIfNotFound: true);
         m_Player_Cycle = m_Player.FindAction("Cycle", throwIfNotFound: true);
-        m_Player_BattleAbilities = m_Player.FindAction("BattleAbilities", throwIfNotFound: true);
-        m_Player_BattleItems = m_Player.FindAction("BattleItems", throwIfNotFound: true);
-        m_Player_BattlePass = m_Player.FindAction("BattlePass", throwIfNotFound: true);
+        m_Player_Battle1 = m_Player.FindAction("Battle1", throwIfNotFound: true);
+        m_Player_Battle2 = m_Player.FindAction("Battle2", throwIfNotFound: true);
+        m_Player_Battle3 = m_Player.FindAction("Battle3", throwIfNotFound: true);
+        m_Player_Battle4 = m_Player.FindAction("Battle4", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1515,9 +1547,10 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_TopGamepad;
     private readonly InputAction m_Player_RightGamepad;
     private readonly InputAction m_Player_Cycle;
-    private readonly InputAction m_Player_BattleAbilities;
-    private readonly InputAction m_Player_BattleItems;
-    private readonly InputAction m_Player_BattlePass;
+    private readonly InputAction m_Player_Battle1;
+    private readonly InputAction m_Player_Battle2;
+    private readonly InputAction m_Player_Battle3;
+    private readonly InputAction m_Player_Battle4;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -1586,17 +1619,21 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @Cycle => m_Wrapper.m_Player_Cycle;
         /// <summary>
-        /// Provides access to the underlying input action "Player/BattleAbilities".
+        /// Provides access to the underlying input action "Player/Battle1".
         /// </summary>
-        public InputAction @BattleAbilities => m_Wrapper.m_Player_BattleAbilities;
+        public InputAction @Battle1 => m_Wrapper.m_Player_Battle1;
         /// <summary>
-        /// Provides access to the underlying input action "Player/BattleItems".
+        /// Provides access to the underlying input action "Player/Battle2".
         /// </summary>
-        public InputAction @BattleItems => m_Wrapper.m_Player_BattleItems;
+        public InputAction @Battle2 => m_Wrapper.m_Player_Battle2;
         /// <summary>
-        /// Provides access to the underlying input action "Player/BattlePass".
+        /// Provides access to the underlying input action "Player/Battle3".
         /// </summary>
-        public InputAction @BattlePass => m_Wrapper.m_Player_BattlePass;
+        public InputAction @Battle3 => m_Wrapper.m_Player_Battle3;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/Battle4".
+        /// </summary>
+        public InputAction @Battle4 => m_Wrapper.m_Player_Battle4;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -1665,15 +1702,18 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Cycle.started += instance.OnCycle;
             @Cycle.performed += instance.OnCycle;
             @Cycle.canceled += instance.OnCycle;
-            @BattleAbilities.started += instance.OnBattleAbilities;
-            @BattleAbilities.performed += instance.OnBattleAbilities;
-            @BattleAbilities.canceled += instance.OnBattleAbilities;
-            @BattleItems.started += instance.OnBattleItems;
-            @BattleItems.performed += instance.OnBattleItems;
-            @BattleItems.canceled += instance.OnBattleItems;
-            @BattlePass.started += instance.OnBattlePass;
-            @BattlePass.performed += instance.OnBattlePass;
-            @BattlePass.canceled += instance.OnBattlePass;
+            @Battle1.started += instance.OnBattle1;
+            @Battle1.performed += instance.OnBattle1;
+            @Battle1.canceled += instance.OnBattle1;
+            @Battle2.started += instance.OnBattle2;
+            @Battle2.performed += instance.OnBattle2;
+            @Battle2.canceled += instance.OnBattle2;
+            @Battle3.started += instance.OnBattle3;
+            @Battle3.performed += instance.OnBattle3;
+            @Battle3.canceled += instance.OnBattle3;
+            @Battle4.started += instance.OnBattle4;
+            @Battle4.performed += instance.OnBattle4;
+            @Battle4.canceled += instance.OnBattle4;
         }
 
         /// <summary>
@@ -1727,15 +1767,18 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
             @Cycle.started -= instance.OnCycle;
             @Cycle.performed -= instance.OnCycle;
             @Cycle.canceled -= instance.OnCycle;
-            @BattleAbilities.started -= instance.OnBattleAbilities;
-            @BattleAbilities.performed -= instance.OnBattleAbilities;
-            @BattleAbilities.canceled -= instance.OnBattleAbilities;
-            @BattleItems.started -= instance.OnBattleItems;
-            @BattleItems.performed -= instance.OnBattleItems;
-            @BattleItems.canceled -= instance.OnBattleItems;
-            @BattlePass.started -= instance.OnBattlePass;
-            @BattlePass.performed -= instance.OnBattlePass;
-            @BattlePass.canceled -= instance.OnBattlePass;
+            @Battle1.started -= instance.OnBattle1;
+            @Battle1.performed -= instance.OnBattle1;
+            @Battle1.canceled -= instance.OnBattle1;
+            @Battle2.started -= instance.OnBattle2;
+            @Battle2.performed -= instance.OnBattle2;
+            @Battle2.canceled -= instance.OnBattle2;
+            @Battle3.started -= instance.OnBattle3;
+            @Battle3.performed -= instance.OnBattle3;
+            @Battle3.canceled -= instance.OnBattle3;
+            @Battle4.started -= instance.OnBattle4;
+            @Battle4.performed -= instance.OnBattle4;
+            @Battle4.canceled -= instance.OnBattle4;
         }
 
         /// <summary>
@@ -2135,26 +2178,33 @@ public partial class @InputSystem_Actions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnCycle(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "BattleAbilities" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "Battle1" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnBattleAbilities(InputAction.CallbackContext context);
+        void OnBattle1(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "BattleItems" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "Battle2" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnBattleItems(InputAction.CallbackContext context);
+        void OnBattle2(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "BattlePass" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "Battle3" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnBattlePass(InputAction.CallbackContext context);
+        void OnBattle3(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Battle4" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnBattle4(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "UI" which allows adding and removing callbacks.
