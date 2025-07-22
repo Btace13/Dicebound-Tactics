@@ -77,7 +77,7 @@ public class CombatEncounter : MonoBehaviour
                 HandleEnemyChaseBehavior(enemy);
             }
 
-            if (!enemy.overworldController.IsChasingTarget)
+            if (!IsAntagonistic || !enemy.overworldController.IsChasingTarget)
             {
                 HandleEnemyWanderBehavior(enemy);
             }
