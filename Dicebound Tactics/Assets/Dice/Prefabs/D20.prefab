@@ -96,6 +96,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 182c15c2b84e63d4cac2882583308858, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7841307654136888622}
+    - targetCorrespondingSourceObject: {fileID: -1077396391054534199, guid: 182c15c2b84e63d4cac2882583308858, type: 3}
+      insertIndex: 1
+      addedObject: {fileID: 1109413542033446546}
+    - targetCorrespondingSourceObject: {fileID: -8206742851654995624, guid: 182c15c2b84e63d4cac2882583308858, type: 3}
+      insertIndex: 1
+      addedObject: {fileID: 5524727537076426452}
   m_SourcePrefab: {fileID: 100100000, guid: 182c15c2b84e63d4cac2882583308858, type: 3}
 --- !u!95 &214040632166542893 stripped
 Animator:
@@ -112,6 +118,32 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6307968309698819790, guid: 182c15c2b84e63d4cac2882583308858, type: 3}
   m_PrefabInstance: {fileID: 6022149962115699644}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2494616833724893813 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -1077396391054534199, guid: 182c15c2b84e63d4cac2882583308858, type: 3}
+  m_PrefabInstance: {fileID: 6022149962115699644}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1109413542033446546
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2494616833724893813}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6dcad5a5b02b4e459c2b50fc1a75bba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  radius: 0.3
+  faceSize: 2
+  faceColor: {r: 1, g: 1, b: 1, a: 1}
+  forward: {x: 0, y: 0, z: 1}
+  positionOffset: {x: 0, y: -0.01, z: 0.015}
+  rotationOffset: {x: 0, y: 0, z: 0}
+  parent: {fileID: 7564251834749196095}
+  fontAsset: {fileID: 11400000, guid: f4d0839316bf0b648aeb96138f31255b, type: 2}
+  diceType: 1
 --- !u!4 &2562982651264965263 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -1151951325145413325, guid: 182c15c2b84e63d4cac2882583308858, type: 3}
@@ -132,6 +164,32 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 182c15c2b84e63d4cac2882583308858, type: 3}
   m_PrefabInstance: {fileID: 6022149962115699644}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &6739975080969331428 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -8206742851654995624, guid: 182c15c2b84e63d4cac2882583308858, type: 3}
+  m_PrefabInstance: {fileID: 6022149962115699644}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5524727537076426452
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6739975080969331428}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6dcad5a5b02b4e459c2b50fc1a75bba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  radius: 0.41
+  faceSize: 1.4
+  faceColor: {r: 1, g: 1, b: 1, a: 1}
+  forward: {x: 0, y: 0, z: 1}
+  positionOffset: {x: 0, y: 0, z: 0}
+  rotationOffset: {x: 0, y: 0, z: 0}
+  parent: {fileID: 7564251834749196095}
+  fontAsset: {fileID: 11400000, guid: f4d0839316bf0b648aeb96138f31255b, type: 2}
+  diceType: 5
 --- !u!4 &6746725400007587175 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8199974674142632229, guid: 182c15c2b84e63d4cac2882583308858, type: 3}
