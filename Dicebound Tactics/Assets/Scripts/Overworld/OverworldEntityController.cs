@@ -29,6 +29,7 @@ public class OverworldEntityController : MonoBehaviour
         rvoController = gameObject.AddOrGetComponent<RVOController>();
         pathfindingAI = gameObject.AddOrGetComponent<CustomRichAI>();
         pathfindingAI.maxSpeed = moveSpeed;
+        pathfindingAI.rotationSpeed = rotationSpeed;
         unitAnimationHandler = gameObject.GetComponentInChildren<UnitAnimationHandler>(true);
     }
 
