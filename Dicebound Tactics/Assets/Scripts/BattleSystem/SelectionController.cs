@@ -209,51 +209,64 @@ public class SelectionController : MonoBehaviour
 
   public void CycleHighlight()
   {
-    if (turnManager == null) return;
+      if (!TryGetValidEntityList(out List<Entity> list)) return;
 
-    List<Entity> list = cyclingEnemies
-        ? turnManager.enemyUnits.ConvertAll(e => (Entity)e)
-        : turnManager.playerUnits.ConvertAll(p => (Entity)p);
+      int max = list.Count;
+      int attempts = 0;
 
-    if (list == null || list.Count == 0) return;
+      do
+      {
+          currentIndex = (currentIndex + 1) % max;
+          attempts++;
+      }
+      while (!list[currentIndex].isAlive && attempts < max);
 
-    int max = list.Count;
-    int attempts = 0;
-
-    do
-    {
-      currentIndex = (currentIndex + 1) % max;
-      attempts++;
-    }
-    while (!list[currentIndex].isAlive && attempts < max);
-
-    Entity entityToHighlight = list[currentIndex];
-
-    if (numberOfSelectableTargets == 1)
-    {
-      ToggleEntitySelection(entityToHighlight, false);
-    }
-    else
-    {
-      SetHighlightedEntity(entityToHighlight);
-    }
+      HandleSelection(list[currentIndex]);
   }
 
   public void SelectPreviousEntity()
   {
-      if (turnManager == null) return;
+      if (!TryGetValidEntityList(out List<Entity> list)) return;
 
-      List<Entity> list = cyclingEnemies
-          ? turnManager.enemyUnits.ConvertAll(e => (Entity)e)
-          : turnManager.playerUnits.ConvertAll(p => (Entity)p);
+      int max = list.Count;
+      int attempts = 0;
 
-      if (list == null || list.Count == 0) return;
+      do
+      {
+          currentIndex = (currentIndex - 1 + max) % max;
+          attempts++;
+      }
+      while (!list[currentIndex].isAlive && attempts < max);
 
-      currentIndex = (currentIndex - 1 + list.Count) % list.Count;
+      HandleSelection(list[currentIndex]);
+  }
 
-      Entity entityToHighlight = list[currentIndex];
 
-      SetHighlightedEntity(entityToHighlight);
+  private bool TryGetValidEntityList(out List<Entity> list)
+  {
+      list = cyclingEnemies
+          ? turnManager?.enemyUnits?.ConvertAll(e => (Entity)e)
+          : turnManager?.playerUnits?.ConvertAll(p => (Entity)p);
+
+      if (list == null || list.Count == 0)
+      {
+          list = null;
+          return false;
+      }
+
+      return true;
+  }
+
+  private void HandleSelection(Entity entity)
+  {
+      if (numberOfSelectableTargets == 1)
+      {
+          ToggleEntitySelection(entity, false);
+      }
+      else
+      {
+          SetHighlightedEntity(entity);
+      }
   }
 
   public void ChangeSelectionType(bool cycleEnemies)
