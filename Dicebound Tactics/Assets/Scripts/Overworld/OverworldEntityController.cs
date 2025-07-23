@@ -35,6 +35,11 @@ public class OverworldEntityController : MonoBehaviour
 
     protected virtual void Update()
     {
+
+    }
+
+    protected virtual void LateUpdate()
+    {
         UpdateAnimationState();
     }
 
@@ -105,7 +110,7 @@ public class OverworldEntityController : MonoBehaviour
             return;
         }
 
-        _currentVelocity = Vector3.LerpUnclamped(_currentVelocity, transform.InverseTransformDirection(rvoController.velocity), 10f * Time.deltaTime);
+        _currentVelocity = Vector3.Lerp(_currentVelocity, transform.InverseTransformDirection(rvoController.velocity), 5f * Time.deltaTime);
 
         unitAnimationHandler.OnUnitVelocityChange(new Vector2(_currentVelocity.x, _currentVelocity.z) / pathfindingAI.maxSpeed);
     }

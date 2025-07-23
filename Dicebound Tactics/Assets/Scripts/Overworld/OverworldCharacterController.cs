@@ -138,7 +138,7 @@ public class OverworldCharacterController : OverworldEntityController
         {
             // Sharp turn: instantly stop and reorient
             rvoController.velocity = Vector3.zero;
-            transform.rotation = Quaternion.LookRotation(zeroedYVelocity, Vector3.up);
+            pathfindingAI.desiredFinalRotation = Quaternion.LookRotation(zeroedYVelocity, Vector3.up);
 
             // Temporarily boost rotation speed and acceleration (on pathfindingAI only)
             if (sharpTurnBoostTimer <= 0f)
