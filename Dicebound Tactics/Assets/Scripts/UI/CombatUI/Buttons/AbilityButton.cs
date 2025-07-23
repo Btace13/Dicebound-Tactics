@@ -15,10 +15,14 @@ public class AbilityButton : CombatButton, IIconUpdater
     [SerializeField] TextMeshProUGUI abilityCostText;
     [SerializeField] TextMeshProUGUI abilityDescriptionText;
     public InputActionReference inputAction;
+    public bool isSelectingTarget;
 
     public void OnEnable()
     {
         button = GetComponent<Button>();
+
+        // Event Listeners
+        EventManager.OnSelectingATarget += HandleSelectingATarget;
 
         if (InputManager.Instance == null)
         {
@@ -50,6 +54,7 @@ public class AbilityButton : CombatButton, IIconUpdater
 
     public void OnDisable()
     {
+        EventManager.OnSelectingATarget -= HandleSelectingATarget;
         if (InputManager.Instance == null)
         {
             Debug.LogWarning("InputManager instance is not found. Please ensure it is initialized before using ActionListenerButton.");
@@ -113,9 +118,15 @@ public class AbilityButton : CombatButton, IIconUpdater
             buttonImage.enabled = false;
         }
     }
-    
+
     private void UpdateButton(InputAction.CallbackContext context)
     {
+        if(isSelectingTarget)
+        {
+            Debug.LogWarning($"Button {name} is currently selecting a target. Ignoring input action.");
+            return;
+        }
+
         if (context.action != inputAction.action)
         {
             Debug.LogWarning($"Input action {context.action.name} does not match the assigned action {inputAction.action.name} for button {name}. Ignoring input.");
@@ -132,5 +143,10 @@ public class AbilityButton : CombatButton, IIconUpdater
         {
             Button.onClick?.Invoke();
         }
+    }
+    
+    private void HandleSelectingATarget(bool enable)
+    {
+        isSelectingTarget = enable;
     }
 }
