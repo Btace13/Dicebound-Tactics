@@ -34,6 +34,18 @@ public class DiceVisualsController : MonoBehaviour
             case DiceType.D20:
                 GenerateD20Numbers();
                 break;
+            case DiceType.D4:
+                GenerateD4Numbers();
+                break;
+            case DiceType.D8:
+                GenerateD8Numbers();
+                break;
+            case DiceType.D10:
+                GenerateD10Numbers();
+                break;
+            case DiceType.D12:
+                GenerateD12Numbers();
+                break;
                 // Add cases for other dice types (D4, D8, D10, D12)
         }
     }
@@ -41,11 +53,23 @@ public class DiceVisualsController : MonoBehaviour
     [Button("Clear Dice Numbers")]
     public async void ClearDiceNumbers()
     {
-        // Clear all child objects (dice faces)
-        foreach (Transform child in transform)
+        // Get all children of parent that start with "Face_"
+
+        if (parent == null)
         {
-            DestroyImmediate(child.gameObject);
-            await System.Threading.Tasks.Task.Yield();
+            Debug.LogWarning("Parent transform is not set. Cannot clear dice numbers.");
+            return;
+        }
+
+        Transform[] children = parent.GetComponentsInChildren<Transform>(true);
+
+        for (int i = 0; i < children.Length; i++)
+        {
+            if (children[i].name.StartsWith("Face_"))
+            {
+                DestroyImmediate(children[i].gameObject);
+                await System.Threading.Tasks.Task.Yield();
+            }
         }
     }
 
@@ -67,8 +91,9 @@ public class DiceVisualsController : MonoBehaviour
             Vector3 pos = transform.position + normals[i] * radius;
             GameObject go = new GameObject($"Face_{faceNumbers[i]}");
             go.transform.SetParent(parent);
-            go.transform.localPosition = normals[i] * radius + positionOffset;
-            go.transform.localRotation = Quaternion.LookRotation(normals[i], Vector3.up) * Quaternion.Euler(rotationOffset) * Quaternion.Euler(0, 180, 0);
+            Vector3 rotatedNormal = Quaternion.Euler(rotationOffset) * normals[i];
+            go.transform.localPosition = rotatedNormal * radius + positionOffset;
+            go.transform.localRotation = Quaternion.LookRotation(rotatedNormal, Vector3.up) * Quaternion.Euler(0, 180, 0);
             var tmp = go.AddComponent<TextMeshPro>();
             tmp.text = faceNumbers[i].ToString();
             tmp.fontSize = faceSize;
@@ -114,8 +139,163 @@ public class DiceVisualsController : MonoBehaviour
             Vector3 pos = transform.position + center * radius;
             GameObject go = new GameObject($"Face_{faceNumbers[i]}");
             go.transform.SetParent(parent);
-            go.transform.localPosition = center * radius + positionOffset;
-            go.transform.localRotation = Quaternion.LookRotation(center, Vector3.up) * Quaternion.Euler(rotationOffset) * Quaternion.Euler(0, 180, 0);
+            Vector3 rotatedCenter = Quaternion.Euler(rotationOffset) * center;
+            go.transform.localPosition = rotatedCenter * radius + positionOffset;
+            go.transform.localRotation = Quaternion.LookRotation(rotatedCenter, Vector3.up) * Quaternion.Euler(0, 180, 0);
+            var tmp = go.AddComponent<TextMeshPro>();
+            tmp.text = faceNumbers[i].ToString();
+            tmp.fontSize = faceSize;
+            tmp.alignment = TextAlignmentOptions.Center;
+            tmp.font = fontAsset;
+            tmp.color = faceColor;
+        }
+    }
+
+    void GenerateD4Numbers()
+    {
+        // Vertices of a regular tetrahedron
+        float sqrt2over3 = Mathf.Sqrt(2f / 3f);
+        float sqrt6over3 = Mathf.Sqrt(6f) / 3f;
+        Vector3[] verts = new Vector3[]
+        {
+            new Vector3(0, 1, 0),
+            new Vector3(2 * Mathf.Sqrt(2f) / 3f, -1f / 3f, 0),
+            new Vector3(-Mathf.Sqrt(2f) / 3f, -1f / 3f, Mathf.Sqrt(6f) / 3f),
+            new Vector3(-Mathf.Sqrt(2f) / 3f, -1f / 3f, -Mathf.Sqrt(6f) / 3f)
+        };
+        int[][] faces = new int[][]
+        {
+            new int[]{0,1,2}, new int[]{0,3,1}, new int[]{0,2,3}, new int[]{1,3,2}
+        };
+        int[] faceNumbers = { 1, 2, 3, 4 }; // Standard D4 numbering (can be customized)
+        for (int i = 0; i < 4; i++)
+        {
+            Vector3 v0 = verts[faces[i][0]];
+            Vector3 v1 = verts[faces[i][1]];
+            Vector3 v2 = verts[faces[i][2]];
+            Vector3 center = (v0 + v1 + v2) / 3f;
+            GameObject go = new GameObject($"Face_{faceNumbers[i]}");
+            go.transform.SetParent(parent);
+            Vector3 rotatedCenter = Quaternion.Euler(rotationOffset) * center;
+            go.transform.localPosition = rotatedCenter * radius + positionOffset;
+            go.transform.localRotation = Quaternion.LookRotation(rotatedCenter, Vector3.up) * Quaternion.Euler(0, 180, 0);
+            var tmp = go.AddComponent<TextMeshPro>();
+            tmp.text = faceNumbers[i].ToString();
+            tmp.fontSize = faceSize;
+            tmp.alignment = TextAlignmentOptions.Center;
+            tmp.font = fontAsset;
+            tmp.color = faceColor;
+        }
+    }
+
+    void GenerateD8Numbers()
+    {
+        // Vertices of a regular octahedron
+        Vector3[] verts = new Vector3[]
+        {
+            new Vector3(1,0,0), new Vector3(-1,0,0), new Vector3(0,1,0), new Vector3(0,-1,0), new Vector3(0,0,1), new Vector3(0,0,-1)
+        };
+        int[][] faces = new int[][]
+        {
+            new int[]{0,2,4}, new int[]{2,1,4}, new int[]{1,3,4}, new int[]{3,0,4},
+            new int[]{0,5,2}, new int[]{2,5,1}, new int[]{1,5,3}, new int[]{3,5,0}
+        };
+        int[] faceNumbers = { 1, 2, 3, 4, 5, 6, 7, 8 };
+        for (int i = 0; i < 8; i++)
+        {
+            Vector3 v0 = verts[faces[i][0]];
+            Vector3 v1 = verts[faces[i][1]];
+            Vector3 v2 = verts[faces[i][2]];
+            Vector3 center = (v0 + v1 + v2) / 3f;
+            GameObject go = new GameObject($"Face_{faceNumbers[i]}");
+            go.transform.SetParent(parent);
+            Vector3 rotatedCenter = Quaternion.Euler(rotationOffset) * center;
+            go.transform.localPosition = rotatedCenter * radius + positionOffset;
+            go.transform.localRotation = Quaternion.LookRotation(rotatedCenter, Vector3.up) * Quaternion.Euler(0, 180, 0);
+            var tmp = go.AddComponent<TextMeshPro>();
+            tmp.text = faceNumbers[i].ToString();
+            tmp.fontSize = faceSize;
+            tmp.alignment = TextAlignmentOptions.Center;
+            tmp.font = fontAsset;
+            tmp.color = faceColor;
+        }
+    }
+
+    void GenerateD10Numbers()
+    {
+        // Vertices of a pentagonal trapezohedron (D10)
+        float angleStep = Mathf.PI * 2f / 10f;
+        float h = Mathf.Cos(angleStep / 2f);
+        float r = Mathf.Sin(angleStep / 2f);
+        Vector3[] verts = new Vector3[10];
+        for (int i = 0; i < 10; i++)
+        {
+            float angle = i * angleStep;
+            verts[i] = new Vector3(Mathf.Cos(angle) * r, (i % 2 == 0 ? h : -h), Mathf.Sin(angle) * r);
+        }
+        // Each face is a kite between two adjacent top and bottom points
+        int[][] faces = new int[10][];
+        for (int i = 0; i < 10; i++)
+        {
+            int next = (i + 1) % 10;
+            faces[i] = new int[] { i, next, (i + 2) % 10 };
+        }
+        int[] faceNumbers = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }; // Standard D10 numbering (can be customized)
+        for (int i = 0; i < 10; i++)
+        {
+            Vector3 v0 = verts[faces[i][0]];
+            Vector3 v1 = verts[faces[i][1]];
+            Vector3 v2 = verts[faces[i][2]];
+            Vector3 center = (v0 + v1 + v2) / 3f;
+            GameObject go = new GameObject($"Face_{faceNumbers[i]}");
+            go.transform.SetParent(parent);
+            Vector3 rotatedCenter = Quaternion.Euler(rotationOffset) * center;
+            go.transform.localPosition = rotatedCenter * radius + positionOffset;
+            go.transform.localRotation = Quaternion.LookRotation(rotatedCenter, Vector3.up) * Quaternion.Euler(0, 180, 0);
+            var tmp = go.AddComponent<TextMeshPro>();
+            tmp.text = faceNumbers[i].ToString();
+            tmp.fontSize = faceSize;
+            tmp.alignment = TextAlignmentOptions.Center;
+            tmp.font = fontAsset;
+            tmp.color = faceColor;
+        }
+    }
+
+    void GenerateD12Numbers()
+    {
+        // Vertices of a regular dodecahedron
+        float phi = (1 + Mathf.Sqrt(5)) / 2;
+        float a = 1f;
+        float b = 1f / phi;
+        float c = 2f - phi;
+        Vector3[] verts = new Vector3[]
+        {
+            new Vector3( 0,  b, -a), new Vector3( b,  a, 0), new Vector3(-b,  a, 0), new Vector3( 0,  b,  a),
+            new Vector3( 0, -b,  a), new Vector3(-a, 0,  b), new Vector3( 0, -b, -a), new Vector3( a, 0, -b),
+            new Vector3( a, 0,  b), new Vector3(-a, 0, -b), new Vector3( b, -a, 0), new Vector3(-b, -a, 0),
+            new Vector3( c,  c,  c), new Vector3( c,  c, -c), new Vector3( c, -c,  c), new Vector3( c, -c, -c),
+            new Vector3(-c,  c,  c), new Vector3(-c,  c, -c), new Vector3(-c, -c,  c), new Vector3(-c, -c, -c)
+        };
+        int[][] faces = new int[][]
+        {
+            new int[]{0,1,12,13,7}, new int[]{1,2,17,16,12}, new int[]{2,3,16,17,9}, new int[]{3,0,7,14,16}, new int[]{3,2,9,18,16},
+            new int[]{0,3,16,12,1}, new int[]{7,13,15,8,14}, new int[]{12,16,18,19,15}, new int[]{13,12,15,19,17}, new int[]{14,8,10,11,18},
+            new int[]{15,19,18,11,10}, new int[]{8,15,10,5,14}
+        };
+        int[] faceNumbers = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
+        for (int i = 0; i < 12; i++)
+        {
+            Vector3 v0 = verts[faces[i][0]];
+            Vector3 v1 = verts[faces[i][1]];
+            Vector3 v2 = verts[faces[i][2]];
+            Vector3 v3 = verts[faces[i][3]];
+            Vector3 v4 = verts[faces[i][4]];
+            Vector3 center = (v0 + v1 + v2 + v3 + v4) / 5f;
+            GameObject go = new GameObject($"Face_{faceNumbers[i]}");
+            go.transform.SetParent(parent);
+            Vector3 rotatedCenter = Quaternion.Euler(rotationOffset) * center;
+            go.transform.localPosition = rotatedCenter * radius + positionOffset;
+            go.transform.localRotation = Quaternion.LookRotation(rotatedCenter, Vector3.up) * Quaternion.Euler(0, 180, 0);
             var tmp = go.AddComponent<TextMeshPro>();
             tmp.text = faceNumbers[i].ToString();
             tmp.fontSize = faceSize;
