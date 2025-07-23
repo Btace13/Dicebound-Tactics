@@ -13,6 +13,13 @@ public class OverworldCharacterController : OverworldEntityController
     public bool IsControlled { get { return isControlled; } private set { isControlled = value; } }
     public bool CanFollowLeader { get; set; } = true;
 
+    private float sharpTurnBoostTimer = 0f;
+    private const float sharpTurnBoostDuration = 0.25f;
+    private float originalRotationSpeed;
+    private float originalAcceleration;
+    private const float sharpTurnRotationSpeed = 2000f; // Boosted value
+    private const float sharpTurnAcceleration = 100f;   // Boosted value
+
     protected override void Awake()
     {
         base.Awake();
@@ -20,6 +27,18 @@ public class OverworldCharacterController : OverworldEntityController
 
     protected override void Update()
     {
+        // Decay sharp turn boost
+        if (sharpTurnBoostTimer > 0f)
+        {
+            sharpTurnBoostTimer -= Time.deltaTime;
+            if (sharpTurnBoostTimer <= 0f)
+            {
+                // Restore original values
+                pathfindingAI.rotationSpeed = originalRotationSpeed;
+                pathfindingAI.acceleration = originalAcceleration;
+            }
+        }
+
         if (GameStateManager.Instance.CurrentGameState == GameState.Overworld && (Encounter == null || !Encounter.IsActive))
         {
             if (IsControlled)
@@ -106,13 +125,30 @@ public class OverworldCharacterController : OverworldEntityController
         }
 
         Vector3 movement = input.x * right + input.y * forward;
-
         Vector3 zeroedYVelocity = movement.normalized;
         zeroedYVelocity.y = 0;
 
         if (zeroedYVelocity.magnitude < 0.01f)
         {
             return; // Avoid setting rotation if there's no movement
+        }
+
+        // Detect sharp turn
+        if (rvoController.velocity.magnitude > 0.1f && Vector3.Dot(rvoController.velocity.normalized, zeroedYVelocity) < -0.8f)
+        {
+            // Sharp turn: instantly stop and reorient
+            rvoController.velocity = Vector3.zero;
+            transform.rotation = Quaternion.LookRotation(zeroedYVelocity, Vector3.up);
+
+            // Temporarily boost rotation speed and acceleration (on pathfindingAI only)
+            if (sharpTurnBoostTimer <= 0f)
+            {
+                originalRotationSpeed = pathfindingAI.rotationSpeed;
+                originalAcceleration = pathfindingAI.acceleration;
+            }
+            pathfindingAI.rotationSpeed = sharpTurnRotationSpeed;
+            pathfindingAI.acceleration = sharpTurnAcceleration;
+            sharpTurnBoostTimer = sharpTurnBoostDuration;
         }
 
         if (!pathfindingAI.updatePosition)
@@ -133,7 +169,6 @@ public class OverworldCharacterController : OverworldEntityController
         if (!pathfindingAI.enableRotation)
         {
             Quaternion targetRotation = Quaternion.LookRotation(zeroedYVelocity, Vector3.up);
-            //transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
             pathfindingAI.desiredFinalRotation = targetRotation;
         }
     }
