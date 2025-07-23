@@ -248,7 +248,7 @@ public class CombatManager : MonoBehaviour
             _selectedAbility = null;
             _selectedItem = null;
 
-            EventManager.TriggerCharacterTurnStarted(currentUnit as CharacterManager);
+            //EventManager.TriggerCharacterTurnStarted(currentUnit as CharacterManager);
         });
     }
 }
