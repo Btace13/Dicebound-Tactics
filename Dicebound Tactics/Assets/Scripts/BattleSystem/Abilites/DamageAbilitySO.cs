@@ -9,6 +9,7 @@ using UnityEngine.Events;
 public class DamageAbilitySO : AbilitySO
 {
     public int damageAmount;
+    private Vector3 failSafePosition = Vector3.zero;
 
     public override IEnumerator Execute(Entity user, Entity target)
     {
@@ -38,6 +39,7 @@ public class DamageAbilitySO : AbilitySO
             Vector3 destination = target.transform.position - direction * range;
 
             bool moveDone = false;
+            failSafePosition = user.transform.position;
             userController.MoveToPosition(destination, true, () => moveDone = true);
             while (!moveDone) yield return null;
 
@@ -49,7 +51,18 @@ public class DamageAbilitySO : AbilitySO
 
             // Return to origin
             bool returnDone = false;
-            userController.MoveToTarget(userController.AssignedEncounterSlot.slotTransform, true, () => returnDone = true);
+            userController.MoveToPosition(
+                userController?.AssignedEncounterSlot?.slotTransform != null
+                    ? userController.AssignedEncounterSlot.slotTransform.position
+                    : failSafePosition,
+                true, () =>
+            {
+                returnDone = true;
+                if (user is CharacterManager character)
+                {
+                    EventManager.TriggerCharacterTurnStarted(character);
+                }
+            });
             while (!returnDone) yield return null;
         }
         else
@@ -57,6 +70,10 @@ public class DamageAbilitySO : AbilitySO
             yield return TriggerAbilityAnimationSequenceCoroutine(user, target, () =>
             {
                 ApplyDamage(amount, user, target);
+                if (user is CharacterManager character)
+                {
+                    EventManager.TriggerCharacterTurnStarted(character);
+                }
             });
         }
     }
