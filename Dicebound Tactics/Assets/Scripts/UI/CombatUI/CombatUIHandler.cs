@@ -29,7 +29,6 @@ public class CombatUIHandler : MonoBehaviour
     [Header("Panel References")]
     public ActionPanel ActionPanel;
     public AbilityPanel AbilityPanel;
-    public GameObject SelectionPanel;
     public ItemPanel ItemPanel;
 
     [Header("Screen Space UI References")]
@@ -62,7 +61,6 @@ public class CombatUIHandler : MonoBehaviour
         EventManager.OnBattleStarted += OpenActionPanel;
         EventManager.OnCharacterTurnStarted += HandleNewCharacterTurn;
         EventManager.OnEnemyTurnStarted += HandleNewEnemyTurn;
-        EventManager.OnTargetChanged += MoveSelectionPanelToTarget;
     }
 
     private void OnDisable()
@@ -70,7 +68,6 @@ public class CombatUIHandler : MonoBehaviour
         EventManager.OnBattleStarted -= OpenActionPanel;
         EventManager.OnCharacterTurnStarted -= HandleNewCharacterTurn;
         EventManager.OnEnemyTurnStarted -= HandleNewEnemyTurn;
-        EventManager.OnTargetChanged -= MoveSelectionPanelToTarget;
     }
 
     public void MoveCanvasToCharacter(CharacterManager character)
@@ -224,7 +221,6 @@ public class CombatUIHandler : MonoBehaviour
             ShowScreenSpacePanelInputs(false);
         }, _fadeDuration, Ease.InOutQuad);
 
-        SelectionPanel?.SetActive(false);
         EventManager.TriggerSelectingATarget(false);
     }
 
@@ -323,26 +319,5 @@ public class CombatUIHandler : MonoBehaviour
     public void HandleNewEnemyTurn(EnemyManager enemy)
     {
         CloseAllPanels();
-    }
-
-    public void OpenSelectionPanel()
-    {
-        if (SelectionPanel == null)
-        {
-            return;
-        }
-
-        SelectionPanel.SetActive(true);
-        SelectionPanel.transform.position = SelectionController.Instance.SelectedEntities.FirstOrDefault()?.transform.position ?? Vector3.zero;
-    }
-
-    private void MoveSelectionPanelToTarget(Entity target)
-    {
-        if (SelectionPanel == null)
-        {
-            return;
-        }
-
-        SelectionPanel.transform.position = target.transform.position;
     }
 }
