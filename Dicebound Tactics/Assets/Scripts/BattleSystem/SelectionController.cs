@@ -241,66 +241,19 @@ public class SelectionController : MonoBehaviour
 
   public void SelectPreviousEntity()
   {
-    if (turnManager == null) return;
+      if (turnManager == null) return;
 
-    List<Entity> list = cyclingEnemies
-        ? turnManager.enemyUnits.ConvertAll(e => (Entity)e)
-        : turnManager.playerUnits.ConvertAll(p => (Entity)p);
+      List<Entity> list = cyclingEnemies
+          ? turnManager.enemyUnits.ConvertAll(e => (Entity)e)
+          : turnManager.playerUnits.ConvertAll(p => (Entity)p);
 
-    if (list == null || list.Count == 0) return;
+      if (list == null || list.Count == 0) return;
 
-    int max = list.Count;
-    int attempts = 0;
+      currentIndex = (currentIndex - 1 + list.Count) % list.Count;
 
-    do
-    {
-      currentIndex = (currentIndex - 1 + max) % max;
-      attempts++;
-    }
-    while (!list[currentIndex].isAlive && attempts < max);
+      Entity entityToHighlight = list[currentIndex];
 
-    Entity entityToHighlight = list[currentIndex];
-
-    if (numberOfSelectableTargets == 1)
-    {
-      ToggleEntitySelection(entityToHighlight, false);
-    }
-    else
-    {
       SetHighlightedEntity(entityToHighlight);
-    }
-  }
-
-  public void SelectNextEntity()
-  {
-    if (turnManager == null) return;
-
-    List<Entity> list = cyclingEnemies
-        ? turnManager.enemyUnits.ConvertAll(e => (Entity)e)
-        : turnManager.playerUnits.ConvertAll(p => (Entity)p);
-
-    if (list == null || list.Count == 0) return;
-
-    int max = list.Count;
-    int attempts = 0;
-
-    do
-    {
-      currentIndex = (currentIndex + 1) % max;
-      attempts++;
-    }
-    while (!list[currentIndex].isAlive && attempts < max);
-
-    Entity entityToHighlight = list[currentIndex];
-
-    if (numberOfSelectableTargets == 1)
-    {
-      ToggleEntitySelection(entityToHighlight, false);
-    }
-    else
-    {
-      SetHighlightedEntity(entityToHighlight);
-    }
   }
 
   public void ChangeSelectionType(bool cycleEnemies)

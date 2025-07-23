@@ -88,7 +88,7 @@ public class AbilityButton : CombatButton, IIconUpdater
 
         SetupButton(ability.abilityName, onClickAction);
 
-        button.interactable = canUse;
+        Button.interactable = canUse;
     }
 
     public override void SetupButton(string text, UnityAction onClickAction)
@@ -130,7 +130,7 @@ public class AbilityButton : CombatButton, IIconUpdater
 
         if (context.performed)
         {
-            button.onClick?.Invoke();
+            Button.onClick?.Invoke();
         }
     }
 }
