@@ -10,23 +10,39 @@ public class OverworldEnemyController : OverworldEntityController
     [BoxGroup("AI Movement Settings"), SerializeField] protected float viewDistance = 5f;
     [BoxGroup("AI Movement Settings"), SerializeField] protected float fovAngle = 120f;
     [BoxGroup("AI Movement Settings"), SerializeField] protected float chaseDelay = 1f;
+    [BoxGroup("AI Movement Settings"), SerializeField] protected float chaseTimeout = 5f;
+    [BoxGroup("AI Movement Settings"), SerializeField] protected float maxChaseDistance = 10f;
 
     public bool HasPath => pathfindingAI.hasPath;
     public bool HasReachedDestination => pathfindingAI.reachedEndOfPath;
     public bool HasSpottedTarget { get; private set; } = false;
-    public Vector3 LastKnownTargetPosition { get; private set; } = Vector3.positiveInfinity;
-    public bool IsChasingTarget => LastKnownTargetPosition != Vector3.positiveInfinity && !HasReachedDestination;
+    public Vector3? LastKnownTargetPosition { get; private set; } = null;
+    public bool IsChasingTarget => LastKnownTargetPosition.HasValue;
 
     private float _timeSinceSeen = 0;
 
     protected override void Awake()
     {
         base.Awake();
+
+        // Initialize pathfinding AI
+        LastKnownTargetPosition = Vector3.positiveInfinity;
+        HasSpottedTarget = false;
     }
 
     protected override void Update()
     {
         base.Update();
+
+        if (IsChasingTarget)
+        {
+            _timeSinceSeen += Time.deltaTime;
+            float distanceToLastKnown = Vector3.Distance(transform.position, LastKnownTargetPosition.Value);
+            if (_timeSinceSeen > chaseTimeout || distanceToLastKnown > maxChaseDistance)
+            {
+                ClearLastKnownTargetPosition();
+            }
+        }
     }
 
     public void OnGameStateChanged(GameState newState)
@@ -57,7 +73,7 @@ public class OverworldEnemyController : OverworldEntityController
     {
         if (LastKnownTargetPosition != Vector3.positiveInfinity)
         {
-            MoveToPosition(LastKnownTargetPosition, false, onTargetReached);
+            MoveToPosition(LastKnownTargetPosition.Value, false, onTargetReached);
         }
     }
     #endregion
@@ -97,21 +113,14 @@ public class OverworldEnemyController : OverworldEntityController
 
     public void UpdateLastKnownTargetPosition(Vector3 position)
     {
-        if (LastKnownTargetPosition == Vector3.positiveInfinity && _timeSinceSeen < chaseDelay)
-        {
-            CancelPath(); // Cancel path if we haven't seen the target for a while
-            HasSpottedTarget = true;
-            _timeSinceSeen += Time.deltaTime;
-            return; // Delay before updating last known position
-        }
-
+        _timeSinceSeen = 0f; // Reset the time since last seen
+        HasSpottedTarget = true; // Set spotted state to true
         LastKnownTargetPosition = position;
     }
 
     public void ClearLastKnownTargetPosition()
     {
-        LastKnownTargetPosition = Vector3.positiveInfinity;
-        _timeSinceSeen = 0f; // Reset the time since last seen
+        LastKnownTargetPosition = null;
         HasSpottedTarget = false; // Reset spotted state
     }
 

@@ -51,7 +51,31 @@ public class CombatEncounter : MonoBehaviour
 
     [Header("Encounter References")]
     [SerializeField] private EncounterSide[] encounterSides = new EncounterSide[2];
-    public List<EnemyManager> Enemies = new List<EnemyManager>();
+    public List<EnemyManager> EnemyPrefabs = new List<EnemyManager>();
+    public List<EnemyManager> Enemies { get; private set; } = new List<EnemyManager>();
+
+    public void Awake()
+    {
+        SpawnEnemies(EnemyPrefabs);
+        IsActive = false;
+        IsCompleted = false;
+    }
+
+    public void SpawnEnemies(List<EnemyManager> enemies)
+    {
+        Enemies.Clear();
+
+        foreach (EnemyManager enemy in enemies)
+        {
+            if (enemy == null) continue;
+
+            EnemyManager spawnedEnemy = Instantiate(enemy, GetRandomPointInEncounterArea(), Quaternion.identity, transform);
+            spawnedEnemy.transform.parent = null;
+
+            Enemies.Add(spawnedEnemy);
+        }
+    }
+
     public void Update()
     {
         if (IsCompleted) return;
@@ -59,8 +83,16 @@ public class CombatEncounter : MonoBehaviour
         // Only update enemy behavior if the encounter is not active
         if (IsActive) return;
 
+        Transform target = PartyManager.Instance.PartyLeader.transform;
+
         foreach (EnemyManager enemy in Enemies)
         {
+            if (target != null && enemy.overworldController.CanSeeTarget(target))
+            {
+                print($"{enemy.name} can see target {target.name} at position {target.position}");
+                enemy.overworldController.UpdateLastKnownTargetPosition(target.position);
+            }
+
             // Ensure the enemy's overworld controller is linked to this encounter
             if (enemy.overworldController.Encounter == null)
             {
@@ -72,7 +104,7 @@ public class CombatEncounter : MonoBehaviour
                 _timeSinceLastAction[enemy] = 0f;
             }
 
-            if (IsAntagonistic)
+            if (IsAntagonistic && enemy.overworldController.HasSpottedTarget)
             {
                 HandleEnemyChaseBehavior(enemy);
             }
@@ -297,9 +329,9 @@ public class CombatEncounter : MonoBehaviour
             return;
         }
 
-        if (enemy.overworldController.HasSpottedTarget && IsAntagonistic)
+        if (enemy.overworldController.IsChasingTarget && IsAntagonistic)
         {
-            // If the enemy is chasing or has spotted a target, do not wander
+            // If the enemy is chasing, do not wander
             return;
         }
 
@@ -333,18 +365,6 @@ public class CombatEncounter : MonoBehaviour
             Debug.LogWarning($"Enemy, OverworldController, or target is null for {enemy?.name}");
             return;
         }
-        Transform target = PartyManager.Instance.PartyLeader.transform;
-
-        if (target == null)
-        {
-            Debug.LogWarning("Target Transform is null.");
-            return;
-        }
-
-        if (enemy.overworldController.CanSeeTarget(target))
-        {
-            enemy.overworldController.UpdateLastKnownTargetPosition(target.position);
-        }
 
         if (enemy.overworldController.LastKnownTargetPosition == Vector3.positiveInfinity)
         {
@@ -353,6 +373,8 @@ public class CombatEncounter : MonoBehaviour
 
         enemy.overworldController.MoveToLastKnownTargetPosition(() =>
         {
+            Transform target = PartyManager.Instance.PartyLeader.transform;
+
             if (enemy.overworldController.CanSeeTarget(target))
             {
                 enemy.overworldController.UpdateLastKnownTargetPosition(target.position);
