@@ -19,6 +19,7 @@ public class EventManager : MonoBehaviour
   public static event Action<Entity> OnNewActiveEntity;
   public static event Action<Entity> OnTargetChanged;
   public static event Action<GameState> OnGameStateChanged;
+  public static event Action<bool> OnSelectingATarget;
 
   // UI Events
   public static event Action OnMenuButtonPressed;
@@ -36,41 +37,58 @@ public class EventManager : MonoBehaviour
   {
     OnCombatEncounterEnded?.Invoke(encounter);
   }
-  public static void TriggerBattleStarted() {
+  public static void TriggerBattleStarted()
+  {
     OnBattleStarted?.Invoke();
   }
-  public static void TriggerBattleEnded() {
+  public static void TriggerBattleEnded()
+  {
     OnBattleEnded?.Invoke();
   }
-  public static void TriggerGameOver() {
+  public static void TriggerGameOver()
+  {
     OnGameOver?.Invoke();
   }
-  public static void TriggerCharacterTurnStarted(CharacterManager character) {
+  public static void TriggerCharacterTurnStarted(CharacterManager character)
+  {
     OnCharacterTurnStarted?.Invoke(character);
   }
-  public static void TriggerCharacterTurnEnded(CharacterManager character) {
+  public static void TriggerCharacterTurnEnded(CharacterManager character)
+  {
     OnCharacterTurnEnded?.Invoke(character);
   }
-  public static void TriggerEnemyTurnStarted(EnemyManager enemy) {
+  public static void TriggerEnemyTurnStarted(EnemyManager enemy)
+  {
     OnEnemyTurnStarted?.Invoke(enemy);
   }
-  public static void TriggerEnemyTurnEnded(EnemyManager enemy) {
+  public static void TriggerEnemyTurnEnded(EnemyManager enemy)
+  {
     OnEnemyTurnEnded?.Invoke(enemy);
   }
-  public static void TriggerNewActiveEntity(Entity entity) {
+  public static void TriggerNewActiveEntity(Entity entity)
+  {
     OnNewActiveEntity?.Invoke(entity);
   }
-  public static void TriggerTargetChanged(Entity entity) {
+  public static void TriggerTargetChanged(Entity entity)
+  {
     OnTargetChanged?.Invoke(entity);
   }
-  public static void TriggerGameStateChanged(GameState state) {
+  public static void TriggerGameStateChanged(GameState state)
+  {
     OnGameStateChanged?.Invoke(state);
   }
-  public static void TriggerMenuButtonPressed() {
+  public static void TriggerMenuButtonPressed()
+  {
     OnMenuButtonPressed?.Invoke();
   }
-  public static void TriggerSuccessButtonPressed() {
+  public static void TriggerSuccessButtonPressed()
+  {
     OnSuccessButtonPressed?.Invoke();
+  }
+  
+  public static void TriggerSelectingATarget(bool isSelecting)
+  {
+    OnSelectingATarget?.Invoke(isSelecting);
   }
 }
 

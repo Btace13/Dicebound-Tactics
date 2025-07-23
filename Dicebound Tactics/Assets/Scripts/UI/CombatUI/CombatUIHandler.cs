@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using TacticsToolkit;
+using System.Linq;
 
 public class CombatUIHandler : MonoBehaviour
 {
@@ -28,6 +29,7 @@ public class CombatUIHandler : MonoBehaviour
     [Header("Panel References")]
     public ActionPanel ActionPanel;
     public AbilityPanel AbilityPanel;
+    public GameObject SelectionPanel;
     public ItemPanel ItemPanel;
 
     [Header("Screen Space UI References")]
@@ -60,6 +62,7 @@ public class CombatUIHandler : MonoBehaviour
         EventManager.OnBattleStarted += OpenActionPanel;
         EventManager.OnCharacterTurnStarted += HandleNewCharacterTurn;
         EventManager.OnEnemyTurnStarted += HandleNewEnemyTurn;
+        EventManager.OnTargetChanged += MoveSelectionPanelToTarget;
     }
 
     private void OnDisable()
@@ -67,6 +70,7 @@ public class CombatUIHandler : MonoBehaviour
         EventManager.OnBattleStarted -= OpenActionPanel;
         EventManager.OnCharacterTurnStarted -= HandleNewCharacterTurn;
         EventManager.OnEnemyTurnStarted -= HandleNewEnemyTurn;
+        EventManager.OnTargetChanged -= MoveSelectionPanelToTarget;
     }
 
     public void MoveCanvasToCharacter(CharacterManager character)
@@ -219,6 +223,9 @@ public class CombatUIHandler : MonoBehaviour
             currentPanel = null;
             ShowScreenSpacePanelInputs(false);
         }, _fadeDuration, Ease.InOutQuad);
+
+        SelectionPanel?.SetActive(false);
+        EventManager.TriggerSelectingATarget(false);
     }
 
     public void ShowScreenSpacePanelInputs(bool enable)
@@ -250,6 +257,7 @@ public class CombatUIHandler : MonoBehaviour
         }
 
         confirmButton.gameObject.SetActive(enable);
+        EventManager.TriggerSelectingATarget(enable);
     }
 
     public void ShowBigNotification(string message, float duration = 2f)
@@ -308,12 +316,33 @@ public class CombatUIHandler : MonoBehaviour
     {
         //Debug.Log($"New character turn started for {character.name}");
         OpenActionPanel();
-        ShowConfirmButton(true);
+        // ShowConfirmButton(true);
         MoveCanvasToCharacter(character);
     }
 
     public void HandleNewEnemyTurn(EnemyManager enemy)
     {
         CloseAllPanels();
+    }
+
+    public void OpenSelectionPanel()
+    {
+        if (SelectionPanel == null)
+        {
+            return;
+        }
+
+        SelectionPanel.SetActive(true);
+        SelectionPanel.transform.position = SelectionController.Instance.SelectedEntities.FirstOrDefault()?.transform.position ?? Vector3.zero;
+    }
+
+    private void MoveSelectionPanelToTarget(Entity target)
+    {
+        if (SelectionPanel == null)
+        {
+            return;
+        }
+
+        SelectionPanel.transform.position = target.transform.position;
     }
 }

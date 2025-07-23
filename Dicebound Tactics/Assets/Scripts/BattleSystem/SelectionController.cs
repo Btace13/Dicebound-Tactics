@@ -4,6 +4,8 @@ using TacticsToolkit;
 
 public class SelectionController : MonoBehaviour
 {
+  public static SelectionController Instance { get; private set; }
+
   public GameObject selectionIndicatorPrefab;
   public GameObject highlightIndicatorPrefab;
 
@@ -25,6 +27,20 @@ public class SelectionController : MonoBehaviour
   private Entity highlightedEntity;
   private GameObject highlightIndicator;
 
+
+  private void Awake() {
+    if (Instance == null)
+    {
+      Instance = this;
+    }
+    else
+    {
+      Destroy(gameObject);
+      return;
+    }
+
+    DontDestroyOnLoad(gameObject);
+  }
 
   private void Start()
   {
@@ -192,6 +208,70 @@ public class SelectionController : MonoBehaviour
   }
 
   public void CycleHighlight()
+  {
+    if (turnManager == null) return;
+
+    List<Entity> list = cyclingEnemies
+        ? turnManager.enemyUnits.ConvertAll(e => (Entity)e)
+        : turnManager.playerUnits.ConvertAll(p => (Entity)p);
+
+    if (list == null || list.Count == 0) return;
+
+    int max = list.Count;
+    int attempts = 0;
+
+    do
+    {
+      currentIndex = (currentIndex + 1) % max;
+      attempts++;
+    }
+    while (!list[currentIndex].isAlive && attempts < max);
+
+    Entity entityToHighlight = list[currentIndex];
+
+    if (numberOfSelectableTargets == 1)
+    {
+      ToggleEntitySelection(entityToHighlight, false);
+    }
+    else
+    {
+      SetHighlightedEntity(entityToHighlight);
+    }
+  }
+
+  public void SelectPreviousEntity()
+  {
+    if (turnManager == null) return;
+
+    List<Entity> list = cyclingEnemies
+        ? turnManager.enemyUnits.ConvertAll(e => (Entity)e)
+        : turnManager.playerUnits.ConvertAll(p => (Entity)p);
+
+    if (list == null || list.Count == 0) return;
+
+    int max = list.Count;
+    int attempts = 0;
+
+    do
+    {
+      currentIndex = (currentIndex - 1 + max) % max;
+      attempts++;
+    }
+    while (!list[currentIndex].isAlive && attempts < max);
+
+    Entity entityToHighlight = list[currentIndex];
+
+    if (numberOfSelectableTargets == 1)
+    {
+      ToggleEntitySelection(entityToHighlight, false);
+    }
+    else
+    {
+      SetHighlightedEntity(entityToHighlight);
+    }
+  }
+
+  public void SelectNextEntity()
   {
     if (turnManager == null) return;
 
