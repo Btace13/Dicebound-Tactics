@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 7517694706583507778}
   - component: {fileID: 2381278418117934402}
   - component: {fileID: 439368263669601305}
+  - component: {fileID: 2203826217135923709}
   m_Layer: 0
   m_Name: CharacterThree
   m_TagString: Untagged
@@ -76,6 +77,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   equippedDice: {fileID: 11400000, guid: 13934ccd0cd1b4e7bb563bac2bcb4735, type: 2}
   portrait: {fileID: 8248543377919322394, guid: cc8cb170ff11da442bedd0e9e3be0e9a, type: 3}
+  StartingWeapon: {fileID: 11400000, guid: f7008429e75d2a74ca1ec020bf30fcf1, type: 2}
   abilityLoadout:
   - {fileID: 11400000, guid: 71895a1f9982b4faebb510e4a913cd15, type: 2}
   inventory: {fileID: 0}
@@ -90,13 +92,11 @@ MonoBehaviour:
   initiativeValue: 0
   isAlive: 1
   isActive: 0
-  endTurn: {fileID: 11400000, guid: fdfd2d860fc9f35449f03cd73e2c6948, type: 2}
   healthBar: {fileID: 4028085818917423970}
   previousTurnCost: -1
   myRenderer: {fileID: 0}
   gameConfig: {fileID: 11400000, guid: eaeab84eb6b1df54eb4c6951b5ec44ae, type: 2}
   characterId: CharacterThree
-  StartingWeapon: {fileID: 11400000, guid: f7008429e75d2a74ca1ec020bf30fcf1, type: 2}
 --- !u!114 &7002688442584483892
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -210,12 +210,12 @@ MonoBehaviour:
   heightBackingField: 2
   centerBackingField: 1
   locked: 0
-  lockWhenNotMoving: 1
+  lockWhenNotMoving: 0
   agentTimeHorizon: 2
   obstacleTimeHorizon: 0.5
   maxNeighbours: 10
   layer: 1
-  collidesWith: -1
+  collidesWith: 2147483519
   wallAvoidForce: 1
   wallAvoidFalloff: 1
   priority: 0.5
@@ -269,6 +269,21 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &2203826217135923709
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1353514822874806384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a2fe242de648ab4fb9f51a8b57f015e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  saveDataModules:
+  - {fileID: 11400000, guid: 3e61869346288a94685f8919db733510, type: 2}
+  - {fileID: 11400000, guid: 60b2fcc6576643d48bcc3fb5a3775c72, type: 2}
 --- !u!1 &2714210313687912838
 GameObject:
   m_ObjectHideFlags: 0
@@ -367,6 +382,10 @@ PrefabInstance:
     - target: {fileID: 3266824261684393882, guid: c2cb49a00ec9ca74fa8027d628a38a2b, type: 3}
       propertyPath: m_Name
       value: WSHealthBar
+      objectReference: {fileID: 0}
+    - target: {fileID: 3266824261684393882, guid: c2cb49a00ec9ca74fa8027d628a38a2b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8830435105581934864, guid: c2cb49a00ec9ca74fa8027d628a38a2b, type: 3}
       propertyPath: m_Pivot.x
