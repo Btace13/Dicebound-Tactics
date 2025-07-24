@@ -230,4 +230,13 @@ public class TurnManager : MonoBehaviour
 
         EventManager.TriggerGameOver();
     }
+
+    public void SetEnemies(List<EnemyManager> enemies)
+    {
+        enemyUnits = enemies;
+        foreach (var enemy in enemyUnits)
+        {
+            enemy.Reset();
+        }
+    }
 }

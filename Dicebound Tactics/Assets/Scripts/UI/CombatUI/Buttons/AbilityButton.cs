@@ -15,7 +15,7 @@ public class AbilityButton : CombatButton, IIconUpdater
     [SerializeField] TextMeshProUGUI abilityCostText;
     [SerializeField] TextMeshProUGUI abilityDescriptionText;
     public InputActionReference inputAction;
-    public bool isSelectingTarget;
+    private bool isSelectingTarget;
 
     public void OnEnable()
     {

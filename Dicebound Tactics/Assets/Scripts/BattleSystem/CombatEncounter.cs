@@ -161,6 +161,8 @@ public class CombatEncounter : MonoBehaviour
     [Button("Start Encounter")]
     public async void StartEncounter()
     {
+        TurnManager.Instance.SetEnemies(Enemies);
+
         IsActive = true;
 
         EncounterSide closestSide = GetClosestEncounterSide(PartyManager.Instance.PartyLeader.transform.position);
