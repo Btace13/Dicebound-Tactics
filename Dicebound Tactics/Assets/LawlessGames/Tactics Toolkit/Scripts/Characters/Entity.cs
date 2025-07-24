@@ -622,6 +622,7 @@ namespace TacticsToolkit
         {
             statsContainer.ActionPoints.statValue = 0;
             statsContainer.CarriedOverActionPoints.statValue = 0;
+            equippedDice.LastRollModifier = null;
             OnCharacterStatChanged?.Invoke(this as CharacterManager);
         }
 
@@ -640,6 +641,23 @@ namespace TacticsToolkit
             }
 
             DiceSide diceRoll = equippedDice.Roll();
+            int totalAP = diceRoll.value + statsContainer.CarriedOverActionPoints.statValue;
+
+            statsContainer.ActionPoints.statValue = statsContainer.ActionPoints.statValue += totalAP;
+            statsContainer.CarriedOverActionPoints.statValue = 0;
+            diceRoll.modifier.Apply(this);
+            OnCharacterStatChanged?.Invoke(this as CharacterManager);
+        }
+
+        public void ApplyDiceRoll(int value)
+        { 
+            if (statsContainer == null)
+            {
+                // Debug.LogError("StatsContainer is not assigned for " + name);
+                return;
+            }
+
+            DiceSide diceRoll = equippedDice.ApplyRoll(value - 1);
             int totalAP = diceRoll.value + statsContainer.CarriedOverActionPoints.statValue;
 
             statsContainer.ActionPoints.statValue = statsContainer.ActionPoints.statValue += totalAP;

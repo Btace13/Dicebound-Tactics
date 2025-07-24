@@ -6,7 +6,7 @@ public class Dice : ScriptableObject
 {
     public List<DiceSide> sides = new(6);
     public int LastRollValue { get; private set; }
-    public DiceModifier LastRollModifier { get; private set; }
+    public DiceModifier LastRollModifier;
 
     public Dice(List<DiceSide> generatedSides)
     {
@@ -19,5 +19,12 @@ public class Dice : ScriptableObject
         LastRollValue = sides[index].value;
         LastRollModifier = sides[index].modifier;
         return sides[index];
+    }
+
+    public DiceSide ApplyRoll(int value)
+    { 
+        LastRollValue = sides[value].value;
+        LastRollModifier = sides[value].modifier;
+        return sides[value];  
     }
 }

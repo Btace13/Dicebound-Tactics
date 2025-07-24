@@ -12,6 +12,7 @@ public class TurnManager : MonoBehaviour
     public List<CharacterManager> playerUnits = new();
     public List<EnemyManager> enemyUnits = new();
     public bool BattlePlaying;
+    [SerializeField] DiceRollManager diceRollManager;
 
     private List<Entity> turnOrder = new();
     private int currentTurnIndex = 0;
@@ -63,6 +64,7 @@ public class TurnManager : MonoBehaviour
     public void StartBattle()
     {
         BattlePlaying = true;
+        currentTurnIndex = 0;
         EventManager.TriggerBattleStarted();
 
         foreach (var character in playerUnits)
@@ -84,11 +86,13 @@ public class TurnManager : MonoBehaviour
         }
 
         BuildTurnOrder();
-        StartNextTurn();
     }
 
     private void BuildTurnOrder()
     {
+        if (!BattlePlaying)
+            return;
+
         turnOrder.Clear();
         var allUnits = new List<Entity>();
         allUnits.AddRange(playerUnits);
@@ -100,7 +104,12 @@ public class TurnManager : MonoBehaviour
             .ThenByDescending(u => Random.value) // Simple tiebreaker
             .ToList();
 
-        turnOrder.ForEach(unit => unit.RollDice());
+        if (currentTurnIndex >= turnOrder.Count)
+        {
+            currentTurnIndex = 0;
+        }
+        Debug.Log("roll Turn order built with " + turnOrder.Count + " entities.");
+        diceRollManager.RollDiceForUnits(turnOrder, () => StartNextTurn());
     }
 
     public void StartNextTurn()
@@ -112,7 +121,7 @@ public class TurnManager : MonoBehaviour
         {
             // End of round, rebuild turn order and start again
             BuildTurnOrder();
-            currentTurnIndex = 0;
+            return;
         }
 
         var unit = currentUnit ? turnOrder[currentTurnIndex] : turnOrder.FirstOrDefault();
