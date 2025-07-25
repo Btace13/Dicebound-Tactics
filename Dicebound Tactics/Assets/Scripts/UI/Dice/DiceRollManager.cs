@@ -24,7 +24,7 @@ public class DiceRollManager : MonoBehaviour
 
         foreach (Entity unit in units)
         {
-            GameObject diceGO = Instantiate(diceUIPrefab, unit.transform.position + Vector3.up * 2, Quaternion.identity);
+            GameObject diceGO = Instantiate(diceUIPrefab, unit.transform.position + Vector3.up * 1.4f, Quaternion.identity);
             DiceRollUI dice = diceGO.GetComponent<DiceRollUI>();
             dice.SetupRoll(unit);
             activeDice.Add(dice);
