@@ -19,7 +19,7 @@ public class CharacterCard : MonoBehaviour
   [SerializeField] private TextMeshProUGUI modifierTextContent;
 
   private CharacterManager character;
-  public float rollSpeed = 18f; // higher = faster
+  public float rollSpeed = 2f; // higher = faster
   private Coroutine rollingCoroutine;
 
   private void Awake()
@@ -94,7 +94,7 @@ public class CharacterCard : MonoBehaviour
       int max = character.GetStat(Stats.Health).statValue;
 
       // Animate health number
-      int currentHealth = from;
+        int currentHealth = from;
       DOTween.To(() => currentHealth, x =>
       {
         currentHealth = x;
@@ -153,6 +153,8 @@ public class CharacterCard : MonoBehaviour
   {
     float duration = Mathf.Abs(to - from) / rollSpeed;
     float elapsed = 0f;
+    float minFontSize = numberText.fontSize;
+    float maxFontSize = numberText.fontSize * 2f;
 
     while (elapsed < duration)
     {
@@ -160,9 +162,17 @@ public class CharacterCard : MonoBehaviour
       float t = Mathf.Clamp01(elapsed / duration);
       int value = Mathf.RoundToInt(Mathf.Lerp(from, to, t));
       numberText.text = value.ToString();
+      numberText.DOFontSize(maxFontSize, duration * 0.5f)
+            .SetEase(Ease.OutQuad)
+            .OnComplete(() =>
+            {
+                numberText.DOFontSize(minFontSize, duration * 0.5f)
+                    .SetEase(Ease.InQuad);
+            });
+
       yield return null;
     }
-
+    
     numberText.text = to.ToString();
     rollingCoroutine = null;
   }

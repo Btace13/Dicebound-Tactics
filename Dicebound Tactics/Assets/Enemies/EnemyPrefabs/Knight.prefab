@@ -161,7 +161,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   equippedDice: {fileID: 11400000, guid: c41cf5cdd117b4da5b898d87cff864ae, type: 2}
-  portrait: {fileID: 3229708652140166120, guid: 3e5c6627436f52749bd3a5b2d7b4ad79, type: 3}
+  portrait: {fileID: -3207128352552956677, guid: b29778d5d4cd64b7089c695918a09687, type: 3}
   StartingWeapon: {fileID: 11400000, guid: 00d22f65aba9aab4eb460cc5caee1c7d, type: 2}
   abilityLoadout:
   - {fileID: 11400000, guid: 7e911d070168540809fbadd791ad7ee7, type: 2}
@@ -204,6 +204,8 @@ MonoBehaviour:
   viewDistance: 8
   fovAngle: 120
   chaseDelay: 1
+  chaseTimeout: 5
+  maxChaseDistance: 10
 --- !u!114 &1911529422208697251
 MonoBehaviour:
   m_ObjectHideFlags: 0
