@@ -7,7 +7,7 @@ public class ButtonWithIconInput : MonoBehaviour
     public InputActionReference inputAction;
     public Image buttonImage;
 
-    private Button button;
+    protected Button button;
 
     private void OnEnable()
     {
@@ -27,7 +27,7 @@ public class ButtonWithIconInput : MonoBehaviour
         }
     }
 
-    private void OnInputActionPerformed(InputAction.CallbackContext context)
+    protected virtual void OnInputActionPerformed(InputAction.CallbackContext context)
     {
         if (button != null && button.interactable)
         {

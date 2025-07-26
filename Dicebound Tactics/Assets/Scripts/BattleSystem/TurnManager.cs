@@ -65,7 +65,6 @@ public class TurnManager : MonoBehaviour
     {
         BattlePlaying = true;
         currentTurnIndex = 0;
-        EventManager.TriggerBattleStarted();
 
         foreach (var character in playerUnits)
         {
@@ -86,6 +85,7 @@ public class TurnManager : MonoBehaviour
         }
 
         BuildTurnOrder();
+        EventManager.TriggerBattleStarted();
     }
 
     private void BuildTurnOrder()

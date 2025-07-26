@@ -131,6 +131,7 @@ public class CombatManager : MonoBehaviour
 
     public void ExecuteAction()
     {
+        EventManager.TriggerSelectingATarget(false);
         Entity currentUnit = turnManager.GetCurrentUnit();
 
         if (currentUnit == null)
