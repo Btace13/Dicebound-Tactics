@@ -263,37 +263,44 @@ public class DiceVisualsController : MonoBehaviour
 
     void GenerateD12Numbers()
     {
-        // Vertices of a regular dodecahedron
-        float phi = (1 + Mathf.Sqrt(5)) / 2;
+        // Regular dodecahedron vertices
+        float phi = (1 + Mathf.Sqrt(5)) / 2f; // Golden ratio
         float a = 1f;
         float b = 1f / phi;
         float c = 2f - phi;
         Vector3[] verts = new Vector3[]
         {
-            new Vector3( 0,  b, -a), new Vector3( b,  a, 0), new Vector3(-b,  a, 0), new Vector3( 0,  b,  a),
-            new Vector3( 0, -b,  a), new Vector3(-a, 0,  b), new Vector3( 0, -b, -a), new Vector3( a, 0, -b),
-            new Vector3( a, 0,  b), new Vector3(-a, 0, -b), new Vector3( b, -a, 0), new Vector3(-b, -a, 0),
-            new Vector3( c,  c,  c), new Vector3( c,  c, -c), new Vector3( c, -c,  c), new Vector3( c, -c, -c),
-            new Vector3(-c,  c,  c), new Vector3(-c,  c, -c), new Vector3(-c, -c,  c), new Vector3(-c, -c, -c)
+            new Vector3( a,  a,  a), new Vector3( a,  a, -a), new Vector3( a, -a,  a), new Vector3( a, -a, -a),
+            new Vector3(-a,  a,  a), new Vector3(-a,  a, -a), new Vector3(-a, -a,  a), new Vector3(-a, -a, -a),
+            new Vector3( 0,  b,  c), new Vector3( 0,  b, -c), new Vector3( 0, -b,  c), new Vector3( 0, -b, -c),
+            new Vector3( b,  c,  0), new Vector3( b, -c,  0), new Vector3(-b,  c,  0), new Vector3(-b, -c,  0),
+            new Vector3( c,  0,  b), new Vector3(-c,  0,  b), new Vector3( c,  0, -b), new Vector3(-c,  0, -b)
         };
+        // Each face is a pentagon (5 indices into verts)
         int[][] faces = new int[][]
         {
-            new int[]{0,1,12,13,7}, new int[]{1,2,17,16,12}, new int[]{2,3,16,17,9}, new int[]{3,0,7,14,16}, new int[]{3,2,9,18,16},
-            new int[]{0,3,16,12,1}, new int[]{7,13,15,8,14}, new int[]{12,16,18,19,15}, new int[]{13,12,15,19,17}, new int[]{14,8,10,11,18},
-            new int[]{15,19,18,11,10}, new int[]{8,15,10,5,14}
+            new int[]{0,8,10,2,16}, new int[]{0,16,18,1,12}, new int[]{0,12,14,4,8}, new int[]{8,4,17,6,10}, new int[]{10,6,13,2,10},
+            new int[]{2,13,3,18,16}, new int[]{1,18,3,19,9}, new int[]{1,9,5,14,12}, new int[]{4,14,5,17,8}, new int[]{6,17,5,9,7},
+            new int[]{6,7,15,13,6}, new int[]{3,13,15,7,19},
         };
         int[] faceNumbers = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
+        // Find normal of first face and rotate so it points forward
+        Vector3 v0 = verts[faces[0][0]];
+        Vector3 v1 = verts[faces[0][1]];
+        Vector3 v2 = verts[faces[0][2]];
+        Vector3 faceNormal = Vector3.Cross(v1 - v0, v2 - v0).normalized;
+        Quaternion alignToForward = Quaternion.FromToRotation(faceNormal, Vector3.forward);
         for (int i = 0; i < 12; i++)
         {
-            Vector3 v0 = verts[faces[i][0]];
-            Vector3 v1 = verts[faces[i][1]];
-            Vector3 v2 = verts[faces[i][2]];
-            Vector3 v3 = verts[faces[i][3]];
-            Vector3 v4 = verts[faces[i][4]];
-            Vector3 center = (v0 + v1 + v2 + v3 + v4) / 5f;
+            Vector3 vv0 = alignToForward * verts[faces[i][0]];
+            Vector3 vv1 = alignToForward * verts[faces[i][1]];
+            Vector3 vv2 = alignToForward * verts[faces[i][2]];
+            Vector3 vv3 = alignToForward * verts[faces[i][3]];
+            Vector3 vv4 = alignToForward * verts[faces[i][4]];
+            Vector3 center = (vv0 + vv1 + vv2 + vv3 + vv4) / 5f;
             GameObject go = new GameObject($"Face_{faceNumbers[i]}");
             go.transform.SetParent(parent);
-            Vector3 rotatedCenter = Quaternion.Euler(rotationOffset) * center;
+            Vector3 rotatedCenter = Quaternion.Euler(rotationOffset) * center.normalized;
             go.transform.localPosition = rotatedCenter * radius + positionOffset;
             go.transform.localRotation = Quaternion.LookRotation(rotatedCenter, Vector3.up) * Quaternion.Euler(0, 180, 0);
             var tmp = go.AddComponent<TextMeshPro>();

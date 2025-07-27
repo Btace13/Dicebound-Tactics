@@ -1,16 +1,18 @@
 using UnityEngine;
 
-public class CharacterExpressionData : MonoBehaviour
+[CreateAssetMenu(fileName = "CharacterExpressionData", menuName = "Dice/Character Expression Data")]
+public class CharacterExpressionData : ScriptableObject
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public class EyeSettings
     {
-        
+        public Color irisColor = Color.blue;
+        public Vector2 pupilSize = new Vector2(0.15f, 0.15f);
+        public float blinkSpeed = 0.5f;
+        public float topEyelashThickness = 0.1f;
+        public float bottomEyelashThickness = 0.05f;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public EyeSettings eyeSettings;
+    public Sprite eyebrowSprite;
+    public Sprite mouthSprite;
 }

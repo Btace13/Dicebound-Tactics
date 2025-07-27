@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c95d29bb51bbde4680c474b85b352b5, type: 3}
+  m_Name: NeutralDiceExpression
+  m_EditorClassIdentifier: 
+  eyebrowSprite: {fileID: -6674174255114997423, guid: c4b53c1b12e00fe42af4c1e9c2a3f57f, type: 3}
+  mouthSprite: {fileID: 0}
