@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Threading.Tasks;
 using Unity.VisualScripting;
+using DG.Tweening;
 
 public class TurnOrderHandler : MonoBehaviour
 {
@@ -10,47 +11,51 @@ public class TurnOrderHandler : MonoBehaviour
     [SerializeField] GameObject PortraitPrefab;
     [SerializeField] GameObject CurrentTurnHolderImage;
 
+    private bool isCreatingPortraits = false;
+
     private void Awake()
     {
-        // Event Listeners
+        // Subscribe to events
         EventManager.OnNewActiveEntity += OnTurnStarted;
         EventManager.OnCombatEncounterEnded += OnCombatEncounterEnded;
     }
 
-    void OnDisable()
+    private void OnDisable()
     {
+        // Unsubscribe to avoid memory leaks
         EventManager.OnNewActiveEntity -= OnTurnStarted;
         EventManager.OnCombatEncounterEnded -= OnCombatEncounterEnded;
     }
 
     public async void OnTurnStarted(Entity entity)
     {
+        if (ImageContainer == null || PortraitPrefab == null || CurrentTurnHolderImage == null)
+            return;
+
         ImageContainer.SetActive(true);
 
-        if (ImageContainer.transform.childCount == 1)
-        {
-            // If there are no portraits, create them
-            await CreateTurnOrderPortraits();
-        }
+        isCreatingPortraits = true;
+        await CreateTurnOrderPortraits();
+        isCreatingPortraits = false;
 
         UpdateCurrentTurnHolder(entity);
     }
 
-    public void OnCombatEncounterEnded(CombatEncounter encounter)
+    public async void OnCombatEncounterEnded(CombatEncounter encounter)
     {
-        ClearTurnOrder();
+        await ClearTurnOrder();
     }
 
     private async Task CreateTurnOrderPortraits()
     {
+        if (TurnManager.Instance == null) return;
+
         await ClearTurnOrder();
 
-        // Create new portraits for each character in the turn order
         foreach (var entity in TurnManager.Instance.GetRemainingEntitiesThisRound())
         {
             if (entity.portrait != null)
             {
-                // instantiate a new image for the portrait
                 GameObject portraitObject = Instantiate(PortraitPrefab, ImageContainer.transform);
                 portraitObject.transform.GetChild(0).GetComponent<Image>().sprite = entity.portrait;
             }
@@ -59,6 +64,8 @@ public class TurnOrderHandler : MonoBehaviour
 
     private void UpdateCurrentTurnHolder(Entity entity = null)
     {
+        if (TurnManager.Instance == null) return;
+
         Entity turnHolder = entity ?? TurnManager.Instance.GetCurrentUnit();
 
         if (turnHolder == null || turnHolder.portrait == null)
@@ -69,7 +76,23 @@ public class TurnOrderHandler : MonoBehaviour
 
         CurrentTurnHolderImage.SetActive(true);
         CurrentTurnHolderImage.transform.GetChild(0).GetComponent<Image>().sprite = turnHolder.portrait;
-        // get textmeshpro component in child and update it with the name of the current unit
+        // DOTween scale animation
+        var rectTransform = CurrentTurnHolderImage.GetComponent<RectTransform>();
+        rectTransform.localScale = Vector3.one; // Reset scale in case previous tween is still active
+
+        // Optional: kill any existing tweens to avoid stacking
+        rectTransform.DOKill();
+
+        rectTransform
+            .DOScale(1.2f, 0.2f) // scale up
+            .SetEase(Ease.OutBack)
+            .OnComplete(() =>
+            {
+                rectTransform
+                    .DOScale(1f, 0.2f) // scale back down
+                    .SetEase(Ease.InBack);
+            });
+
         var textMeshPro = CurrentTurnHolderImage.GetComponentInChildren<TMPro.TextMeshProUGUI>();
         if (textMeshPro != null)
         {
@@ -79,17 +102,15 @@ public class TurnOrderHandler : MonoBehaviour
 
     public async Task ClearTurnOrder()
     {
-        // Clear the turn order UI minus the first child (which is the current turn holder)
+        if (ImageContainer == null) return;
+
         foreach (Transform child in ImageContainer.transform)
         {
-            if (child.gameObject == CurrentTurnHolderImage) continue; // Skip the current turn holder
+            if (child.gameObject == CurrentTurnHolderImage) continue;
             Destroy(child.gameObject);
         }
 
-        while (ImageContainer.transform.childCount > 1)
-        {
-            await Task.Yield(); // Wait for the UI to update
-        }
+        await Task.Delay(1); // Let Unity complete object destruction
 
         CurrentTurnHolderImage.SetActive(false);
     }

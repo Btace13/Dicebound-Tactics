@@ -63,18 +63,20 @@ public class DamageAbilitySO : AbilitySO
                     EventManager.TriggerCharacterTurnStarted(character);
                 }
             });
-            while (!returnDone) yield return null;
+            while (!returnDone) yield return new WaitForSeconds(1.6f);
         }
         else
         {
+
             yield return TriggerAbilityAnimationSequenceCoroutine(user, target, () =>
             {
                 ApplyDamage(amount, user, target);
-                if (user is CharacterManager character)
-                {
-                    EventManager.TriggerCharacterTurnStarted(character);
-                }
             });
+            yield return new WaitForSeconds(1.6f);
+            if (user is CharacterManager character)
+            {
+                EventManager.TriggerCharacterTurnStarted(character);
+            }
         }
     }
 

@@ -223,7 +223,7 @@ public class CombatManager : MonoBehaviour
                                 int damage = currentUnit.characterClass.Strength.baseStatValue;
                                 target.TakeDamage(damage);
                                 CombatUIHandler.damageNumberUIHandler.ShowDamageNumber(damage, target.transform.position, DamageNumberType.Normal);
-                                CameraManager.Instance?.ShakeActiveCamera();
+                                // CameraManager.Instance?.ShakeActiveCamera();
                             });
                             attackSequence.AppendInterval(0.5f);
                             attackSequence.AppendCallback(() =>
@@ -238,7 +238,7 @@ public class CombatManager : MonoBehaviour
                         int damage = currentUnit.characterClass.Strength.baseStatValue;
                         target.TakeDamage(damage);
                         CombatUIHandler.damageNumberUIHandler.ShowDamageNumber(damage, target.transform.position, DamageNumberType.Normal);
-                        CameraManager.Instance?.ShakeActiveCamera();
+                        // CameraManager.Instance?.ShakeActiveCamera();
                     }
                 }
             }
