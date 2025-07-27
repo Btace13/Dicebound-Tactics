@@ -28,14 +28,11 @@ public class DiceVisualsController : MonoBehaviour
     {
         switch (diceType)
         {
-            case DiceType.D6:
-                GenerateD6Numbers();
-                break;
-            case DiceType.D20:
-                GenerateD20Numbers();
-                break;
             case DiceType.D4:
                 GenerateD4Numbers();
+                break;
+            case DiceType.D6:
+                GenerateD6Numbers();
                 break;
             case DiceType.D8:
                 GenerateD8Numbers();
@@ -46,7 +43,9 @@ public class DiceVisualsController : MonoBehaviour
             case DiceType.D12:
                 GenerateD12Numbers();
                 break;
-                // Add cases for other dice types (D4, D8, D10, D12)
+            case DiceType.D20:
+                GenerateD20Numbers();
+                break;
         }
     }
 
@@ -99,7 +98,7 @@ public class DiceVisualsController : MonoBehaviour
             tmp.fontSize = faceSize;
             tmp.alignment = TextAlignmentOptions.Center;
             tmp.font = fontAsset;
-            tmp.color = faceColor;
+            SetColorValue(tmp, faceColor);
         }
     }
 
@@ -147,7 +146,7 @@ public class DiceVisualsController : MonoBehaviour
             tmp.fontSize = faceSize;
             tmp.alignment = TextAlignmentOptions.Center;
             tmp.font = fontAsset;
-            tmp.color = faceColor;
+            SetColorValue(tmp, faceColor);
         }
     }
 
@@ -184,7 +183,7 @@ public class DiceVisualsController : MonoBehaviour
             tmp.fontSize = faceSize;
             tmp.alignment = TextAlignmentOptions.Center;
             tmp.font = fontAsset;
-            tmp.color = faceColor;
+            SetColorValue(tmp, faceColor);
         }
     }
 
@@ -217,7 +216,7 @@ public class DiceVisualsController : MonoBehaviour
             tmp.fontSize = faceSize;
             tmp.alignment = TextAlignmentOptions.Center;
             tmp.font = fontAsset;
-            tmp.color = faceColor;
+            SetColorValue(tmp, faceColor);
         }
     }
 
@@ -257,7 +256,7 @@ public class DiceVisualsController : MonoBehaviour
             tmp.fontSize = faceSize;
             tmp.alignment = TextAlignmentOptions.Center;
             tmp.font = fontAsset;
-            tmp.color = faceColor;
+            SetColorValue(tmp, faceColor);
         }
     }
 
@@ -308,10 +307,16 @@ public class DiceVisualsController : MonoBehaviour
             tmp.fontSize = faceSize;
             tmp.alignment = TextAlignmentOptions.Center;
             tmp.font = fontAsset;
-            tmp.color = faceColor;
+            SetColorValue(tmp, faceColor);
         }
     }
 
-    // TODO: Implement GenerateD4Numbers, GenerateD8Numbers, etc.
-    // For each, define face normals and number mapping, then instantiate TextMeshPro as above.
+    private void SetColorValue(TextMeshPro tmp, Color color)
+    {
+        float dotProd = Vector3.Dot(transform.forward, tmp.transform.forward);
+
+        color.a = dotProd > -0.7f ? 1 : 0;
+
+        tmp.color = color;
+    }
 }

@@ -1,14 +1,15 @@
 using UnityEngine;
 using UnityEngine.UI;
 using Sirenix.OdinInspector;
+using DG.Tweening;
 
 public class CharacterExpressionHandler : MonoBehaviour
 {
-    [BoxGroup("References"), SerializeField] Image leftEyebrowImage;
-    [BoxGroup("References"), SerializeField] Image rightEyebrowImage;
-    [BoxGroup("References"), SerializeField] Image mouthImage;
-    [BoxGroup("References"), SerializeField] Image leftEyeImage;
-    [BoxGroup("References"), SerializeField] Image rightEyeImage;
+    [BoxGroup("References"), SerializeField] MeshRenderer leftEyebrowMeshRenderer;
+    [BoxGroup("References"), SerializeField] MeshRenderer rightEyebrowMeshRenderer;
+    [BoxGroup("References"), SerializeField] MeshRenderer mouthMeshRenderer;
+    [BoxGroup("References"), SerializeField] MeshRenderer leftEyeMeshRenderer;
+    [BoxGroup("References"), SerializeField] MeshRenderer rightEyeMeshRenderer;
 
     public CharacterExpressionData expressionData;
 
@@ -16,6 +17,11 @@ public class CharacterExpressionHandler : MonoBehaviour
     private Material _rightEyeMaterial;
     private MaterialPropertyBlock _leftEyePropertyBlock;
     private MaterialPropertyBlock _rightEyePropertyBlock;
+
+    private float _blinkTimer = 0f;
+    private float _blinkIntervalMin => expressionData?.eyeSettings?.blinkIntervalMin ?? 2f;
+    private float _blinkIntervalMax => expressionData?.eyeSettings?.blinkIntervalMax ?? 4f;
+    private float _nextBlinkTime = 0f;
 
     private void Awake()
     {
@@ -25,13 +31,14 @@ public class CharacterExpressionHandler : MonoBehaviour
             return;
         }
 
-        _leftEyeMaterial = leftEyeImage.material;
-        _rightEyeMaterial = rightEyeImage.material;
+        _leftEyeMaterial = leftEyeMeshRenderer.material;
+        _rightEyeMaterial = rightEyeMeshRenderer.material;
 
         _leftEyePropertyBlock = new MaterialPropertyBlock();
         _rightEyePropertyBlock = new MaterialPropertyBlock();
 
         ApplyExpressionData();
+        SetNextBlinkTime();
     }
 
     private void ApplyExpressionData()
@@ -39,11 +46,14 @@ public class CharacterExpressionHandler : MonoBehaviour
         // Apply the expression data to the character's visual elements
 
         // - Set the eyebrow sprite
-        leftEyebrowImage.sprite = expressionData.eyebrowSprite;
-        rightEyebrowImage.sprite = expressionData.eyebrowSprite;
+        _leftEyePropertyBlock.SetTexture("_MainTex", expressionData.eyebrowSprite.texture);
+        _rightEyePropertyBlock.SetTexture("_MainTex", expressionData.eyebrowSprite.texture);
 
         // - Set the mouth sprite
-        mouthImage.sprite = expressionData.mouthSprite;
+        if (mouthMeshRenderer != null && expressionData.mouthSprite != null)
+        {
+            mouthMeshRenderer.material.SetTexture("_MainTex", expressionData.mouthSprite.texture);
+        }
 
         // - Adjust eye settings
         if (expressionData.eyeSettings != null)
@@ -56,9 +66,7 @@ public class CharacterExpressionHandler : MonoBehaviour
             _leftEyePropertyBlock.SetVector("_PupilSize", new Vector4(expressionData.eyeSettings.pupilSize.x, expressionData.eyeSettings.pupilSize.y, 0, 0));
             _rightEyePropertyBlock.SetVector("_PupilSize", new Vector4(expressionData.eyeSettings.pupilSize.x, expressionData.eyeSettings.pupilSize.y, 0, 0));
 
-            // Set blink speed
-            _leftEyePropertyBlock.SetFloat("_BlinkSpeed", expressionData.eyeSettings.blinkSpeed);
-            _rightEyePropertyBlock.SetFloat("_BlinkSpeed", expressionData.eyeSettings.blinkSpeed);
+            // Blink speed is now randomized per interval, so no direct property to set here.
 
             // Set eyelash thickness
             _leftEyePropertyBlock.SetFloat("_TopEyelashThickness", expressionData.eyeSettings.topEyelashThickness);
@@ -66,5 +74,41 @@ public class CharacterExpressionHandler : MonoBehaviour
             _rightEyePropertyBlock.SetFloat("_TopEyelashThickness", expressionData.eyeSettings.topEyelashThickness);
             _rightEyePropertyBlock.SetFloat("_BottomEyelashThickness", expressionData.eyeSettings.bottomEyelashThickness);
         }
+    }
+
+    private void LateUpdate()
+    {
+        // Handle blinking logic
+        _blinkTimer += Time.deltaTime;
+        if (_blinkTimer >= _nextBlinkTime)
+        {
+            BlinkEyes();
+            _blinkTimer = 0f;
+            SetNextBlinkTime();
+        }
+    }
+
+    private void SetNextBlinkTime()
+    {
+        _nextBlinkTime = Random.Range(_blinkIntervalMin, _blinkIntervalMax);
+    }
+
+    private void BlinkEyes()
+    {
+        string topEyelidControl = "_TopEyelidControl";
+        float topEyelidXValue = 0.5f; // Adjust this value to control the eyelid position
+        float topEyelidYValue = 0.8f; // Adjust this value to control the eyelid position
+
+        // Blink animation for both eyes
+        _leftEyeMaterial.SetVector(topEyelidControl, new Vector2(topEyelidXValue, topEyelidYValue));
+        _rightEyeMaterial.SetVector(topEyelidControl, new Vector2(topEyelidXValue, topEyelidYValue));
+
+        DOTween.To(() => topEyelidYValue, x => topEyelidYValue = x, 0.15f, Random.Range(0.1f, 0.2f))
+            .OnUpdate(() =>
+            {
+                _leftEyeMaterial.SetVector(topEyelidControl, new Vector2(topEyelidXValue, topEyelidYValue));
+                _rightEyeMaterial.SetVector(topEyelidControl, new Vector2(topEyelidXValue, topEyelidYValue));
+            })
+            .SetLoops(2, LoopType.Yoyo);
     }
 }
