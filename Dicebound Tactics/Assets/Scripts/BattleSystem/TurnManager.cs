@@ -4,6 +4,7 @@ using UnityEngine;
 using TacticsToolkit;
 using Sirenix.OdinInspector;
 using System.Linq;
+using System.Threading.Tasks;
 
 public class TurnManager : MonoBehaviour
 {
@@ -84,11 +85,10 @@ public class TurnManager : MonoBehaviour
             }
         }
 
-        BuildTurnOrder();
-        EventManager.TriggerBattleStarted();
+        BuildTurnOrder(true);
     }
 
-    private void BuildTurnOrder()
+    private void BuildTurnOrder(bool isFirstRound = false)
     {
         if (!BattlePlaying)
             return;
@@ -108,8 +108,15 @@ public class TurnManager : MonoBehaviour
         {
             currentTurnIndex = 0;
         }
-        Debug.Log("roll Turn order built with " + turnOrder.Count + " entities.");
-        diceRollManager.RollDiceForUnits(turnOrder, () => StartNextTurn());
+
+        diceRollManager.RollDiceForUnits(turnOrder, () =>
+        {
+            if (isFirstRound)
+            {
+                EventManager.TriggerBattleStarted();
+            }
+            StartNextTurn();
+        });
     }
 
     public void StartNextTurn()

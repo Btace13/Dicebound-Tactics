@@ -96,7 +96,7 @@ public class EnemyManager : Entity
             yield return ability.Execute(this, target);
 
             // Optional shake or visual cue
-            CameraManager.Instance.ShakeActiveCamera();
+            // CameraManager.Instance.ShakeActiveCamera();
 
             yield return new WaitForSeconds(0.5f); // slight pacing delay between abilities
         }
