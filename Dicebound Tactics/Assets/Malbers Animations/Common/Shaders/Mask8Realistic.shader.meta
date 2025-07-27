@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 9fe9ba9d26f6a544fbb02b1e945872f8
+labels:
+- AllCreature
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  nonModifiableTextures: []
+  preprocessorOverride: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 78795
+  packageName: 'Poly Art: Wolf'
+  packageVersion: 3.9d
+  assetPath: Assets/Malbers Animations/Common/Shaders/Mask8Realistic.shader
+  uploadId: 624977

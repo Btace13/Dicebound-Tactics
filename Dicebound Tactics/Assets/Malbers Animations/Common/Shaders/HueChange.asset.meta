@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 5cbe9f9fd918cbc4292c90b25314adb1
+labels:
+- AllCreature
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 78795
+  packageName: 'Poly Art: Wolf'
+  packageVersion: 3.9d
+  assetPath: Assets/Malbers Animations/Common/Shaders/HueChange.asset
+  uploadId: 624977
