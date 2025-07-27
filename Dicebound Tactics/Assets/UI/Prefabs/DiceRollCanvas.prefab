@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 748053841064709956}
   - component: {fileID: 6186844974555694517}
   - component: {fileID: 1932775116561189323}
+  - component: {fileID: 797917351016249456}
   m_Layer: 5
   m_Name: DiceRollCanvas
   m_TagString: Untagged
@@ -117,6 +118,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   diceText: {fileID: 1859753986625948251}
   rollDuration: 1.5
+--- !u!114 &797917351016249456
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1902752924590704612}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7d56649cd73d80d4198aa725f95bf6ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShouldBillboard: 1
+  FlipHorizontal: 1
 --- !u!1 &4698838119805351202
 GameObject:
   m_ObjectHideFlags: 0

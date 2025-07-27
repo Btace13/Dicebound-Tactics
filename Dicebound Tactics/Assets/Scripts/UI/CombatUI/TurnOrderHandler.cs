@@ -11,13 +11,12 @@ public class TurnOrderHandler : MonoBehaviour
     [SerializeField] GameObject PortraitPrefab;
     [SerializeField] GameObject CurrentTurnHolderImage;
 
-    private bool isCreatingPortraits = false;
-
     private void Awake()
     {
         // Subscribe to events
         EventManager.OnNewActiveEntity += OnTurnStarted;
         EventManager.OnCombatEncounterEnded += OnCombatEncounterEnded;
+        EventManager.OnCombatEncounterStarted += OnEncounterStarted;
     }
 
     private void OnDisable()
@@ -25,20 +24,30 @@ public class TurnOrderHandler : MonoBehaviour
         // Unsubscribe to avoid memory leaks
         EventManager.OnNewActiveEntity -= OnTurnStarted;
         EventManager.OnCombatEncounterEnded -= OnCombatEncounterEnded;
+        EventManager.OnCombatEncounterStarted -= OnEncounterStarted;
     }
 
-    public async void OnTurnStarted(Entity entity)
+    public void OnEncounterStarted(CombatEncounter encounter)
+    {
+        OnTurnStarted();
+    }
+
+    public async void OnTurnStarted(Entity entity = null)
     {
         if (ImageContainer == null || PortraitPrefab == null || CurrentTurnHolderImage == null)
             return;
 
         ImageContainer.SetActive(true);
-
-        isCreatingPortraits = true;
         await CreateTurnOrderPortraits();
-        isCreatingPortraits = false;
-
-        UpdateCurrentTurnHolder(entity);
+        
+        if(entity != null)
+        {
+            UpdateCurrentTurnHolder(entity);
+        }
+        else
+        {
+            UpdateCurrentTurnHolder();
+        }
     }
 
     public async void OnCombatEncounterEnded(CombatEncounter encounter)
@@ -48,7 +57,7 @@ public class TurnOrderHandler : MonoBehaviour
 
     private async Task CreateTurnOrderPortraits()
     {
-        if (TurnManager.Instance == null) return;
+        if (TurnManager.Instance == null || TurnManager.Instance.GetRemainingEntitiesThisRound().Count != 0) return;
 
         await ClearTurnOrder();
 
