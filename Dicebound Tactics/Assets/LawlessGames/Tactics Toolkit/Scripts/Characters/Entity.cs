@@ -74,7 +74,7 @@ namespace TacticsToolkit
         private bool isOverloaded = false;
 
         public event Action OnLevelChanged;
-        public event Action<CharacterManager> OnCharacterStatChanged;
+        public event Action<Entity> OnCharacterStatChanged;
 
 #if UNITY_EDITOR
         [Sirenix.OdinInspector.Button("Add EXP", ButtonSizes.Medium)]
@@ -248,7 +248,7 @@ namespace TacticsToolkit
 
         public void InvokeCharacterStatChanged()
         {
-            OnCharacterStatChanged?.Invoke(this as CharacterManager);
+            OnCharacterStatChanged?.Invoke(this);
         }
 
         //Entity is being targets for an attack. 
@@ -585,7 +585,7 @@ namespace TacticsToolkit
             statsContainer.CurrentMana.statValue = statsContainer.Mana.statValue;
             statsContainer.ActionPoints.statValue = 0;
             statsContainer.CarriedOverActionPoints.statValue = 0;
-            OnCharacterStatChanged?.Invoke(this as CharacterManager);
+            OnCharacterStatChanged?.Invoke(this);
             UpdateCharacterUI();
         }
 
@@ -623,7 +623,7 @@ namespace TacticsToolkit
             statsContainer.ActionPoints.statValue = 0;
             statsContainer.CarriedOverActionPoints.statValue = 0;
             equippedDice.LastRollModifier = null;
-            OnCharacterStatChanged?.Invoke(this as CharacterManager);
+            OnCharacterStatChanged?.Invoke(this);
         }
 
         public void RollDice()
@@ -646,7 +646,7 @@ namespace TacticsToolkit
             statsContainer.ActionPoints.statValue = statsContainer.ActionPoints.statValue += totalAP;
             statsContainer.CarriedOverActionPoints.statValue = 0;
             diceRoll.modifier.Apply(this);
-            OnCharacterStatChanged?.Invoke(this as CharacterManager);
+            OnCharacterStatChanged?.Invoke(this);
         }
 
         public void ApplyDiceRoll(int value)
@@ -663,7 +663,7 @@ namespace TacticsToolkit
             statsContainer.ActionPoints.statValue = statsContainer.ActionPoints.statValue += totalAP;
             statsContainer.CarriedOverActionPoints.statValue = 0;
             diceRoll.modifier.Apply(this);
-            OnCharacterStatChanged?.Invoke(this as CharacterManager);
+            OnCharacterStatChanged?.Invoke(this);
         }
 
         public void ResetTempModifiers()

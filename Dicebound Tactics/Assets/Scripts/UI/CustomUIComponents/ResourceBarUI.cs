@@ -12,6 +12,7 @@ public class ResourceBarUI : MonoBehaviour
     [BoxGroup("Settings"), SerializeField] private int maxResource = 100;
     [BoxGroup("Settings"), SerializeField] private int currentResource = 100;
     [BoxGroup("Settings"), SerializeField, ColorUsage(false)] private Color barColor = Color.green;
+    [BoxGroup("Settings"), SerializeField] private bool addColonToName = true;
 
     public int MaxResource
     {
@@ -39,7 +40,7 @@ public class ResourceBarUI : MonoBehaviour
         set
         {
             resourceName = value;
-            resourceNameText.text = value + ":";
+            resourceNameText.text = value + (addColonToName ? ":" : "");
         }
     }
 
@@ -72,7 +73,7 @@ public class ResourceBarUI : MonoBehaviour
         // Ensure the resource name is set
         if (resourceNameText != null)
         {
-            resourceNameText.text = resourceName + ":";
+            resourceNameText.text = resourceName + (addColonToName ? ":" : "");
         }
 
         // Update the resource amount

@@ -18,7 +18,7 @@ public class CharacterCard : MonoBehaviour
   [SerializeField] private GameObject CurrentTurnIndicator;
   [SerializeField] private TextMeshProUGUI modifierTextContent;
 
-  private CharacterManager character;
+  private Entity character;
   public float rollSpeed = 2f; // higher = faster
   private Coroutine rollingCoroutine;
 
@@ -41,13 +41,13 @@ public class CharacterCard : MonoBehaviour
     EventManager.OnCharacterTurnEnded -= RemoveCurrentTurnIndicator;
   }
 
-  private void HandleUpdatingCharacterInfo(CharacterManager character)
+  private void HandleUpdatingCharacterInfo(Entity character)
   {
     SetCharacterInfo(character);
     CurrentTurnIndicator.SetActive(CombatManager.Instance.TurnManager.GetCurrentUnit() == character);
   }
 
-  public void SetCharacterInfo(CharacterManager character)
+  public void SetCharacterInfo(Entity character)
   {
     if (character == null)
     {
