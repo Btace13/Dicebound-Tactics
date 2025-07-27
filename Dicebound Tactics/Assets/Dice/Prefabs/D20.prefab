@@ -52,6 +52,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -3249670416398575621, guid: 182c15c2b84e63d4cac2882583308858, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: -1077396391054534199, guid: 182c15c2b84e63d4cac2882583308858, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -119,11 +123,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5799779343919122468, guid: 182c15c2b84e63d4cac2882583308858, type: 3}
   m_PrefabInstance: {fileID: 6022149962115699644}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &295160299140228466 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6307968309698819790, guid: 182c15c2b84e63d4cac2882583308858, type: 3}
-  m_PrefabInstance: {fileID: 6022149962115699644}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &624782934025779430 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6573379411836201818, guid: 182c15c2b84e63d4cac2882583308858, type: 3}
@@ -176,16 +175,6 @@ MonoBehaviour:
   parent: {fileID: 7564251834749196095}
   fontAsset: {fileID: 11400000, guid: f4d0839316bf0b648aeb96138f31255b, type: 2}
   diceType: 1
---- !u!4 &2562982651264965263 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -1151951325145413325, guid: 182c15c2b84e63d4cac2882583308858, type: 3}
-  m_PrefabInstance: {fileID: 6022149962115699644}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &4704073202720029864 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -7864761746890264812, guid: 182c15c2b84e63d4cac2882583308858, type: 3}
-  m_PrefabInstance: {fileID: 6022149962115699644}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4941470540539891307 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1657703158223855063, guid: 182c15c2b84e63d4cac2882583308858, type: 3}
@@ -248,11 +237,6 @@ MonoBehaviour:
   parent: {fileID: 7564251834749196095}
   fontAsset: {fileID: 11400000, guid: f4d0839316bf0b648aeb96138f31255b, type: 2}
   diceType: 5
---- !u!4 &6746725400007587175 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8199974674142632229, guid: 182c15c2b84e63d4cac2882583308858, type: 3}
-  m_PrefabInstance: {fileID: 6022149962115699644}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &6868992917428825837 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 182c15c2b84e63d4cac2882583308858, type: 3}
@@ -272,7 +256,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _Animancer: {fileID: 3099776234427511391}
   AnimationData: {fileID: 11400000, guid: 49dcfb2bb1c0c7e47bbe1022d0794c1c, type: 2}
-  rightHandTransform: {fileID: 2562982651264965263}
+  rightHandTransform: {fileID: 0}
   lookAnimator: {fileID: 289088773627833566}
   debug: 0
 --- !u!114 &289088773627833566
@@ -564,10 +548,10 @@ MonoBehaviour:
     SpineMiddle: {fileID: 8972279459292510051}
     Chest: {fileID: 7564251834749196095}
     Neck: {fileID: 4941470540539891307}
-    LeftUpperArm: {fileID: 6746725400007587175}
-    LeftForearm: {fileID: 4704073202720029864}
-    RightUpperArm: {fileID: 7158761973584410391}
-    RightForearm: {fileID: 295160299140228466}
+    LeftUpperArm: {fileID: 0}
+    LeftForearm: {fileID: 0}
+    RightUpperArm: {fileID: 0}
+    RightForearm: {fileID: 0}
     SpineGroundAlign: 0
     SpineGrAdjustDuration: 0.15
     SlopeSpineLean:
@@ -595,11 +579,6 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     AdjustForwAndSide: {x: 1, y: 0.75}
---- !u!4 &7158761973584410391 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3516169388021212331, guid: 182c15c2b84e63d4cac2882583308858, type: 3}
-  m_PrefabInstance: {fileID: 6022149962115699644}
-  m_PrefabAsset: {fileID: 0}
 --- !u!137 &7219709970062542915 stripped
 SkinnedMeshRenderer:
   m_CorrespondingSourceObject: {fileID: 4009178439354768383, guid: 182c15c2b84e63d4cac2882583308858, type: 3}
