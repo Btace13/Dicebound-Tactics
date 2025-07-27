@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a18afbbf0062ac4bbec1e43a25c797e, type: 3}
+  m_Name: Wolf Animation Data
+  m_EditorClassIdentifier: 
+  equipWeapon: {fileID: 0}
+  unequipWeapon: {fileID: 0}
+  aimWeapon: {fileID: 0}
+  reloadWeapon: {fileID: 0}
+  abilities:
+    keys:
+    - {fileID: 11400000, guid: 5d28c466750da4c42be20859550aa08d, type: 2}
+    values:
+    - {fileID: 1827226128182048838, guid: e4948e438def9484db486b2403a5e34e, type: 3}
+  equippedMovement:
+    _FadeDuration: 0.25
+    _Events:
+      _NormalizedTimes: []
+      _Callbacks: []
+      _Names: []
+    _Speed: 1
+    _Animations:
+    - {fileID: 6431192172652362133, guid: cf3f189fff0d40146810f34a765395b9, type: 3}
+    - {fileID: 6431192172652362133, guid: b355bb1064ffea44886804c44d9c4dd1, type: 3}
+    - {fileID: 1827226128182048838, guid: b144b515a260deb4d9e7ff05fef38126, type: 3}
+    _Speeds: []
+    _SynchronizeChildren: 
+    _Thresholds:
+    - {x: 0, y: 0}
+    - {x: 0, y: 0}
+    - {x: 0, y: 0}
+    _DefaultParameter: {x: 0, y: 0}
+    _Type: 0
+  normalizedEquipTime: 0.4
+  normalizedAttackTriggerTimes:
+  - 0.5

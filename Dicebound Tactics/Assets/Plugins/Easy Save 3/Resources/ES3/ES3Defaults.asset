@@ -44,9 +44,12 @@ MonoBehaviour:
     - AstarPathfindingProject
     - DamageNumbersPro
     - Drawing
+    - KAnimationCore.Editor
+    - KAnimationCore.Runtime
     - LeTai.TrueShadow
     - LeTai.TrueShadow.Demo
     - PackageTools
+    - RetargetPro.Runtime
     - sc.stylizedwater3.runtime
     - sc.utilities.selectionhistory.editor
     - ShapesRuntime

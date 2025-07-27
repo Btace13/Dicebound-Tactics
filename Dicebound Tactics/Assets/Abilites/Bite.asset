@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ffa81a779bc640479befcccdab77d70, type: 3}
+  m_Name: Bite
+  m_EditorClassIdentifier: 
+  abilityName: Bite
+  description: A strong bite
+  notifcationMessage: is preparing to lunge.
+  icon: {fileID: -6941875414966023432, guid: bfe016ef2a04aa04d957b688986f78b9, type: 3}
+  apCost: 2
+  abilityType: 2
+  requiresMovement: 1
+  range: 4
+  unlockLevel: 1
+  damageAmount: 20

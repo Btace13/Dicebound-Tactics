@@ -1,0 +1,203 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c9c04639ae548bdb0a8e927492d029d, type: 3}
+  m_Name: Wolf Pa v2 Rig
+  m_EditorClassIdentifier: 
+  targetAnimator: {fileID: 0}
+  inputConfig: {fileID: 0}
+  rigHierarchy:
+  - name: Wolf Pa v2
+    index: 0
+    isVirtual: 0
+  - name: CG
+    index: 1
+    isVirtual: 0
+  - name: Pelvis
+    index: 2
+    isVirtual: 0
+  - name: L Thigh
+    index: 3
+    isVirtual: 0
+  - name: L Calf
+    index: 4
+    isVirtual: 0
+  - name: L HorseLink
+    index: 5
+    isVirtual: 0
+  - name: L Foot
+    index: 6
+    isVirtual: 0
+  - name: R Thigh
+    index: 7
+    isVirtual: 0
+  - name: R Calf
+    index: 8
+    isVirtual: 0
+  - name: R HorseLink
+    index: 9
+    isVirtual: 0
+  - name: R Foot
+    index: 10
+    isVirtual: 0
+  - name: Spine
+    index: 11
+    isVirtual: 0
+  - name: Spine1
+    index: 12
+    isVirtual: 0
+  - name: Spine2
+    index: 13
+    isVirtual: 0
+  - name: L Clavicle
+    index: 14
+    isVirtual: 0
+  - name: L UpperArm
+    index: 15
+    isVirtual: 0
+  - name: L Forearm
+    index: 16
+    isVirtual: 0
+  - name: L Hand
+    index: 17
+    isVirtual: 0
+  - name: L Finger0
+    index: 18
+    isVirtual: 0
+  - name: Neck
+    index: 19
+    isVirtual: 0
+  - name: Head
+    index: 20
+    isVirtual: 0
+  - name: Cheek L
+    index: 21
+    isVirtual: 0
+  - name: Cheek R
+    index: 22
+    isVirtual: 0
+  - name: Ear L
+    index: 23
+    isVirtual: 0
+  - name: Ear R
+    index: 24
+    isVirtual: 0
+  - name: Eye Socket L
+    index: 25
+    isVirtual: 0
+  - name: Eye L
+    index: 26
+    isVirtual: 0
+  - name: Eye Lid Lower L
+    index: 27
+    isVirtual: 0
+  - name: Eye Lid Upper L
+    index: 28
+    isVirtual: 0
+  - name: Eye Socket R
+    index: 29
+    isVirtual: 0
+  - name: Eye Lid Lower R
+    index: 30
+    isVirtual: 0
+  - name: Eye Lid Upper R
+    index: 31
+    isVirtual: 0
+  - name: Eye R
+    index: 32
+    isVirtual: 0
+  - name: Jaw
+    index: 33
+    isVirtual: 0
+  - name: Lip Lower0 L
+    index: 34
+    isVirtual: 0
+  - name: Lip Lower0 R
+    index: 35
+    isVirtual: 0
+  - name: Lip Lower1 L
+    index: 36
+    isVirtual: 0
+  - name: Lip Lower1 R
+    index: 37
+    isVirtual: 0
+  - name: Lip Lower2 L
+    index: 38
+    isVirtual: 0
+  - name: Lip Lower2 R
+    index: 39
+    isVirtual: 0
+  - name: Tongue01
+    index: 40
+    isVirtual: 0
+  - name: Tongue02
+    index: 41
+    isVirtual: 0
+  - name: Tongue03
+    index: 42
+    isVirtual: 0
+  - name: Lip Upper 0 L
+    index: 43
+    isVirtual: 0
+  - name: Lip Upper 0 R
+    index: 44
+    isVirtual: 0
+  - name: Lip Upper 1 L
+    index: 45
+    isVirtual: 0
+  - name: Lip Upper 1 R
+    index: 46
+    isVirtual: 0
+  - name: Lip Upper 2 L
+    index: 47
+    isVirtual: 0
+  - name: Lip Upper 2 R
+    index: 48
+    isVirtual: 0
+  - name: R Clavicle
+    index: 49
+    isVirtual: 0
+  - name: R UpperArm
+    index: 50
+    isVirtual: 0
+  - name: R Forearm
+    index: 51
+    isVirtual: 0
+  - name: R Hand
+    index: 52
+    isVirtual: 0
+  - name: R Finger0
+    index: 53
+    isVirtual: 0
+  - name: Tail01
+    index: 54
+    isVirtual: 0
+  - name: Tail02
+    index: 55
+    isVirtual: 0
+  - name: Tail03
+    index: 56
+    isVirtual: 0
+  - name: Tail04
+    index: 57
+    isVirtual: 0
+  - name: Tail05
+    index: 58
+    isVirtual: 0
+  - name: Magic PA
+    index: 59
+    isVirtual: 0
+  - name: Wolf PA
+    index: 60
+    isVirtual: 0
+  rigElementChains: []
+  rigCurves: []
+  rigDepths: 0000000001000000020000000300000004000000050000000600000003000000040000000500000006000000030000000400000005000000060000000700000008000000090000000a000000060000000700000008000000080000000800000008000000080000000900000009000000090000000800000009000000090000000900000008000000090000000900000009000000090000000900000009000000090000000a0000000b000000080000000800000008000000080000000800000008000000060000000700000008000000090000000a00000003000000040000000500000006000000070000000100000001000000

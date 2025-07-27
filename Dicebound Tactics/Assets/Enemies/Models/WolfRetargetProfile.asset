@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12349bae48c61824bb8e519537ce28eb, type: 3}
+  m_Name: WolfRetargetProfile
+  m_EditorClassIdentifier: 
+  sourceCharacter: {fileID: 919132149155446097, guid: b3967d13d3dbce94891ab49356f46a7e, type: 3}
+  targetCharacter: {fileID: 0}
+  sourcePose: {fileID: 0}
+  targetPose: {fileID: 0}
+  sourceRig: {fileID: 11400000, guid: 871cef72b784ab14ea77fa412ffc0987, type: 2}
+  targetRig: {fileID: 11400000, guid: 0448e6d38ce7ee54f9dfbc06c562b22d, type: 2}
+  excludeChain:
+    chainName: Elements To Exclude
+    elementChain:
+    - name: CharacterExpression
+      index: 49
+      isVirtual: 0
+    - name: RightEye
+      index: 50
+      isVirtual: 0
+    - name: LeftEye
+      index: 51
+      isVirtual: 0
+    - name: D4_Head
+      index: 62
+      isVirtual: 0
+    - name: DiceNumbers
+      index: 63
+      isVirtual: 0
+    - name: Wolf Ears
+      index: 64
+      isVirtual: 0
+    - name: Wolf PA
+      index: 65
+      isVirtual: 0
+  retargetFeatures: []
