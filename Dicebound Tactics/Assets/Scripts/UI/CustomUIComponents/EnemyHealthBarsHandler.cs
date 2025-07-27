@@ -28,16 +28,27 @@ public class EnemyHealthBarsHandler : MonoBehaviour
 
   private void CreateEnemyHealthBars(CombatEncounter encounter)
   {
-    // Create health bars for all current enemies
-    foreach (var enemy in TurnManager.Instance.enemyUnits)
+    if (encounter.GetEnemyEncounterSide() == null || encounter.GetEnemyEncounterSide().combatSlots.Count == 0)
+    {
+      Debug.Log("No enemy combat slots found in the encounter.");
+      return;
+    }
+
+    List<Entity> enemies = encounter.GetEnemyEncounterSide().combatSlots.FindAll(slot => slot.isOccupied && slot.entity is EnemyManager)
+      .ConvertAll(slot => slot.entity);
+
+    foreach (var enemy in enemies)
     {
       EnemyHealthBarUI healthBar = Instantiate(healthBarPrefab, healthBarsContainer.transform);
       healthBar.SetEnemyInfo(enemy);
+      healthBars.Add(healthBar);
     }
   }
 
+
   private void DestroyEnemyHealthBars(CombatEncounter encounter)
   {
+    healthBars.Clear();
     foreach (Transform child in healthBarsContainer.transform)
     {
       Destroy(child.gameObject);

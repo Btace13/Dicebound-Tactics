@@ -8129,6 +8129,30 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4408696052577232829, guid: bbde8504cab454b2f8560186e359fe3c, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4408696052577232829, guid: bbde8504cab454b2f8560186e359fe3c, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4533208409245488012, guid: bbde8504cab454b2f8560186e359fe3c, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4533208409245488012, guid: bbde8504cab454b2f8560186e359fe3c, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4533208409245488012, guid: bbde8504cab454b2f8560186e359fe3c, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4533208409245488012, guid: bbde8504cab454b2f8560186e359fe3c, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4799983559162860537, guid: bbde8504cab454b2f8560186e359fe3c, type: 3}
       propertyPath: 'playerUnits.Array.data[0]'
       value: 
@@ -8201,6 +8225,22 @@ PrefabInstance:
       propertyPath: Target.TrackingTarget
       value: 
       objectReference: {fileID: 896658384}
+    - target: {fileID: 5803532677331449746, guid: bbde8504cab454b2f8560186e359fe3c, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5803532677331449746, guid: bbde8504cab454b2f8560186e359fe3c, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5803532677331449746, guid: bbde8504cab454b2f8560186e359fe3c, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5803532677331449746, guid: bbde8504cab454b2f8560186e359fe3c, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6102868632693936178, guid: bbde8504cab454b2f8560186e359fe3c, type: 3}
       propertyPath: 'PartyMembers.Array.data[0]'
       value: 

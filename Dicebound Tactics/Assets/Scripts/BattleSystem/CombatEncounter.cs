@@ -206,6 +206,7 @@ public class CombatEncounter : MonoBehaviour
                     }
                 });
                 closestSlot.isOccupied = true;
+                closestSlot.entity = c; // Assign the character to the slot
             }
         }
 
@@ -243,6 +244,7 @@ public class CombatEncounter : MonoBehaviour
                 });
 
                 closestSlot.isOccupied = true;
+                closestSlot.entity = enemy; // Assign the enemy to the slot
             }
         }
 
@@ -304,6 +306,11 @@ public class CombatEncounter : MonoBehaviour
         return allEnemiesDefeated;
     }
 
+    public EncounterSide GetEnemyEncounterSide()
+    {
+        return encounterSides.FirstOrDefault(side => side.combatSlots.Any(slot => slot.isOccupied && slot.entity is EnemyManager));
+    }
+
     #region OVERWORLD ENEMY MANAGEMENT
 
     public Vector3 GetRandomPointInEncounterArea()
@@ -349,7 +356,6 @@ public class CombatEncounter : MonoBehaviour
                 // Handle enemy wandering behavior here
                 if (Vector3.Distance(enemy.transform.position, randomPoint) > 1f)
                 {
-                    Debug.Log($"{enemy.name} is wandering to {randomPoint}");
                     _timeSinceLastAction[enemy] = 0f;
                 }
             }
