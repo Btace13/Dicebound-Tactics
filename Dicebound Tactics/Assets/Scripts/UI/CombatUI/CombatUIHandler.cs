@@ -220,8 +220,6 @@ public class CombatUIHandler : MonoBehaviour
             currentPanel = null;
             ShowScreenSpacePanelInputs(false);
         }, _fadeDuration, Ease.InOutQuad);
-
-        EventManager.TriggerSelectingATarget(false);
     }
 
     public void ShowScreenSpacePanelInputs(bool enable)
@@ -241,6 +239,7 @@ public class CombatUIHandler : MonoBehaviour
 
     public void ShowConfirmButton(bool enable)
     {
+        EventManager.TriggerSelectingATarget(enable);
         if (confirmButton == null)
         {
             return;
@@ -253,7 +252,6 @@ public class CombatUIHandler : MonoBehaviour
         }
 
         confirmButton.gameObject.SetActive(enable);
-        EventManager.TriggerSelectingATarget(enable);
     }
 
     public void ShowBigNotification(string message, float duration = 2f)

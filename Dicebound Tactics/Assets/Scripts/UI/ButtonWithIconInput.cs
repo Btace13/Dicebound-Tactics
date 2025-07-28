@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
 
+[RequireComponent(typeof(Button))]
 public class ButtonWithIconInput : MonoBehaviour
 {
     public InputActionReference inputAction;

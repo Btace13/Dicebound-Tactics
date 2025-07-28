@@ -46,8 +46,6 @@ namespace DiceboundTactics.UI
         {
             if (iconLookup == null) OnEnable();
 
-            Debug.Log($"Getting icon for action: {actionName}");
-
             if (!iconLookup.TryGetValue(actionName, out var iconSet))
                 return null;
 

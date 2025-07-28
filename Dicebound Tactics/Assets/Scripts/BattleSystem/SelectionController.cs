@@ -59,35 +59,35 @@ public class SelectionController : MonoBehaviour
     UpdateIndicators();
     HandleMouseHover();
 
-    if (Input.GetKeyDown(KeyCode.Tab))
-    {
-      CycleHighlight();
-    }
+    // if (Input.GetKeyDown(KeyCode.Tab))
+    // {
+    //   CycleHighlight();
+    // }
 
-    if (Input.GetKeyDown(KeyCode.Space))
-    {
-      if (numberOfSelectableTargets > 1)
-      {
-        Entity toSelect = lastHoveredEntity != null ? lastHoveredEntity : highlightedEntity;
+    // if (Input.GetKeyDown(KeyCode.Space))
+    // {
+    //   if (numberOfSelectableTargets > 1)
+    //   {
+    //     Entity toSelect = lastHoveredEntity != null ? lastHoveredEntity : highlightedEntity;
 
-        if (toSelect != null && toSelect.isAlive)
-        {
-          // bool multiSelect = Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.LeftShift); 
-          ToggleEntitySelection(toSelect);
-        }
-      }
-    }
+    //     if (toSelect != null && toSelect.isAlive)
+    //     {
+    //       // bool multiSelect = Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.LeftShift); 
+    //       ToggleEntitySelection(toSelect);
+    //     }
+    //   }
+    // }
 
-    if (Input.GetKeyDown(KeyCode.LeftShift))
-    {
-      cyclingEnemies = !cyclingEnemies;
-      currentIndex = -1;
-    }
+    // if (Input.GetKeyDown(KeyCode.LeftShift))
+    // {
+    //   cyclingEnemies = !cyclingEnemies;
+    //   currentIndex = -1;
+    // }
 
-    if (Input.GetKeyDown(KeyCode.Escape))
-    {
-      ClearAllSelections();
-    }
+    // if (Input.GetKeyDown(KeyCode.Escape))
+    // {
+    //   ClearAllSelections();
+    // }
   }
 
   private void UpdateIndicators()

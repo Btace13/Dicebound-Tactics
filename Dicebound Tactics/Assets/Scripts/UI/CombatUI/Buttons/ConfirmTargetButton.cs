@@ -1,12 +1,9 @@
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.InputSystem;
 
 public class ConfirmTargetButton : ButtonWithIconInput
 {
-  private bool isSelectingTarget;
-
-  private void Awake() {
+  private void Awake()
+  {
     // Event Listeners
     EventManager.OnSelectingATarget += HandleSelectingATarget;
   }
@@ -18,8 +15,7 @@ public class ConfirmTargetButton : ButtonWithIconInput
 
   private void HandleSelectingATarget(bool isSelecting)
   {
-    isSelectingTarget = isSelecting;
-
-    button.interactable = isSelectingTarget;
+    Debug.Log($"ConfirmTargetButton: HandleSelectingATarget called with isSelecting: {isSelecting}");
+    button.interactable = isSelecting;
   }
 }
