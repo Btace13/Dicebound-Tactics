@@ -8295,6 +8295,26 @@ PrefabInstance:
       propertyPath: Target.TrackingTarget
       value: 
       objectReference: {fileID: 896658384}
+    - target: {fileID: 5464283524078862037, guid: bbde8504cab454b2f8560186e359fe3c, type: 3}
+      propertyPath: Damping.x
+      value: 3.09
+      objectReference: {fileID: 0}
+    - target: {fileID: 5464283524078862037, guid: bbde8504cab454b2f8560186e359fe3c, type: 3}
+      propertyPath: Damping.y
+      value: 4.06
+      objectReference: {fileID: 0}
+    - target: {fileID: 5464283524078862037, guid: bbde8504cab454b2f8560186e359fe3c, type: 3}
+      propertyPath: Lookahead.Time
+      value: 0.469
+      objectReference: {fileID: 0}
+    - target: {fileID: 5464283524078862037, guid: bbde8504cab454b2f8560186e359fe3c, type: 3}
+      propertyPath: TargetOffset.z
+      value: 0.67
+      objectReference: {fileID: 0}
+    - target: {fileID: 5464283524078862037, guid: bbde8504cab454b2f8560186e359fe3c, type: 3}
+      propertyPath: Lookahead.Smoothing
+      value: 30
+      objectReference: {fileID: 0}
     - target: {fileID: 5803532677331449746, guid: bbde8504cab454b2f8560186e359fe3c, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -8323,6 +8343,10 @@ PrefabInstance:
       propertyPath: 'PartyMembers.Array.data[2]'
       value: 
       objectReference: {fileID: 561669390}
+    - target: {fileID: 6802391324652706900, guid: bbde8504cab454b2f8560186e359fe3c, type: 3}
+      propertyPath: TargetOffset.z
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 7916960669193843031, guid: bbde8504cab454b2f8560186e359fe3c, type: 3}
       propertyPath: 'idRef._Values.Array.data[323]'
       value: 
@@ -13850,6 +13874,10 @@ PrefabInstance:
     - target: {fileID: 7990100593937408401, guid: bbde8504cab454b2f8560186e359fe3c, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -30
+      objectReference: {fileID: 0}
+    - target: {fileID: 8021449390853810482, guid: bbde8504cab454b2f8560186e359fe3c, type: 3}
+      propertyPath: TargetOffset.y
+      value: -2
       objectReference: {fileID: 0}
     - target: {fileID: 8399152642029015173, guid: bbde8504cab454b2f8560186e359fe3c, type: 3}
       propertyPath: m_AnchorMax.y

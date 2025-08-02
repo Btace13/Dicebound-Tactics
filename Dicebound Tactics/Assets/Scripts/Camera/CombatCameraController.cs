@@ -76,7 +76,7 @@ public class CombatCameraController : BaseCameraController
         }
     }
 
-    public void UpdateTargetAtIndex(Transform target, int index, float weight = 1f, float radius = 1f)
+    public void UpdateTargetAtIndex(Transform target, int index, float weight = 1f, float radius = 2f)
     {
         if (_targetGroup != null)
         {
