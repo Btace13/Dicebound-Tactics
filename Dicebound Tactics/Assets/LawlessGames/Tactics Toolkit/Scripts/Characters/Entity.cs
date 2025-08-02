@@ -59,8 +59,6 @@ namespace TacticsToolkit
         public int previousTurnCost = -1;
 
         private bool isTargetted = false;
-        [HideInInspector]
-        public SpriteRenderer myRenderer;
 
         public GameConfig gameConfig;
 
@@ -97,8 +95,6 @@ namespace TacticsToolkit
             SetDefaultAbilityList();
             SetStats();
             requiredExperience = gameConfig.GetRequiredExp(level);
-
-            myRenderer = gameObject.GetComponent<SpriteRenderer>();
 
             if (statsContainer != null)
             {
@@ -142,7 +138,6 @@ namespace TacticsToolkit
             {
                 //Just a Color Lerp for when a character is targetted for an attack. 
                 i += Time.deltaTime * 0.5f;
-                myRenderer.color = Color.Lerp(new Color(1, 1, 1, 1), new Color(1, 0.5f, 0, 1), Mathf.PingPong(i * 2, 1));
             }
         }
 
@@ -255,18 +250,6 @@ namespace TacticsToolkit
         public void SetTargeted(bool focused = false)
         {
             isTargetted = focused;
-
-            if (isAlive)
-            {
-                if (isTargetted)
-                {
-                    myRenderer.color = new Color(1, 0, 0, 1);
-                }
-                else
-                {
-                    myRenderer.color = new Color(1, 1, 1, 1);
-                }
-            }
         }
 
         //Take damage from an attack or ability. 
@@ -372,8 +355,6 @@ namespace TacticsToolkit
                 transform.eulerAngles = currentRot;
                 yield return null;
             }
-
-            GetComponent<SpriteRenderer>().color = new Color(0.35f, 0.35f, 0.35f, 1);
         }
 
         private void SetupWeapon()
@@ -654,7 +635,7 @@ namespace TacticsToolkit
         { 
             if (statsContainer == null)
             {
-                // Debug.LogError("StatsContainer is not assigned for " + name);
+                Debug.LogError("StatsContainer is not assigned for " + name);
                 return;
             }
 
