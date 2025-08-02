@@ -113,7 +113,6 @@ namespace TacticsToolkit
             movementModeEnabled = false;
             isMoving = false; 
             OverlayController.Instance.ClearTiles(null);
-            activeCharacter.CharacterMoved();
             path = new List<OverlayTile>();
         }
 
@@ -170,7 +169,6 @@ namespace TacticsToolkit
             if (tile != null)
             {
                 character.transform.position = new Vector3(tile.transform.position.x, tile.transform.position.y + 0.0001f, tile.transform.position.z);
-                character.LinkCharacterToTile(tile);
             }
         }
 

@@ -64,17 +64,6 @@ namespace TacticsToolkit
             base.StartTurn();
         }
 
-        public override void CharacterMoved()
-        {
-            logAction.Raise(gameObject.name + ": Moved To " + bestSenario.positionTile.grid2DLocation);
-
-            //Once a character has finished moving, check if a attack/ability is available and do it. Otherwise, end turn
-            if (bestSenario != null && (bestSenario.targetTile != null || bestSenario.targetAbility != null))
-                Attack();
-            else
-                StartCoroutine(EndTurn());
-        }
-
         private Senario AutoAttackBasedOnPersonality(OverlayTile position)
         {
             switch (personality)

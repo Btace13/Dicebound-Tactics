@@ -28,7 +28,8 @@ public class SelectionController : MonoBehaviour
   private GameObject highlightIndicator;
 
 
-  private void Awake() {
+  private void Awake()
+  {
     if (Instance == null)
     {
       Instance = this;
@@ -40,6 +41,15 @@ public class SelectionController : MonoBehaviour
     }
 
     DontDestroyOnLoad(gameObject);
+
+    // Event Listeners
+    EventManager.OnEntityDied += HandleEntityDied;
+
+  }
+
+  void OnDisable()
+  {
+    EventManager.OnEntityDied -= HandleEntityDied;
   }
 
   private void Start()
@@ -209,64 +219,64 @@ public class SelectionController : MonoBehaviour
 
   public void CycleHighlight()
   {
-      if (!TryGetValidEntityList(out List<Entity> list)) return;
+    if (!TryGetValidEntityList(out List<Entity> list)) return;
 
-      int max = list.Count;
-      int attempts = 0;
+    int max = list.Count;
+    int attempts = 0;
 
-      do
-      {
-          currentIndex = (currentIndex + 1) % max;
-          attempts++;
-      }
-      while (!list[currentIndex].isAlive && attempts < max);
+    do
+    {
+      currentIndex = (currentIndex + 1) % max;
+      attempts++;
+    }
+    while (!list[currentIndex].isAlive && attempts < max);
 
-      HandleSelection(list[currentIndex]);
+    HandleSelection(list[currentIndex]);
   }
 
   public void SelectPreviousEntity()
   {
-      if (!TryGetValidEntityList(out List<Entity> list)) return;
+    if (!TryGetValidEntityList(out List<Entity> list)) return;
 
-      int max = list.Count;
-      int attempts = 0;
+    int max = list.Count;
+    int attempts = 0;
 
-      do
-      {
-          currentIndex = (currentIndex - 1 + max) % max;
-          attempts++;
-      }
-      while (!list[currentIndex].isAlive && attempts < max);
+    do
+    {
+      currentIndex = (currentIndex - 1 + max) % max;
+      attempts++;
+    }
+    while (!list[currentIndex].isAlive && attempts < max);
 
-      HandleSelection(list[currentIndex]);
+    HandleSelection(list[currentIndex]);
   }
 
 
   private bool TryGetValidEntityList(out List<Entity> list)
   {
-      list = cyclingEnemies
-          ? turnManager?.enemyUnits?.ConvertAll(e => (Entity)e)
-          : turnManager?.playerUnits?.ConvertAll(p => (Entity)p);
+    list = cyclingEnemies
+        ? turnManager?.enemyUnits?.ConvertAll(e => (Entity)e)
+        : turnManager?.playerUnits?.ConvertAll(p => (Entity)p);
 
-      if (list == null || list.Count == 0)
-      {
-          list = null;
-          return false;
-      }
+    if (list == null || list.Count == 0)
+    {
+      list = null;
+      return false;
+    }
 
-      return true;
+    return true;
   }
 
   private void HandleSelection(Entity entity)
   {
-      if (numberOfSelectableTargets == 1)
-      {
-          ToggleEntitySelection(entity, false);
-      }
-      else
-      {
-          SetHighlightedEntity(entity);
-      }
+    if (numberOfSelectableTargets == 1)
+    {
+      ToggleEntitySelection(entity, false);
+    }
+    else
+    {
+      SetHighlightedEntity(entity);
+    }
   }
 
   public void ChangeSelectionType(bool cycleEnemies)
@@ -324,5 +334,24 @@ public class SelectionController : MonoBehaviour
     }
 
     highlightedEntity = null;
+  }
+
+  private void HandleEntityDied(Entity entity)
+  {
+    if (SelectedEntities.Contains(entity))
+    {
+      RemoveEntitySelection(entity);
+    }
+
+    if (highlightedEntity == entity)
+    {
+      ClearHighlight();
+    }
+
+    if (indicators.ContainsKey(entity))
+    {
+      Destroy(indicators[entity]);
+      indicators.Remove(entity);
+    }
   }
 }

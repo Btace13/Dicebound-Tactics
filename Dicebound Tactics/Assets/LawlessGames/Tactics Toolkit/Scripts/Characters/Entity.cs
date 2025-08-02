@@ -276,8 +276,8 @@ namespace TacticsToolkit
         public virtual void Die()
         {
             isAlive = false;
+            EventManager.TriggerEntityDied(this);
             StartCoroutine(DieCoroutine());
-            UnlinkCharacterToTile();
         }
 
         public void HealEntity(int value)
@@ -339,22 +339,8 @@ namespace TacticsToolkit
         //What happens when a character dies. 
         public IEnumerator DieCoroutine()
         {
-            float DegreesPerSecond = 360f;
-            Vector3 currentRot, targetRot = new Vector3();
-            currentRot = transform.eulerAngles;
-            targetRot.z = currentRot.z + 90; // calculate the new angle
-
-            foreach (Transform child in transform)
-            {
-                child.gameObject.SetActive(false);
-            }
-
-            while (currentRot.z < targetRot.z)
-            {
-                currentRot.z = Mathf.MoveTowardsAngle(currentRot.z, targetRot.z, DegreesPerSecond * Time.deltaTime);
-                transform.eulerAngles = currentRot;
-                yield return null;
-            }
+            yield return new WaitForSeconds(1f);
+            gameObject.SetActive(false);
         }
 
         private void SetupWeapon()
@@ -475,30 +461,6 @@ namespace TacticsToolkit
                 Stat value = (Stat)item.GetValue(statsContainer);
 
                 value.TickStatMods();
-            }
-        }
-
-        public virtual void CharacterMoved()
-        {
-        }
-
-        //When an Entity moves, link it to the tiles it's standing on. 
-        public void LinkCharacterToTile(OverlayTile tile)
-        {
-            UnlinkCharacterToTile();
-            tile.activeCharacter = this;
-            tile.isBlocked = true;
-            activeTile = tile;
-        }
-
-        //Unlink an entity from a previous tile it was standing on. 
-        public void UnlinkCharacterToTile()
-        {
-            if (activeTile)
-            {
-                activeTile.activeCharacter = null;
-                activeTile.isBlocked = false;
-                activeTile = null;
             }
         }
 
@@ -718,7 +680,10 @@ namespace TacticsToolkit
         {
             if (isOverloaded)
             {
-                var enemies = FindObjectsByType<Entity>(FindObjectsSortMode.None).Where(e => e.teamID != teamID && e.isAlive).ToList();
+                var enemies = TurnManager.Instance.enemyUnits.Cast<Entity>()
+                    .Concat(TurnManager.Instance.playerUnits.Cast<Entity>())
+                    .Where(e => e.teamID != teamID && e.isAlive)
+                    .ToList();
                 if (enemies.Count == 0)
                     return;
 
@@ -735,7 +700,6 @@ namespace TacticsToolkit
                     } while (randomEnemy == originalTarget);
                 }
                 randomEnemy.TakeDamage(damageDealt);
-                // Debug.Log($"{name} overloads and hits {randomEnemy.name} for {damageDealt} damage.");
                 isOverloaded = false;
             }
         }
