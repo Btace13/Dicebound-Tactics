@@ -22,8 +22,6 @@ public class ItemPanel : CombatPanel
             return;
         }
 
-        print($"Populating item panel for {character.name} with {character.inventory.combatItems.Count} items.");
-
         foreach (var button in itemButtons)
         {
             button.gameObject.SetActive(false);

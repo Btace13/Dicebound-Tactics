@@ -3,6 +3,7 @@ using TacticsToolkit;
 
 public abstract class DiceModifier : ScriptableObject
 {
+    public Sprite Icon;
     public string Name;
     [TextArea] public string Description;
 

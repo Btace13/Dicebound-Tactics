@@ -60,8 +60,6 @@ public class CombatButton : MonoBehaviour
 
     public virtual void SetupButton(string text, UnityAction onClickAction)
     {
-        Debug.Log($"Setting up button for {text}, action null? {onClickAction == null}");
-
         buttonText.SetText(text);
         OnClickAction = onClickAction;
     }

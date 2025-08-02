@@ -6,45 +6,45 @@ using TacticsToolkit;
 
 public class DiceRollUI : MonoBehaviour
 {
-    public TextMeshProUGUI diceText;
-    public float rollDuration = 1.5f;
+  public TextMeshProUGUI diceText;
+  public float rollDuration = 1.5f;
 
-    private int finalRoll;
-    private Action<int> onRollComplete;
-    private Entity entity;
-    private int maxRollValue = 6;
-    
-    public void SetupRoll(Entity entity)
-    {
-        this.entity = entity;
-        maxRollValue = entity.equippedDice.sides.Count;
-    }
+  private int finalRoll;
+  private Action<int> onRollComplete;
+  private Entity entity;
+  private int maxRollValue = 6;
+  
+  public void SetupRoll(Entity entity)
+  {
+      this.entity = entity;
+      maxRollValue = entity.equippedDice.sides.Count;
+  }
 
-    public void StartRoll(Action<int> callback = null)
+  public void StartRoll(Action<int> callback = null)
   {
     Debug.Log("Starting dice roll for " + entity.name);
     onRollComplete = callback;
     StartCoroutine(RollDiceCoroutine());
   }
 
-    private IEnumerator RollDiceCoroutine()
+  private IEnumerator RollDiceCoroutine()
+  {
+    float elapsed = 0f;
+    float speed = 0.05f;
+
+    while (elapsed < rollDuration)
     {
-        float elapsed = 0f;
-        float speed = 0.05f;
+        int currentRoll = UnityEngine.Random.Range(1, maxRollValue + 1);
+        diceText.text = currentRoll.ToString();
 
-        while (elapsed < rollDuration)
-        {
-            int currentRoll = UnityEngine.Random.Range(1, maxRollValue + 1);
-            diceText.text = currentRoll.ToString();
-
-            yield return new WaitForSeconds(speed);
-            elapsed += speed;
-            speed += 0.01f;
-        }
-
-        finalRoll = UnityEngine.Random.Range(1, maxRollValue + 1);
-        diceText.text = finalRoll.ToString();
-        Debug.Log("Final roll for " + entity.name + ": " + finalRoll);
-        onRollComplete?.Invoke(finalRoll);
+        yield return new WaitForSeconds(speed);
+        elapsed += speed;
+        speed += 0.01f;
     }
+
+    finalRoll = UnityEngine.Random.Range(1, maxRollValue + 1);
+    diceText.text = finalRoll.ToString();
+    Debug.Log("Final roll for " + entity.name + ": " + finalRoll);
+    onRollComplete?.Invoke(finalRoll);
+  }
 }

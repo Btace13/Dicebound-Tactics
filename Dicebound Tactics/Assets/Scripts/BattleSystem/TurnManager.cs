@@ -109,17 +109,10 @@ public class TurnManager : MonoBehaviour
             currentTurnIndex = 0;
         }
 
-        diceRollManager.RollDiceForUnits(turnOrder, () =>
-        {
-            if (isFirstRound)
-            {
-                EventManager.TriggerBattleStarted();
-            }
-            StartNextTurn();
-        });
+        StartNextTurn(isFirstRound);
     }
 
-    public void StartNextTurn()
+    public void StartNextTurn(bool isFirstRound = false)
     {
         if (!BattlePlaying || turnOrder.Count == 0)
             return;
@@ -140,16 +133,24 @@ public class TurnManager : MonoBehaviour
             unit.StartTurn();
             EventManager.TriggerNewActiveEntity(unit);
 
-            if (unit is CharacterManager character)
+            diceRollManager.RollDiceForUnit(unit, () =>
             {
-                EventManager.TriggerCharacterTurnStarted(character);
-                // Wait for EventManager.OnCharacterTurnEnded to advance turn
-            }
-            else if (unit is EnemyManager enemy)
-            {
-                EventManager.TriggerEnemyTurnStarted(enemy);
-                // Wait for EventManager.OnEnemyTurnEnded to advance turn
-            }
+                if (unit is CharacterManager character)
+                {
+                    EventManager.TriggerCharacterTurnStarted(character);
+                    // Wait for EventManager.OnCharacterTurnEnded to advance turn
+                }
+                else if (unit is EnemyManager enemy)
+                {
+                    EventManager.TriggerEnemyTurnStarted(enemy);
+                    // Wait for EventManager.OnEnemyTurnEnded to advance turn
+                }
+
+                if (isFirstRound)
+                {
+                    EventManager.TriggerBattleStarted();
+                }
+            });
         }
     }
 

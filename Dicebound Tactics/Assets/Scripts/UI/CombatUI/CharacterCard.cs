@@ -16,6 +16,7 @@ public class CharacterCard : MonoBehaviour
   [SerializeField] private TextMeshProUGUI apAmountText;
   [SerializeField] private TextMeshProUGUI modifierText;
   [SerializeField] private GameObject CurrentTurnIndicator;
+  [SerializeField] private TextMeshProUGUI modifierTextTitle;
   [SerializeField] private TextMeshProUGUI modifierTextContent;
 
   private Entity character;
@@ -57,7 +58,8 @@ public class CharacterCard : MonoBehaviour
       healthText.text = string.Empty;
       apAmountText.text = string.Empty;
       modifierText.text = string.Empty;
-      modifierTextContent.text = "";
+      modifierTextTitle.text = string.Empty;
+      modifierTextContent.text = string.Empty;
       lvlText.text = string.Empty;
       return;
     }
@@ -115,6 +117,12 @@ public class CharacterCard : MonoBehaviour
       else
         modifierText.text = character.equippedDice.LastRollModifier.Name;
     }
+
+    if (modifierTextTitle != null)
+      if (character.equippedDice == null || character.equippedDice.LastRollModifier == null)
+        modifierTextTitle.text = "";
+      else
+        modifierTextTitle.text = character.equippedDice.LastRollModifier.Name;
 
     if (modifierTextContent != null)
       if (character.equippedDice == null || character.equippedDice.LastRollModifier == null)

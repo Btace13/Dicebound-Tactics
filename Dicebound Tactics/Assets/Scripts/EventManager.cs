@@ -20,6 +20,7 @@ public class EventManager : MonoBehaviour
   public static event Action<Entity> OnTargetChanged;
   public static event Action<GameState> OnGameStateChanged;
   public static event Action<bool> OnSelectingATarget;
+  public static event Action<DiceModifier> OnModifierApplied;
 
   // UI Events
   public static event Action OnMenuButtonPressed;
@@ -85,10 +86,16 @@ public class EventManager : MonoBehaviour
   {
     OnSuccessButtonPressed?.Invoke();
   }
-  
+
   public static void TriggerSelectingATarget(bool isSelecting)
   {
     OnSelectingATarget?.Invoke(isSelecting);
+  }
+  
+  public static void TriggerModifierApplied(DiceModifier modifier)
+  {
+    Debug.Log("Modifier applied: " + modifier.Name);
+    OnModifierApplied?.Invoke(modifier);
   }
 }
 
