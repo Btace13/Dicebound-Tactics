@@ -341,6 +341,7 @@ public class SelectionController : MonoBehaviour
     if (SelectedEntities.Contains(entity))
     {
       RemoveEntitySelection(entity);
+      CycleHighlight();
     }
 
     if (highlightedEntity == entity)
