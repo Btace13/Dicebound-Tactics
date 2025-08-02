@@ -7,6 +7,7 @@ using DG.Tweening;
 
 public class CharacterCard : MonoBehaviour
 {
+  public DieIconSet diceIconSet;
   [Header("UI References")]
   [SerializeField] private Image characterPortrait;
   [SerializeField] private TextMeshProUGUI characterNameText;
@@ -18,6 +19,7 @@ public class CharacterCard : MonoBehaviour
   [SerializeField] private GameObject CurrentTurnIndicator;
   [SerializeField] private TextMeshProUGUI modifierTextTitle;
   [SerializeField] private TextMeshProUGUI modifierTextContent;
+  [SerializeField] private Image diceIconImage;
 
   private Entity character;
   public float rollSpeed = 2f; // higher = faster
@@ -96,7 +98,7 @@ public class CharacterCard : MonoBehaviour
       int max = character.GetStat(Stats.Health).statValue;
 
       // Animate health number
-        int currentHealth = from;
+      int currentHealth = from;
       DOTween.To(() => currentHealth, x =>
       {
         currentHealth = x;
@@ -129,6 +131,20 @@ public class CharacterCard : MonoBehaviour
         modifierTextContent.text = "";
       else
         modifierTextContent.text = character.equippedDice.LastRollModifier.Description;
+
+    if (diceIconImage != null && diceIconSet != null && TurnManager.Instance.GetCurrentUnit() == character)
+    { 
+      Sprite icon = diceIconSet.GetIconForValue(character.equippedDice?.LastRollValue ?? 1);
+      if (icon != null)
+      {
+        diceIconImage.sprite = icon;
+        diceIconImage.gameObject.SetActive(true);
+      }
+      else
+      {
+        diceIconImage.gameObject.SetActive(false);
+      }
+    }
   }
 
   private void UpdateLevelText()
