@@ -5,12 +5,16 @@ using TacticsToolkit;
 [RequireComponent(typeof(ResourceBarUI))]
 public class EnemyHealthBarUI : MonoBehaviour
 {
+  [SerializeField] private ModifierNotification modifierNotification;
   private ResourceBarUI resourceBarUI;
   private Entity enemy;
 
   private void Awake()
   {
     resourceBarUI = GetComponent<ResourceBarUI>();
+
+    // Event Listeners
+    EventManager.OnModifierApplied += ShowModifierNotification;
   }
 
   private void OnDestroy()
@@ -19,6 +23,8 @@ public class EnemyHealthBarUI : MonoBehaviour
     {
       enemy.OnCharacterStatChanged -= UpdateEnemyInfo;
     }
+
+    EventManager.OnModifierApplied -= ShowModifierNotification;
   }
 
   public void SetEnemyInfo(Entity enemy)
@@ -45,7 +51,8 @@ public class EnemyHealthBarUI : MonoBehaviour
     int to = enemy.GetStat(Stats.CurrentHealth).statValue;
     int from = resourceBarUI.CurrentResource;
     resourceBarUI.MaxResource = max;
-    DOTween.To(() => from, x => {
+    DOTween.To(() => from, x =>
+    {
       from = x;
       resourceBarUI.CurrentResource = from;
     }, to, 0.5f).SetEase(Ease.OutCubic);
@@ -59,5 +66,13 @@ public class EnemyHealthBarUI : MonoBehaviour
   public Entity GetEnemy()
   {
     return enemy;
+  }
+  
+  private void ShowModifierNotification(DiceModifier dice, Entity user)
+  {
+    if (modifierNotification == null || enemy == null || enemy != user)
+      return;
+
+    modifierNotification.ShowEnemyModifier(dice, user);
   }
 }

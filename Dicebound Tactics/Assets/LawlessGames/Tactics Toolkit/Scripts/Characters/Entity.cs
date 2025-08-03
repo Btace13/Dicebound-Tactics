@@ -584,7 +584,7 @@ namespace TacticsToolkit
             }
 
             DiceSide diceRoll = equippedDice.Roll();
-            EventManager.TriggerModifierApplied(diceRoll.modifier); 
+            EventManager.TriggerModifierApplied(diceRoll.modifier, this); 
             int totalAP = diceRoll.value + statsContainer.CarriedOverActionPoints.statValue;
 
             statsContainer.ActionPoints.statValue = statsContainer.ActionPoints.statValue += totalAP;
@@ -606,7 +606,7 @@ namespace TacticsToolkit
             if(diceRoll.modifier != null)
             {
                 diceRoll.modifier.Apply(this);
-                EventManager.TriggerModifierApplied(diceRoll.modifier);
+                EventManager.TriggerModifierApplied(diceRoll.modifier, this);
             }
 
             int totalAP = diceRoll.value + statsContainer.CarriedOverActionPoints.statValue;

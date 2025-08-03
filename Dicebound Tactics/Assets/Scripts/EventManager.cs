@@ -20,7 +20,7 @@ public class EventManager : MonoBehaviour
   public static event Action<Entity> OnTargetChanged;
   public static event Action<GameState> OnGameStateChanged;
   public static event Action<bool> OnSelectingATarget;
-  public static event Action<DiceModifier> OnModifierApplied;
+  public static event Action<DiceModifier, Entity> OnModifierApplied;
   public static event Action<Entity> OnEntityDied;
 
   // UI Events
@@ -93,10 +93,9 @@ public class EventManager : MonoBehaviour
     OnSelectingATarget?.Invoke(isSelecting);
   }
 
-  public static void TriggerModifierApplied(DiceModifier modifier)
+  public static void TriggerModifierApplied(DiceModifier modifier, Entity user)
   {
-    Debug.Log("Modifier applied: " + modifier.Name);
-    OnModifierApplied?.Invoke(modifier);
+    OnModifierApplied?.Invoke(modifier, user);
   }
   
   public static void TriggerEntityDied(Entity entity)
