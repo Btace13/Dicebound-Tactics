@@ -19,8 +19,10 @@ MonoBehaviour:
   abilities:
     keys:
     - {fileID: 11400000, guid: 71895a1f9982b4faebb510e4a913cd15, type: 2}
+    - {fileID: 11400000, guid: dac7f7cc02a7246bf9b1c50126047700, type: 2}
     values:
     - {fileID: 7400004, guid: 4accf136b05606f46a0657e3c51271ff, type: 3}
+    - {fileID: 7400014, guid: 552a5a0580ffcfb4c926e37b0c1a66c9, type: 3}
   equippedMovement:
     _FadeDuration: 0.25
     _Events:

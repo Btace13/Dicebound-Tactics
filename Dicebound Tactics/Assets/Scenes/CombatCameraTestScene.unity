@@ -14131,6 +14131,14 @@ PrefabInstance:
       propertyPath: inventory
       value: 
       objectReference: {fileID: 1229161592}
+    - target: {fileID: 484317405324075932, guid: d8c30de4e48b94564b5964eb287c6249, type: 3}
+      propertyPath: abilityLoadout.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 484317405324075932, guid: d8c30de4e48b94564b5964eb287c6249, type: 3}
+      propertyPath: 'abilityLoadout.Array.data[1]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 24725aae1a8d546c085300d7c4339b44, type: 2}
     - target: {fileID: 5475917019711313092, guid: d8c30de4e48b94564b5964eb287c6249, type: 3}
       propertyPath: m_Name
       value: CharacterOne
@@ -14244,6 +14252,14 @@ PrefabInstance:
       propertyPath: equippedDice
       value: 
       objectReference: {fileID: 11400000, guid: 2a0f62e01cb67493db66c41a09fc09c4, type: 2}
+    - target: {fileID: 8052718447517918033, guid: 17230f4ae22f4427a9e2f2ef723a854a, type: 3}
+      propertyPath: abilityLoadout.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8052718447517918033, guid: 17230f4ae22f4427a9e2f2ef723a854a, type: 3}
+      propertyPath: 'abilityLoadout.Array.data[1]'
+      value: 
+      objectReference: {fileID: 11400000, guid: dac7f7cc02a7246bf9b1c50126047700, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -14269,6 +14285,14 @@ PrefabInstance:
       propertyPath: equippedDice
       value: 
       objectReference: {fileID: 11400000, guid: 8065c17c830c7476eacbf993e53bd33e, type: 2}
+    - target: {fileID: 2002588848888832617, guid: e669acb488d4d42da8cc45e9d8a0b3ee, type: 3}
+      propertyPath: abilityLoadout.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2002588848888832617, guid: e669acb488d4d42da8cc45e9d8a0b3ee, type: 3}
+      propertyPath: 'abilityLoadout.Array.data[1]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 0cf4c21cbff4b4e0d8e91aedf5fd55e0, type: 2}
     - target: {fileID: 5179019300147648176, guid: e669acb488d4d42da8cc45e9d8a0b3ee, type: 3}
       propertyPath: m_Name
       value: CharacterTwo

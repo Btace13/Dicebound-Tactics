@@ -16,4 +16,3 @@ MonoBehaviour:
   maxSides: 6
   possibleModifiers:
   - {fileID: 11400000, guid: 54510bce2a9e242198ea90b63448d67f, type: 2}
-  - {fileID: 11400000, guid: fc2ba6592f81443fc88a6ba8d2b6ce88, type: 2}

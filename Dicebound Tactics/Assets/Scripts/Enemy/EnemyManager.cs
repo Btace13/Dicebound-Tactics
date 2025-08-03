@@ -123,7 +123,19 @@ public class EnemyManager : Entity
 
         for (int i = 0; i < sides; i++)
         {
-            DiceModifier randomMod = profile.possibleModifiers[Random.Range(0, profile.possibleModifiers.Count)];
+            DiceModifier randomMod = null;
+            // 50% chance to apply a modifier
+            if (Random.value < 0.5f && profile.possibleModifiers.Count > 0)
+            {
+                randomMod = profile.possibleModifiers[Random.Range(0, profile.possibleModifiers.Count)];
+                // Debug.Log($"Generated side {i + 1} with modifier: {randomMod.name}");
+            }
+            else
+            {
+                // No modifier for this side
+                // Debug.Log($"Generated side {i + 1} without modifier");
+                randomMod = null;
+            }
             generatedSides.Add(new DiceSide(i + 1, randomMod));
         }
 
