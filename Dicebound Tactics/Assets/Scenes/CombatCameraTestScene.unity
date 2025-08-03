@@ -14406,6 +14406,10 @@ PrefabInstance:
       propertyPath: encounterSides.Array.data[1].combatCamera
       value: 
       objectReference: {fileID: 478739487}
+    - target: {fileID: 7293276827070698072, guid: 9e553778f72e0894cb7e70029cd9fb36, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1.27
+      objectReference: {fileID: 0}
     - target: {fileID: 9085001621248797750, guid: 9e553778f72e0894cb7e70029cd9fb36, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
