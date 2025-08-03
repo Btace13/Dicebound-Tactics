@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TacticsToolkit;
+using andywiecko.BurstTriangulator;
 
 
 public class EnemyHealthBarsHandler : MonoBehaviour
@@ -16,6 +17,7 @@ public class EnemyHealthBarsHandler : MonoBehaviour
     EventManager.OnCombatEncounterEnded += DestroyEnemyHealthBars;
     EventManager.OnTargetChanged += OnlyShowSelectedHealthBar;
     EventManager.OnSelectingATarget += ShowAllHealthBars;
+    EventManager.OnEntityDied += HandleEntityDied;
   }
 
   private void OnDestroy()
@@ -24,6 +26,7 @@ public class EnemyHealthBarsHandler : MonoBehaviour
     EventManager.OnCombatEncounterEnded -= DestroyEnemyHealthBars;
     EventManager.OnTargetChanged -= OnlyShowSelectedHealthBar;
     EventManager.OnSelectingATarget -= ShowAllHealthBars;
+    EventManager.OnEntityDied -= HandleEntityDied;
   }
 
   private void CreateEnemyHealthBars(CombatEncounter encounter)
@@ -78,5 +81,18 @@ public class EnemyHealthBarsHandler : MonoBehaviour
         healthBar.gameObject.SetActive(true);
       }
     }
+  }
+
+  private void HandleEntityDied(Entity entity)
+  {
+    foreach (var healthBar in healthBars)
+    {
+      if (healthBar != null && healthBar.GetEnemy() == entity)
+      {
+        healthBar.gameObject.GetComponent<CanvasGroup>().alpha = 0f; // Hide the health bar
+      }
+    }
+
+    ShowAllHealthBars(false); // Show all health bars again
   }
 }

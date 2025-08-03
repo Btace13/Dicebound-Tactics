@@ -49,6 +49,7 @@ GameObject:
   - component: {fileID: 3488236035020640986}
   - component: {fileID: 1214605603088664464}
   - component: {fileID: 3418366068970973026}
+  - component: {fileID: 4389848829097870157}
   m_Layer: 5
   m_Name: EnemyHealthBarTop
   m_TagString: Untagged
@@ -150,6 +151,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 0
   m_VerticalFit: 2
+--- !u!225 &4389848829097870157
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1242241217249148817}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &5088443850316414282
 GameObject:
   m_ObjectHideFlags: 0
