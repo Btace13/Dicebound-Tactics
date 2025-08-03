@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using TacticsToolkit;
+using System.Linq;
 
 public class SelectionController : MonoBehaviour
 {
@@ -148,11 +149,11 @@ public class SelectionController : MonoBehaviour
 
   public void ToggleEntitySelection(Entity entity, bool additive = true)
   {
-    if (entity == null) return;
+    if (entity == null || entity.isAlive == false) return;
 
     var list = cyclingEnemies
-        ? turnManager.enemyUnits.ConvertAll(e => (Entity)e)
-        : turnManager.playerUnits.ConvertAll(p => (Entity)p);
+        ? turnManager.enemyUnits.ConvertAll(e => (Entity)e).Where(e => e.isAlive).ToList()
+        : turnManager.playerUnits.ConvertAll(p => (Entity)p).Where(p => p.isAlive).ToList();
 
     if (!list.Contains(entity)) return;
 
@@ -254,18 +255,25 @@ public class SelectionController : MonoBehaviour
 
   private bool TryGetValidEntityList(out List<Entity> list)
   {
-    list = cyclingEnemies
-        ? turnManager?.enemyUnits?.ConvertAll(e => (Entity)e)
-        : turnManager?.playerUnits?.ConvertAll(p => (Entity)p);
-
-    if (list == null || list.Count == 0)
-    {
       list = null;
-      return false;
-    }
 
-    return true;
+      if (turnManager == null)
+          return false;
+
+      if (cyclingEnemies && turnManager.enemyUnits != null)
+          list = turnManager.enemyUnits.ConvertAll(e => (Entity)e).Where(e => e.isAlive).ToList();
+      else if (!cyclingEnemies && turnManager.playerUnits != null)
+          list = turnManager.playerUnits.ConvertAll(p => (Entity)p).Where(p => p.isAlive).ToList();
+
+      if (list == null || list.Count == 0)
+      {
+          list = null;
+          return false;
+      }
+
+      return true;
   }
+
 
   private void HandleSelection(Entity entity)
   {
@@ -305,7 +313,7 @@ public class SelectionController : MonoBehaviour
 
   private void SetHighlightedEntity(Entity entity)
   {
-    if (highlightedEntity == entity) return;
+    if (highlightedEntity == entity || !entity.isAlive) return;
 
     ClearHighlight();
 

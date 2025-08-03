@@ -21,6 +21,7 @@ public class CombatManager : MonoBehaviour
 
     private CombatItem _selectedItem;
     private AbilitySO _selectedAbility;
+    private CombatEncounter _currentEncounter;
 
     private void Awake()
     {
@@ -35,11 +36,15 @@ public class CombatManager : MonoBehaviour
 
         // Event Listeners
         EventManager.OnGameStateChanged += OnGameStateChanged;
+        EventManager.OnCombatEncounterStarted += encounter => _currentEncounter = encounter;
+        EventManager.OnCombatEncounterEnded += encounter => _currentEncounter = null;
     }
 
     void OnDisable()
     {
         EventManager.OnGameStateChanged -= OnGameStateChanged;
+        EventManager.OnCombatEncounterStarted -= encounter => _currentEncounter = encounter;
+        EventManager.OnCombatEncounterEnded -= encounter => _currentEncounter = null;
     }
 
     public void OnGameStateChanged(GameState newState)
@@ -174,7 +179,7 @@ public class CombatManager : MonoBehaviour
             }
 
             // set the active camera as the AttackCamera
-            CameraManager.Instance?.TrySetActiveCamera("AttackCamera");
+            CameraManager.Instance?.TrySetActiveCamera(_currentEncounter.GetCameraControllerForSide(currentUnit).name);
 
             //TODO: trigger animations / effects here
         });

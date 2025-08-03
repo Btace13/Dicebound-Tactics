@@ -70,6 +70,7 @@ public class CameraManager : MonoBehaviour
         // Event Listeners
         EventManager.OnNewActiveEntity += SetActiveCombatCharacter;
         EventManager.OnTargetChanged += SetCombatTarget;
+        EventManager.OnCombatEncounterStarted += HandleCombatEncounterStarted;
         EventManager.OnCombatEncounterEnded += HandleCombatEncounterEnded;
     }
 
@@ -77,6 +78,7 @@ public class CameraManager : MonoBehaviour
     {
         EventManager.OnNewActiveEntity -= SetActiveCombatCharacter;
         EventManager.OnTargetChanged -= SetCombatTarget;
+        EventManager.OnCombatEncounterStarted -= HandleCombatEncounterStarted;
         EventManager.OnCombatEncounterEnded -= HandleCombatEncounterEnded;
     }
 
@@ -97,6 +99,22 @@ public class CameraManager : MonoBehaviour
         }
     }
 
+    public void UnregisterCamera(string cameraName)
+    {
+        if (Cameras.ContainsKey(cameraName))
+        {
+            Cameras.Remove(cameraName);
+            if (ActiveCamera != null && ActiveCamera.CameraName == cameraName)
+            {
+                ActiveCamera = null; // Clear active camera if it was unregistered
+            }
+        }
+        else
+        {
+            // Debug.LogWarning($"Camera with name {cameraName} is not registered.");
+        }
+    }
+
     public void TrySetActiveCamera(string cameraName)
     {
         if (Cameras.TryGetValue(cameraName, out var cameraController))
@@ -111,7 +129,20 @@ public class CameraManager : MonoBehaviour
 
     private void HandleCombatEncounterEnded(CombatEncounter encounter)
     {
+        foreach (var cam in encounter.GetAllCameraControllers())
+        {
+            UnregisterCamera(cam.name);
+        }
+
         TrySetActiveCamera("OverworldCamera");
+    }
+
+    private void HandleCombatEncounterStarted(CombatEncounter encounter)
+    {
+        foreach (var cam in encounter.GetAllCameraControllers())
+        {
+            RegisterCamera(cam.name, cam);
+        }
     }
 
     public void SetActiveCamera(BaseCameraController cameraController)

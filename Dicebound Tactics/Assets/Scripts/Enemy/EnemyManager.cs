@@ -10,6 +10,7 @@ public class EnemyManager : Entity
     public EnemyDiceProfile diceProfile;
     public OverworldEnemyController overworldController;
     private TurnManager turnManager;
+    private CombatEncounter _currentEncounter;
 
 
     private void Awake()
@@ -22,6 +23,15 @@ public class EnemyManager : Entity
 
         // Event Listeners
         EventManager.OnEnemyTurnStarted += HandleEnemyTurnStarted;
+        EventManager.OnCombatEncounterStarted += encounter => _currentEncounter = encounter;
+        EventManager.OnCombatEncounterEnded += encounter => _currentEncounter = null;
+    }
+
+    void OnDisable()
+    {
+        EventManager.OnEnemyTurnStarted -= HandleEnemyTurnStarted;
+        EventManager.OnCombatEncounterStarted -= encounter => _currentEncounter = encounter;
+        EventManager.OnCombatEncounterEnded -= encounter => _currentEncounter = null;
     }
 
     protected override void Start()
@@ -90,7 +100,7 @@ public class EnemyManager : Entity
             // Camera setup
             CameraManager.Instance.SetActiveCombatCharacter(target.transform);
             CameraManager.Instance.SetCombatTarget(transform);
-            CameraManager.Instance.TrySetActiveCamera("EnemyAttackCamera");
+            CameraManager.Instance.TrySetActiveCamera(_currentEncounter.GetCameraControllerForSide(target).name);
 
             // Wait for ability execution to finish
             yield return ability.Execute(this, target);

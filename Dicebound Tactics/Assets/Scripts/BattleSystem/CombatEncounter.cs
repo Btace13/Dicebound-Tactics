@@ -4,6 +4,7 @@ using TacticsToolkit;
 using Sirenix.OdinInspector;
 using System.Threading.Tasks;
 using System.Linq;
+using Unity.Cinemachine;
 
 public class CombatEncounter : MonoBehaviour
 {
@@ -18,6 +19,7 @@ public class CombatEncounter : MonoBehaviour
     [System.Serializable]
     public class EncounterSide
     {
+        public CombatCameraController combatCamera;
         public List<EncounterSlot> combatSlots = new List<EncounterSlot>();
         public Vector3 CenterPosition
         {
@@ -364,6 +366,24 @@ public class CombatEncounter : MonoBehaviour
                 _timeSinceLastAction[enemy] += Time.deltaTime;
             }
         }
+    }
+
+    public CombatCameraController GetCameraControllerForSide(Entity entity)
+    {
+        // find side that has the entity
+        EncounterSide side = encounterSides.FirstOrDefault(s => s.combatSlots.Any(slot => slot.entity == entity));
+        if (side == null)
+        {
+            Debug.LogWarning($"No encounter side found for entity {entity.name}");
+            return null;
+        }
+
+        return side.combatCamera;
+    }
+
+    public List<CombatCameraController> GetAllCameraControllers()
+    {
+        return encounterSides.Select(side => side.combatCamera).ToList();
     }
 
     public void HandleEnemyChaseBehavior(EnemyManager enemy)

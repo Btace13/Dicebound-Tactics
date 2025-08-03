@@ -5,7 +5,8 @@ public enum CameraTarget
 {
     ActivePlayer = 0,
     Target = 1,
-    Both = 2
+    Both = 2,
+    None = 3
 }
 
 public class CombatCameraController : BaseCameraController

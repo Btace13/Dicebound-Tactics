@@ -602,12 +602,17 @@ namespace TacticsToolkit
             }
 
             DiceSide diceRoll = equippedDice.ApplyRoll(value - 1);
-            diceRoll.modifier.Apply(this);
+            
+            if(diceRoll.modifier != null)
+            {
+                diceRoll.modifier.Apply(this);
+                EventManager.TriggerModifierApplied(diceRoll.modifier);
+            }
+
             int totalAP = diceRoll.value + statsContainer.CarriedOverActionPoints.statValue;
 
             statsContainer.ActionPoints.statValue = statsContainer.ActionPoints.statValue += totalAP;
             statsContainer.CarriedOverActionPoints.statValue = 0;
-            EventManager.TriggerModifierApplied(diceRoll.modifier);
             OnCharacterStatChanged?.Invoke(this);
         }
 
