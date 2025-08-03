@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61618e5a9baff4be68b41f2fbf77ed86, type: 3}
   m_Name: Heal on Hit
   m_EditorClassIdentifier: 
+  Icon: {fileID: 0}
   Name: Heal on Hit
   Description: Heal 15% of damage dealt on next ability.
+  modifierTriggerEffectPrefab: {fileID: 956972627074513070, guid: 5ee95e2f6d66e754faf257b6b887f266, type: 3}
   percent: 15

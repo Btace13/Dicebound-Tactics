@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1f0c56553da34fbcb8e3ba9bd0f0dfa, type: 3}
   m_Name: +2 AP
   m_EditorClassIdentifier: 
+  Icon: {fileID: 0}
   Name: +2 AP
   Description: Gain 2 additional Action Points.
+  modifierTriggerEffectPrefab: {fileID: 956972627074513070, guid: 5ee95e2f6d66e754faf257b6b887f266, type: 3}
   modifierValue: 2

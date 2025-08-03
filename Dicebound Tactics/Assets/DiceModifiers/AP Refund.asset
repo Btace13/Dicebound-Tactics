@@ -12,5 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 725bd759b9a83419ea3ebd7a449c94b8, type: 3}
   m_Name: AP Refund
   m_EditorClassIdentifier: 
+  Icon: {fileID: 0}
   Name: AP Refund
   Description: Next ability costs 0 AP.
+  modifierTriggerEffectPrefab: {fileID: 956972627074513070, guid: 5ee95e2f6d66e754faf257b6b887f266, type: 3}

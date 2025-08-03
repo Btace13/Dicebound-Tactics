@@ -38,7 +38,7 @@ public class ModifierNotification : MonoBehaviour
 
     public void ShowModifier(DiceModifier dice, Entity user)
     {
-        if (notificationType == ModifierNotificationType.Enemy)
+        if (notificationType == ModifierNotificationType.Enemy || user is not CharacterManager character)
             return;
 
         if (modifierName == null || modifierDescription == null)

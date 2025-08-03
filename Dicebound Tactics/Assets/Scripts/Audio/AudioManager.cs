@@ -1,4 +1,5 @@
 using UnityEngine;
+using TacticsToolkit;
 
 public class AudioManager : MonoBehaviour
 {
@@ -9,21 +10,37 @@ public class AudioManager : MonoBehaviour
   {
     EventManager.OnMenuButtonPressed += HandleMenuButtonPressed;
     EventManager.OnSuccessButtonPressed += HandleSuccessButtonPressed;
+    EventManager.OnModifierApplied += HandleModifierApplied;
   }
 
   private void OnDisable()
   {
     EventManager.OnMenuButtonPressed -= HandleMenuButtonPressed;
     EventManager.OnSuccessButtonPressed -= HandleSuccessButtonPressed;
+    EventManager.OnModifierApplied -= HandleModifierApplied;
   }
 
   private void HandleMenuButtonPressed()
   {
-    audioSource.PlayOneShot(audioConfig.menuButtonPressed);
+    if (audioConfig.menuButtonPressed != null)
+    {
+      audioSource.PlayOneShot(audioConfig.menuButtonPressed);
+    }
   }
-  
+
   private void HandleSuccessButtonPressed()
   {
-    audioSource.PlayOneShot(audioConfig.successButtonPressed);
+    if (audioConfig.successButtonPressed != null)
+    {
+      audioSource.PlayOneShot(audioConfig.successButtonPressed);
+    }
+  }
+  
+  private void HandleModifierApplied(DiceModifier modifier, Entity user)
+  {
+    if (audioConfig.modifierApplied != null && user is CharacterManager character)
+    {
+      audioSource.PlayOneShot(audioConfig.modifierApplied);
+    }
   }
 }

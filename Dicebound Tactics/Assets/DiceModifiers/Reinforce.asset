@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00c4ac9f8c8354abd94410639162d4c0, type: 3}
   m_Name: Reinforce
   m_EditorClassIdentifier: 
+  Icon: {fileID: 0}
   Name: Reinforce
   Description: Take 25% less damage this turn.
+  modifierTriggerEffectPrefab: {fileID: 956972627074513070, guid: 5ee95e2f6d66e754faf257b6b887f266, type: 3}
   defenseBoost: 25

@@ -9,6 +9,8 @@ public class GrantAllyAPModifier : DiceModifier
 
     public override void Apply(Entity user)
     {
+        base.Apply(user);
+
         if (user == null || !user.isAlive) return;
         var allies = GameObject.FindObjectsByType<Entity>(FindObjectsSortMode.None).Where(e => e.teamID == user.teamID && e != user && e.isAlive).ToList();
         if (allies.Count > 0)

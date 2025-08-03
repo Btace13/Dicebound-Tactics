@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4db0a9c961b034342b6d91cedfc149b7, type: 3}
   m_Name: Self Heal
   m_EditorClassIdentifier: 
+  Icon: {fileID: 0}
   Name: Self Heal
   Description: Restore 10% of max HP.
+  modifierTriggerEffectPrefab: {fileID: 956972627074513070, guid: 5ee95e2f6d66e754faf257b6b887f266, type: 3}
   percent: 10

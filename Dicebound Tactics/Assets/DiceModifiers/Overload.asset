@@ -12,5 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 563fe6beb7fdb4762842da40f126cc92, type: 3}
   m_Name: Overload
   m_EditorClassIdentifier: 
+  Icon: {fileID: 0}
   Name: Overload
   Description: Your next ability targets an extra enemy.
+  modifierTriggerEffectPrefab: {fileID: 956972627074513070, guid: 5ee95e2f6d66e754faf257b6b887f266, type: 3}

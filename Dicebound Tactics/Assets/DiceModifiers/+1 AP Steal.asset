@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf328570db25d400bbaff669820108fe, type: 3}
   m_Name: +1 AP Steal
   m_EditorClassIdentifier: 
+  Icon: {fileID: 0}
   Name: +1 AP Steal
   Description: Steal 1 AP from a random enemy.
+  modifierTriggerEffectPrefab: {fileID: 956972627074513070, guid: 5ee95e2f6d66e754faf257b6b887f266, type: 3}
   amount: 1

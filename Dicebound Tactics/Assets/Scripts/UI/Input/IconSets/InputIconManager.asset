@@ -59,12 +59,12 @@ MonoBehaviour:
     playstationControllerSprite: {fileID: -5433958992158819592, guid: 95f90cef880d04619bb2771c692bfcaa, type: 3}
     switchControllerSprite: {fileID: -679083064054180673, guid: f13e217b7239b48f4aa87e0cd3fec7c0, type: 3}
   - actionName: Player/Previous
-    keyboardSprite: {fileID: 2285120093584573513, guid: a7ef1898f47e14f5ba5ecbd442fde979, type: 3}
-    xboxControllerSprite: {fileID: -6164935804030125252, guid: 58ce8308fb6454b66b2a51715b294c0e, type: 3}
-    playstationControllerSprite: {fileID: 780114571240795900, guid: 6bef737b97b8648e99238fd76e4818f4, type: 3}
-    switchControllerSprite: {fileID: -2368825800229423949, guid: c85c3adafa51549d39f94d5930ba93c8, type: 3}
+    keyboardSprite: {fileID: 1145220741083561907, guid: a8f82c03120c849728f628dc5ef9b2d9, type: 3}
+    xboxControllerSprite: {fileID: 2267800731179639549, guid: 1fc6693e20e2c4935a360cb5795b5368, type: 3}
+    playstationControllerSprite: {fileID: 8055460797219978303, guid: 0f59aa188a35e4c318efbe72773b20aa, type: 3}
+    switchControllerSprite: {fileID: -8896013569825370043, guid: 6a06cd12516dc45b88f17237aedc8bd5, type: 3}
   - actionName: Player/Next
-    keyboardSprite: {fileID: -4842122482347598607, guid: 54c0c9b8ac56a416b9c939514022decf, type: 3}
-    xboxControllerSprite: {fileID: -8794133603664248715, guid: 2cb1ff3fa15264317bed80589e1eed17, type: 3}
-    playstationControllerSprite: {fileID: -8022254609415329910, guid: 708d907c8241b448399922e623b1ab74, type: 3}
-    switchControllerSprite: {fileID: 5652331927395226624, guid: b7ec620b64be1482989a035d3fc707ba, type: 3}
+    keyboardSprite: {fileID: -8387302115945079765, guid: a434c932b929546709b97494e8dcd5d9, type: 3}
+    xboxControllerSprite: {fileID: 4249578791139060025, guid: 9c0c734bae7ad41c793afaeb2779a22f, type: 3}
+    playstationControllerSprite: {fileID: 7052965910084622545, guid: fc89ad6bcea0c460bbd47fcb0798db5e, type: 3}
+    switchControllerSprite: {fileID: -7671505313890964669, guid: 2677d72fcdc2948f09cc24071fb87794, type: 3}

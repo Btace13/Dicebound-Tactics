@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c253f4e327aa4078993a51bb1a3c90d, type: 3}
   m_Name: Bonus Damage
   m_EditorClassIdentifier: 
+  Icon: {fileID: 0}
   Name: Bonus Damage
   Description: Next ability deals +10% damage.
+  modifierTriggerEffectPrefab: {fileID: 956972627074513070, guid: 5ee95e2f6d66e754faf257b6b887f266, type: 3}
   bonusPercent: 10

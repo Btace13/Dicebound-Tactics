@@ -9,6 +9,8 @@ public class APStealModifier : DiceModifier
 
     public override void Apply(Entity user)
     {
+        base.Apply(user);
+
         if (user == null || !user.isAlive) return;
         var enemies = GameObject.FindObjectsByType<Entity>(FindObjectsSortMode.None).Where(e => e.teamID != user.teamID && e.isAlive).ToList();
         if (enemies.Count > 0)

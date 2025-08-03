@@ -19,3 +19,4 @@ MonoBehaviour:
   characterTurnStart: {fileID: 0}
   enemyTurnStart: {fileID: 0}
   gameOver: {fileID: 0}
+  modifierApplied: {fileID: 8300000, guid: 392320453da1f6b4881da0a03f842fb9, type: 3}

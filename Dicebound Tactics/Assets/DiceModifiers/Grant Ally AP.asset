@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf03979b19cd34cc5b2ba33d72f7692c, type: 3}
   m_Name: Grant Ally AP
   m_EditorClassIdentifier: 
+  Icon: {fileID: 0}
   Name: Grant Ally AP
   Description: Grant 1 AP to a random ally.
+  modifierTriggerEffectPrefab: {fileID: 956972627074513070, guid: 5ee95e2f6d66e754faf257b6b887f266, type: 3}
   amount: 1
