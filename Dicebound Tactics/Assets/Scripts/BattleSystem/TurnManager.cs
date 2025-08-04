@@ -31,6 +31,14 @@ public class TurnManager : MonoBehaviour
         // Event Listeners
         EventManager.OnCharacterTurnEnded += HandleCharacterTurnEnded;
         EventManager.OnEnemyTurnEnded += HandleEnemyTurnEnded;
+        EventManager.OnEntityDied += HandleEntityDied;
+    }
+
+    void OnDisable()
+    {
+        EventManager.OnCharacterTurnEnded -= HandleCharacterTurnEnded;
+        EventManager.OnEnemyTurnEnded -= HandleEnemyTurnEnded;
+        EventManager.OnEntityDied -= HandleEntityDied;
     }
 
     private void Update()
@@ -255,5 +263,19 @@ public class TurnManager : MonoBehaviour
         {
             enemy.Reset();
         }
+    }
+    
+    private void HandleEntityDied(Entity entity)
+    {
+        if (entity is CharacterManager character)
+        {
+            playerUnits.Remove(character);
+        }
+        else if (entity is EnemyManager enemy)
+        {
+            enemyUnits.Remove(enemy);
+        }
+
+        RemoveFromTurnOrder(entity);
     }
 }
