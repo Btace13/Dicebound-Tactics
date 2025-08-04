@@ -2,6 +2,7 @@ using UnityEngine;
 using Sirenix.OdinInspector;
 using Animancer;
 using System.Collections.Generic;
+using UnityEditor.EditorTools;
 
 [CreateAssetMenu(menuName = "Dicebound Tactics/Animation/Combat Animation Data")]
 public class CombatAnimationData : ScriptableObject
@@ -18,6 +19,10 @@ public class CombatAnimationData : ScriptableObject
 	public UDictionary<AbilitySO, AnimationClip> abilities = new UDictionary<AbilitySO, AnimationClip>();
 	[BoxGroup("References"), Tooltip("Transition group to play while moving when this weapon is equipped")]
 	public MixerTransition2D equippedMovement;
-	[BoxGroup("Settings"), Tooltip("Normalized time which weapon is equipped to player during the animation")] public float normalizedEquipTime = 0.4f;
-	[BoxGroup("Settings"), Tooltip("List of normalized times which weapon deals damage to target")] public List<float> normalizedAttackTriggerTimes = new List<float>();
+	[BoxGroup("Settings"), Tooltip("Normalized time which weapon is equipped to player during the animation")]
+	public float normalizedEquipTime = 0.4f;
+	[BoxGroup("Settings"), Tooltip("List of normalized times which weapon deals damage to target")]
+	public List<float> normalizedAttackTriggerTimes = new List<float>();
+	[BoxGroup("Settings"), Tooltip("Indicates if the weapon is held in the right hand or left hand")]
+	public bool isRightHanded = true;
 }

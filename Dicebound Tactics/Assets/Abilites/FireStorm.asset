@@ -17,8 +17,10 @@ MonoBehaviour:
   notifcationMessage: '''s hands begin to generate extreme heat.'
   icon: {fileID: -6941875414966023432, guid: bfe016ef2a04aa04d957b688986f78b9, type: 3}
   apCost: 5
+  cooldown: -1
   abilityType: 2
   requiresMovement: 0
+  projectileData: {fileID: 11400000, guid: d0b09472cee94e94e9751ffdd5c820e0, type: 2}
   range: 4
   unlockLevel: 1
   damageAmount: 55

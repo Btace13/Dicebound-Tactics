@@ -35,8 +35,9 @@ public class MagicAttacks_Projectile : MonoBehaviour
 
     private void OnTriggerEnter(Collider col)
     {
-        Instantiate(FX_Hit, col.transform.position, Quaternion.identity);
-        
+        if (FX_Hit)
+            Instantiate(FX_Hit, col.transform.position, Quaternion.identity);
+
         Destroy(FX_Projectile);
         FX_ProjectileTail.Stop();
         SFX_Projectile.Stop();

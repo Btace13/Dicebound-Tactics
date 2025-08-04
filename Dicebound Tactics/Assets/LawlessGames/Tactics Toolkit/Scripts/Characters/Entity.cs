@@ -29,6 +29,7 @@ namespace TacticsToolkit
 
         [Header("Abilities")]
         public List<AbilitySO> abilityLoadout = new();
+        public UDictionary<string, Transform> vfxSpawnPoints = new();
 
         [Header("Inventory")]
         public Inventory inventory;
@@ -584,7 +585,7 @@ namespace TacticsToolkit
             }
 
             DiceSide diceRoll = equippedDice.Roll();
-            EventManager.TriggerModifierApplied(diceRoll.modifier, this); 
+            EventManager.TriggerModifierApplied(diceRoll.modifier, this);
             int totalAP = diceRoll.value + statsContainer.CarriedOverActionPoints.statValue;
 
             statsContainer.ActionPoints.statValue = statsContainer.ActionPoints.statValue += totalAP;
@@ -594,7 +595,7 @@ namespace TacticsToolkit
         }
 
         public void ApplyDiceRoll(int value)
-        { 
+        {
             if (statsContainer == null)
             {
                 Debug.LogError("StatsContainer is not assigned for " + name);
@@ -602,8 +603,8 @@ namespace TacticsToolkit
             }
 
             DiceSide diceRoll = equippedDice.ApplyRoll(value - 1);
-            
-            if(diceRoll.modifier != null)
+
+            if (diceRoll.modifier != null)
             {
                 diceRoll.modifier.Apply(this);
                 EventManager.TriggerModifierApplied(diceRoll.modifier, this);

@@ -11,6 +11,7 @@ public class UnitAnimationHandler : MonoBehaviour
 	public EntityAnimationData AnimationData;
 
 	[BoxGroup("References"), SerializeField] Transform rightHandTransform;
+	[BoxGroup("References"), SerializeField] Transform leftHandTransform;
 	[BoxGroup("References"), SerializeField] FLookAnimator lookAnimator;
 
 	[BoxGroup("Settings"), SerializeField] bool debug = false;
@@ -135,7 +136,7 @@ public class UnitAnimationHandler : MonoBehaviour
 			if (AnimationData.combatAnimations.ContainsKey(_equippedWeapon))
 			{
 				_Animancer.TryPlay(AnimationData.combatAnimations[weaponData].equipWeapon, 0.25f, FadeMode.FixedDuration);
-				StartCoroutine(ToggleWeaponParented(weaponData != null, AnimationData.combatAnimations[weaponData].normalizedEquipTime, weaponData));
+				StartCoroutine(ToggleWeaponParented(weaponData != null, AnimationData.combatAnimations[weaponData].normalizedEquipTime, weaponData, AnimationData.combatAnimations[weaponData].isRightHanded));
 			}
 			else
 			{
@@ -228,9 +229,9 @@ public class UnitAnimationHandler : MonoBehaviour
 		state.NormalizedEndTime = 1;
 	}
 
-	IEnumerator ToggleWeaponParented(bool equipped, float equipTime, WeaponData weaponData = null)
+	IEnumerator ToggleWeaponParented(bool equipped, float equipTime, WeaponData weaponData = null, bool isRightHand = true)
 	{
-		if (rightHandTransform == null) yield break;
+		if (rightHandTransform == null && leftHandTransform == null) yield break;
 
 		yield return new WaitForSeconds(equipTime);
 
@@ -243,7 +244,7 @@ public class UnitAnimationHandler : MonoBehaviour
 
 			if (weaponData.ItemPrefab)
 			{
-				_weaponObject = Instantiate(weaponData.ItemPrefab, rightHandTransform);
+				_weaponObject = Instantiate(weaponData.ItemPrefab, isRightHand ? rightHandTransform : leftHandTransform);
 				_weaponObject.transform.localPosition = weaponData.PositionOffset;
 				_weaponObject.transform.localEulerAngles = weaponData.RotationOffset;
 			}

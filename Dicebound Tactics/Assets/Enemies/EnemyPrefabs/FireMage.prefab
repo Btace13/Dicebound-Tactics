@@ -78,6 +78,11 @@ MonoBehaviour:
   StartingWeapon: {fileID: 11400000, guid: f7008429e75d2a74ca1ec020bf30fcf1, type: 2}
   abilityLoadout:
   - {fileID: 11400000, guid: 71895a1f9982b4faebb510e4a913cd15, type: 2}
+  vfxSpawnPoints:
+    keys:
+    - rightHand
+    values:
+    - {fileID: 7497837899363256122}
   inventory: {fileID: 0}
   level: 1
   experience: 0
@@ -92,7 +97,6 @@ MonoBehaviour:
   isActive: 0
   healthBar: {fileID: 5135797998519714728}
   previousTurnCost: -1
-  myRenderer: {fileID: 0}
   gameConfig: {fileID: 11400000, guid: eaeab84eb6b1df54eb4c6951b5ec44ae, type: 2}
   diceProfile: {fileID: 11400000, guid: 22d593f9d0fc74833ae292890888b6e8, type: 2}
   overworldController: {fileID: 4862689077579711255}
@@ -400,6 +404,11 @@ PrefabInstance:
 --- !u!4 &2271046742777899490 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6059663695870735447, guid: b602caa653df6ab4e94f8318ce9c3639, type: 3}
+  m_PrefabInstance: {fileID: 5448265917007994293}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &7497837899363256122 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2562982651264965263, guid: b602caa653df6ab4e94f8318ce9c3639, type: 3}
   m_PrefabInstance: {fileID: 5448265917007994293}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8566520576237720991
