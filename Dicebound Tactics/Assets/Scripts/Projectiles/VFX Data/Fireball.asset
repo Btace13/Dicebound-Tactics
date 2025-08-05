@@ -17,7 +17,7 @@ MonoBehaviour:
   castTime: 0.5
   particleObject: {fileID: 6212705254198847238, guid: 75e968e119e5cd148866e4d0c9c95794, type: 3}
   impactObject: {fileID: 2245482869191477356, guid: 8ff967cab5618e047838158fe313fb8e, type: 3}
-  projectileSpeed: 10
+  projectileSpeed: 20
   maxLifeTime: 2
   projectilePath: 0
   projectileSpawnPoint: rightHand

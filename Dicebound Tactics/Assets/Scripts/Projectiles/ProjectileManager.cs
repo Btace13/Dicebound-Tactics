@@ -37,6 +37,7 @@ public class ProjectileManager : MonoBehaviour
 		public bool isReseting;
 		public string shooterTag = "";
 		public Action<RaycastHit> OnImpact;
+		[HideInInspector] public Vector3 previousPosition;
 	}
 
 	[SerializeField] LayerMask layersToCheck;
@@ -229,7 +230,8 @@ public class ProjectileManager : MonoBehaviour
 			isReseting = false,
 			shooterTag = shooterTag,
 			OnImpact = OnImpact,
-			target = intendedTarget
+			target = intendedTarget,
+			previousPosition = origin // Initialize previous position to origin
 		};
 
 		activeProjectiles.Add(data);
@@ -335,6 +337,8 @@ public class ProjectileManager : MonoBehaviour
 										data.direction,
 										new QueryParameters(), // Default query parameters
 										0f); // Zero distance
+
+			data.previousPosition = data.projectileObject.transform.position; // Update previous position to current
 			return;
 		}
 
@@ -350,15 +354,13 @@ public class ProjectileManager : MonoBehaviour
 		var queryParameters = new QueryParameters(layers, false, QueryTriggerInteraction.Ignore);
 		// Calculate previous position more accurately based on current position and movement this frame
 		Vector3 currentPosition = data.projectileObject.transform.position;
-		Vector3 movementThisFrame = data.direction * data.speed * Time.deltaTime;
-		Vector3 previousPosition = currentPosition - movementThisFrame;
-		float castDistance = movementThisFrame.magnitude; // Use the actual movement distance
+		float castDistance = (currentPosition - data.previousPosition).magnitude; // Use the actual movement distance
 
 		// Ensure radius is not zero if scaling from zero
 		float currentRadius = Mathf.Max(data.projectileObject.transform.localScale.x * 0.5f, 0.01f);
 
 		spherecastCommands[index] = new SpherecastCommand(
-									previousPosition,
+									data.previousPosition,
 									currentRadius, // Use calculated radius
 									data.direction,
 									queryParameters,
@@ -392,6 +394,7 @@ public class ProjectileManager : MonoBehaviour
 			return;
 		}
 
+		data.previousPosition = data.projectileObject.transform.position; // Update previous position to current
 		data.projectileObject.transform.rotation = Quaternion.RotateTowards(data.projectileObject.transform.rotation, Quaternion.LookRotation(data.direction), 720f * Time.deltaTime);
 		data.projectileObject.transform.position += data.direction * data.speed * Time.deltaTime;
 		data.timeAlive += Time.deltaTime;
