@@ -163,11 +163,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a67821d0ea4da545a4405a4a9cceb86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  equippedDice: {fileID: 11400000, guid: 13934ccd0cd1b4e7bb563bac2bcb4735, type: 2}
-  portrait: {fileID: -1960546628078278901, guid: cc8cb170ff11da442bedd0e9e3be0e9a, type: 3}
+  equippedDice: {fileID: 11400000, guid: 8065c17c830c7476eacbf993e53bd33e, type: 2}
+  portrait: {fileID: -4569005136305762425, guid: c8bdf21d1988c4635a14a9ad0aa9e130, type: 3}
   StartingWeapon: {fileID: 11400000, guid: 7a451a5cbc8ea3f42a4207b8862fbda4, type: 2}
   abilityLoadout:
   - {fileID: 11400000, guid: 594f47a0dcaef4935b1b146f622cabb8, type: 2}
+  - {fileID: 11400000, guid: 0cf4c21cbff4b4e0d8e91aedf5fd55e0, type: 2}
+  vfxSpawnPoints:
+    keys:
+    - rightHand
+    - leftHand
+    values:
+    - {fileID: 2063240074086450406}
+    - {fileID: 2794545203165188903}
   inventory: {fileID: 0}
   level: 1
   experience: 0
@@ -182,7 +190,6 @@ MonoBehaviour:
   isActive: 0
   healthBar: {fileID: 5637769574389663187}
   previousTurnCost: -1
-  myRenderer: {fileID: 0}
   gameConfig: {fileID: 11400000, guid: eaeab84eb6b1df54eb4c6951b5ec44ae, type: 2}
   characterId: CharacterTwo
 --- !u!114 &2441592753242427009
@@ -454,6 +461,16 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b602caa653df6ab4e94f8318ce9c3639, type: 3}
+--- !u!4 &2063240074086450406 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2562982651264965263, guid: b602caa653df6ab4e94f8318ce9c3639, type: 3}
+  m_PrefabInstance: {fileID: 4554145062340337257}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &2794545203165188903 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1872277813710277966, guid: b602caa653df6ab4e94f8318ce9c3639, type: 3}
+  m_PrefabInstance: {fileID: 4554145062340337257}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7722497744821135934 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6059663695870735447, guid: b602caa653df6ab4e94f8318ce9c3639, type: 3}

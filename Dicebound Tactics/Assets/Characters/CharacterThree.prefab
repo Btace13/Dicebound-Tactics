@@ -75,11 +75,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a67821d0ea4da545a4405a4a9cceb86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  equippedDice: {fileID: 11400000, guid: 13934ccd0cd1b4e7bb563bac2bcb4735, type: 2}
-  portrait: {fileID: 8248543377919322394, guid: cc8cb170ff11da442bedd0e9e3be0e9a, type: 3}
+  equippedDice: {fileID: 11400000, guid: 2a0f62e01cb67493db66c41a09fc09c4, type: 2}
+  portrait: {fileID: 3150560864545804172, guid: 26bfd5cb79372445ab8c4c46b9bf8e1b, type: 3}
   StartingWeapon: {fileID: 11400000, guid: f7008429e75d2a74ca1ec020bf30fcf1, type: 2}
   abilityLoadout:
   - {fileID: 11400000, guid: 71895a1f9982b4faebb510e4a913cd15, type: 2}
+  - {fileID: 11400000, guid: dac7f7cc02a7246bf9b1c50126047700, type: 2}
+  vfxSpawnPoints:
+    keys:
+    - rightHand
+    - leftHand
+    values:
+    - {fileID: 4695874021759443338}
+    - {fileID: 8881443089757779531}
   inventory: {fileID: 0}
   level: 1
   experience: 0
@@ -94,7 +102,6 @@ MonoBehaviour:
   isActive: 0
   healthBar: {fileID: 4028085818917423970}
   previousTurnCost: -1
-  myRenderer: {fileID: 0}
   gameConfig: {fileID: 11400000, guid: eaeab84eb6b1df54eb4c6951b5ec44ae, type: 2}
   characterId: CharacterThree
 --- !u!114 &7002688442584483892
@@ -552,5 +559,15 @@ PrefabInstance:
 --- !u!4 &3936941751312535378 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6059663695870735447, guid: b602caa653df6ab4e94f8318ce9c3639, type: 3}
+  m_PrefabInstance: {fileID: 7114160942804892421}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &4695874021759443338 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2562982651264965263, guid: b602caa653df6ab4e94f8318ce9c3639, type: 3}
+  m_PrefabInstance: {fileID: 7114160942804892421}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8881443089757779531 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1872277813710277966, guid: b602caa653df6ab4e94f8318ce9c3639, type: 3}
   m_PrefabInstance: {fileID: 7114160942804892421}
   m_PrefabAsset: {fileID: 0}

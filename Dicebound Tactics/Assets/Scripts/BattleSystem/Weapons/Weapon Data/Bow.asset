@@ -12,9 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01d5638418b737d4ba5b78d80ca61013, type: 3}
   m_Name: Bow
   m_EditorClassIdentifier: 
-  ItemPrefab: {fileID: 0}
+  ItemPrefab: {fileID: 8941004395702375381, guid: 8eecda95fb0c3e04b80d84a9b2608075, type: 3}
   WeaponName: Bow
   Damage: 5
-  PositionOffset: {x: 0, y: 0, z: 0}
-  RotationOffset: {x: 0, y: 0, z: 0}
+  PositionOffset: {x: -0.05, y: 0.1, z: 0}
+  RotationOffset: {x: -90, y: 0, z: -20}
   EquipTime: 0.5
+  Icon: {fileID: 0}
+  WeaponTypeIcon: {fileID: 0}
+  RarityColor: {r: 0, g: 0, b: 0, a: 0}
+  rarityAmount: 1

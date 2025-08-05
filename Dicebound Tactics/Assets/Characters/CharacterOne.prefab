@@ -163,10 +163,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   equippedDice: {fileID: 11400000, guid: 13934ccd0cd1b4e7bb563bac2bcb4735, type: 2}
-  portrait: {fileID: 3542127132570728493, guid: cc8cb170ff11da442bedd0e9e3be0e9a, type: 3}
+  portrait: {fileID: 3553258842519990366, guid: 996eaf2700f604638941211ec4e5ff31, type: 3}
   StartingWeapon: {fileID: 11400000, guid: 00d22f65aba9aab4eb460cc5caee1c7d, type: 2}
   abilityLoadout:
   - {fileID: 11400000, guid: 7e911d070168540809fbadd791ad7ee7, type: 2}
+  - {fileID: 11400000, guid: 24725aae1a8d546c085300d7c4339b44, type: 2}
+  vfxSpawnPoints:
+    keys:
+    - rightHand
+    - leftHand
+    values:
+    - {fileID: 3576323029773180988}
+    - {fileID: 849921649787877373}
   inventory: {fileID: 0}
   level: 1
   experience: 0
@@ -181,7 +189,6 @@ MonoBehaviour:
   isActive: 0
   healthBar: {fileID: 6144177648201545998}
   previousTurnCost: -1
-  myRenderer: {fileID: 0}
   gameConfig: {fileID: 11400000, guid: eaeab84eb6b1df54eb4c6951b5ec44ae, type: 2}
   characterId: CharacterOne
 --- !u!114 &7227452953740530858
@@ -436,6 +443,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b602caa653df6ab4e94f8318ce9c3639, type: 3}
+--- !u!4 &849921649787877373 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1872277813710277966, guid: b602caa653df6ab4e94f8318ce9c3639, type: 3}
+  m_PrefabInstance: {fileID: 1310598054898760371}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3576323029773180988 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2562982651264965263, guid: b602caa653df6ab4e94f8318ce9c3639, type: 3}
