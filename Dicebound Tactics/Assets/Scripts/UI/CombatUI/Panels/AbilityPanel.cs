@@ -11,8 +11,6 @@ public class AbilityPanel : CombatPanel
 
     public void PopulateAbilityPanel(CharacterManager character)
     {
-        print($"Populating ability panel for {character.name} with {character.abilityLoadout.Count} abilities.");
-
         for (int i = 0; i < abilityButtons.Count; i++)
         {
             if (i >= character.abilityLoadout.Count)
@@ -27,13 +25,9 @@ public class AbilityPanel : CombatPanel
             abilityButtons[i].gameObject.SetActive(true); // Ensure the button is active
             abilityButtons[i].ability = ability;
 
-
-            print("Setting up ability button: " + ability.abilityName);
-
             // Set the button text and action
             abilityButtons[i].SetupAbilityButton(ability, () =>
             {
-                print("Using ability: " + ability.abilityName);
                 OnAbilitySelected?.Invoke(ability);
             }, character.HasEnoughApToUseAbility(ability));
             abilityButtons[i].AnimateIn();

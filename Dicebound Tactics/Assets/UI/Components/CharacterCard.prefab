@@ -107,6 +107,7 @@ MonoBehaviour:
   modifierTextTitle: {fileID: 7819086354253244069}
   modifierTextContent: {fileID: 0}
   diceIconImage: {fileID: 773722360103918614}
+  apInfo: {fileID: 7990261955749929150}
   rollSpeed: 18
 --- !u!1 &699721213339184408
 GameObject:
@@ -2479,7 +2480,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &9215658611539915720
 RectTransform:
   m_ObjectHideFlags: 0

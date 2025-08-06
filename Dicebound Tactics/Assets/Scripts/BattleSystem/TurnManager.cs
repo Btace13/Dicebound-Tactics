@@ -253,7 +253,7 @@ public class TurnManager : MonoBehaviour
             BattleEndedDialogManager.Instance.Show(false);
         }
 
-        EventManager.TriggerGameOver();
+        EventManager.TriggerBattleEnded();
     }
 
     public void SetEnemies(List<EnemyManager> enemies)

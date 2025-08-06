@@ -20,6 +20,7 @@ public class CharacterCard : MonoBehaviour
   [SerializeField] private TextMeshProUGUI modifierTextTitle;
   [SerializeField] private TextMeshProUGUI modifierTextContent;
   [SerializeField] private Image diceIconImage;
+  [SerializeField] private GameObject apInfo;
 
   private Entity character;
   public float rollSpeed = 2f; // higher = faster
@@ -30,6 +31,8 @@ public class CharacterCard : MonoBehaviour
     // Event Listeners
     EventManager.OnCharacterTurnStarted += UpdateCurrentTurnIndicator;
     EventManager.OnCharacterTurnEnded += RemoveCurrentTurnIndicator;
+    EventManager.OnBattleStarted += HandleBattleStarted;
+    EventManager.OnBattleEnded += HandleBattleEnded;
   }
 
   void OnDestroy()
@@ -42,6 +45,8 @@ public class CharacterCard : MonoBehaviour
 
     EventManager.OnCharacterTurnStarted -= UpdateCurrentTurnIndicator;
     EventManager.OnCharacterTurnEnded -= RemoveCurrentTurnIndicator;
+    EventManager.OnBattleStarted -= HandleBattleStarted;
+    EventManager.OnBattleEnded -= HandleBattleEnded;
   }
 
   private void HandleUpdatingCharacterInfo(Entity character)
@@ -133,7 +138,7 @@ public class CharacterCard : MonoBehaviour
         modifierTextContent.text = character.equippedDice.LastRollModifier.Description;
 
     if (diceIconImage != null && diceIconSet != null && TurnManager.Instance.GetCurrentUnit() == character)
-    { 
+    {
       Sprite icon = diceIconSet.GetIconForValue(character.equippedDice?.LastRollValue ?? 1);
       if (icon != null)
       {
@@ -190,22 +195,54 @@ public class CharacterCard : MonoBehaviour
             .SetEase(Ease.OutQuad)
             .OnComplete(() =>
             {
-                numberText.DOFontSize(minFontSize, duration * 0.5f)
-                    .SetEase(Ease.InQuad);
+              numberText.DOFontSize(minFontSize, duration * 0.5f)
+                  .SetEase(Ease.InQuad);
             });
 
       yield return null;
     }
-    
+
     numberText.text = to.ToString();
     rollingCoroutine = null;
   }
-  
+
   private void RemoveCurrentTurnIndicator(CharacterManager character)
   {
     if (CurrentTurnIndicator != null && character == CombatManager.Instance.TurnManager.GetCurrentUnit())
     {
       CurrentTurnIndicator.SetActive(false);
+    }
+  }
+
+  private void HandleBattleStarted()
+  { 
+    if (apInfo != null)
+    {
+      apInfo.SetActive(true);
+    }
+  }
+
+  private void HandleBattleEnded()
+  {
+    // Hide the current turn indicator when the battle ends
+    if (CurrentTurnIndicator != null)
+    {
+      CurrentTurnIndicator.SetActive(false);
+    }
+
+    if (diceIconImage != null)
+    {
+      diceIconImage.gameObject.SetActive(false);
+    }
+
+    if (apAmountText != null)
+    {
+      apAmountText.text = string.Empty;
+    }
+
+    if (apInfo != null)
+    {
+      apInfo.SetActive(false);
     }
   }
 }

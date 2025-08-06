@@ -11,14 +11,12 @@ public class EventManager : MonoBehaviour
   public static event Action<CombatEncounter> OnCombatEncounterEnded;
   public static event Action OnBattleStarted;
   public static event Action OnBattleEnded;
-  public static event Action OnGameOver;
   public static event Action<CharacterManager> OnCharacterTurnStarted;
   public static event Action<CharacterManager> OnCharacterTurnEnded;
   public static event Action<EnemyManager> OnEnemyTurnStarted;
   public static event Action<EnemyManager> OnEnemyTurnEnded;
   public static event Action<Entity> OnNewActiveEntity;
   public static event Action<Entity> OnTargetChanged;
-  public static event Action<GameState> OnGameStateChanged;
   public static event Action<bool> OnSelectingATarget;
   public static event Action<DiceModifier, Entity> OnModifierApplied;
   public static event Action<Entity> OnEntityDied;
@@ -26,6 +24,10 @@ public class EventManager : MonoBehaviour
   // UI Events
   public static event Action OnMenuButtonPressed;
   public static event Action OnSuccessButtonPressed;
+
+  // Game Events
+  public static event Action OnGameOver;
+  public static event Action<GameState> OnGameStateChanged;
 
   // Flag Events
 

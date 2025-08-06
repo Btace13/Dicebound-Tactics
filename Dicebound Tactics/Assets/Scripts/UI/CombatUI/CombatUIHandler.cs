@@ -36,6 +36,7 @@ public class CombatUIHandler : MonoBehaviour
     [SerializeField] private CombatNotification notificationUI;
     [SerializeField] private CanvasGroup panelInputsCanvasGroup;
     [SerializeField] private Button confirmButton;
+    [SerializeField] private Button cancelButton;
 
     [Header("Other References")]
     public DamageNumberUIHandler damageNumberUIHandler;
@@ -215,6 +216,7 @@ public class CombatUIHandler : MonoBehaviour
             return;
         }
 
+        cancelButton.interactable = false;
         currentPanel.FadeOutCanvas(() =>
         {
             currentPanel = null;
