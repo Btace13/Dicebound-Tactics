@@ -9,6 +9,8 @@ public class CharacterMenuHandler : MonoBehaviour
   [SerializeField] private CanvasGroup characterScreenUI;
   [SerializeField] private CharacterMenuDiceCustomizationHandler charactersHandler;
   [SerializeField] private GameObject backButton;
+  [SerializeField] private GameObject closeMenuButton
+  ;
 
   private void Awake()
   {
@@ -22,6 +24,20 @@ public class CharacterMenuHandler : MonoBehaviour
     EventManager.OnCharacterMenuClosed -= HideCharacterMenu;
   }
 
+  private void Update() {
+    if (Input.GetKeyDown(KeyCode.M))
+    {
+      if(characterMenuUI.alpha == 0f)
+      {
+        ShowCharacterMenu();
+      }
+      else
+      {
+        HideCharacterMenu();
+      }
+    }
+  }
+
   public void ToggleBackButton(bool isVisible)
   {
     if (backButton != null)
@@ -30,7 +46,15 @@ public class CharacterMenuHandler : MonoBehaviour
     }
   }
 
-  private void ShowCharacterMenu()
+  public void ToggleCloseMenuButton(bool isVisible)
+  {
+    if (closeMenuButton != null)
+    {
+      closeMenuButton.SetActive(isVisible);
+    }
+  }
+
+  public void ShowCharacterMenu()
   {
     characterMenuUI.DOFade(1f, 0.2f).SetEase(Ease.InOutQuad).OnComplete(() =>
     {
@@ -39,7 +63,7 @@ public class CharacterMenuHandler : MonoBehaviour
     });
   }
 
-  private void HideCharacterMenu()
+  public void HideCharacterMenu()
   {
     characterMenuUI.DOFade(0f, 0.2f).SetEase(Ease.InOutQuad).OnComplete(() =>
     {
@@ -57,6 +81,7 @@ public class CharacterMenuHandler : MonoBehaviour
     });
 
     ToggleBackButton(false);
+    ToggleCloseMenuButton(true);
   }
 
   public void CloseCharacterSelector()
@@ -78,6 +103,7 @@ public class CharacterMenuHandler : MonoBehaviour
     });
 
     ToggleBackButton(true);
+    ToggleCloseMenuButton(false);
   }
   
   public void CloseCharacterScreen()
