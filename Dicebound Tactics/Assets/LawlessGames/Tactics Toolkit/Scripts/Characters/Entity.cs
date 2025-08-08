@@ -32,7 +32,7 @@ namespace TacticsToolkit
         public UDictionary<string, Transform> vfxSpawnPoints = new();
 
         [Header("Inventory")]
-        public Inventory inventory;
+        public CombatItemInventory inventory;
         public List<CombatItem> combatItems => inventory.combatItems.Keys;
 
         [Header("Level")]

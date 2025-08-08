@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Inventory : MonoBehaviour
+public class CombatItemInventory : MonoBehaviour
 {
     [Header("Item Management")]
     public UDictionary<CombatItem, int> combatItems = new UDictionary<CombatItem, int>(); // List of combat items in the inventory

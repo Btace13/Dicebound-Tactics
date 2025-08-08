@@ -9,7 +9,7 @@ public class InventorySaveData : SaveData
 
     public override void Apply(GameObject obj)
     {
-        var inventory = obj.GetComponent<Inventory>();
+        var inventory = obj.GetComponent<CombatItemInventory>();
         if (inventory == null)
         {
             Debug.LogWarning("No Inventory component found on the GameObject.");
@@ -27,7 +27,7 @@ public class InventorySaveData : SaveData
 
     public override void Capture(GameObject obj)
     {
-        var inventory = obj.GetComponent<Inventory>();
+        var inventory = obj.GetComponent<CombatItemInventory>();
         if (inventory == null)
         {
             Debug.LogWarning("No Inventory component found on the GameObject.");

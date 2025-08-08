@@ -1,6 +1,8 @@
 using UnityEngine;
 using DG.Tweening;
 using TacticsToolkit;
+using TMPro;
+using UnityEngine.UI;
 
 public class CharacterMenuHandler : MonoBehaviour
 {
@@ -9,8 +11,8 @@ public class CharacterMenuHandler : MonoBehaviour
   [SerializeField] private CanvasGroup characterScreenUI;
   [SerializeField] private CharacterMenuDiceCustomizationHandler charactersHandler;
   [SerializeField] private GameObject backButton;
-  [SerializeField] private GameObject closeMenuButton
-  ;
+  [SerializeField] private GameObject closeMenuButton;
+  [SerializeField] private TMP_Text modifierDescriptionText;
 
   private void Awake()
   {
@@ -24,10 +26,18 @@ public class CharacterMenuHandler : MonoBehaviour
     EventManager.OnCharacterMenuClosed -= HideCharacterMenu;
   }
 
-  private void Update() {
+  private void Start() {
+    if(modifierDescriptionText != null)
+    {
+      modifierDescriptionText.text = string.Empty;
+    }
+  }
+
+  private void Update()
+  {
     if (Input.GetKeyDown(KeyCode.M))
     {
-      if(characterMenuUI.alpha == 0f)
+      if (characterMenuUI.alpha == 0f)
       {
         ShowCharacterMenu();
       }
@@ -43,6 +53,7 @@ public class CharacterMenuHandler : MonoBehaviour
     if (backButton != null)
     {
       backButton.SetActive(isVisible);
+      backButton.GetComponent<Button>().interactable = isVisible;
     }
   }
 
@@ -105,7 +116,7 @@ public class CharacterMenuHandler : MonoBehaviour
     ToggleBackButton(true);
     ToggleCloseMenuButton(false);
   }
-  
+
   public void CloseCharacterScreen()
   {
     characterScreenUI.DOFade(0f, 0.2f).SetEase(Ease.InOutQuad).OnComplete(() =>
@@ -113,5 +124,16 @@ public class CharacterMenuHandler : MonoBehaviour
       characterScreenUI.interactable = false;
       characterScreenUI.blocksRaycasts = false;
     });
+  }
+  
+  public void UpdateModifierDescription(DiceModifier modifier)
+  {
+    if (modifierDescriptionText != null)
+    {
+      modifierDescriptionText.text = modifier != null ? modifier.Description : string.Empty;
+    } else
+    {
+      modifierDescriptionText.text = string.Empty;
+    }
   }
 }

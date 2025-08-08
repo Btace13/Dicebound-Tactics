@@ -11,4 +11,9 @@ public class DiceSide
         this.value = value;
         modifier = mod;
     }
+
+    public bool HasModifier()
+    {
+        return modifier != null;
+    }
 }
