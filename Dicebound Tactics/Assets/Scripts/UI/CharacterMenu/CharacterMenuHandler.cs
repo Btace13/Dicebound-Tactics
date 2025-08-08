@@ -25,8 +25,9 @@ public class CharacterMenuHandler : MonoBehaviour
     EventManager.OnCharacterMenuClosed -= HideCharacterMenu;
   }
 
-  private void Start() {
-    if(modifierDescriptionText != null)
+  private void Start()
+  {
+    if (modifierDescriptionText != null)
     {
       modifierDescriptionText.text = string.Empty;
     }
@@ -112,15 +113,21 @@ public class CharacterMenuHandler : MonoBehaviour
     characterScreenUI.interactable = false;
     characterScreenUI.blocksRaycasts = false;
   }
-  
+
   public void UpdateModifierDescription(DiceModifier modifier)
   {
     if (modifierDescriptionText != null)
     {
       modifierDescriptionText.text = modifier != null ? modifier.Description : string.Empty;
-    } else
+    }
+    else
     {
       modifierDescriptionText.text = string.Empty;
     }
+  }
+
+  public CharacterMenuDiceCustomizationHandler GetCharacterMenuDiceCustomizationHandler()
+  {
+    return charactersHandler;
   }
 }

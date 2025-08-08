@@ -23,26 +23,26 @@ public class DieSideHandler : MonoBehaviour, IDropHandler
   
     public void OnDrop(PointerEventData eventData)
     {
-        if (transform.childCount == 0)
-        {
-            if(dieSide.modifier != null)
-            {
-                diceModifierInventory.AddItem(dieSide.modifier, 1);
-            }
+        // if (transform.childCount == 0)
+        // {
+        //     if(dieSide.modifier != null)
+        //     {
+        //         diceModifierInventory.AddItem(dieSide.modifier, 1);
+        //     }
 
-            dieSide.modifier = eventData.pointerDrag.GetComponent<DiceModifierCardHandler>().GetDiceModifier();
-            diceModifierInventory.RemoveItem(dieSide.modifier, 1);
-            if (dieSide.modifier != null)
-            {
-                modifierIndicator.SetActive(true);
-                characterMenuHandler.UpdateModifierDescription(dieSide.modifier);
-            }
-            else
-            {
-                modifierIndicator.SetActive(false);
-                characterMenuHandler.UpdateModifierDescription(null);
-            }
-        }
+        //     dieSide.modifier = eventData.pointerDrag.GetComponent<DiceModifierCardHandler>().GetDiceModifier();
+        //     diceModifierInventory.RemoveItem(dieSide.modifier, 1);
+        //     if (dieSide.modifier != null)
+        //     {
+        //         modifierIndicator.SetActive(true);
+        //         characterMenuHandler.UpdateModifierDescription(dieSide.modifier);
+        //     }
+        //     else
+        //     {
+        //         modifierIndicator.SetActive(false);
+        //         characterMenuHandler.UpdateModifierDescription(null);
+        //     }
+        // }
     }
 
   public void SetDieSide(DiceSide side, CharacterMenuHandler characterMenuHandler, DiceModifierInventory diceModifierInventory)
@@ -78,6 +78,34 @@ public class DieSideHandler : MonoBehaviour, IDropHandler
                     if (characterMenuHandler != null)
                     {
                         characterMenuHandler.UpdateModifierDescription(null);
+                    }
+                }
+                
+
+                if (characterMenuHandler != null)
+                {
+                    CharacterMenuDiceCustomizationHandler customizationHandler = characterMenuHandler.GetCharacterMenuDiceCustomizationHandler();
+                    if (customizationHandler != null && customizationHandler.HasStagedDiceModifierCard())
+                    {
+                        if (dieSide.modifier != null)
+                        {
+                            diceModifierInventory.AddItem(dieSide.modifier, 1);
+                        }
+
+                        dieSide.modifier = customizationHandler.GetStagedDiceModifierCard().GetDiceModifier();
+                        diceModifierInventory.RemoveItem(dieSide.modifier, 1);
+                        if (dieSide.modifier != null)
+                        {
+                            modifierIndicator.SetActive(true);
+                            characterMenuHandler.UpdateModifierDescription(dieSide.modifier);
+                        }
+                        else
+                        {
+                            modifierIndicator.SetActive(false);
+                            characterMenuHandler.UpdateModifierDescription(null);
+                        }
+                        
+                        customizationHandler.SetStagedDiceModifierCard(null);
                     }
                 }
             });

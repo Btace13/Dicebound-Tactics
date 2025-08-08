@@ -13,6 +13,7 @@ public class CharacterMenuDiceCustomizationHandler : MonoBehaviour
     [SerializeField] private GameObject diceModifierContainer;
     [SerializeField] private GameObject diceSidePrefab;
     [SerializeField] private GameObject characterDiceSidesContainer;
+    private DiceModifierCardHandler stagedDiceModifierCard;
 
     void Start()
     {
@@ -22,7 +23,7 @@ public class CharacterMenuDiceCustomizationHandler : MonoBehaviour
             DiceModifierCardHandler diceModifierCard = card.GetComponent<DiceModifierCardHandler>();
             if (diceModifierCard != null)
             {
-                diceModifierCard.SetDiceModifier(characterMenuHandler,pair.Key, pair.Value);
+                diceModifierCard.SetDiceModifier(this, characterMenuHandler, pair.Key, pair.Value);
             }
         });
     }
@@ -53,5 +54,29 @@ public class CharacterMenuDiceCustomizationHandler : MonoBehaviour
                 dieSideHandler.SetDieSide(side, characterMenuHandler, diceModifierInventory);
             }
         });
+    }
+
+    public bool HasStagedDiceModifierCard()
+    {
+        return stagedDiceModifierCard != null;
+    }
+
+    public void SetStagedDiceModifierCard(DiceModifierCardHandler card)
+    {
+        foreach (Transform child in diceModifierContainer.transform)
+        {
+            DiceModifierCardHandler diceModifierCard = child.GetComponent<DiceModifierCardHandler>();
+            if (diceModifierCard != null)
+            {
+                diceModifierCard.UnstageDiceModifierCard(card);
+            }
+        }
+
+        stagedDiceModifierCard = card;
+    }
+    
+    public DiceModifierCardHandler GetStagedDiceModifierCard()
+    {
+        return stagedDiceModifierCard;
     }
 }
