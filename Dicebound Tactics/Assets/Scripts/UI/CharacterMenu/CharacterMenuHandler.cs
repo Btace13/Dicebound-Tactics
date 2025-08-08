@@ -1,5 +1,4 @@
 using UnityEngine;
-using DG.Tweening;
 using TacticsToolkit;
 using TMPro;
 using UnityEngine.UI;
@@ -67,29 +66,23 @@ public class CharacterMenuHandler : MonoBehaviour
 
   public void ShowCharacterMenu()
   {
-    characterMenuUI.DOFade(1f, 0.2f).SetEase(Ease.InOutQuad).OnComplete(() =>
-    {
-      characterMenuUI.interactable = true;
-      characterMenuUI.blocksRaycasts = true;
-    });
+    characterMenuUI.alpha = 1f;
+    characterMenuUI.interactable = true;
+    characterMenuUI.blocksRaycasts = true;
   }
 
   public void HideCharacterMenu()
   {
-    characterMenuUI.DOFade(0f, 0.2f).SetEase(Ease.InOutQuad).OnComplete(() =>
-    {
-      characterMenuUI.interactable = false;
-      characterMenuUI.blocksRaycasts = false;
-    });
+    characterMenuUI.alpha = 0f;
+    characterMenuUI.interactable = false;
+    characterMenuUI.blocksRaycasts = false;
   }
 
   public void OpenCharacterSelector()
   {
-    characterSelectorUI.DOFade(1f, 0.2f).SetEase(Ease.InOutQuad).OnComplete(() =>
-    {
-      characterSelectorUI.interactable = true;
-      characterSelectorUI.blocksRaycasts = true;
-    });
+    characterSelectorUI.alpha = 1f;
+    characterSelectorUI.interactable = true;
+    characterSelectorUI.blocksRaycasts = true;
 
     ToggleBackButton(false);
     ToggleCloseMenuButton(true);
@@ -97,21 +90,17 @@ public class CharacterMenuHandler : MonoBehaviour
 
   public void CloseCharacterSelector()
   {
-    characterSelectorUI.DOFade(0f, 0.2f).SetEase(Ease.InOutQuad).OnComplete(() =>
-    {
-      characterSelectorUI.interactable = false;
-      characterSelectorUI.blocksRaycasts = false;
-    });
+    characterSelectorUI.alpha = 0f;
+    characterSelectorUI.interactable = false;
+    characterSelectorUI.blocksRaycasts = false;
   }
 
   public void OpenCharacterScreen(CharacterManager character)
   {
     charactersHandler.SetCharacter(character);
-    characterScreenUI.DOFade(1f, 0.2f).SetEase(Ease.InOutQuad).OnComplete(() =>
-    {
-      characterScreenUI.interactable = true;
-      characterScreenUI.blocksRaycasts = true;
-    });
+    characterScreenUI.alpha = 1f;
+    characterScreenUI.interactable = true;
+    characterScreenUI.blocksRaycasts = true;
 
     ToggleBackButton(true);
     ToggleCloseMenuButton(false);
@@ -119,11 +108,9 @@ public class CharacterMenuHandler : MonoBehaviour
 
   public void CloseCharacterScreen()
   {
-    characterScreenUI.DOFade(0f, 0.2f).SetEase(Ease.InOutQuad).OnComplete(() =>
-    {
-      characterScreenUI.interactable = false;
-      characterScreenUI.blocksRaycasts = false;
-    });
+    characterScreenUI.alpha = 0f;
+    characterScreenUI.interactable = false;
+    characterScreenUI.blocksRaycasts = false;
   }
   
   public void UpdateModifierDescription(DiceModifier modifier)

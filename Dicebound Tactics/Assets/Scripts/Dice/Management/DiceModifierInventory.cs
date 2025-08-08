@@ -21,10 +21,6 @@ public class DiceModifierInventory : MonoBehaviour
             {
                 return true; // Item exists in the inventory and has a count greater than zero
             }
-            else
-            {
-                Debug.Log($"Item '{item.Name}' exists in the inventory but has a count of zero.");
-            }
         }
 
         return false;

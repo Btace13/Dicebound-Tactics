@@ -28,7 +28,6 @@ public class DiceModifierCardHandler : MonoBehaviour
     {
       EventManager.TriggerMenuButtonPressed();
       characterMenuHandler.UpdateModifierDescription(diceModifier);
-      Debug.Log($"Dice Modifier '{diceModifier.name}' clicked. Quantity: {quantity}");
     });
   }
 }

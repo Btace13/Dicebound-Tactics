@@ -48,7 +48,6 @@ public class DieSideHandler : MonoBehaviour
                         characterMenuHandler.UpdateModifierDescription(null);
                     }
                 }
-                Debug.Log($"Die side '{side.value}' clicked with modifier: {side.HasModifier()}");
             });
         }
     }
