@@ -89,4 +89,18 @@ public class DiceModifierInventory : MonoBehaviour
             Debug.Log($"Removed {quantity} of '{item.Name}' from the inventory. Remaining: {diceModifierItems[item]}");
         }
     }
+
+    public int GetIndexOfItem(DiceModifier key)
+    {
+        if (diceModifierItems == null)
+            return -1;
+        int index = 0;
+        foreach (var pair in diceModifierItems)
+        {
+            if (EqualityComparer<DiceModifier>.Default.Equals(pair.Key, key))
+                return index;
+            index++;
+        }
+        return -1;
+    }
 }

@@ -50,7 +50,7 @@ public class CharacterMenuDiceCustomizationHandler : MonoBehaviour
             DieSideHandler dieSideHandler = dieSideObject.GetComponent<DieSideHandler>();
             if (dieSideHandler != null)
             {
-                dieSideHandler.SetDieSide(side, characterMenuHandler);
+                dieSideHandler.SetDieSide(side, characterMenuHandler, diceModifierInventory);
             }
         });
     }

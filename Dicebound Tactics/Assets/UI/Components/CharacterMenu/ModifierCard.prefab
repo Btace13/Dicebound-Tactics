@@ -150,6 +150,7 @@ GameObject:
   - component: {fileID: 8578427327489238764}
   - component: {fileID: 6587018149928080653}
   - component: {fileID: 541087355752456218}
+  - component: {fileID: -2982064508434385653}
   m_Layer: 5
   m_Name: ModifierCard
   m_TagString: Untagged
@@ -248,6 +249,8 @@ MonoBehaviour:
   modifierNameText: {fileID: 5432174830944150995}
   modifierValueText: {fileID: 6122038718903278611}
   diceModifierButton: {fileID: 541087355752456218}
+  group: {fileID: 0}
+  parentAfterDrag: {fileID: 0}
 --- !u!114 &541087355752456218
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -304,6 +307,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!225 &-2982064508434385653
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 799658684398403482}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &6823786658137762376
 GameObject:
   m_ObjectHideFlags: 0

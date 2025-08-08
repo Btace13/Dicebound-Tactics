@@ -2,23 +2,55 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using System;
+using UnityEngine.EventSystems;
 
-public class DieSideHandler : MonoBehaviour
+public class DieSideHandler : MonoBehaviour, IDropHandler
 {
     [SerializeField] private TextMeshProUGUI dieSideText;
     [SerializeField] private GameObject modifierIndicator;
     [SerializeField] private Button button;
+    private DiceSide dieSide;
+    private CharacterMenuHandler characterMenuHandler;
+    private DiceModifierInventory diceModifierInventory;
 
-  void Start()
-  {
-    if(button == null)
+    void Start()
     {
-      button = GetComponent<Button>();
+        if(button == null)
+        {
+        button = GetComponent<Button>();
+        }
     }
-  }
-
-  public void SetDieSide(DiceSide side, CharacterMenuHandler characterMenuHandler)
+  
+    public void OnDrop(PointerEventData eventData)
     {
+        if (transform.childCount == 0)
+        {
+            if(dieSide.modifier != null)
+            {
+                diceModifierInventory.AddItem(dieSide.modifier, 1);
+            }
+
+            dieSide.modifier = eventData.pointerDrag.GetComponent<DiceModifierCardHandler>().GetDiceModifier();
+            diceModifierInventory.RemoveItem(dieSide.modifier, 1);
+            if (dieSide.modifier != null)
+            {
+                modifierIndicator.SetActive(true);
+                characterMenuHandler.UpdateModifierDescription(dieSide.modifier);
+            }
+            else
+            {
+                modifierIndicator.SetActive(false);
+                characterMenuHandler.UpdateModifierDescription(null);
+            }
+        }
+    }
+
+  public void SetDieSide(DiceSide side, CharacterMenuHandler characterMenuHandler, DiceModifierInventory diceModifierInventory)
+    {
+        dieSide = side;
+        this.characterMenuHandler = characterMenuHandler;
+        this.diceModifierInventory = diceModifierInventory;
+
         if (dieSideText != null)
         {
             dieSideText.text = side.value.ToString();
@@ -42,7 +74,7 @@ public class DieSideHandler : MonoBehaviour
                     }
                 }
                 else
-                { 
+                {
                     if (characterMenuHandler != null)
                     {
                         characterMenuHandler.UpdateModifierDescription(null);
