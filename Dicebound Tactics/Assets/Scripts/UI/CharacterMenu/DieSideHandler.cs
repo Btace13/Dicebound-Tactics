@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine.UI;
 using System;
 using UnityEngine.EventSystems;
+using DG.Tweening;
 
 public class DieSideHandler : MonoBehaviour, IDropHandler
 {
@@ -80,7 +81,11 @@ public class DieSideHandler : MonoBehaviour, IDropHandler
                         characterMenuHandler.UpdateModifierDescription(null);
                     }
                 }
-                
+
+                transform.DOScale(1.1f, 0.2f).SetEase(Ease.OutBack).OnComplete(() =>
+                {
+                    transform.DOScale(1f, 0.2f).SetEase(Ease.OutBack);
+                });
 
                 if (characterMenuHandler != null)
                 {
@@ -104,7 +109,7 @@ public class DieSideHandler : MonoBehaviour, IDropHandler
                             modifierIndicator.SetActive(false);
                             characterMenuHandler.UpdateModifierDescription(null);
                         }
-                        
+
                         customizationHandler.SetStagedDiceModifierCard(null);
                     }
                 }
