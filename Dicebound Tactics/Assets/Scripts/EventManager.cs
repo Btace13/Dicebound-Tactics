@@ -24,6 +24,8 @@ public class EventManager : MonoBehaviour
   // UI Events
   public static event Action OnMenuButtonPressed;
   public static event Action OnSuccessButtonPressed;
+  public static event Action OnCharacterMenuOpened;
+  public static event Action OnCharacterMenuClosed;
 
   // Game Events
   public static event Action OnGameOver;
@@ -89,20 +91,25 @@ public class EventManager : MonoBehaviour
   {
     OnSuccessButtonPressed?.Invoke();
   }
-
   public static void TriggerSelectingATarget(bool isSelecting)
   {
     OnSelectingATarget?.Invoke(isSelecting);
   }
-
   public static void TriggerModifierApplied(DiceModifier modifier, Entity user)
   {
     OnModifierApplied?.Invoke(modifier, user);
   }
-  
   public static void TriggerEntityDied(Entity entity)
   {
     OnEntityDied?.Invoke(entity);
+  }
+  public static void TriggerCharacterMenuOpened()
+  {
+    OnCharacterMenuOpened?.Invoke();
+  }
+  public static void TriggerCharacterMenuClosed()
+  {
+    OnCharacterMenuClosed?.Invoke();
   }
 }
 

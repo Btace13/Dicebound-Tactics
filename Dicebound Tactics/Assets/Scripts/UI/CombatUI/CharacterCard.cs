@@ -52,7 +52,11 @@ public class CharacterCard : MonoBehaviour
   private void HandleUpdatingCharacterInfo(Entity character)
   {
     SetCharacterInfo(character);
-    CurrentTurnIndicator.SetActive(CombatManager.Instance.TurnManager.GetCurrentUnit() == character);
+    
+    if(CurrentTurnIndicator != null)
+    {
+      CurrentTurnIndicator.SetActive(CombatManager.Instance.TurnManager.GetCurrentUnit() == character);
+    }
   }
 
   public void SetCharacterInfo(Entity character)

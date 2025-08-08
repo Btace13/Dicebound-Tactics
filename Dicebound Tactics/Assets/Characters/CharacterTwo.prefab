@@ -192,6 +192,7 @@ MonoBehaviour:
   previousTurnCost: -1
   gameConfig: {fileID: 11400000, guid: eaeab84eb6b1df54eb4c6951b5ec44ae, type: 2}
   characterId: CharacterTwo
+  characterFullBodyImage: {fileID: 1613950306668849816, guid: 1cf3106ec7e66419cbf52d4ebeb48dd4, type: 3}
 --- !u!114 &2441592753242427009
 MonoBehaviour:
   m_ObjectHideFlags: 0

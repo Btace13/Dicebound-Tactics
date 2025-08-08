@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.IO;
 using UnityEditor;
+using Microsoft.Unity.VisualStudio.Editor;
 
 namespace TacticsToolkit
 {
@@ -9,6 +10,7 @@ namespace TacticsToolkit
     public class CharacterManager : Entity, IOverworldControllable
     {
         public string characterId;
+        public Sprite characterFullBodyImage;
         public bool IsControllable { get; set; } = true;
         public bool IsControlled { get; set; } = false;
         public OverworldCharacterController OverworldCharacterController { get; set; }
