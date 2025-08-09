@@ -16,12 +16,12 @@ public class DieSideHandler : MonoBehaviour, IDropHandler
 
     void Start()
     {
-        if(button == null)
+        if (button == null)
         {
-        button = GetComponent<Button>();
+            button = GetComponent<Button>();
         }
     }
-  
+
     public void OnDrop(PointerEventData eventData)
     {
         // if (transform.childCount == 0)
@@ -46,7 +46,7 @@ public class DieSideHandler : MonoBehaviour, IDropHandler
         // }
     }
 
-  public void SetDieSide(DiceSide side, CharacterMenuHandler characterMenuHandler, DiceModifierInventory diceModifierInventory)
+    public void SetDieSide(DiceSide side, CharacterMenuHandler characterMenuHandler, DiceModifierInventory diceModifierInventory)
     {
         dieSide = side;
         this.characterMenuHandler = characterMenuHandler;
@@ -82,38 +82,46 @@ public class DieSideHandler : MonoBehaviour, IDropHandler
                     }
                 }
 
-                transform.DOScale(1.1f, 0.2f).SetEase(Ease.OutBack).OnComplete(() =>
+                CharacterMenuDiceCustomizationHandler charactersHandler = characterMenuHandler.GetCharacterMenuDiceCustomizationHandler();
+
+                if (charactersHandler != null)
                 {
-                    transform.DOScale(1f, 0.2f).SetEase(Ease.OutBack);
-                });
-
-                if (characterMenuHandler != null)
-                {
-                    CharacterMenuDiceCustomizationHandler customizationHandler = characterMenuHandler.GetCharacterMenuDiceCustomizationHandler();
-                    if (customizationHandler != null && customizationHandler.HasStagedDiceModifierCard())
-                    {
-                        if (dieSide.modifier != null)
-                        {
-                            diceModifierInventory.AddItem(dieSide.modifier, 1);
-                        }
-
-                        dieSide.modifier = customizationHandler.GetStagedDiceModifierCard().GetDiceModifier();
-                        diceModifierInventory.RemoveItem(dieSide.modifier, 1);
-                        if (dieSide.modifier != null)
-                        {
-                            modifierIndicator.SetActive(true);
-                            characterMenuHandler.UpdateModifierDescription(dieSide.modifier);
-                        }
-                        else
-                        {
-                            modifierIndicator.SetActive(false);
-                            characterMenuHandler.UpdateModifierDescription(null);
-                        }
-
-                        customizationHandler.SetStagedDiceModifierCard(null);
-                    }
+                    charactersHandler.SetStagedDieSide(this);
+                    charactersHandler.ToggleEditButtons(true);
+                    charactersHandler.ToggleModifierCanvasGroup(false);
                 }
             });
         }
+    }
+
+    public DiceSide GetDieSide()
+    {
+        return dieSide;
+    }
+
+    public void ApplyModifierToDiceSide(DiceModifier modifier)
+    {
+        if (dieSide.modifier != null)
+        {
+            diceModifierInventory.AddItem(dieSide.modifier, 1);
+        }
+
+        dieSide.modifier = modifier;
+        diceModifierInventory.RemoveItem(dieSide.modifier, 1);
+        if (dieSide.modifier != null)
+        {
+            modifierIndicator.SetActive(true);
+            characterMenuHandler.UpdateModifierDescription(dieSide.modifier);
+        }
+        else
+        {
+            modifierIndicator.SetActive(false);
+            characterMenuHandler.UpdateModifierDescription(null);
+        }
+
+        characterMenuHandler.GetCharacterMenuDiceCustomizationHandler().SetInventory();
+        characterMenuHandler.GetCharacterMenuDiceCustomizationHandler().SetStagedDieSide(null);
+        characterMenuHandler.GetCharacterMenuDiceCustomizationHandler().ToggleEditButtons(false);
+        characterMenuHandler.GetCharacterMenuDiceCustomizationHandler().ToggleModifierCanvasGroup(false);
     }
 }

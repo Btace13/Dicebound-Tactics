@@ -24,7 +24,7 @@ MonoBehaviour:
     playstationControllerSprite: {fileID: 265468883692527984, guid: 78ad0d5178697478689a148cbde0846a, type: 3}
     switchControllerSprite: {fileID: 6336310393044179604, guid: 0411c80813e7e4c23a1014db69dc5150, type: 3}
   - actionName: Player/TopGamepad
-    keyboardSprite: {fileID: -5276268084499866289, guid: e3289eb9928e84dc4bbe20fe83872cb8, type: 3}
+    keyboardSprite: {fileID: -9125861541802950594, guid: bacc72b8d0d944823a04b53a20f70600, type: 3}
     xboxControllerSprite: {fileID: -1236389414660901761, guid: e01700ca784b04d85a5d439c0b55ea04, type: 3}
     playstationControllerSprite: {fileID: -6428336804260667672, guid: aa1963e99aeac409d8b8187870980809, type: 3}
     switchControllerSprite: {fileID: -1042983111052659530, guid: c47020cc246e84dadb0a7356ab2e0edb, type: 3}

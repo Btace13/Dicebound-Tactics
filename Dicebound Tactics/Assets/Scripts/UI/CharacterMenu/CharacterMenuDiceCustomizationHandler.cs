@@ -2,6 +2,8 @@ using UnityEngine;
 using TacticsToolkit;
 using UnityEngine.UI;
 using Sirenix.Utilities;
+using DG.Tweening;
+using System.Collections.Generic;
 
 public class CharacterMenuDiceCustomizationHandler : MonoBehaviour
 {
@@ -13,10 +15,24 @@ public class CharacterMenuDiceCustomizationHandler : MonoBehaviour
     [SerializeField] private GameObject diceModifierContainer;
     [SerializeField] private GameObject diceSidePrefab;
     [SerializeField] private GameObject characterDiceSidesContainer;
-    private DiceModifierCardHandler stagedDiceModifierCard;
+    [SerializeField] private GameObject addModifierButton;
+    [SerializeField] private GameObject removeModifierButton;
+    [SerializeField] private CanvasGroup modifierCanvasGroup;
+
+    private DieSideHandler stagedDieSide;
 
     void Start()
     {
+        SetInventory();
+    }
+
+    public void SetInventory()
+    {
+        foreach (Transform child in diceModifierContainer.transform)
+        {
+            Destroy(child.gameObject);
+        }
+
         diceModifierInventory.diceModifierItems.ForEach(pair =>
         {
             GameObject card = Instantiate(diceModifierCardPrefab, diceModifierContainer.transform);
@@ -56,27 +72,77 @@ public class CharacterMenuDiceCustomizationHandler : MonoBehaviour
         });
     }
 
-    public bool HasStagedDiceModifierCard()
+    public bool HasStagedDieSide()
     {
-        return stagedDiceModifierCard != null;
+        return stagedDieSide != null;
     }
 
-    public void SetStagedDiceModifierCard(DiceModifierCardHandler card)
+    public void SetStagedDieSide(DieSideHandler dieSideHandler)
     {
-        foreach (Transform child in diceModifierContainer.transform)
+        stagedDieSide = dieSideHandler;
+
+        foreach (Transform child in characterDiceSidesContainer.transform)
         {
-            DiceModifierCardHandler diceModifierCard = child.GetComponent<DiceModifierCardHandler>();
-            if (diceModifierCard != null)
+            DieSideHandler handler = child.GetComponent<DieSideHandler>();
+            if (handler != null)
             {
-                diceModifierCard.UnstageDiceModifierCard(card);
+                if (handler == stagedDieSide)
+                {
+                    child.DOScale(1.1f, 0.2f).SetEase(Ease.OutBack);
+                }
+                else
+                {
+                    child.DOScale(1f, 0.2f).SetEase(Ease.OutBack);
+                }
             }
         }
-
-        stagedDiceModifierCard = card;
     }
-    
-    public DiceModifierCardHandler GetStagedDiceModifierCard()
+
+    public DieSideHandler GetStagedDieSide()
     {
-        return stagedDiceModifierCard;
+        return stagedDieSide;
+    }
+
+    public void ToggleEditButtons(bool isVisible)
+    {
+        if (addModifierButton != null)
+        {
+            addModifierButton.SetActive(isVisible);
+            addModifierButton.GetComponent<Button>().interactable = isVisible;
+        }
+
+        if (removeModifierButton != null && stagedDieSide != null && stagedDieSide.GetDieSide().HasModifier() && isVisible)
+        {
+            removeModifierButton.SetActive(true);
+            removeModifierButton.GetComponent<Button>().interactable = true;
+        }
+        else if (removeModifierButton != null)
+        {
+            removeModifierButton.SetActive(false);
+            removeModifierButton.GetComponent<Button>().interactable = false;
+        }
+    }
+
+    public void RemoveModifierFromStagedDieSide()
+    {
+        if (stagedDieSide != null && stagedDieSide.GetDieSide().HasModifier())
+        {
+            DiceModifier modifier = stagedDieSide.GetDieSide().modifier;
+            diceModifierInventory.AddItem(modifier, 1);
+            stagedDieSide.GetDieSide().modifier = null;
+            stagedDieSide.SetDieSide(stagedDieSide.GetDieSide(), characterMenuHandler, diceModifierInventory);
+            ToggleEditButtons(true);
+            characterMenuHandler.UpdateModifierDescription(null);
+            SetInventory();
+        }
+    }
+
+    public void ToggleModifierCanvasGroup(bool value)
+    {
+        if (modifierCanvasGroup != null)
+        {
+            modifierCanvasGroup.interactable = value;
+            modifierCanvasGroup.blocksRaycasts = value;
+        }
     }
 }

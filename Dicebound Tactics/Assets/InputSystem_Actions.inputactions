@@ -579,7 +579,7 @@
                 {
                     "name": "",
                     "id": "6c545f34-3b4d-4265-b831-4625b5ce1e06",
-                    "path": "<Keyboard>/1",
+                    "path": "<Gamepad>/buttonWest",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",

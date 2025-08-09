@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI.ProceduralImage;
 using DG.Tweening;
 
-public class DiceModifierCardHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class DiceModifierCardHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler
 {
   [SerializeField] private TextMeshProUGUI modifierNameText;
   [SerializeField] private TextMeshProUGUI modifierValueText;
@@ -39,6 +39,14 @@ public class DiceModifierCardHandler : MonoBehaviour, IBeginDragHandler, IDragHa
     originalColor = proceduralImage.color;
   }
 
+  public void OnPointerEnter(PointerEventData eventData)
+  {
+    if (characterMenuHandler != null)
+    {
+      characterMenuHandler.UpdateModifierDescription(diceModifier);
+    }
+  }
+
   public void OnBeginDrag(PointerEventData eventData)
   {
     // parentAfterDrag = transform.parent;
@@ -63,8 +71,8 @@ public class DiceModifierCardHandler : MonoBehaviour, IBeginDragHandler, IDragHa
   {
     this.diceModifier = diceModifier;
     this.characterMenuHandler = characterMenuHandler;
-    this.canvasParent = characterMenuHandler.transform.parent;
     this.characterMenuDiceCustomizationHandler = characterMenuDiceCustomizationHandler;
+    canvasParent = characterMenuHandler.transform.parent;
 
     modifierNameText.text = diceModifier.name;
     modifierValueText.text = "x" + quantity.ToString();
@@ -72,24 +80,23 @@ public class DiceModifierCardHandler : MonoBehaviour, IBeginDragHandler, IDragHa
     diceModifierButton.onClick.AddListener(() =>
     {
       EventManager.TriggerMenuButtonPressed();
-      characterMenuHandler.UpdateModifierDescription(diceModifier);
-      characterMenuDiceCustomizationHandler.SetStagedDiceModifierCard(this);
-      proceduralImage.color = Color.blue;
-      transform.DOScale(1.1f, 0.2f).SetEase(Ease.OutBack);
+      transform.DOScale(1.1f, 0.2f).SetEase(Ease.OutBack).OnComplete(() =>
+      {
+        transform.DOScale(1f, 0.2f).SetEase(Ease.OutBack);
+      });
+
+      if(characterMenuDiceCustomizationHandler != null)
+      {
+        if(characterMenuDiceCustomizationHandler.HasStagedDieSide())
+        {
+          characterMenuDiceCustomizationHandler.GetStagedDieSide().ApplyModifierToDiceSide(diceModifier);
+        }
+      }
     });
   }
 
   public DiceModifier GetDiceModifier()
   {
     return diceModifier;
-  }
-  
-  public void UnstageDiceModifierCard(DiceModifierCardHandler card)
-  {
-    if (card != null && card != this)
-    {
-      proceduralImage.color = originalColor;
-      transform.DOScale(1f, 0.2f).SetEase(Ease.InBack);
-    }
   }
 }

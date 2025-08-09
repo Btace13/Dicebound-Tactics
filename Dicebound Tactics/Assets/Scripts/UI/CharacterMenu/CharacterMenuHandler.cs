@@ -70,6 +70,7 @@ public class CharacterMenuHandler : MonoBehaviour
     characterMenuUI.alpha = 1f;
     characterMenuUI.interactable = true;
     characterMenuUI.blocksRaycasts = true;
+    OpenCharacterSelector();
   }
 
   public void HideCharacterMenu()
