@@ -78,6 +78,7 @@ public class CharacterMenuHandler : MonoBehaviour
     characterMenuUI.alpha = 0f;
     characterMenuUI.interactable = false;
     characterMenuUI.blocksRaycasts = false;
+    CloseCharacterSelector();
   }
 
   public void OpenCharacterSelector()
