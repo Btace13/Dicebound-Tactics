@@ -14,4 +14,5 @@ public class AudioConfigProfile : ScriptableObject
     public AudioClip enemyTurnStart;
     public AudioClip gameOver;
     public AudioClip modifierApplied;
+    public AudioClip attackedBlocked;
 }

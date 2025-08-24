@@ -11,6 +11,7 @@ public class AudioManager : MonoBehaviour
     EventManager.OnMenuButtonPressed += HandleMenuButtonPressed;
     EventManager.OnSuccessButtonPressed += HandleSuccessButtonPressed;
     EventManager.OnModifierApplied += HandleModifierApplied;
+    EventManager.OnAttackBlocked += HandleAttackBlocked;
   }
 
   private void OnDisable()
@@ -18,6 +19,7 @@ public class AudioManager : MonoBehaviour
     EventManager.OnMenuButtonPressed -= HandleMenuButtonPressed;
     EventManager.OnSuccessButtonPressed -= HandleSuccessButtonPressed;
     EventManager.OnModifierApplied -= HandleModifierApplied;
+    EventManager.OnAttackBlocked -= HandleAttackBlocked;
   }
 
   private void HandleMenuButtonPressed()
@@ -35,12 +37,20 @@ public class AudioManager : MonoBehaviour
       audioSource.PlayOneShot(audioConfig.successButtonPressed);
     }
   }
-  
+
   private void HandleModifierApplied(DiceModifier modifier, Entity user)
   {
     if (audioConfig.modifierApplied != null && user is CharacterManager character)
     {
       audioSource.PlayOneShot(audioConfig.modifierApplied);
+    }
+  }
+
+  private void HandleAttackBlocked()
+  {
+    if (audioConfig.attackedBlocked != null)
+    {
+      audioSource.PlayOneShot(audioConfig.attackedBlocked);
     }
   }
 }

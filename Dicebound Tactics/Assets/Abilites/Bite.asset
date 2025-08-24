@@ -17,8 +17,15 @@ MonoBehaviour:
   notifcationMessage: is preparing to lunge.
   icon: {fileID: -6941875414966023432, guid: bfe016ef2a04aa04d957b688986f78b9, type: 3}
   apCost: 2
+  cooldown: -1
   abilityType: 2
   requiresMovement: 1
+  projectileData: {fileID: 0}
   range: 4
   unlockLevel: 1
   damageAmount: 20
+  defensiveWindowDuration: 1.5
+  buttonSequenceTimeLimit: 1.5
+  requiredButtonSequence:
+  - LeftGamepad
+  - RightGamepad

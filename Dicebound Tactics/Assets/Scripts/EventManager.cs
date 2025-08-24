@@ -20,6 +20,7 @@ public class EventManager : MonoBehaviour
   public static event Action<bool> OnSelectingATarget;
   public static event Action<DiceModifier, Entity> OnModifierApplied;
   public static event Action<Entity> OnEntityDied;
+  public static event Action OnAttackBlocked;
 
   // UI Events
   public static event Action OnMenuButtonPressed;
@@ -110,6 +111,10 @@ public class EventManager : MonoBehaviour
   public static void TriggerCharacterMenuClosed()
   {
     OnCharacterMenuClosed?.Invoke();
+  }
+  public static void TriggerAttackBlocked()
+  {
+    OnAttackBlocked?.Invoke();
   }
 }
 

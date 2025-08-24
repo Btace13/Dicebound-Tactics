@@ -123,7 +123,7 @@ public class ProjectileManager : MonoBehaviour
 		// Process results
 		for (int i = 0; i < collisionResults.Length; i++)
 		{
-			Debug.Log($"SphereCast Result {i}: {collisionResults[i].collider?.name}");
+			// Debug.Log($"SphereCast Result {i}: {collisionResults[i].collider?.name}");
 			HandleProjectileCollision(activeProjectiles[i], collisionResults[i]);
 		}
 
