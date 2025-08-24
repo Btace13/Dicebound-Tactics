@@ -1935,6 +1935,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ButtonPromptPrefab
       objectReference: {fileID: 0}
+    - target: {fileID: 3991507209841228720, guid: f9765ec9d7a4147a391fcac25a33350e, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -298569682275349766, guid: 9f0dd4d919a914b45bf1b3cc6044857b, type: 3}
     - target: {fileID: 4221031966220411045, guid: f9765ec9d7a4147a391fcac25a33350e, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5

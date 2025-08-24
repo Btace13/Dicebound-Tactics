@@ -261,11 +261,18 @@ public class DefensiveTimingUI : MonoBehaviour
   {
       if (index < currentButtonPrompts.Count)
       {
-          Image buttonImage = currentButtonPrompts[index].GetComponent<Image>();
-          if (buttonImage != null)
+          GameObject buttonToRemove = currentButtonPrompts[index];
+          if (buttonToRemove != null)
           {
-              buttonImage.color = correctButtonColor;
-              buttonImage.transform.DOPunchScale(Vector3.one * 0.2f, 0.3f);
+              // Animate the button before removing it
+              buttonToRemove.transform.DOPunchScale(Vector3.one * 0.2f, 0.1f).OnComplete(() =>
+              {
+                  buttonToRemove.GetComponent<ButtonPrompt>()?.SetColors(correctButtonColor, Color.white);
+              });
+              
+              // Remove from our list immediately to prevent accessing it again
+              currentButtonPrompts[index] = null;
+              Debug.Log($"DefensiveTimingUI: Marked button {index} for removal");
           }
       }
   }
@@ -274,10 +281,13 @@ public class DefensiveTimingUI : MonoBehaviour
   {
       foreach (GameObject prompt in currentButtonPrompts)
       {
-          Image buttonImage = prompt.GetComponent<Image>();
-          if (buttonImage != null)
+          if (prompt != null) // Check for null since some buttons might have been removed
           {
-              buttonImage.color = neutralColor;
+              Image buttonImage = prompt.GetComponent<Image>();
+              if (buttonImage != null)
+              {
+                  buttonImage.color = neutralColor;
+              }
           }
       }
   }
