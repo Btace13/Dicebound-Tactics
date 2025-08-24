@@ -16,10 +16,10 @@ public class DefensiveTimingUI : MonoBehaviour
   [SerializeField] private GameObject buttonPromptPrefab;
   
   [Header("Button Icons")]
-  [SerializeField] private Sprite leftGamepadIcon;
-  [SerializeField] private Sprite rightGamepadIcon;
-  [SerializeField] private Sprite topGamepadIcon;
-  [SerializeField] private Sprite bottomGamepadIcon;
+  [SerializeField] private Sprite leftDirectionIcon;   // W or D-pad Up
+  [SerializeField] private Sprite rightDirectionIcon; // S or D-pad Down  
+  [SerializeField] private Sprite upDirectionIcon;    // A or D-pad Left
+  [SerializeField] private Sprite downDirectionIcon;  // D or D-pad Right
   
   [Header("Visual Feedback")]
   [SerializeField] private Color successColor = Color.green;
@@ -29,6 +29,9 @@ public class DefensiveTimingUI : MonoBehaviour
 
   private List<GameObject> currentButtonPrompts = new List<GameObject>();
   private Coroutine activeTimingCoroutine;
+  
+  // Movement tracking for detecting new presses vs holds
+  private bool wasMovingUp, wasMovingDown, wasMovingLeft, wasMovingRight;
   
   public static DefensiveTimingUI Instance { get; private set; }
   
@@ -101,6 +104,9 @@ public class DefensiveTimingUI : MonoBehaviour
   {
       // Show the panel
       defensivePromptPanel.SetActive(true);
+      
+      // Reset movement tracking
+      wasMovingUp = wasMovingDown = wasMovingLeft = wasMovingRight = false;
       
       // Setup initial state
       SetupButtonPrompts(buttonSequence);
@@ -340,18 +346,22 @@ public class DefensiveTimingUI : MonoBehaviour
       
       switch (buttonName)
       {
-          case "LeftGamepad":
-              if (leftGamepadIcon == null) Debug.LogWarning("DefensiveTimingUI: leftGamepadIcon is not assigned!");
-              return leftGamepadIcon;
-          case "RightGamepad":
-              if (rightGamepadIcon == null) Debug.LogWarning("DefensiveTimingUI: rightGamepadIcon is not assigned!");
-              return rightGamepadIcon;
-          case "TopGamepad":
-              if (topGamepadIcon == null) Debug.LogWarning("DefensiveTimingUI: topGamepadIcon is not assigned!");
-              return topGamepadIcon;
-          case "BottomGamepad":
-              if (bottomGamepadIcon == null) Debug.LogWarning("DefensiveTimingUI: bottomGamepadIcon is not assigned!");
-              return bottomGamepadIcon;
+          case "Up":
+          case "W":
+              if (upDirectionIcon == null) Debug.LogWarning("DefensiveTimingUI: upDirectionIcon is not assigned!");
+              return upDirectionIcon;
+          case "Down":
+          case "S":
+              if (downDirectionIcon == null) Debug.LogWarning("DefensiveTimingUI: downDirectionIcon is not assigned!");
+              return downDirectionIcon;
+          case "Left":
+          case "A":
+              if (leftDirectionIcon == null) Debug.LogWarning("DefensiveTimingUI: leftDirectionIcon is not assigned!");
+              return leftDirectionIcon;
+          case "Right":
+          case "D":
+              if (rightDirectionIcon == null) Debug.LogWarning("DefensiveTimingUI: rightDirectionIcon is not assigned!");
+              return rightDirectionIcon;
           default:
               Debug.LogWarning($"DefensiveTimingUI: Unknown button name: '{buttonName}'");
               return null;
@@ -360,16 +370,38 @@ public class DefensiveTimingUI : MonoBehaviour
   
   private bool WasButtonPressed(InputSystem_Actions inputActions, string buttonName)
   {
+      Vector2 moveInput = inputActions.Player.Move.ReadValue<Vector2>();
+      
       switch (buttonName)
       {
-          case "LeftGamepad":
-              return inputActions.Player.LeftGamepad.WasPressedThisFrame();
-          case "RightGamepad":
-              return inputActions.Player.RightGamepad.WasPressedThisFrame();
-          case "TopGamepad":
-              return inputActions.Player.TopGamepad.WasPressedThisFrame();
-          case "BottomGamepad":
-              return inputActions.Player.BottomGamepad.WasPressedThisFrame();
+          case "Up":
+          case "W":
+              bool currentlyUp = moveInput.y > 0.5f;
+              bool wasUpPressed = currentlyUp && !wasMovingUp;
+              wasMovingUp = currentlyUp;
+              return wasUpPressed;
+              
+          case "Down":
+          case "S":
+              bool currentlyDown = moveInput.y < -0.5f;
+              bool wasDownPressed = currentlyDown && !wasMovingDown;
+              wasMovingDown = currentlyDown;
+              return wasDownPressed;
+              
+          case "Left":
+          case "A":
+              bool currentlyLeft = moveInput.x < -0.5f;
+              bool wasLeftPressed = currentlyLeft && !wasMovingLeft;
+              wasMovingLeft = currentlyLeft;
+              return wasLeftPressed;
+              
+          case "Right":
+          case "D":
+              bool currentlyRight = moveInput.x > 0.5f;
+              bool wasRightPressed = currentlyRight && !wasMovingRight;
+              wasMovingRight = currentlyRight;
+              return wasRightPressed;
+              
           default:
               return false;
       }
@@ -377,23 +409,29 @@ public class DefensiveTimingUI : MonoBehaviour
   
   private bool AnyUnexpectedButtonPressed(InputSystem_Actions inputActions, string expectedButton)
   {
-      bool leftPressed = inputActions.Player.LeftGamepad.WasPressedThisFrame();
-      bool rightPressed = inputActions.Player.RightGamepad.WasPressedThisFrame();
-      bool topPressed = inputActions.Player.TopGamepad.WasPressedThisFrame();
-      bool bottomPressed = inputActions.Player.BottomGamepad.WasPressedThisFrame();
+      Vector2 moveInput = inputActions.Player.Move.ReadValue<Vector2>();
+      
+      bool upPressed = moveInput.y > 0.5f && !wasMovingUp;
+      bool downPressed = moveInput.y < -0.5f && !wasMovingDown;
+      bool leftPressed = moveInput.x < -0.5f && !wasMovingLeft;
+      bool rightPressed = moveInput.x > 0.5f && !wasMovingRight;
 
       switch (expectedButton)
       {
-          case "LeftGamepad":
-              return rightPressed || topPressed || bottomPressed;
-          case "RightGamepad":
-              return leftPressed || topPressed || bottomPressed;
-          case "TopGamepad":
-              return leftPressed || rightPressed || bottomPressed;
-          case "BottomGamepad":
-              return leftPressed || rightPressed || topPressed;
+          case "Up":
+          case "W":
+              return downPressed || leftPressed || rightPressed;
+          case "Down":
+          case "S":
+              return upPressed || leftPressed || rightPressed;
+          case "Left":
+          case "A":
+              return upPressed || downPressed || rightPressed;
+          case "Right":
+          case "D":
+              return upPressed || downPressed || leftPressed;
           default:
-              return leftPressed || rightPressed || topPressed || bottomPressed;
+              return upPressed || downPressed || leftPressed || rightPressed;
       }
-    }
+  }
 }

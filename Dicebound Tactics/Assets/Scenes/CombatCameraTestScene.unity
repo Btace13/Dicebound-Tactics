@@ -9391,10 +9391,10 @@ MonoBehaviour:
   timerFillBar: {fileID: 1633647294}
   buttonPromptContainer: {fileID: 1635017014}
   buttonPromptPrefab: {fileID: 435471165287905297, guid: f9765ec9d7a4147a391fcac25a33350e, type: 3}
-  leftGamepadIcon: {fileID: -3607151359317351652, guid: 95a96e5e44efe41e69bfab6b2cd61fe0, type: 3}
-  rightGamepadIcon: {fileID: -4797783203767385232, guid: db54f525157414de99c5d35154e5d565, type: 3}
-  topGamepadIcon: {fileID: 2349417091975035521, guid: d803ca2da4e4e40039287e176ed2b709, type: 3}
-  bottomGamepadIcon: {fileID: 5154032583816780984, guid: 1cc184b376b6b4cffbc54a09fe3a3c30, type: 3}
+  leftDirectionIcon: {fileID: -3607151359317351652, guid: 3488d5afa73624147ab6945c7034470d, type: 3}
+  rightDirectionIcon: {fileID: -4797783203767385232, guid: db54f525157414de99c5d35154e5d565, type: 3}
+  upDirectionIcon: {fileID: 2349417091975035521, guid: d803ca2da4e4e40039287e176ed2b709, type: 3}
+  downDirectionIcon: {fileID: 5154032583816780984, guid: 1cc184b376b6b4cffbc54a09fe3a3c30, type: 3}
   successColor: {r: 0, g: 1, b: 0, a: 1}
   failureColor: {r: 1, g: 0, b: 0, a: 1}
   neutralColor: {r: 1, g: 1, b: 1, a: 1}

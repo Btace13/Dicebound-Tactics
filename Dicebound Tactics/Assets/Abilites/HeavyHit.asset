@@ -27,5 +27,5 @@ MonoBehaviour:
   defensiveWindowDuration: 1
   buttonSequenceTimeLimit: 1
   requiredButtonSequence:
-  - LeftGamepad
-  - RightGamepad
+  - Right
+  - Left
