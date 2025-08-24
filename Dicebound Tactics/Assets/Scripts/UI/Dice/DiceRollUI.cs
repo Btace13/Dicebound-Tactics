@@ -22,7 +22,6 @@ public class DiceRollUI : MonoBehaviour
 
   public void StartRoll(Action<int> callback = null)
   {
-    Debug.Log("Starting dice roll for " + entity.name);
     onRollComplete = callback;
     StartCoroutine(RollDiceCoroutine());
   }
@@ -44,7 +43,7 @@ public class DiceRollUI : MonoBehaviour
 
     finalRoll = UnityEngine.Random.Range(1, maxRollValue + 1);
     diceText.text = finalRoll.ToString();
-    Debug.Log("Final roll for " + entity.name + ": " + finalRoll);
+    // Debug.Log("Final roll for " + entity.name + ": " + finalRoll);
     onRollComplete?.Invoke(finalRoll);
   }
 }

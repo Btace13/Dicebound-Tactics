@@ -20,4 +20,4 @@ MonoBehaviour:
   enemyTurnStart: {fileID: 0}
   gameOver: {fileID: 0}
   modifierApplied: {fileID: 8300000, guid: 392320453da1f6b4881da0a03f842fb9, type: 3}
-  attackedBlocked: {fileID: 8300000, guid: 5b97c1a3a3ee1420aa6e92d5cc1e1a6b, type: 3}
+  attackedBlocked: {fileID: 8300000, guid: 5a8b0127c9e91409c9b61d31a906446a, type: 3}

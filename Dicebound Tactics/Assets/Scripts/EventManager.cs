@@ -22,6 +22,13 @@ public class EventManager : MonoBehaviour
   public static event Action<Entity> OnEntityDied;
   public static event Action OnAttackBlocked;
 
+  // Defensive Timing Events
+  public static event Action<Entity, string[], float, System.Action<bool>> OnDefensivePromptRequested;
+  public static event Action OnDefensivePromptHidden;
+  public static event Action<string> OnDefensiveButtonPressed;
+  public static event Action OnDefensiveSequenceCompleted;
+  public static event Action OnDefensiveSequenceFailed;
+
   // UI Events
   public static event Action OnMenuButtonPressed;
   public static event Action OnSuccessButtonPressed;
@@ -115,6 +122,26 @@ public class EventManager : MonoBehaviour
   public static void TriggerAttackBlocked()
   {
     OnAttackBlocked?.Invoke();
+  }
+  public static void TriggerDefensivePromptRequested(Entity target, string[] buttonSequence, float timeLimit, System.Action<bool> onComplete)
+  {
+    OnDefensivePromptRequested?.Invoke(target, buttonSequence, timeLimit, onComplete);
+  }
+  public static void TriggerDefensivePromptHidden()
+  {
+    OnDefensivePromptHidden?.Invoke();
+  }
+  public static void TriggerDefensiveButtonPressed(string buttonName)
+  {
+    OnDefensiveButtonPressed?.Invoke(buttonName);
+  }
+  public static void TriggerDefensiveSequenceCompleted()
+  {
+    OnDefensiveSequenceCompleted?.Invoke();
+  }
+  public static void TriggerDefensiveSequenceFailed()
+  {
+    OnDefensiveSequenceFailed?.Invoke();
   }
 }
 

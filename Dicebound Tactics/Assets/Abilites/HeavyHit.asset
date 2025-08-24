@@ -24,8 +24,8 @@ MonoBehaviour:
   range: 3
   unlockLevel: 1
   damageAmount: 60
-  defensiveWindowDuration: 1.5
-  buttonSequenceTimeLimit: 1.5
+  defensiveWindowDuration: 1
+  buttonSequenceTimeLimit: 1
   requiredButtonSequence:
   - LeftGamepad
   - RightGamepad

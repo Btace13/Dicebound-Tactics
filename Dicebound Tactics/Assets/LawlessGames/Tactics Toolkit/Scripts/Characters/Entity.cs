@@ -50,6 +50,7 @@ namespace TacticsToolkit
         public CharacterStats statsContainer;
         [HideInInspector]
         public int initiativeValue;
+        [SerializeField] GameObject blockVfxPrefab;
 
         [HideInInspector]
         public bool isAlive = true;
@@ -733,6 +734,15 @@ namespace TacticsToolkit
         {
             int healAmount = Mathf.RoundToInt((percent / 100f) * statsContainer.Health.statValue);
             HealEntity(healAmount);
+        }
+
+        public void PlayBlockVFX()
+        {
+            if (blockVfxPrefab != null)
+            {
+                GameObject blockVfxInstance = Instantiate(blockVfxPrefab, transform.position, Quaternion.identity);
+                Destroy(blockVfxInstance, 1f);
+            }
         }
     }
 }

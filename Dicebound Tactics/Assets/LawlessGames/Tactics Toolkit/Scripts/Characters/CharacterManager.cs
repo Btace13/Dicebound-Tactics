@@ -17,7 +17,7 @@ namespace TacticsToolkit
         private void Awake()
         {
             OverworldCharacterController = GetComponent<OverworldCharacterController>();
-            
+
             LoadOrCreateStats();
             LoadOrCreateDie();
         }

@@ -114,16 +114,16 @@ public class DamageAbilitySO : AbilitySO
         // Calculate defensive window timing
         float defensiveWindowStart = Mathf.Max(0, clipTime - defensiveWindowDuration);
         bool defensiveActionSucceeded = false;
+        bool damageApplied = false; // Track if damage has been applied to prevent double application
 
         // Play attack animation and wait for completion
         bool animDone = false;
-        bool hitTriggered = false;
 
         if (animationHandler == null)
         {
             // No animation, apply damage immediately
             ApplyDamage(damageAmount, user, target, false);
-            hitTriggered = true;
+            damageApplied = true;
             animDone = true;
             onDefensiveResult?.Invoke(false);
         }
@@ -131,12 +131,8 @@ public class DamageAbilitySO : AbilitySO
         {
             animationHandler.UseAbility(this, time =>
             {
-                if (!hitTriggered)
-                {
-                    // Apply damage with defensive result
-                    ApplyDamage(damageAmount, user, target, defensiveActionSucceeded);
-                    hitTriggered = true;
-                }
+                // Don't apply damage immediately - wait for defensive window to complete
+                // The damage will be applied after the defensive timing finishes
             }, () => { animDone = true; });
 
             // Start defensive timing window if the target is a player character
@@ -150,16 +146,33 @@ public class DamageAbilitySO : AbilitySO
                     {
                         defensiveActionSucceeded = success;
                         onDefensiveResult?.Invoke(success);
+                        
+                        // Apply damage after defensive window completes
+                        if (!damageApplied)
+                        {
+                            ApplyDamage(damageAmount, user, target, defensiveActionSucceeded);
+                            damageApplied = true;
+                        }
                     }));
                 }
                 else
                 {
                     onDefensiveResult?.Invoke(false);
+                    if (!damageApplied)
+                    {
+                        ApplyDamage(damageAmount, user, target, false);
+                        damageApplied = true;
+                    }
                 }
             }
             else
             {
                 onDefensiveResult?.Invoke(false);
+                if (!damageApplied)
+                {
+                    ApplyDamage(damageAmount, user, target, false);
+                    damageApplied = true;
+                }
             }
 
             if (ProjectileManager.Instance != null && projectileData != null)
@@ -207,10 +220,11 @@ public class DamageAbilitySO : AbilitySO
         }
         if (!animDone)
         {
-            if (!hitTriggered) 
+            if (!damageApplied) 
             {
                 ApplyDamage(damageAmount, user, target, defensiveActionSucceeded);
                 onDefensiveResult?.Invoke(defensiveActionSucceeded);
+                damageApplied = true;
             }
         }
     }
@@ -227,7 +241,6 @@ public class DamageAbilitySO : AbilitySO
         if (defensiveActionSucceeded)
         {
             finalDamage = 0; // Reduce damage to 0 for successful defense
-            EventManager.TriggerAttackBlocked();
             Debug.Log($"Defensive action succeeded! Damage reduced from {amount} to {finalDamage}");
         }
 
@@ -247,37 +260,42 @@ public class DamageAbilitySO : AbilitySO
             yield return new WaitForSeconds(delayBeforeWindow);
         }
 
-        // Try to find the UI system
-        var defensiveUI = Object.FindFirstObjectByType(System.Type.GetType("DefensiveTimingUI"));
+        // Use the EventManager to request defensive prompt
+        bool sequenceCompleted = false;
+        bool responseReceived = false;
         
-        if (defensiveUI != null)
-        {
-            bool sequenceCompleted = false;
-            
-            // Use reflection to call ShowDefensivePrompt method
-            var showMethod = defensiveUI.GetType().GetMethod("ShowDefensivePrompt");
-            if (showMethod != null)
+        // Trigger the defensive prompt event
+        EventManager.TriggerDefensivePromptRequested(
+            target,
+            requiredButtonSequence, 
+            buttonSequenceTimeLimit, 
+            (success) => 
             {
-                System.Action<bool> callback = (success) => sequenceCompleted = success;
-                showMethod.Invoke(defensiveUI, new object[] { requiredButtonSequence, buttonSequenceTimeLimit, callback });
-                
-                // Wait for the UI sequence to complete
-                float maxWaitTime = buttonSequenceTimeLimit + 1f; // Add buffer time
-                float waitTimer = 0f;
-                
-                while (waitTimer < maxWaitTime)
-                {
-                    waitTimer += Time.deltaTime;
-                    yield return null;
-                }
-                
-                onComplete?.Invoke(sequenceCompleted);
-                yield break;
+                sequenceCompleted = success;
+                responseReceived = true;
             }
+        );
+        
+        // Wait for the UI sequence to complete or timeout
+        float maxWaitTime = buttonSequenceTimeLimit + 2f; // Add buffer time for UI animations
+        float waitTimer = 0f;
+        
+        while (!responseReceived && waitTimer < maxWaitTime)
+        {
+            waitTimer += Time.deltaTime;
+            yield return null;
         }
         
-        // Fallback to the original console-based system
-        yield return HandleDefensiveTimingFallback(target, onComplete);
+        // If no UI system responded, fall back to console-based system
+        if (!responseReceived)
+        {
+            Debug.Log("No UI system responded to defensive prompt - using fallback system");
+            yield return HandleDefensiveTimingFallback(target, onComplete);
+        }
+        else
+        {
+            onComplete?.Invoke(sequenceCompleted);
+        }
     }
 
     /// <summary>
