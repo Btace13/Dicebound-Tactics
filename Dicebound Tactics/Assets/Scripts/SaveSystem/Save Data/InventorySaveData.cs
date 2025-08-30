@@ -34,12 +34,13 @@ public class InventorySaveData : SaveData
             return;
         }
 
-        items = inventory.combatItems.Keys.ToArray();
+        var validItems = inventory.GetValidItems();
+        items = validItems.Keys.ToArray();
         itemQuantities = new int[items.Length];
 
         for (int i = 0; i < items.Length; i++)
         {
-            itemQuantities[i] = inventory.combatItems[items[i]];
+            itemQuantities[i] = validItems[items[i]];
         }
     }
 }

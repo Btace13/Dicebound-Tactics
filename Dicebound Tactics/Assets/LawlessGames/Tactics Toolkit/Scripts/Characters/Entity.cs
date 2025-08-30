@@ -33,7 +33,7 @@ namespace TacticsToolkit
 
         [Header("Inventory")]
         public CombatItemInventory inventory;
-        public List<CombatItem> combatItems => inventory.combatItems.Keys;
+        public List<CombatItem> combatItems => inventory?.combatItems?.Where(e => e?.item != null).Select(e => e.item).ToList() ?? new List<CombatItem>();
 
         [Header("Level")]
         public int level;
@@ -59,6 +59,8 @@ namespace TacticsToolkit
         public HealthBarUI healthBar;
         [HideInInspector]
         public int previousTurnCost = -1;
+        [HideInInspector]
+        public bool hasUsedItemThisTurn = false;
 
         private bool isTargetted = false;
 
@@ -67,7 +69,7 @@ namespace TacticsToolkit
         private int initiativeBase = 1000;
         private float i;
         private bool nextAbilityFree = false;
-        private Dictionary<string, float> tempModifiers = new();
+        public Dictionary<string, float> tempModifiers = new();
         private float healOnNextHit = 0f;
         private bool isTaunting = false;
         private int tauntTurnsRemaining = 0;
@@ -463,6 +465,81 @@ namespace TacticsToolkit
                 Stat value = (Stat)item.GetValue(statsContainer);
 
                 value.TickStatMods();
+            }
+            
+            // Reset item usage tracking for this turn
+            hasUsedItemThisTurn = false;
+        }
+
+        /// <summary>
+        /// Checks if this entity can use an item this turn (for single-item-per-turn limitations)
+        /// </summary>
+        public bool CanUseItemThisTurn()
+        {
+            return !hasUsedItemThisTurn;
+        }
+
+        /// <summary>
+        /// Manually reset the item usage flag (useful for special abilities or testing)
+        /// </summary>
+        public void ResetItemUsageThisTurn()
+        {
+            hasUsedItemThisTurn = false;
+        }
+
+        /// <summary>
+        /// Use a combat item on a target entity
+        /// Handles all validation, inventory management, and usage tracking
+        /// </summary>
+        /// <param name="item">The combat item to use</param>
+        /// <param name="target">The target entity</param>
+        /// <returns>True if the item was successfully used</returns>
+        public bool UseCombatItem(CombatItem item, Entity target)
+        {
+            if (item == null)
+            {
+                Debug.LogWarning($"{name} tried to use a null item");
+                return false;
+            }
+
+            if (target == null)
+            {
+                Debug.LogWarning($"{name} tried to use {item.ItemName} on a null target");
+                return false;
+            }
+
+            // Check if the item can be used
+            if (!item.CanUseOn(this, target))
+            {
+                Debug.LogWarning($"{name} cannot use {item.ItemName} on {target.name}");
+                return false;
+            }
+
+            // Check if we have the item in inventory
+            if (inventory == null || !inventory.HasItem(item))
+            {
+                Debug.LogWarning($"{name} does not have {item.ItemName} in inventory");
+                return false;
+            }
+
+            // Attempt to use the item
+            bool itemUsed = item.UseItem(this, target);
+
+            if (itemUsed)
+            {
+                // Remove the item from inventory
+                inventory.RemoveItem(item, 1);
+                
+                // Mark that this character has used an item this turn
+                hasUsedItemThisTurn = true;
+                
+                Debug.Log($"{name} successfully used {item.ItemName} on {target.name}");
+                return true;
+            }
+            else
+            {
+                Debug.LogWarning($"{name} failed to use {item.ItemName} on {target.name}");
+                return false;
             }
         }
 

@@ -126,6 +126,7 @@ public class TurnDebuggerWindow : EditorWindow
             EditorGUILayout.LabelField($"AP: {entity.GetStat(Stats.ActionPoints).statValue}");
             EditorGUILayout.LabelField($"Rollover AP: {entity.GetStat(Stats.CarriedOverActionPoints).statValue}");
             EditorGUILayout.LabelField($"Alive: {(entity.isAlive ? "Yes" : "No")}");
+            EditorGUILayout.LabelField($"Used Item This Turn: {(entity.hasUsedItemThisTurn ? "Yes" : "No")}");
         }
 
         EditorGUILayout.Space();

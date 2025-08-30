@@ -63,6 +63,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buttonText: {fileID: 5443045920692941998}
   combatItem: {fileID: 0}
+  buttonImage: {fileID: 0}
+  itemCostText: {fileID: 0}
+  itemDescriptionText: {fileID: 0}
+  itemQuantityText: {fileID: 0}
+  inputAction: {fileID: 0}
 --- !u!114 &3938458765883943269
 MonoBehaviour:
   m_ObjectHideFlags: 0

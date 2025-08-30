@@ -129,9 +129,42 @@ public class CombatManager : MonoBehaviour
             return;
         }
 
-        selectionController.ChangeSelectionType(false); // Assuming items target allies
-        selectionController.SetSelectableTargetCount(1); // Assuming items can target one entity at a time
-        selectionController.ToggleEntitySelection(turnManager.playerUnits[0], false); // Assuming items target allies
+        _selectedItem = item;
+
+        // Determine targeting based on item properties
+        bool targetAllies = item.canTargetAllies || item.canTargetSelf;
+        bool targetEnemies = item.canTargetEnemies;
+        
+        // For revive items, check if they can target dead allies
+        if (item.canTargetDeadAllies)
+        {
+            targetAllies = true;
+            targetEnemies = false;
+        }
+
+        // Set up selection controller based on item targeting
+        if (targetAllies && targetEnemies)
+        {
+            // Can target both allies and enemies
+            selectionController.ChangeSelectionType(true); // Allow both
+        }
+        else if (targetEnemies)
+        {
+            // Target enemies only
+            selectionController.ChangeSelectionType(true); // Target enemies
+        }
+        else
+        {
+            // Target allies only (default)
+            selectionController.ChangeSelectionType(false); // Target allies
+        }
+
+        selectionController.SetSelectableTargetCount(1); // Items typically target one entity at a time
+        
+        // Start target selection
+        EventManager.TriggerSelectingATarget(true);
+        
+        Debug.Log($"Item {item.ItemName} selected. Targeting mode: Allies={targetAllies}, Enemies={targetEnemies}");
     }
 
     public void ExecuteAction()
@@ -205,10 +238,12 @@ public class CombatManager : MonoBehaviour
                 }
                 else if (_selectedItem != null)
                 {
-                    // Use the item on the target
-                    if (target is CharacterManager character)
+                    // Use the new centralized item usage method
+                    bool itemUsed = currentUnit.UseCombatItem(_selectedItem, target);
+                    
+                    if (!itemUsed)
                     {
-                        //character.UseItem(_selectedItem);
+                        Debug.LogWarning($"{currentUnit.name} failed to use {_selectedItem.ItemName} on {target.name}");
                     }
                 }
                 else // basic attack

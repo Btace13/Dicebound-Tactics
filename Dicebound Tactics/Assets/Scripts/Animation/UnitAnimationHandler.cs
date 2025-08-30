@@ -41,6 +41,10 @@ public class UnitAnimationHandler : MonoBehaviour
 		{
 			AnimationData = ScriptableObject.Instantiate(AnimationData);
 		}
+
+		#if UNITY_EDITOR || DEVELOPMENT_BUILD
+			Animancer.OptionalWarning.UnusedNode.Disable();
+		#endif
 	}
 
 	private void Start()

@@ -2,6 +2,7 @@ using UnityEngine;
 using TacticsToolkit;
 using System.Collections.Generic;
 using UnityEngine.Events;
+using System.Linq;
 
 public class ItemPanel : CombatPanel
 {
@@ -27,34 +28,63 @@ public class ItemPanel : CombatPanel
             button.gameObject.SetActive(false);
         }
 
-        for (int i = 0; i < itemButtons.Count; i++)
+        // Get valid items (excluding null entries)
+        var validItems = character.inventory.GetValidItems();
+        var itemList = validItems.ToList();
+
+        for (int i = 0; i < itemButtons.Count && i < itemList.Count; i++)
         {
-            if (i < character.inventory.combatItems.Count)
+            var itemEntry = itemList[i];
+            CombatItem currentItem = itemEntry.Key;
+            int itemCount = itemEntry.Value;
+
+            // Additional null check
+            if (currentItem == null)
             {
-                // Create a local copy to capture in the closure
-                CombatItem currentItem = character.inventory.combatItems.Keys[i];
-                int itemCount = character.inventory.combatItems[currentItem];
+                Debug.LogWarning($"Skipping null item at index {i} in item panel.");
+                continue;
+            }
 
-                // Set up the button properties
-                itemButtons[i].combatItem = currentItem;
-                itemButtons[i].gameObject.SetActive(true);
-                itemButtons[i].Button.interactable = itemCount > 0;
+            // Set up the button properties
+            itemButtons[i].gameObject.SetActive(true);
+            
+            // Check if character can use this item
+            bool canUse = character.CanUseItemThisTurn() && 
+                         currentItem.CanUseOn(character, character) && 
+                         itemCount > 0;
 
-                itemButtons[i].SetupButton(
-                    $"{currentItem.ItemName} ({itemCount}/{currentItem.MaxStackSize})",
-                    () =>
+            itemButtons[i].SetupItemButton(
+                currentItem,
+                itemCount,
+                () =>
+                {
+                    try
                     {
-                        try
-                        {
-                            print("Item button clicked: " + currentItem.ItemName);
-                            OnItemClicked?.Invoke(currentItem);
-                        }
-                        catch (System.Exception ex)
-                        {
-                            Debug.LogError($"Error when using button for item {currentItem.ItemName}: {ex.Message}");
-                        }
+                        print("Item button clicked: " + currentItem.ItemName);
+                        OnItemClicked?.Invoke(currentItem);
                     }
-                );
+                    catch (System.Exception ex)
+                    {
+                        Debug.LogError($"Error when using button for item {currentItem.ItemName}: {ex.Message}");
+                    }
+                },
+                canUse
+            );
+            
+            itemButtons[i].AnimateIn();
+        }
+    }
+
+    /// <summary>
+    /// Update all item button states for the current character
+    /// </summary>
+    public void UpdateItemButtonStates(Entity currentEntity)
+    {
+        foreach (var button in itemButtons)
+        {
+            if (button.gameObject.activeInHierarchy)
+            {
+                button.UpdateButtonState(currentEntity);
             }
         }
     }
