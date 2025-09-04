@@ -82,12 +82,12 @@ public class CameraManager : MonoBehaviour
         EventManager.OnCombatEncounterEnded -= HandleCombatEncounterEnded;
     }
 
-  void Start()
-  {
-    TrySetActiveCamera("OverworldCamera");
-  }
+    void Start()
+    {
+        TrySetActiveCamera("OverworldCamera");
+    }
 
-  public void RegisterCamera(string cameraName, BaseCameraController cameraController)
+    public void RegisterCamera(string cameraName, BaseCameraController cameraController)
     {
         // print($"Attempting to register camera: {cameraName}");
         if (!Cameras.ContainsKey(cameraName))

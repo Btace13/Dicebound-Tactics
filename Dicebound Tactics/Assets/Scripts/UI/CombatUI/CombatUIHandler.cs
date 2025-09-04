@@ -181,25 +181,22 @@ public class CombatUIHandler : MonoBehaviour
         {
             if (currentPanel.PreviousPanel != null)
             {
-                currentPanel.FadeOutCanvas(() =>
+                // Deactivate the current panel and set the previous panel as current
+                currentPanel.gameObject.SetActive(false);
+
+                currentPanel = currentPanel.PreviousPanel;
+                ShowScreenSpacePanelInputs(currentPanel.PreviousPanel != null);
+
+                currentPanel.gameObject.SetActive(true);
+                currentPanel.FadeInCanvas(null, _fadeDuration, Ease.InOutQuad);
+
+                if (cameraManager)
                 {
-                    // Deactivate the current panel and set the previous panel as current
-                    currentPanel.gameObject.SetActive(false);
-
-                    currentPanel = currentPanel.PreviousPanel;
-                    ShowScreenSpacePanelInputs(currentPanel.PreviousPanel != null);
-
-                    currentPanel.gameObject.SetActive(true);
-                    currentPanel.FadeInCanvas(null, _fadeDuration, Ease.InOutQuad);
-
-                    if (cameraManager)
+                    if (PanelCameras.TryGetValue(currentPanel, out string cameraName))
                     {
-                        if (PanelCameras.TryGetValue(currentPanel, out string cameraName))
-                        {
-                            cameraManager.TrySetActiveCamera(cameraName);
-                        }
+                        cameraManager.TrySetActiveCamera(cameraName);
                     }
-                }, _fadeDuration, Ease.InOutQuad);
+                }
             }
             else
             {
@@ -216,7 +213,10 @@ public class CombatUIHandler : MonoBehaviour
             return;
         }
 
-        cancelButton.interactable = false;
+        if (cancelButton)
+        {
+            cancelButton.interactable = false;
+        }
         currentPanel.FadeOutCanvas(() =>
         {
             currentPanel = null;

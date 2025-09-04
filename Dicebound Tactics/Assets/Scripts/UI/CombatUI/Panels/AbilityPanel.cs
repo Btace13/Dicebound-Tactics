@@ -29,6 +29,7 @@ public class AbilityPanel : CombatPanel
             abilityButtons[i].SetupAbilityButton(ability, () =>
             {
                 OnAbilitySelected?.Invoke(ability);
+                EventManager.TriggerSelectingATarget(ability.abilityType == AbilityType.Enemy);
             }, character.HasEnoughApToUseAbility(ability));
             abilityButtons[i].AnimateIn();
         }

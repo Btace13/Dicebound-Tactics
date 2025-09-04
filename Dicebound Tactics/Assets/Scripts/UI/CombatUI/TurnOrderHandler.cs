@@ -39,8 +39,8 @@ public class TurnOrderHandler : MonoBehaviour
 
         ImageContainer.SetActive(true);
         await CreateTurnOrderPortraits();
-        
-        if(entity != null)
+
+        if (entity != null)
         {
             UpdateCurrentTurnHolder(entity);
         }

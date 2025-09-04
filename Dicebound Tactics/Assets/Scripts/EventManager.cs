@@ -34,6 +34,7 @@ public class EventManager : MonoBehaviour
   public static event Action OnSuccessButtonPressed;
   public static event Action OnCharacterMenuOpened;
   public static event Action OnCharacterMenuClosed;
+  public static event Action OnBackButtonPressed;
 
   // Game Events
   public static event Action OnGameOver;
@@ -142,6 +143,10 @@ public class EventManager : MonoBehaviour
   public static void TriggerDefensiveSequenceFailed()
   {
     OnDefensiveSequenceFailed?.Invoke();
+  }
+  public static void TriggerBackButtonPressed()
+  {
+    OnBackButtonPressed?.Invoke();
   }
 }
 

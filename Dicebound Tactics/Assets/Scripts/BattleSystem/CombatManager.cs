@@ -240,10 +240,14 @@ public class CombatManager : MonoBehaviour
                 {
                     // Use the new centralized item usage method
                     bool itemUsed = currentUnit.UseCombatItem(_selectedItem, target);
-                    
+
                     if (!itemUsed)
                     {
                         Debug.LogWarning($"{currentUnit.name} failed to use {_selectedItem.ItemName} on {target.name}");
+                    }
+                    else
+                    { 
+                        EventManager.TriggerCharacterTurnStarted(currentUnit as CharacterManager);
                     }
                 }
                 else // basic attack
@@ -288,8 +292,7 @@ public class CombatManager : MonoBehaviour
         {
             _selectedAbility = null;
             _selectedItem = null;
-
-            //EventManager.TriggerCharacterTurnStarted(currentUnit as CharacterManager);
+            SelectionController.Instance.ClearAllSelections();
         });
     }
 }

@@ -8,6 +8,12 @@ public class ItemPanel : CombatPanel
 {
     [SerializeField] List<ItemButton> itemButtons = new List<ItemButton>();
     public UnityEvent<CombatItem> OnItemClicked;
+    private CombatEncounter _currentEncounter;
+
+    private void Awake() {
+        EventManager.OnCombatEncounterStarted += encounter => _currentEncounter = encounter;
+        EventManager.OnCombatEncounterEnded += encounter => _currentEncounter = null;
+    }
 
     public void PopulateItemPanel(CharacterManager character)
     {
@@ -47,10 +53,10 @@ public class ItemPanel : CombatPanel
 
             // Set up the button properties
             itemButtons[i].gameObject.SetActive(true);
-            
+
             // Check if character can use this item
-            bool canUse = character.CanUseItemThisTurn() && 
-                         currentItem.CanUseOn(character, character) && 
+            bool canUse = character.CanUseItemThisTurn() &&
+                         currentItem.CanUseOn(character, character) &&
                          itemCount > 0;
 
             itemButtons[i].SetupItemButton(
@@ -61,6 +67,10 @@ public class ItemPanel : CombatPanel
                     try
                     {
                         print("Item button clicked: " + currentItem.ItemName);
+                        EventManager.TriggerSelectingATarget(true);
+                        SelectionController.Instance.ChangeSelectionType(!currentItem.canTargetAllies || !currentItem.canTargetSelf);
+                        CameraManager.Instance.TrySetActiveCamera(_currentEncounter.GetCameraControllerForSide(TurnManager.Instance.enemyUnits[0]).name);
+                        CombatManager.Instance.ItemSelected(currentItem);
                         OnItemClicked?.Invoke(currentItem);
                     }
                     catch (System.Exception ex)
@@ -70,7 +80,7 @@ public class ItemPanel : CombatPanel
                 },
                 canUse
             );
-            
+
             itemButtons[i].AnimateIn();
         }
     }

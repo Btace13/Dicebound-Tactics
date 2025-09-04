@@ -5,7 +5,20 @@ using UnityEngine.Events;
 [RequireComponent(typeof(CanvasGroup))]
 public class CombatPanel : MonoBehaviour
 {
-    public CanvasGroup PanelCanvasGroup { get; set; }
+    [SerializeField] private CanvasGroup _panelCanvasGroup; // cached to avoid null refs
+    public CanvasGroup PanelCanvasGroup
+    {
+        get
+        {
+            if (_panelCanvasGroup == null)
+            {
+                _panelCanvasGroup = GetComponent<CanvasGroup>();
+            }
+            return _panelCanvasGroup;
+        }
+        set => _panelCanvasGroup = value;
+    }
+
     public Ease FadeEase { get; set; } = Ease.InOutQuad;
     public Sequence FadeSequence { get; set; }
     public CombatPanel PreviousPanel { get; set; } = null;
@@ -19,17 +32,26 @@ public class CombatPanel : MonoBehaviour
     }
 
 #if UNITY_EDITOR
-    private void OValidate()
+    private void OnValidate()
     {
-        if (PanelCanvasGroup == null)
+        if (_panelCanvasGroup == null)
         {
-            PanelCanvasGroup = GetComponent<CanvasGroup>();
+            _panelCanvasGroup = GetComponent<CanvasGroup>();
         }
     }
 #endif
 
     public void FadeCanvas(bool fadeIn, UnityAction OnFadeComplete = null, float duration = 0.15f, Ease ease = Ease.InOutQuad)
     {
+        // Ensure we have a CanvasGroup before proceeding
+        var cg = PanelCanvasGroup;
+        if (cg == null)
+        {
+            Debug.LogError($"[{nameof(CombatPanel)}] Missing CanvasGroup on {name}. Aborting fade.");
+            OnFadeComplete?.Invoke();
+            return;
+        }
+
         gameObject.SetActive(true);
 
         if (FadeSequence != null && FadeSequence.IsActive())
@@ -41,29 +63,24 @@ public class CombatPanel : MonoBehaviour
 
         if (fadeIn)
         {
-            FadeSequence.AppendCallback(() =>
+            FadeSequence.OnStart(() =>
             {
-                PanelCanvasGroup.blocksRaycasts = true;
-                PanelCanvasGroup.interactable = true;
-                // Fade in the canvas after moving
-                PanelCanvasGroup.DOFade(1, 0.15f).SetEase(FadeEase);
+                cg.blocksRaycasts = true;
+                cg.interactable = true;
             });
+            FadeSequence.Append(cg.DOFade(1f, duration).SetEase(ease));
         }
         else
         {
-            if (PanelCanvasGroup.alpha > 0)
+            if (cg.alpha > 0f)
             {
-                PanelCanvasGroup.blocksRaycasts = false;
-                PanelCanvasGroup.interactable = false;
-                // Fade out the canvas before moving
-                FadeSequence.Append(PanelCanvasGroup.DOFade(0, 0.15f).SetEase(FadeEase));
+                cg.blocksRaycasts = false;
+                cg.interactable = false;
+                FadeSequence.Append(cg.DOFade(0f, duration).SetEase(ease));
             }
         }
 
-        FadeSequence.AppendCallback(() =>
-        {
-            OnFadeComplete?.Invoke();
-        });
+        FadeSequence.AppendCallback(() => { OnFadeComplete?.Invoke(); });
     }
 
     public void FadeInCanvas(UnityAction OnFadeComplete = null, float duration = 0.15f, Ease ease = Ease.InOutQuad)
