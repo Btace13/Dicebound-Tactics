@@ -247,7 +247,7 @@ public class CombatManager : MonoBehaviour
                     }
                     else
                     { 
-                        EventManager.TriggerCharacterTurnStarted(currentUnit as CharacterManager);
+                        TurnManager.Instance.StartNextTurn();
                     }
                 }
                 else // basic attack

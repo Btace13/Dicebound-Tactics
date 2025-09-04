@@ -71,7 +71,14 @@ public class DamageAbilitySO : AbilitySO
                 returnDone = true;
                 if (user is CharacterManager character)
                 {
-                    EventManager.TriggerCharacterTurnStarted(character);
+                    if (!character.CanUseMoreAbilitiesThisTurn())
+                    {
+                        TurnManager.Instance.StartNextTurn();
+                    }
+                    else
+                    { 
+                        EventManager.TriggerCharacterTurnStarted(character);
+                    }
                 }
             });
             while (!returnDone) yield return new WaitForSeconds(1.6f);
@@ -86,7 +93,15 @@ public class DamageAbilitySO : AbilitySO
             yield return new WaitForSeconds(1.6f);
             if (user is CharacterManager character)
             {
-                EventManager.TriggerCharacterTurnStarted(character);
+
+                if (!character.CanUseMoreAbilitiesThisTurn())
+                {
+                    TurnManager.Instance.StartNextTurn();
+                }
+                else
+                { 
+                    EventManager.TriggerCharacterTurnStarted(character);
+                }
             }
         }
     }

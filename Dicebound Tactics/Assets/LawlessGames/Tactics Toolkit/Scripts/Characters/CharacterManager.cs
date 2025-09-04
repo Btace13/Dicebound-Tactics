@@ -22,6 +22,18 @@ namespace TacticsToolkit
             LoadOrCreateDie();
         }
 
+        public bool CanUseMoreAbilitiesThisTurn()
+        {
+            foreach (var ability in abilityLoadout)
+            {
+                if (ability != null && HasEnoughApToUseAbility(ability))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         private void LoadOrCreateStats()
         {
             string path = $"CharacterStats/{characterId}"; // Resources path (no extension)
