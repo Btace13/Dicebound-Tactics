@@ -35,6 +35,9 @@ public class EventManager : MonoBehaviour
   public static event Action OnCharacterMenuOpened;
   public static event Action OnCharacterMenuClosed;
   public static event Action OnBackButtonPressed;
+  public static event Action OnShowActionPanel;
+  public static event Action OnShowAbilityPanel;
+  public static event Action OnShowItemPanel;
 
   // Game Events
   public static event Action OnGameOver;
@@ -147,6 +150,18 @@ public class EventManager : MonoBehaviour
   public static void TriggerBackButtonPressed()
   {
     OnBackButtonPressed?.Invoke();
+  }
+  public static void TriggerShowActionPanel()
+  {
+    OnShowActionPanel?.Invoke();
+  }
+  public static void TriggerShowAbilityPanel()
+  {
+    OnShowAbilityPanel?.Invoke();
+  }
+  public static void TriggerShowItemPanel()
+  {
+    OnShowItemPanel?.Invoke();
   }
 }
 

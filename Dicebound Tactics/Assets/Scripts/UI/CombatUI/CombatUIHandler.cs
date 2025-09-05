@@ -32,11 +32,13 @@ public class CombatUIHandler : MonoBehaviour
     public ItemPanel ItemPanel;
 
     [Header("Screen Space UI References")]
+    [SerializeField] private Button backButton;
     [SerializeField] private CanvasGroup screenSpaceCanvasGroup;
     [SerializeField] private CombatNotification notificationUI;
     [SerializeField] private CanvasGroup panelInputsCanvasGroup;
     [SerializeField] private Button confirmButton;
     [SerializeField] private Button cancelButton;
+    [SerializeField] private CanvasGroup targetSelectionCanvasGroup;
 
     [Header("Other References")]
     public DamageNumberUIHandler damageNumberUIHandler;
@@ -57,18 +59,11 @@ public class CombatUIHandler : MonoBehaviour
         {
             ItemPanel.gameObject.SetActive(false);
         }
-
-        // Event Listeners
-        EventManager.OnBattleStarted += OpenActionPanel;
-        EventManager.OnCharacterTurnStarted += HandleNewCharacterTurn;
-        EventManager.OnEnemyTurnStarted += HandleNewEnemyTurn;
     }
 
     private void OnDisable()
     {
-        EventManager.OnBattleStarted -= OpenActionPanel;
-        EventManager.OnCharacterTurnStarted -= HandleNewCharacterTurn;
-        EventManager.OnEnemyTurnStarted -= HandleNewEnemyTurn;
+        // Intentionally left blank: this class no longer subscribes to global events.
     }
 
     public void MoveCanvasToCharacter(CharacterManager character)
@@ -241,7 +236,6 @@ public class CombatUIHandler : MonoBehaviour
 
     public void ShowConfirmButton(bool enable)
     {
-        EventManager.TriggerSelectingATarget(enable);
         if (confirmButton == null)
         {
             return;
@@ -254,6 +248,7 @@ public class CombatUIHandler : MonoBehaviour
         }
 
         confirmButton.gameObject.SetActive(enable);
+        confirmButton.interactable = enable;
     }
 
     public void ShowBigNotification(string message, float duration = 2f)
@@ -319,5 +314,30 @@ public class CombatUIHandler : MonoBehaviour
     public void HandleNewEnemyTurn(EnemyManager enemy)
     {
         CloseAllPanels();
+    }
+
+    public void ShowTargetSelectionUI(bool enable)
+    {
+        if (targetSelectionCanvasGroup == null)
+        {
+            return;
+        }
+
+        DOTween.To(() => targetSelectionCanvasGroup.alpha, x => targetSelectionCanvasGroup.alpha = x, enable ? 1 : 0, _fadeDuration)
+            .OnStart(() =>
+            {
+                targetSelectionCanvasGroup.interactable = enable;
+                targetSelectionCanvasGroup.blocksRaycasts = enable;
+            });
+    }
+
+    public void ToggleBackButtonInteractable(bool enable)
+    {
+        if (backButton == null)
+        {
+            return;
+        }
+
+        backButton.interactable = enable;
     }
 }
