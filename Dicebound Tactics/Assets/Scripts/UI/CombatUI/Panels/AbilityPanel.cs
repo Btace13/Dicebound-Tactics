@@ -8,6 +8,7 @@ public class AbilityPanel : CombatPanel
 {
     [SerializeField] List<AbilityButton> abilityButtons = new List<AbilityButton>();
     public UnityEvent<AbilitySO> OnAbilitySelected;
+    public string cameraName = "ConfirmTargetCamera";
 
     public void PopulateAbilityPanel(CharacterManager character)
     {
@@ -30,6 +31,8 @@ public class AbilityPanel : CombatPanel
             {
                 OnAbilitySelected?.Invoke(ability);
                 EventManager.TriggerSelectingATarget(ability.abilityType == AbilityType.Enemy);
+                CameraManager.Instance.TrySetActiveCamera(cameraName);
+                CombatManager.Instance.AbilitySelected(ability);
             }, character.HasEnoughApToUseAbility(ability));
             abilityButtons[i].AnimateIn();
         }

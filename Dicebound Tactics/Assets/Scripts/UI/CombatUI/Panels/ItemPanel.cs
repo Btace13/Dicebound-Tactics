@@ -69,13 +69,32 @@ public class ItemPanel : CombatPanel
                         print("Item button clicked: " + currentItem.ItemName);
                         EventManager.TriggerSelectingATarget(true);
                         SelectionController.Instance.ChangeSelectionType(!currentItem.canTargetAllies || !currentItem.canTargetSelf);
-                        CameraManager.Instance.TrySetActiveCamera(_currentEncounter.GetCameraControllerForSide(TurnManager.Instance.enemyUnits[0]).name);
+                        
+                        // Safe camera switching with null checks
+                        if (_currentEncounter != null && TurnManager.Instance.enemyUnits != null && TurnManager.Instance.enemyUnits.Count > 0)
+                        {
+                            var cameraController = _currentEncounter.GetCameraControllerForSide(TurnManager.Instance.enemyUnits[0]);
+                            if (cameraController != null)
+                            {
+                                CameraManager.Instance.TrySetActiveCamera(cameraController.name);
+                            }
+                            else
+                            {
+                                Debug.LogWarning("No camera controller found for the enemy side. Skipping camera switch.");
+                            }
+                        }
+                        else
+                        {
+                            Debug.LogWarning("Current encounter or enemy units are null/empty. Skipping camera switch.");
+                        }
+                        
                         CombatManager.Instance.ItemSelected(currentItem);
                         OnItemClicked?.Invoke(currentItem);
                     }
                     catch (System.Exception ex)
                     {
                         Debug.LogError($"Error when using button for item {currentItem.ItemName}: {ex.Message}");
+                        Debug.LogError($"Stack trace: {ex.StackTrace}");
                     }
                 },
                 canUse

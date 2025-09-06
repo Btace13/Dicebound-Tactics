@@ -29,6 +29,8 @@ public class CombatUIPhaseController : MonoBehaviour
         EventManager.OnEnemyTurnStarted += OnEnemyTurnStarted;
         EventManager.OnEnemyTurnEnded += OnEnemyTurnEnded;
         EventManager.OnSelectingATarget += OnSelectingATarget;
+        EventManager.OnPassTurn += OnPassTurn;
+        EventManager.OnBackButtonPressed += OnBackButtonPressed;
 
         // Panel show requests
         EventManager.OnShowActionPanel += HandleShowActionPanel;
@@ -45,6 +47,8 @@ public class CombatUIPhaseController : MonoBehaviour
         EventManager.OnEnemyTurnStarted -= OnEnemyTurnStarted;
         EventManager.OnEnemyTurnEnded -= OnEnemyTurnEnded;
         EventManager.OnSelectingATarget -= OnSelectingATarget;
+        EventManager.OnPassTurn -= OnPassTurn;
+        EventManager.OnBackButtonPressed -= OnBackButtonPressed;
 
         // Panel show requests
         EventManager.OnShowActionPanel -= HandleShowActionPanel;
@@ -107,6 +111,7 @@ public class CombatUIPhaseController : MonoBehaviour
         // The SelectionPanel listens to this event to show/hide targeting buttons.
         // Here we only manage the confirm button visibility and inputs.
         ui.ShowConfirmButton(isSelecting);
+        ui.ShowTargetSelectionUI(isSelecting);
     }
 
     // External requests to show specific panels
@@ -128,6 +133,25 @@ public class CombatUIPhaseController : MonoBehaviour
     {
         if (ui == null || ui.ItemPanel == null) return;
         ui.OpenPanel(ui.ItemPanel);
-        //ui.ToggleBackButtonInteractable(true);
+        ui.ToggleBackButtonInteractable(true);
+        ui.ShowConfirmButton(false);
+    }
+
+    private void OnPassTurn()
+    {
+        if (ui == null) return;
+        ui.CloseAllPanels();
+        TurnManager.Instance.StartNextTurn();
+        ui.ToggleBackButtonInteractable(false);
+    }
+
+    private void OnBackButtonPressed()
+    {
+        if (ui == null) return;
+        ui.CloseCurrentPanel();
+        ui.ShowConfirmButton(false);
+        ui.ToggleBackButtonInteractable(false);
+        ui.ShowTargetSelectionUI(false);
+        SelectionController.Instance.ClearAllSelections();
     }
 }

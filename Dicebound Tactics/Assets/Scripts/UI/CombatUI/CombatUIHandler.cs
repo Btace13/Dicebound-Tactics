@@ -32,7 +32,6 @@ public class CombatUIHandler : MonoBehaviour
     public ItemPanel ItemPanel;
 
     [Header("Screen Space UI References")]
-    [SerializeField] private Button backButton;
     [SerializeField] private CanvasGroup screenSpaceCanvasGroup;
     [SerializeField] private CombatNotification notificationUI;
     [SerializeField] private CanvasGroup panelInputsCanvasGroup;
@@ -333,11 +332,11 @@ public class CombatUIHandler : MonoBehaviour
 
     public void ToggleBackButtonInteractable(bool enable)
     {
-        if (backButton == null)
+        if (cancelButton == null)
         {
             return;
         }
 
-        backButton.interactable = enable;
+        cancelButton.interactable = enable;
     }
 }

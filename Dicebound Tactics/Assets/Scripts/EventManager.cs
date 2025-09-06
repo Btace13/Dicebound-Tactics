@@ -21,6 +21,7 @@ public class EventManager : MonoBehaviour
   public static event Action<DiceModifier, Entity> OnModifierApplied;
   public static event Action<Entity> OnEntityDied;
   public static event Action OnAttackBlocked;
+  public static event Action OnPassTurn;
 
   // Defensive Timing Events
   public static event Action<Entity, string[], float, System.Action<bool>> OnDefensivePromptRequested;
@@ -162,6 +163,10 @@ public class EventManager : MonoBehaviour
   public static void TriggerShowItemPanel()
   {
     OnShowItemPanel?.Invoke();
+  }
+  public static void TriggerPassTurn()
+  {
+    OnPassTurn?.Invoke();
   }
 }
 
