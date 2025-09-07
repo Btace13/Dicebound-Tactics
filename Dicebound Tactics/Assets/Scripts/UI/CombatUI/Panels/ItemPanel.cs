@@ -8,6 +8,7 @@ public class ItemPanel : CombatPanel
 {
     [SerializeField] List<ItemButton> itemButtons = new List<ItemButton>();
     public UnityEvent<CombatItem> OnItemClicked;
+    public string cameraName = "ConfirmTargetCamera";
     private CombatEncounter _currentEncounter;
 
     private void Awake() {
@@ -66,28 +67,27 @@ public class ItemPanel : CombatPanel
                 {
                     try
                     {
-                        print("Item button clicked: " + currentItem.ItemName);
-                        EventManager.TriggerSelectingATarget(true);
-                        SelectionController.Instance.ChangeSelectionType(!currentItem.canTargetAllies || !currentItem.canTargetSelf);
+                        // SelectionController.Instance.ChangeSelectionType(!currentItem.canTargetAllies || !currentItem.canTargetSelf);
+
+                        // // Safe camera switching with null checks
+                        // if (_currentEncounter != null && TurnManager.Instance.enemyUnits != null && TurnManager.Instance.enemyUnits.Count > 0)
+                        // {
+                        //     var cameraController = _currentEncounter.GetCameraControllerForSide(TurnManager.Instance.enemyUnits[0]);
+                        //     if (cameraController != null)
+                        //     {
+                        //         CameraManager.Instance.TrySetActiveCamera(cameraController.name);
+                        //     }
+                        //     else
+                        //     {
+                        //         Debug.LogWarning("No camera controller found for the enemy side. Skipping camera switch.");
+                        //     }
+                        // }
+                        // else
+                        // {
+                        //     Debug.LogWarning("Current encounter or enemy units are null/empty. Skipping camera switch.");
+                        // }
                         
-                        // Safe camera switching with null checks
-                        if (_currentEncounter != null && TurnManager.Instance.enemyUnits != null && TurnManager.Instance.enemyUnits.Count > 0)
-                        {
-                            var cameraController = _currentEncounter.GetCameraControllerForSide(TurnManager.Instance.enemyUnits[0]);
-                            if (cameraController != null)
-                            {
-                                CameraManager.Instance.TrySetActiveCamera(cameraController.name);
-                            }
-                            else
-                            {
-                                Debug.LogWarning("No camera controller found for the enemy side. Skipping camera switch.");
-                            }
-                        }
-                        else
-                        {
-                            Debug.LogWarning("Current encounter or enemy units are null/empty. Skipping camera switch.");
-                        }
-                        
+                        CameraManager.Instance.TrySetActiveCamera(cameraName);
                         CombatManager.Instance.ItemSelected(currentItem);
                         OnItemClicked?.Invoke(currentItem);
                     }

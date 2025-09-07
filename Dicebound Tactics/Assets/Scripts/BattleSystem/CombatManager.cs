@@ -130,6 +130,7 @@ public class CombatManager : MonoBehaviour
         }
 
         _selectedItem = item;
+        selectionController.SetSelectableTargetCount(1); // Items typically target one entity at a time
 
         // Determine targeting based on item properties
         bool targetAllies = item.canTargetAllies || item.canTargetSelf;
@@ -147,19 +148,20 @@ public class CombatManager : MonoBehaviour
         {
             // Can target both allies and enemies
             selectionController.ChangeSelectionType(true); // Allow both
+            selectionController.ToggleEntitySelection(turnManager.playerUnits[0], false);
         }
         else if (targetEnemies)
         {
             // Target enemies only
             selectionController.ChangeSelectionType(true); // Target enemies
+            selectionController.ToggleEntitySelection(turnManager.enemyUnits[0], false);
         }
         else
         {
             // Target allies only (default)
             selectionController.ChangeSelectionType(false); // Target allies
+            selectionController.ToggleEntitySelection(turnManager.playerUnits[0], false);
         }
-
-        selectionController.SetSelectableTargetCount(1); // Items typically target one entity at a time
         
         // Start target selection
         EventManager.TriggerSelectingATarget(true);

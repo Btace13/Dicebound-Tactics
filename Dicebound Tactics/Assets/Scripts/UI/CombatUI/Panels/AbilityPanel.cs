@@ -30,7 +30,6 @@ public class AbilityPanel : CombatPanel
             abilityButtons[i].SetupAbilityButton(ability, () =>
             {
                 OnAbilitySelected?.Invoke(ability);
-                EventManager.TriggerSelectingATarget(ability.abilityType == AbilityType.Enemy);
                 CameraManager.Instance.TrySetActiveCamera(cameraName);
                 CombatManager.Instance.AbilitySelected(ability);
             }, character.HasEnoughApToUseAbility(ability));

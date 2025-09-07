@@ -317,25 +317,25 @@ public class CameraManager : MonoBehaviour
     {
         if (target == null)
         {
-            // Debug.LogError("Target is null. Cannot set combat target.");
+            // Debug.LogError("CameraManager: Target is null. Cannot set combat target.");
             return;
         }
-        // print("Setting combat target: " + target.name);
+        print("CameraManager: Setting combat target: " + target.name);
         foreach (CombatCameraController combatCameraController in Cameras.Values.OfType<CombatCameraController>())
         {
             if (combatCameraController == null)
             {
-                // Debug.LogWarning("Active camera is not a CombatCameraController.");
+                // Debug.LogWarning("CameraManager: Active camera is not a CombatCameraController.");
                 continue;
             }
             if (combatCameraController.TargetGroup == null)
             {
-                // Debug.LogError("Target group is not initialized in CombatCameraController.");
+                // Debug.LogError("CameraManager: Target group is not initialized in CombatCameraController.");
                 continue;
             }
             if (combatCameraController.cameraTarget == CameraTarget.ActivePlayer)
             {
-                // Debug.LogWarning("Camera target is set to ActivePlayer. Cannot set target.");
+                // Debug.LogWarning("CameraManager: Camera target is set to ActivePlayer. Cannot set target.");
                 continue;
             }
             combatCameraController.TargetGroup.Targets.Clear();
