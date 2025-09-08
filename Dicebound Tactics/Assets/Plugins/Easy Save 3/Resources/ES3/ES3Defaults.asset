@@ -50,6 +50,10 @@ MonoBehaviour:
     - KAnimationCore.Runtime
     - LeTai.TrueShadow
     - LeTai.TrueShadow.Demo
+    - MagicaCloth2Example
+    - MagicaClothV2
+    - MK.Toon
+    - MK.Toon.URP
     - PackageTools
     - RetargetPro.Runtime
     - sc.stylizedwater3.runtime
