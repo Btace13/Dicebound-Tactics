@@ -156,6 +156,26 @@ public class CombatUIHandler : MonoBehaviour
         OpenPanel(ActionPanel);
     }
 
+    public void FadeOutCurrentPanel()
+    {
+        if (currentPanel == null)
+        {
+            return;
+        }
+        
+        currentPanel.FadeOutCanvas(null, _fadeDuration, Ease.InOutQuad);
+    }
+
+    public void FadeInCurrentPanel()
+    {
+        if (currentPanel == null)
+        {
+            return;
+        }
+
+        currentPanel.FadeInCanvas(null, _fadeDuration, Ease.InOutQuad);
+    }
+
     public void CloseCurrentPanel()
     {
         if (currentPanel == null)
