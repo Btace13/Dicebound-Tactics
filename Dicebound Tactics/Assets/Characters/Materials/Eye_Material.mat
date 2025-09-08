@@ -120,7 +120,7 @@ Material:
     - _InnerEyeCornerHeight: 0.5
     - _IrisFadeStrength: 1
     - _IrisRadius: 0.45
-    - _LookXOffset: 0.095
+    - _LookXOffset: 0
     - _LookYOffset: 0
     - _Metallic: 0
     - _OcclusionStrength: 1
