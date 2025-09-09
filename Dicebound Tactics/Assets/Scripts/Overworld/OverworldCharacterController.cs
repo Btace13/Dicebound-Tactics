@@ -149,14 +149,38 @@ public class OverworldCharacterController : OverworldEntityController
         float targetSpeed = pathfindingAI.maxSpeed * input.magnitude;
         Vector3 targetVelocity = zeroedYVelocity * targetSpeed;
         
-        // For testing: Try direct velocity assignment
+        // Set RVO velocity for movement calculation
         rvoController.velocity = targetVelocity;
         
-        // Manually update position since pathfindingAI.updatePosition is disabled
-        transform.position += rvoController.velocity * Time.deltaTime;
-        
-        // Debug: Check what speeds we're working with
-        Debug.Log($"MaxSpeed: {pathfindingAI.maxSpeed}, TargetSpeed: {targetSpeed}, Final Velocity: {rvoController.velocity.magnitude}");
+        // Use CharacterController for physics-based movement with collision detection
+        CharacterController characterController = GetComponent<CharacterController>();
+        if (characterController != null)
+        {
+            // Use CharacterController.Move for proper collision detection
+            Vector3 moveVector = rvoController.velocity * Time.deltaTime;
+            
+            // Add gravity if not grounded
+            if (!characterController.isGrounded)
+            {
+                moveVector.y += Physics.gravity.y * Time.deltaTime;
+            }
+            
+            characterController.Move(moveVector);
+        }
+        else
+        {
+            // Fallback: Use Rigidbody if available
+            Rigidbody rb = GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                rb.MovePosition(transform.position + rvoController.velocity * Time.deltaTime);
+            }
+            else
+            {
+                // Last resort: Direct transform movement (no collision)
+                transform.position += rvoController.velocity * Time.deltaTime;
+            }
+        }
         
         // Handle rotation manually for immediate response
         if (zeroedYVelocity.magnitude > 0.01f)
