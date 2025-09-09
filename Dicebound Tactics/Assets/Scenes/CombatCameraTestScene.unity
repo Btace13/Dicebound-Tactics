@@ -1295,7 +1295,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 5625239005865857264}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 179816872}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 163d2c8446aa6ae42a718abaa805b8f3, type: 3}
   m_Name: 
@@ -5879,7 +5879,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 2254033509825382327}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 966211547}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 163d2c8446aa6ae42a718abaa805b8f3, type: 3}
   m_Name: 
@@ -21741,11 +21741,11 @@ PrefabInstance:
       objectReference: {fileID: 2906175958268946483, guid: 614536ada5d014a64a20838f77977351, type: 3}
     - target: {fileID: 5016635214214657793, guid: d8c30de4e48b94564b5964eb287c6249, type: 3}
       propertyPath: _EditorDrawSetup
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5016635214214657793, guid: d8c30de4e48b94564b5964eb287c6249, type: 3}
-      propertyPath: Leaning.TryAutoDetectGround
-      value: 0
+      propertyPath: Leaning.AccelerationDetection
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5475917019711313092, guid: d8c30de4e48b94564b5964eb287c6249, type: 3}
       propertyPath: m_Name
@@ -21794,6 +21794,10 @@ PrefabInstance:
     - target: {fileID: 7778571490162536184, guid: d8c30de4e48b94564b5964eb287c6249, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9142806664556021661, guid: d8c30de4e48b94564b5964eb287c6249, type: 3}
+      propertyPath: _EditorDrawSetup
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 2438182897133802256, guid: d8c30de4e48b94564b5964eb287c6249, type: 3}
@@ -21886,8 +21890,8 @@ PrefabInstance:
     m_TransformParent: {fileID: 1201685919}
     m_Modifications:
     - target: {fileID: 686300969389362813, guid: e669acb488d4d42da8cc45e9d8a0b3ee, type: 3}
-      propertyPath: Leaning.TryAutoDetectGround
-      value: 0
+      propertyPath: Leaning.AccelerationDetection
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2002588848888832617, guid: e669acb488d4d42da8cc45e9d8a0b3ee, type: 3}
       propertyPath: inventory

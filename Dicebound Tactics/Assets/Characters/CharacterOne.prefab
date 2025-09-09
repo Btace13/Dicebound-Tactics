@@ -487,6 +487,7 @@ MonoBehaviour:
   rightHandTransform: {fileID: 6618873665940747941}
   leftHandTransform: {fileID: 7039363041250320740}
   lookAnimator: {fileID: 8425326126921551883}
+  leanAnimator: {fileID: 5016635214214657793}
   debug: 0
 --- !u!114 &2254261448393597844
 MonoBehaviour:
@@ -724,7 +725,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2121983695552959750}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 163d2c8446aa6ae42a718abaa805b8f3, type: 3}
   m_Name: 
@@ -760,8 +761,8 @@ MonoBehaviour:
     ArmsForwardSway: -0.225
     ObjSpeedWhenBraking: 0.2
     ObjSpeedWhenRunning: 10
-    AccelerationDetection: 1
-    TryAutoDetectGround: 1
+    AccelerationDetection: 2
+    TryAutoDetectGround: 0
     UseMuscles: 0
     MuscleSettings:
       DesiredPosition: {x: 0, y: 0, z: 0}

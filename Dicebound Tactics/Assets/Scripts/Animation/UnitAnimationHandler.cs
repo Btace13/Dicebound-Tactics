@@ -4,6 +4,7 @@ using System.Collections;
 using System;
 using FIMSpace.FLook;
 using Sirenix.OdinInspector;
+using FIMSpace;
 
 public class UnitAnimationHandler : MonoBehaviour
 {
@@ -13,6 +14,7 @@ public class UnitAnimationHandler : MonoBehaviour
 	[BoxGroup("References"), SerializeField] Transform rightHandTransform;
 	[BoxGroup("References"), SerializeField] Transform leftHandTransform;
 	[BoxGroup("References"), SerializeField] FLookAnimator lookAnimator;
+	[BoxGroup("References"), SerializeField] LeaningAnimator leanAnimator;
 
 	[BoxGroup("Settings"), SerializeField] bool debug = false;
 
@@ -34,6 +36,7 @@ public class UnitAnimationHandler : MonoBehaviour
 
 	private GameObject _weaponObject = null;
 	private Transform _lookAt = null;
+	private Vector3 _lastPosition = Vector3.zero;
 
 	private void Awake()
 	{
@@ -42,9 +45,11 @@ public class UnitAnimationHandler : MonoBehaviour
 			AnimationData = ScriptableObject.Instantiate(AnimationData);
 		}
 
-		#if UNITY_EDITOR || DEVELOPMENT_BUILD
-			Animancer.OptionalWarning.UnusedNode.Disable();
-		#endif
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+		Animancer.OptionalWarning.UnusedNode.Disable();
+#endif
+
+		_lastPosition = transform.position;
 	}
 
 	private void Start()
@@ -63,6 +68,12 @@ public class UnitAnimationHandler : MonoBehaviour
 		{
 			lookAnimator.SetLookTarget(_lookAt);
 			lookAnimator.enabled = false;
+		}
+
+		if (leanAnimator)
+		{
+			leanAnimator.enabled = false;
+			leanAnimator.enabled = true;
 		}
 
 		OnUnitVelocityChange(Vector2.zero); // for starting in idle at least
@@ -85,6 +96,15 @@ public class UnitAnimationHandler : MonoBehaviour
 
 			mixer.State.Parameter = velocity;
 			_Animancer.Play(mixer, 0.1f, FadeMode.FixedDuration);
+		}
+
+		if (leanAnimator)
+		{
+			leanAnimator.enabled = velocity.magnitude > 0.1f;
+			if (leanAnimator.enabled)
+			{
+				leanAnimator.SetIsAccelerating = (velocity.magnitude > new Vector2(_lastPosition.x - transform.position.x, _lastPosition.z - transform.position.z).magnitude / Time.deltaTime);
+			}
 		}
 	}
 
