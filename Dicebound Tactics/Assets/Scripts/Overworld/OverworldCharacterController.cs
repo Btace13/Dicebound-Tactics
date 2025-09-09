@@ -144,27 +144,27 @@ public class OverworldCharacterController : OverworldEntityController
         // Use consistent direct velocity control for player movement
         // This bypasses pathfinding for more responsive control
         pathfindingAI.SetPath(null); // Clear any existing paths
-        
+
         // Apply movement with input magnitude for variable speed
         float targetSpeed = pathfindingAI.maxSpeed * input.magnitude;
         Vector3 targetVelocity = zeroedYVelocity * targetSpeed;
-        
+
         // Set RVO velocity for movement calculation
         rvoController.velocity = targetVelocity;
-        
+
         // Use CharacterController for physics-based movement with collision detection
         CharacterController characterController = GetComponent<CharacterController>();
         if (characterController != null)
         {
             // Use CharacterController.Move for proper collision detection
             Vector3 moveVector = rvoController.velocity * Time.deltaTime;
-            
+
             // Add gravity if not grounded
             if (!characterController.isGrounded)
             {
                 moveVector.y += Physics.gravity.y * Time.deltaTime;
             }
-            
+
             characterController.Move(moveVector);
         }
         else
@@ -181,7 +181,7 @@ public class OverworldCharacterController : OverworldEntityController
                 transform.position += rvoController.velocity * Time.deltaTime;
             }
         }
-        
+
         // Handle rotation manually for immediate response
         if (zeroedYVelocity.magnitude > 0.01f)
         {
@@ -202,7 +202,7 @@ public class OverworldCharacterController : OverworldEntityController
             pathfindingAI.enableRotation = false; // Disable AI rotation for manual control
             pathfindingAI.updatePosition = false; // Disable AI position updates for manual control
             SetShouldSprint(false);
-            
+
             // Clear any existing paths when taking control
             pathfindingAI.SetPath(null);
             rvoController.velocity = Vector3.zero;
