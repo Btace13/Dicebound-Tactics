@@ -29,9 +29,9 @@ public class AbilityPanel : CombatPanel
             // Set the button text and action
             abilityButtons[i].SetupAbilityButton(ability, () =>
             {
-                OnAbilitySelected?.Invoke(ability);
                 CameraManager.Instance.TrySetActiveCamera(cameraName);
                 CombatManager.Instance.AbilitySelected(ability);
+                OnAbilitySelected?.Invoke(ability);
             }, character.HasEnoughApToUseAbility(ability));
             abilityButtons[i].AnimateIn();
         }

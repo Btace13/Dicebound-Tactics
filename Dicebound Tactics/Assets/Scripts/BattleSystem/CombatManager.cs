@@ -103,6 +103,7 @@ public class CombatManager : MonoBehaviour
         // TODO: need to implement logic for this
         selectionController.SetSelectableTargetCount(1);
         selectionController.ToggleEntitySelection(targetsEnemy ? turnManager.enemyUnits[0] : turnManager.playerUnits[0], false);
+        EventManager.TriggerSelectingATarget(true);
 
         _selectedAbility = ability;
     }

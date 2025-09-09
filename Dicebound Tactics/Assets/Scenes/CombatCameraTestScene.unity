@@ -5607,7 +5607,7 @@ CharacterController:
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 1.02, z: 0}
 --- !u!1 &901245795 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2608154472718758090, guid: 17230f4ae22f4427a9e2f2ef723a854a, type: 3}
@@ -7122,7 +7122,7 @@ CharacterController:
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 0.97, z: 0}
 --- !u!1 &1169335772 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 884337154495347306, guid: e669acb488d4d42da8cc45e9d8a0b3ee, type: 3}
