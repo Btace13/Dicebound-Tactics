@@ -153,5 +153,6 @@ public class CombatUIPhaseController : MonoBehaviour
         ui.ToggleBackButtonInteractable(false);
         ui.ShowTargetSelectionUI(false);
         SelectionController.Instance.ClearAllSelections();
+        EventManager.TriggerSelectingATarget(false);
     }
 }

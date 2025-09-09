@@ -8591,34 +8591,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -12.1
       objectReference: {fileID: 0}
-    - target: {fileID: 2367053594791448773, guid: bbde8504cab454b2f8560186e359fe3c, type: 3}
-      propertyPath: OnItemClicked.m_PersistentCalls.m_Calls.Array.size
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2367053594791448773, guid: bbde8504cab454b2f8560186e359fe3c, type: 3}
-      propertyPath: OnItemClicked.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2367053594791448773, guid: bbde8504cab454b2f8560186e359fe3c, type: 3}
-      propertyPath: OnItemClicked.m_PersistentCalls.m_Calls.Array.data[1].m_Target
-      value: 
-      objectReference: {fileID: 1326901497}
-    - target: {fileID: 2367053594791448773, guid: bbde8504cab454b2f8560186e359fe3c, type: 3}
-      propertyPath: OnItemClicked.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2367053594791448773, guid: bbde8504cab454b2f8560186e359fe3c, type: 3}
-      propertyPath: OnItemClicked.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: FadeOutCurrentPanel
-      objectReference: {fileID: 0}
-    - target: {fileID: 2367053594791448773, guid: bbde8504cab454b2f8560186e359fe3c, type: 3}
-      propertyPath: OnItemClicked.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
-      value: CombatUIHandler, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 2367053594791448773, guid: bbde8504cab454b2f8560186e359fe3c, type: 3}
-      propertyPath: OnItemClicked.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
     - target: {fileID: 2372667810407973647, guid: bbde8504cab454b2f8560186e359fe3c, type: 3}
       propertyPath: m_SizeDelta.x
       value: 0
@@ -8790,6 +8762,34 @@ PrefabInstance:
     - target: {fileID: 5093371943391824306, guid: bbde8504cab454b2f8560186e359fe3c, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -43.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 5158897217245337952, guid: bbde8504cab454b2f8560186e359fe3c, type: 3}
+      propertyPath: OnAbilitySelected.m_PersistentCalls.m_Calls.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5158897217245337952, guid: bbde8504cab454b2f8560186e359fe3c, type: 3}
+      propertyPath: OnAbilitySelected.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5158897217245337952, guid: bbde8504cab454b2f8560186e359fe3c, type: 3}
+      propertyPath: OnAbilitySelected.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 1326901497}
+    - target: {fileID: 5158897217245337952, guid: bbde8504cab454b2f8560186e359fe3c, type: 3}
+      propertyPath: OnAbilitySelected.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5158897217245337952, guid: bbde8504cab454b2f8560186e359fe3c, type: 3}
+      propertyPath: OnAbilitySelected.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: FadeOutCurrentPanel
+      objectReference: {fileID: 0}
+    - target: {fileID: 5158897217245337952, guid: bbde8504cab454b2f8560186e359fe3c, type: 3}
+      propertyPath: OnAbilitySelected.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: CombatUIHandler, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 5158897217245337952, guid: bbde8504cab454b2f8560186e359fe3c, type: 3}
+      propertyPath: OnAbilitySelected.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 5243249099643823977, guid: bbde8504cab454b2f8560186e359fe3c, type: 3}
       propertyPath: m_AnchorMax.y
