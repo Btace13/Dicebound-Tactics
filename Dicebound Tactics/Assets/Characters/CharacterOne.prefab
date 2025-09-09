@@ -817,9 +817,9 @@ MonoBehaviour:
     SpineMiddle: {fileID: 4513359880894532744}
     Chest: {fileID: 3087431609512406228}
     Neck: {fileID: 482726291295843712}
-    LeftUpperArm: {fileID: 4084909701126595140}
+    LeftUpperArm: {fileID: 0}
     LeftForearm: {fileID: 2269940960438816396}
-    RightUpperArm: {fileID: 8573703155743664677}
+    RightUpperArm: {fileID: 0}
     RightForearm: {fileID: 2411770309533011196}
     SpineGroundAlign: 0
     SpineGrAdjustDuration: 0.15
@@ -868,11 +868,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4436805663696350335, guid: 0bd862afdf85e314fa7d97e10292bc86, type: 3}
   m_PrefabInstance: {fileID: 1275544797877626967}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &4084909701126595140 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2955248140533713427, guid: 0bd862afdf85e314fa7d97e10292bc86, type: 3}
-  m_PrefabInstance: {fileID: 1275544797877626967}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4513359880894532744 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3391502827646887135, guid: 0bd862afdf85e314fa7d97e10292bc86, type: 3}
@@ -901,11 +896,6 @@ Transform:
 --- !u!4 &7039363041250320740 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -1151951325145413325, guid: 0bd862afdf85e314fa7d97e10292bc86, type: 3}
-  m_PrefabInstance: {fileID: 1275544797877626967}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &8573703155743664677 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7442282653420143218, guid: 0bd862afdf85e314fa7d97e10292bc86, type: 3}
   m_PrefabInstance: {fileID: 1275544797877626967}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &8782538545488075398 stripped

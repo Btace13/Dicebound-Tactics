@@ -571,11 +571,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7517208691937506001, guid: ceab76dacc4fed242984fed3dead8f61, type: 3}
   m_PrefabInstance: {fileID: 5620251412891014360}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &3078043518156494506 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7442282653420143218, guid: ceab76dacc4fed242984fed3dead8f61, type: 3}
-  m_PrefabInstance: {fileID: 5620251412891014360}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4466540306500378091 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -1151951325145413325, guid: ceab76dacc4fed242984fed3dead8f61, type: 3}
@@ -621,7 +616,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _Animancer: {fileID: 313470399989969888}
-  AnimationData: {fileID: 11400000, guid: 49dcfb2bb1c0c7e47bbe1022d0794c1c, type: 2}
+  AnimationData: {fileID: 11400000, guid: 40bdad06ed1963a448ebc58d67a3c0be, type: 2}
   rightHandTransform: {fileID: 4466540306500378091}
   leftHandTransform: {fileID: 546755634792729130}
   lookAnimator: {fileID: 1316860253803466245}
@@ -915,9 +910,9 @@ MonoBehaviour:
     SpineMiddle: {fileID: 7128684994375036935}
     Chest: {fileID: 8544528529937322075}
     Neck: {fileID: 6556815394604599567}
-    LeftUpperArm: {fileID: 7276693740442672843}
+    LeftUpperArm: {fileID: 0}
     LeftForearm: {fileID: 4885546444821819907}
-    RightUpperArm: {fileID: 3078043518156494506}
+    RightUpperArm: {fileID: 0}
     RightForearm: {fileID: 9022070751789510771}
     SpineGroundAlign: 0
     SpineGrAdjustDuration: 0.15
@@ -969,11 +964,6 @@ SkinnedMeshRenderer:
 --- !u!4 &7128684994375036935 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3391502827646887135, guid: ceab76dacc4fed242984fed3dead8f61, type: 3}
-  m_PrefabInstance: {fileID: 5620251412891014360}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &7276693740442672843 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 2955248140533713427, guid: ceab76dacc4fed242984fed3dead8f61, type: 3}
   m_PrefabInstance: {fileID: 5620251412891014360}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &8101298291021346983 stripped

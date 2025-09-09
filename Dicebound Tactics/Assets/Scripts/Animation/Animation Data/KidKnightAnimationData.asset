@@ -1,0 +1,85 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aad61d9748e586f4ca545a2053ce64f6, type: 3}
+  m_Name: KidKnightAnimationData
+  m_EditorClassIdentifier: 
+  movementAnimations:
+    _FadeDuration: 0.1
+    _Events:
+      _NormalizedTimes: []
+      _Callbacks: []
+      _Names: []
+    _Speed: 1
+    _Animations:
+    - {fileID: 7400002, guid: a3422ad278cd9a94aa3da8e6bff9deea, type: 3}
+    - {fileID: 7400000, guid: 423d1298920c0b34780912c62b9aef03, type: 3}
+    - {fileID: 7400000, guid: 70ab2ccac2af7174f9b612026ed74bbd, type: 3}
+    - {fileID: 7400000, guid: 7c6d8b69cf38c1e48bb58569a2691d02, type: 2}
+    _Speeds:
+    - 1
+    - 2
+    - 2
+    - 2
+    _SynchronizeChildren: 
+    _Thresholds:
+    - {x: 0, y: 0}
+    - {x: 0, y: 0.1}
+    - {x: 0, y: 0.5}
+    - {x: 0, y: -0.1}
+    _DefaultParameter: {x: 0, y: 0}
+    _Type: 0
+  idleAnimations:
+  - {fileID: 7267397709382041070, guid: 182c15c2b84e63d4cac2882583308858, type: 3}
+  CanSwim: 0
+  swimmingAnimations:
+    _FadeDuration: 0.25
+    _Events:
+      _NormalizedTimes: []
+      _Callbacks: []
+      _Names: []
+    _Speed: 1
+    _Animations: []
+    _Speeds: []
+    _SynchronizeChildren: 
+    _Thresholds: []
+    _DefaultParameter: {x: 0, y: 0}
+    _Type: 0
+  CanFly: 0
+  flyingAnimations:
+    _FadeDuration: 0.25
+    _Events:
+      _NormalizedTimes: []
+      _Callbacks: []
+      _Names: []
+    _Speed: 1
+    _Animations: []
+    _Speeds: []
+    _SynchronizeChildren: 
+    _Thresholds: []
+    _DefaultParameter: {x: 0, y: 0}
+    _Type: 0
+  CanJump: 0
+  jumpAnimation: {fileID: 0}
+  fallingAnimation: {fileID: 0}
+  landingAnimation: {fileID: 0}
+  CanFight: 1
+  combatAnimations:
+    keys:
+    - {fileID: 11400000, guid: 00d22f65aba9aab4eb460cc5caee1c7d, type: 2}
+    - {fileID: 11400000, guid: f7008429e75d2a74ca1ec020bf30fcf1, type: 2}
+    - {fileID: 11400000, guid: 7a451a5cbc8ea3f42a4207b8862fbda4, type: 2}
+    values:
+    - {fileID: 11400000, guid: b2492bda72d5f4b42baa7455a05f7dce, type: 2}
+    - {fileID: 11400000, guid: 0017d249e1f11cd42bfd26e4d97fca22, type: 2}
+    - {fileID: 11400000, guid: b851d0475c58e5f4c88175bc02405e05, type: 2}
+  hitAnimation: {fileID: 0}
+  deathAnimation: {fileID: 0}
