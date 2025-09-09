@@ -187,7 +187,7 @@ MonoBehaviour:
   characterClass: {fileID: 11400000, guid: d7f6b715b6616184d96404092586ab2b, type: 2}
   statsContainer: {fileID: 0}
   initiativeValue: 0
-  blockVfxPrefab: {fileID: 0}
+  blockVfxPrefab: {fileID: 2906175958268946483, guid: 614536ada5d014a64a20838f77977351, type: 3}
   isAlive: 1
   isActive: 0
   healthBar: {fileID: 5637769574389663187}
@@ -208,7 +208,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28a244090561de44495066d2eb1d88f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
+  moveSpeed: 8
   defaultAcceleration: 10
   sprintSpeed: 25
   sprintAcceleration: 200

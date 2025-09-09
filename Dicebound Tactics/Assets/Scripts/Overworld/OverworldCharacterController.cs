@@ -49,14 +49,9 @@ public class OverworldCharacterController : OverworldEntityController
                     return;
                 }
 
-                if (InputManager.Instance.InputActions.Player.Move.IsPressed())
-                {
-                    HandleMovement(InputManager.Instance.InputActions.Player.Move.ReadValue<Vector2>());
-                }
-                else
-                {
-                    HandleMovement(Vector2.zero);
-                }
+                // Always read input value, don't check if pressed - this improves responsiveness
+                Vector2 inputValue = InputManager.Instance.InputActions.Player.Move.ReadValue<Vector2>();
+                HandleMovement(inputValue);
             }
             else
             {
@@ -116,10 +111,11 @@ public class OverworldCharacterController : OverworldEntityController
         right.y = 0;
         right.Normalize();
 
-        if (pathfindingAI.updatePosition && input.magnitude < 0.01f)
+        // Apply deadzone for more precise control
+        if (input.magnitude < 0.1f)
         {
-            // If the input is too small, stop the character
-            rvoController.velocity = Vector3.zero;
+            // Stop the character smoothly
+            rvoController.velocity = Vector3.Lerp(rvoController.velocity, Vector3.zero, Time.deltaTime * 15f);
             pathfindingAI.SetPath(null);
             return;
         }
@@ -128,17 +124,11 @@ public class OverworldCharacterController : OverworldEntityController
         Vector3 zeroedYVelocity = movement.normalized;
         zeroedYVelocity.y = 0;
 
-        if (zeroedYVelocity.magnitude < 0.01f)
-        {
-            return; // Avoid setting rotation if there's no movement
-        }
-
         // Detect sharp turn
         if (rvoController.velocity.magnitude > 0.1f && Vector3.Dot(rvoController.velocity.normalized, zeroedYVelocity) < -0.8f)
         {
             // Sharp turn: instantly stop and reorient
             rvoController.velocity = Vector3.zero;
-            pathfindingAI.desiredFinalRotation = Quaternion.LookRotation(zeroedYVelocity, Vector3.up);
 
             // Temporarily boost rotation speed and acceleration (on pathfindingAI only)
             if (sharpTurnBoostTimer <= 0f)
@@ -151,25 +141,29 @@ public class OverworldCharacterController : OverworldEntityController
             sharpTurnBoostTimer = sharpTurnBoostDuration;
         }
 
-        if (!pathfindingAI.updatePosition)
-        {
-            if (pathfindingAI.hasPath)
-            {
-                pathfindingAI.SetPath(null);
-            }
-
-            rvoController.velocity = zeroedYVelocity * pathfindingAI.maxSpeed;
-            transform.position += rvoController.velocity * Time.deltaTime;
-        }
-        else
-        {
-            pathfindingAI.destination = transform.position + zeroedYVelocity * pathfindingAI.maxSpeed;
-        }
-
-        if (!pathfindingAI.enableRotation)
+        // Use consistent direct velocity control for player movement
+        // This bypasses pathfinding for more responsive control
+        pathfindingAI.SetPath(null); // Clear any existing paths
+        
+        // Apply movement with input magnitude for variable speed
+        float targetSpeed = pathfindingAI.maxSpeed * input.magnitude;
+        Vector3 targetVelocity = zeroedYVelocity * targetSpeed;
+        
+        // For testing: Try direct velocity assignment
+        rvoController.velocity = targetVelocity;
+        
+        // Manually update position since pathfindingAI.updatePosition is disabled
+        transform.position += rvoController.velocity * Time.deltaTime;
+        
+        // Debug: Check what speeds we're working with
+        Debug.Log($"MaxSpeed: {pathfindingAI.maxSpeed}, TargetSpeed: {targetSpeed}, Final Velocity: {rvoController.velocity.magnitude}");
+        
+        // Handle rotation manually for immediate response
+        if (zeroedYVelocity.magnitude > 0.01f)
         {
             Quaternion targetRotation = Quaternion.LookRotation(zeroedYVelocity, Vector3.up);
-            pathfindingAI.desiredFinalRotation = targetRotation;
+            float rotationRate = 12f; // Faster rotation for responsiveness
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationRate);
         }
     }
     #endregion
@@ -181,15 +175,21 @@ public class OverworldCharacterController : OverworldEntityController
             isControlled = true;
             rvoController.collidesWith = 0 << 0; // Disable RVO collisions when controlled
             rvoController.layer = RVOLayer.Layer30; // Set to layer 30 when controlled
-            pathfindingAI.enableRotation = false;
+            pathfindingAI.enableRotation = false; // Disable AI rotation for manual control
+            pathfindingAI.updatePosition = false; // Disable AI position updates for manual control
             SetShouldSprint(false);
+            
+            // Clear any existing paths when taking control
+            pathfindingAI.SetPath(null);
+            rvoController.velocity = Vector3.zero;
         }
         else
         {
             isControlled = false;
             rvoController.collidesWith = 0 << 1; // Enable RVO collisions when not controlled
             rvoController.layer = RVOLayer.DefaultAgent; // Set to layer 31 when not controlled
-            pathfindingAI.enableRotation = true;
+            pathfindingAI.enableRotation = true; // Re-enable AI rotation
+            pathfindingAI.updatePosition = true; // Re-enable AI position updates
             SetShouldSprint(true);
         }
     }
