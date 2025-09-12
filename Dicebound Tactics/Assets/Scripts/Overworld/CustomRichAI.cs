@@ -53,9 +53,10 @@ public class CustomRichAI : RichAI
             }
             else
             {
+                Vector3 flatVelocity = new Vector3(velocity.x, 0, velocity.z); // Ignore y-axis for rotation
                 rotation = Quaternion.RotateTowards(
                     rotation,
-                    Quaternion.LookRotation(velocity, Vector3.up),
+                    Quaternion.LookRotation(flatVelocity, Vector3.up),
                     rotationSpeed * Time.deltaTime
                 );
             }

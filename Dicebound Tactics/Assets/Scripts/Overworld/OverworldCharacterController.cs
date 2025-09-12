@@ -156,7 +156,6 @@ public class OverworldCharacterController : OverworldEntityController
         CharacterController characterController = GetComponent<CharacterController>();
         if (characterController != null)
         {
-            // Use CharacterController.Move for proper collision detection
             Vector3 moveVector = rvoController.velocity * Time.deltaTime;
 
             // Add gravity if not grounded
@@ -182,10 +181,11 @@ public class OverworldCharacterController : OverworldEntityController
             }
         }
 
-        // Handle rotation manually for immediate response
+        // Ensure the rotation only affects the y-axis
         if (zeroedYVelocity.magnitude > 0.01f)
         {
-            Quaternion targetRotation = Quaternion.LookRotation(zeroedYVelocity, Vector3.up);
+            Vector3 flatDirection = new Vector3(zeroedYVelocity.x, 0, zeroedYVelocity.z);
+            Quaternion targetRotation = Quaternion.LookRotation(flatDirection, Vector3.up);
             float rotationRate = 12f; // Faster rotation for responsiveness
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationRate);
         }
