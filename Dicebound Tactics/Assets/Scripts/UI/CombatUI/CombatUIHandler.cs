@@ -8,18 +8,13 @@ public class CombatUIHandler : MonoBehaviour
 {
     [SerializeField] private float _fadeDuration = 0.5f;
     [SerializeField] private Vector3 _canvasOffset = new Vector3(0.25f, 0.5f, 0); // Offset for the canvas position
+    [SerializeField] private Ease _defaultEase = Ease.InOutQuad;
 
     [SerializeField] private CombatPanel currentPanel;
     public CombatPanel CurrentPanel
     {
         get => currentPanel;
-        set
-        {
-            if (value != null)
-            {
-                currentPanel = value;
-            }
-        }
+        set => currentPanel = value; // Simplified - null assignment is valid and useful for clearing
     }
 
     [Header("Camera Settings")]
@@ -44,20 +39,16 @@ public class CombatUIHandler : MonoBehaviour
 
     private void Awake()
     {
-        if (ActionPanel)
-        {
-            ActionPanel.gameObject.SetActive(false);
-        }
+        // Initialize all panels as inactive
+        SetPanelActive(ActionPanel?.gameObject, false);
+        SetPanelActive(AbilityPanel?.gameObject, false);
+        SetPanelActive(ItemPanel?.gameObject, false);
+    }
 
-        if (AbilityPanel)
-        {
-            AbilityPanel.gameObject.SetActive(false);
-        }
-
-        if (ItemPanel)
-        {
-            ItemPanel.gameObject.SetActive(false);
-        }
+    private void SetPanelActive(GameObject panel, bool active)
+    {
+        if (panel != null)
+            panel.SetActive(active);
     }
 
     private void OnDisable()
@@ -104,77 +95,80 @@ public class CombatUIHandler : MonoBehaviour
 
     public void OpenPanel(CombatPanel panel)
     {
-        if (panel == null)
-        {
-            return;
-        }
+        if (panel == null) return;
 
         if (currentPanel != null)
         {
-            // Fade out the current panel before switching
-            currentPanel.FadeOutCanvas(() =>
-            {
-                CombatPanel previousPanel = currentPanel;
-                currentPanel = panel;
-                if (previousPanel != null && previousPanel != panel)
-                {
-                    currentPanel.PreviousPanel = previousPanel;
-                }
-
-                // deactivate the previous panel and activate the new one
-                previousPanel.gameObject.SetActive(false);
-                panel.gameObject.SetActive(true);
-
-                ShowScreenSpacePanelInputs(currentPanel.PreviousPanel != null);
-                currentPanel.FadeInCanvas(null, _fadeDuration, Ease.InOutQuad);
-            }, _fadeDuration, Ease.InOutQuad);
+            SwitchPanels(currentPanel, panel);
         }
         else
         {
-            ShowScreenSpacePanelInputs(false);
-            currentPanel = panel;
-            currentPanel.FadeInCanvas(null, _fadeDuration, Ease.InOutQuad);
-
+            ShowFirstPanel(panel);
         }
 
-        if (cameraManager)
+        SetCameraForPanel(panel);
+    }
+
+    private void SwitchPanels(CombatPanel fromPanel, CombatPanel toPanel)
+    {
+        fromPanel.FadeOutCanvas(() =>
         {
-            if (PanelCameras.TryGetValue(panel, out string cameraName))
-            {
-                cameraManager.TrySetActiveCamera(cameraName);
-            }
+            CompletePanelSwitch(fromPanel, toPanel);
+        }, _fadeDuration, _defaultEase);
+    }
+
+    private void ShowFirstPanel(CombatPanel panel)
+    {
+        ShowScreenSpacePanelInputs(false);
+        currentPanel = panel;
+        currentPanel.FadeInCanvas(null, _fadeDuration, _defaultEase);
+    }
+
+    private void CompletePanelSwitch(CombatPanel fromPanel, CombatPanel toPanel)
+    {
+        // Set up panel relationships
+        if (fromPanel != toPanel)
+        {
+            toPanel.PreviousPanel = fromPanel;
+        }
+
+        // Update active states
+        fromPanel.gameObject.SetActive(false);
+        toPanel.gameObject.SetActive(true);
+
+        // Update current panel reference
+        currentPanel = toPanel;
+
+        // Update UI state
+        ShowScreenSpacePanelInputs(currentPanel.PreviousPanel != null);
+        currentPanel.FadeInCanvas(null, _fadeDuration, _defaultEase);
+    }
+
+    private void SetCameraForPanel(CombatPanel panel)
+    {
+        if (cameraManager != null && PanelCameras.TryGetValue(panel, out string cameraName))
+        {
+            cameraManager.TrySetActiveCamera(cameraName);
         }
     }
 
     public void OpenActionPanel()
     {
-        if (ActionPanel == null)
-        {
-            return;
-        }
-
         OpenPanel(ActionPanel);
     }
 
-    public void FadeOutCurrentPanel()
+    public void FadeCurrentPanel(bool fadeIn)
     {
-        if (currentPanel == null)
-        {
-            return;
-        }
-        
-        currentPanel.FadeOutCanvas(null, _fadeDuration, Ease.InOutQuad);
+        if (currentPanel == null) return;
+
+        if (fadeIn)
+            currentPanel.FadeInCanvas(null, _fadeDuration, _defaultEase);
+        else
+            currentPanel.FadeOutCanvas(null, _fadeDuration, _defaultEase);
     }
 
-    public void FadeInCurrentPanel()
-    {
-        if (currentPanel == null)
-        {
-            return;
-        }
-
-        currentPanel.FadeInCanvas(null, _fadeDuration, Ease.InOutQuad);
-    }
+    public void FadeOutCurrentPanel() => FadeCurrentPanel(false);
+    public void FadeInCurrentPanel() => FadeCurrentPanel(true);
 
     public void CloseCurrentPanel()
     {
@@ -184,81 +178,84 @@ public class CombatUIHandler : MonoBehaviour
             return;
         }
 
-        // if the panel you're returning to has no previous panel,
-        // hide the screen space inputs
-        if (currentPanel.PreviousPanel == null || currentPanel.PreviousPanel.PreviousPanel == null)
+        var panelToReturn = currentPanel.PreviousPanel;
+        bool shouldHideInputs = ShouldHideScreenSpaceInputs(panelToReturn);
+
+        if (shouldHideInputs)
         {
             ShowScreenSpacePanelInputs(false);
         }
 
         currentPanel.FadeOutCanvas(() =>
         {
-            if (currentPanel.PreviousPanel != null)
+            if (panelToReturn != null)
             {
-                // Deactivate the current panel and set the previous panel as current
-                currentPanel.gameObject.SetActive(false);
-
-                currentPanel = currentPanel.PreviousPanel;
-                ShowScreenSpacePanelInputs(currentPanel.PreviousPanel != null);
-
-                currentPanel.gameObject.SetActive(true);
-                currentPanel.FadeInCanvas(null, _fadeDuration, Ease.InOutQuad);
-
-                if (cameraManager)
-                {
-                    if (PanelCameras.TryGetValue(currentPanel, out string cameraName))
-                    {
-                        cameraManager.TrySetActiveCamera(cameraName);
-                    }
-                }
+                ReturnToPreviousPanel(panelToReturn);
             }
             else
             {
                 currentPanel = null;
             }
+        }, _fadeDuration, _defaultEase);
+    }
 
-        }, _fadeDuration, Ease.InOutQuad);
+    private bool ShouldHideScreenSpaceInputs(CombatPanel panelToReturn)
+    {
+        return panelToReturn == null || panelToReturn.PreviousPanel == null;
+    }
+
+    private void ReturnToPreviousPanel(CombatPanel panelToReturn)
+    {
+        // Deactivate current panel
+        currentPanel.gameObject.SetActive(false);
+
+        // Set previous panel as current
+        currentPanel = panelToReturn;
+        ShowScreenSpacePanelInputs(currentPanel.PreviousPanel != null);
+
+        // Activate and fade in previous panel
+        currentPanel.gameObject.SetActive(true);
+        currentPanel.FadeInCanvas(null, _fadeDuration, _defaultEase);
+
+        // Update camera
+        SetCameraForPanel(currentPanel);
     }
 
     public void CloseAllPanels()
     {
-        if (currentPanel == null)
-        {
-            return;
-        }
+        if (currentPanel == null) return;
 
-        if (cancelButton)
-        {
+        if (cancelButton != null)
             cancelButton.interactable = false;
-        }
+
         currentPanel.FadeOutCanvas(() =>
         {
             currentPanel = null;
             ShowScreenSpacePanelInputs(false);
-        }, _fadeDuration, Ease.InOutQuad);
+        }, _fadeDuration, _defaultEase);
+    }
+
+    private void FadeCanvasGroup(CanvasGroup canvasGroup, bool fadeIn, System.Action onComplete = null)
+    {
+        if (canvasGroup == null) return;
+
+        DOTween.To(() => canvasGroup.alpha, x => canvasGroup.alpha = x, fadeIn ? 1 : 0, _fadeDuration)
+            .OnStart(() =>
+            {
+                canvasGroup.interactable = fadeIn;
+                canvasGroup.blocksRaycasts = fadeIn;
+            })
+            .OnComplete(() => onComplete?.Invoke());
     }
 
     public void ShowScreenSpacePanelInputs(bool enable)
     {
-        if (panelInputsCanvasGroup == null)
-        {
-            return;
-        }
-
-        DOTween.To(() => panelInputsCanvasGroup.alpha, x => panelInputsCanvasGroup.alpha = x, enable ? 1 : 0, _fadeDuration)
-            .OnStart(() =>
-            {
-                panelInputsCanvasGroup.interactable = enable;
-                panelInputsCanvasGroup.blocksRaycasts = enable;
-            });
+        FadeCanvasGroup(panelInputsCanvasGroup, enable);
     }
 
     public void ShowConfirmButton(bool enable)
     {
-        if (confirmButton == null)
-        {
-            return;
-        }
+        if (confirmButton == null) return;
 
         if (enable)
         {
@@ -272,54 +269,25 @@ public class CombatUIHandler : MonoBehaviour
 
     public void ShowBigNotification(string message, float duration = 2f)
     {
-        if (notificationUI == null)
-        {
-            return;
-        }
-
-        notificationUI.ShowBigNotification(message, duration);
+        notificationUI?.ShowBigNotification(message, duration);
     }
 
     public void ShowNotification(string message, float duration = 2f)
     {
-        if (notificationUI == null)
-        {
-            return;
-        }
-
-        notificationUI.ShowNotification(message, duration);
+        notificationUI?.ShowNotification(message, duration);
     }
 
     public void ShowCombatUI()
     {
-        if (screenSpaceCanvasGroup == null)
-        {
-            return;
-        }
-
-        DOTween.To(() => screenSpaceCanvasGroup.alpha, x => screenSpaceCanvasGroup.alpha = x, 1, _fadeDuration)
-            .OnStart(() =>
-            {
-                screenSpaceCanvasGroup.interactable = true;
-                screenSpaceCanvasGroup.blocksRaycasts = true;
-            });
+        FadeCanvasGroup(screenSpaceCanvasGroup, true);
     }
 
     public void HideCombatUI()
     {
-        if (screenSpaceCanvasGroup == null)
-        {
-            return;
-        }
+        if (screenSpaceCanvasGroup == null) return;
 
         CloseAllPanels();
-
-        DOTween.To(() => screenSpaceCanvasGroup.alpha, x => screenSpaceCanvasGroup.alpha = x, 0, _fadeDuration)
-            .OnComplete(() =>
-            {
-                screenSpaceCanvasGroup.interactable = false;
-                screenSpaceCanvasGroup.blocksRaycasts = false;
-            });
+        FadeCanvasGroup(screenSpaceCanvasGroup, false);
     }
 
     private void HandleNewCharacterTurn(CharacterManager character)
@@ -337,26 +305,12 @@ public class CombatUIHandler : MonoBehaviour
 
     public void ShowTargetSelectionUI(bool enable)
     {
-        if (targetSelectionCanvasGroup == null)
-        {
-            return;
-        }
-
-        DOTween.To(() => targetSelectionCanvasGroup.alpha, x => targetSelectionCanvasGroup.alpha = x, enable ? 1 : 0, _fadeDuration)
-            .OnStart(() =>
-            {
-                targetSelectionCanvasGroup.interactable = enable;
-                targetSelectionCanvasGroup.blocksRaycasts = enable;
-            });
+        FadeCanvasGroup(targetSelectionCanvasGroup, enable);
     }
 
     public void ToggleBackButtonInteractable(bool enable)
     {
-        if (cancelButton == null)
-        {
-            return;
-        }
-
-        cancelButton.interactable = enable;
+        if (cancelButton != null)
+            cancelButton.interactable = enable;
     }
 }
