@@ -374,7 +374,15 @@ public class ProjectileManager : MonoBehaviour
 			//if the object hit is damageable, apply damage
 			if (hit.collider.gameObject.TryGetComponent(out Entity damageable))
 			{
-				damageable.TakeDamage((int)data.damage);
+				// Only apply damage if the entity is properly initialized
+				if (damageable != null && damageable.statsContainer != null && damageable.statsContainer.CurrentHealth != null)
+				{
+					damageable.TakeDamage((int)data.damage);
+				}
+				else
+				{
+					Debug.LogWarning($"Entity {hit.collider.name} is not properly initialized for damage calculation");
+				}
 			}
 
 			//invoke any additional callbacks on hit

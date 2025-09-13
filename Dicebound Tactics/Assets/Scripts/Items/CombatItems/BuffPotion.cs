@@ -45,9 +45,9 @@ public class BuffPotion : CombatItem
         // TODO: Add buff duration tracking when status effect system is implemented
         
         // Visual feedback - could use a different damage number type for buffs
-        if (CombatManager.Instance?.CombatUIHandler?.damageNumberUIHandler != null)
+        if (CombatManager.Instance?.CombatUIManager?.damageNumberUIHandler != null)
         {
-            CombatManager.Instance.CombatUIHandler.damageNumberUIHandler.ShowDamageNumber(
+            CombatManager.Instance.CombatUIManager.damageNumberUIHandler.ShowDamageNumber(
                 (int)buffValue, 
                 target.transform.position, 
                 DamageNumberType.Normal // You might want to add a new type for buffs

@@ -40,7 +40,11 @@ public class DamageAbilitySO : AbilitySO
         {
             if (userController == null || enemyController == null)
             {
-                ApplyDamage(amount, user, target);
+                // No movement controllers, but still check for defensive timing on player characters
+                yield return TriggerAbilityAnimationSequenceCoroutine(user, target, amount, (wasDefended) =>
+                {
+                    defensiveActionSucceeded = wasDefended;
+                });
                 yield return new WaitForSeconds(0.5f);
                 yield break;
             }
@@ -136,11 +140,44 @@ public class DamageAbilitySO : AbilitySO
 
         if (animationHandler == null)
         {
-            // No animation, apply damage immediately
-            ApplyDamage(damageAmount, user, target, false);
-            damageApplied = true;
+            // No animation, but still check for defensive timing on player characters
+            if (target is CharacterManager && defensiveWindowDuration > 0)
+            {
+                var targetController = target.GetComponent<OverworldEntityController>();
+                if (targetController != null)
+                {
+                    targetController.StartCoroutine(HandleDefensiveTimingWindow(target, 0f, (success) =>
+                    {
+                        defensiveActionSucceeded = success;
+                        Debug.Log($"[DamageAbilitySO] No animation - Defensive timing callback received for {target.name}. Success: {success}");
+                        onDefensiveResult?.Invoke(success);
+                        
+                        if (!damageApplied)
+                        {
+                            Debug.Log($"[DamageAbilitySO] No animation - Applying damage to {target.name} after defensive timing. Success: {success}");
+                            ApplyDamage(damageAmount, user, target, defensiveActionSucceeded);
+                            damageApplied = true;
+                        }
+                        else
+                        {
+                            Debug.LogWarning($"[DamageAbilitySO] No animation - Damage already applied to {target.name}, skipping duplicate application.");
+                        }
+                    }));
+                }
+                else
+                {
+                    ApplyDamage(damageAmount, user, target, false);
+                    damageApplied = true;
+                    onDefensiveResult?.Invoke(false);
+                }
+            }
+            else
+            {
+                ApplyDamage(damageAmount, user, target, false);
+                damageApplied = true;
+                onDefensiveResult?.Invoke(false);
+            }
             animDone = true;
-            onDefensiveResult?.Invoke(false);
         }
         else
         {
@@ -160,34 +197,42 @@ public class DamageAbilitySO : AbilitySO
                     targetController.StartCoroutine(HandleDefensiveTimingWindow(target, defensiveWindowStart, (success) =>
                     {
                         defensiveActionSucceeded = success;
+                        Debug.Log($"[DamageAbilitySO] Defensive timing callback received for {target.name}. Success: {success}");
                         onDefensiveResult?.Invoke(success);
                         
                         // Apply damage after defensive window completes
                         if (!damageApplied)
                         {
+                            Debug.Log($"[DamageAbilitySO] Applying damage to {target.name} after defensive timing. Success: {success}");
                             ApplyDamage(damageAmount, user, target, defensiveActionSucceeded);
                             damageApplied = true;
+                        }
+                        else
+                        {
+                            Debug.LogWarning($"[DamageAbilitySO] Damage already applied to {target.name}, skipping duplicate application.");
                         }
                     }));
                 }
                 else
                 {
-                    onDefensiveResult?.Invoke(false);
+                    // No controller found, apply damage without defensive timing
                     if (!damageApplied)
                     {
                         ApplyDamage(damageAmount, user, target, false);
                         damageApplied = true;
                     }
+                    onDefensiveResult?.Invoke(false);
                 }
             }
             else
             {
-                onDefensiveResult?.Invoke(false);
+                // Not a player character or no defensive window, apply damage normally
                 if (!damageApplied)
                 {
                     ApplyDamage(damageAmount, user, target, false);
                     damageApplied = true;
                 }
+                onDefensiveResult?.Invoke(false);
             }
 
             if (ProjectileManager.Instance != null && projectileData != null)
@@ -235,6 +280,7 @@ public class DamageAbilitySO : AbilitySO
         }
         if (!animDone)
         {
+            // Only apply damage if it hasn't been applied yet and there's no active defensive timing
             if (!damageApplied) 
             {
                 ApplyDamage(damageAmount, user, target, defensiveActionSucceeded);
@@ -256,7 +302,11 @@ public class DamageAbilitySO : AbilitySO
         if (defensiveActionSucceeded)
         {
             finalDamage = 0; // Reduce damage to 0 for successful defense
-            Debug.Log($"Defensive action succeeded! Damage reduced from {amount} to {finalDamage}");
+            Debug.Log($"[DamageAbilitySO] Defensive action succeeded! Damage reduced from {amount} to {finalDamage} for {target.name}");
+        }
+        else
+        {
+            Debug.Log($"[DamageAbilitySO] Applying {finalDamage} damage to {target.name} (defensive action: {(defensiveActionSucceeded ? "succeeded" : "failed/none")})");
         }
 
         target.TakeDamage(finalDamage);
@@ -280,12 +330,14 @@ public class DamageAbilitySO : AbilitySO
         bool responseReceived = false;
         
         // Trigger the defensive prompt event
+        Debug.Log($"[DamageAbilitySO] Requesting defensive prompt for {target.name} with sequence: [{string.Join(", ", requiredButtonSequence)}]");
         EventManager.TriggerDefensivePromptRequested(
             target,
             requiredButtonSequence, 
             buttonSequenceTimeLimit, 
             (success) => 
             {
+                Debug.Log($"[DamageAbilitySO] Defensive prompt callback received for {target.name}. Success: {success}");
                 sequenceCompleted = success;
                 responseReceived = true;
             }
@@ -304,11 +356,12 @@ public class DamageAbilitySO : AbilitySO
         // If no UI system responded, fall back to console-based system
         if (!responseReceived)
         {
-            Debug.Log("No UI system responded to defensive prompt - using fallback system");
+            Debug.Log("[DamageAbilitySO] No UI system responded to defensive prompt - using fallback system");
             yield return HandleDefensiveTimingFallback(target, onComplete);
         }
         else
         {
+            Debug.Log($"[DamageAbilitySO] Defensive timing completed for {target.name}. Success: {sequenceCompleted}");
             onComplete?.Invoke(sequenceCompleted);
         }
     }

@@ -109,6 +109,11 @@ namespace TacticsToolkit
         //Setup the statsContainer and scale up the stats based on level. 
         public void SetStats()
         {
+            if (characterClass == null)
+            {
+                Debug.LogError($"Entity {name} has null characterClass. Cannot initialize stats.");
+                return;
+            }
 
             if (statsContainer == null)
             {
@@ -259,12 +264,41 @@ namespace TacticsToolkit
         //Take damage from an attack or ability. 
         public void TakeDamage(int damage, bool ignoreDefence = false)
         {
+            // Ensure statsContainer and CurrentHealth are not null
+            if (statsContainer == null)
+            {
+                Debug.LogError($"Entity {name} has null statsContainer when taking damage. Attempting to initialize stats.");
+                
+                if (characterClass != null)
+                {
+                    SetStats(); // Try to initialize stats if they're null
+                }
+                
+                if (statsContainer == null)
+                {
+                    Debug.LogError($"Failed to initialize stats for Entity {name}. CharacterClass is {(characterClass == null ? "null" : "not null")}");
+                    return;
+                }
+            }
+
+            if (statsContainer.CurrentHealth == null)
+            {
+                Debug.LogError($"Entity {name} has null CurrentHealth stat when taking damage");
+                return;
+            }
+
             int damageToTake = CalculateDamageTakenWithModifiers(damage);
 
             if (damageToTake > 0)
             {
                 statsContainer.CurrentHealth.statValue -= damageToTake;
-                CombatManager.Instance.CombatUIHandler.damageNumberUIHandler.ShowDamageNumber(damageToTake, transform.position, DamageNumberType.Normal);
+                
+                // Null check for CombatManager and its components
+                if (CombatManager.Instance?.CombatUIManager?.damageNumberUIHandler != null)
+                {
+                    CombatManager.Instance.CombatUIManager.damageNumberUIHandler.ShowDamageNumber(damageToTake, transform.position, DamageNumberType.Normal);
+                }
+                
                 CameraManager.Instance?.ShakeActiveCamera();
                 //CameraShake.Shake(0.125f, 0.1f);
 
@@ -286,6 +320,12 @@ namespace TacticsToolkit
 
         public void HealEntity(int value)
         {
+            if (statsContainer == null || statsContainer.CurrentHealth == null)
+            {
+                Debug.LogError($"Entity {name} has null stats when trying to heal");
+                return;
+            }
+
             statsContainer.CurrentHealth.statValue += value;
             // Debug.Log($"{name} healed for {value} HP.");
             UpdateCharacterUI();
@@ -382,6 +422,12 @@ namespace TacticsToolkit
         //Updates the characters healthbar. 
         private void UpdateCharacterUI()
         {
+            if (statsContainer == null || statsContainer.CurrentHealth == null || statsContainer.Health == null)
+            {
+                Debug.LogWarning($"Entity {name} has null stats when updating UI");
+                return;
+            }
+
             if (healthBar)
                 healthBar.SetHealth((float)statsContainer.CurrentHealth.statValue, statsContainer.Health.statValue);
 

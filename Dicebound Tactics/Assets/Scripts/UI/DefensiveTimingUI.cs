@@ -73,8 +73,11 @@ public class DefensiveTimingUI : MonoBehaviour
   /// </summary>
   public void ShowDefensivePrompt(Entity target, string[] buttonSequence, float timeLimit, System.Action<bool> onComplete)
   {
+      Debug.Log($"[DefensiveTimingUI] ShowDefensivePrompt called for {target.name} with {buttonSequence.Length} buttons, time limit: {timeLimit}");
+      
       if (activeTimingCoroutine != null)
       {
+          Debug.Log("[DefensiveTimingUI] Stopping existing timing coroutine");
           StopCoroutine(activeTimingCoroutine);
       }
       
@@ -197,6 +200,7 @@ public class DefensiveTimingUI : MonoBehaviour
       });
       
       // Call completion callback
+      Debug.Log($"[DefensiveTimingUI] Defensive sequence completed for {target.name}. Success: {sequenceCompleted}");
       onComplete?.Invoke(sequenceCompleted);
       
       activeTimingCoroutine = null;

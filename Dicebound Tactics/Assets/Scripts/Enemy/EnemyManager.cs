@@ -70,10 +70,36 @@ public class EnemyManager : Entity
     {
         // Debug.Log($"[AI] {name} begins turn with {CurrentAP} AP");
 
+        // Ensure turnManager is available
+        if (turnManager == null)
+        {
+            turnManager = FindFirstObjectByType<TurnManager>();
+            if (turnManager == null)
+            {
+                Debug.LogError($"[EnemyManager] TurnManager not found for {name}. Cannot execute AI turn.");
+                EndAITurn();
+                yield break;
+            }
+        }
+
         while (true)
         {
+            // Check if abilityLoadout is available
+            if (abilityLoadout == null || abilityLoadout.Count == 0)
+            {
+                Debug.LogWarning($"[EnemyManager] {name} has no abilities in loadout. Trying to set default abilities.");
+                SetDefaultAbilityList();
+                
+                // If still no abilities after setting defaults, end turn
+                if (abilityLoadout == null || abilityLoadout.Count == 0)
+                {
+                    Debug.LogWarning($"[EnemyManager] {name} could not get any abilities. Ending turn.");
+                    break;
+                }
+            }
+
             var usableAbilities = abilityLoadout
-                .Where(a => a.apCost <= CurrentAP)
+                .Where(a => a != null && a.apCost <= CurrentAP)
                 .ToList();
 
             if (usableAbilities.Count == 0)
@@ -83,6 +109,13 @@ public class EnemyManager : Entity
             }
 
             var ability = usableAbilities[Random.Range(0, usableAbilities.Count)];
+
+            // Additional null check for playerUnits
+            if (turnManager.playerUnits == null)
+            {
+                Debug.LogError($"[EnemyManager] TurnManager.playerUnits is null for {name}. Cannot find targets.");
+                break;
+            }
 
             var targets = turnManager.playerUnits
                 .Where(p => p != null && p.isAlive)
@@ -98,10 +131,25 @@ public class EnemyManager : Entity
 
             // Debug.Log($"[AI] {name} using {ability.abilityName} (cost {ability.apCost}) on {target.name}");
 
-            // Camera setup
-            CameraManager.Instance.SetActiveCombatCharacter(target.transform);
-            CameraManager.Instance.SetCombatTarget(transform);
-            CameraManager.Instance.TrySetActiveCamera(_currentEncounter.GetCameraControllerForSide(target).name);
+            // Camera setup with null checks
+            if (CameraManager.Instance != null && _currentEncounter != null)
+            {
+                CameraManager.Instance.SetActiveCombatCharacter(target.transform);
+                CameraManager.Instance.SetCombatTarget(transform);
+                
+                var cameraController = _currentEncounter.GetCameraControllerForSide(target);
+                if (cameraController != null)
+                {
+                    CameraManager.Instance.TrySetActiveCamera(cameraController.name);
+                }
+            }
+            else
+            {
+                if (CameraManager.Instance == null)
+                    Debug.LogWarning($"[EnemyManager] CameraManager.Instance is null during {name}'s turn.");
+                if (_currentEncounter == null)
+                    Debug.LogWarning($"[EnemyManager] _currentEncounter is null during {name}'s turn.");
+            }
 
             // Wait for ability execution to finish
             yield return ability.Execute(this, target);

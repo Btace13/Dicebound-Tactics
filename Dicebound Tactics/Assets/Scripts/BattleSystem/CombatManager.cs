@@ -13,11 +13,11 @@ public class CombatManager : MonoBehaviour
     [Header("Component References")]
     [SerializeField] private SelectionController selectionController;
     [SerializeField] private TurnManager turnManager;
-    [SerializeField] private CombatUIHandler combatUIHandler;
+    [SerializeField] private CombatUIManager combatUIManager;
 
     public SelectionController SelectionController => selectionController;
     public TurnManager TurnManager => turnManager;
-    public CombatUIHandler CombatUIHandler => combatUIHandler;
+    public CombatUIManager CombatUIManager => combatUIManager;
 
     private CombatItem _selectedItem;
     private AbilitySO _selectedAbility;
@@ -52,13 +52,13 @@ public class CombatManager : MonoBehaviour
         if (newState == GameState.Combat)
         {
             turnManager.StartBattle();
-            combatUIHandler.ShowCombatUI();
-            combatUIHandler.ShowBigNotification("Fight!", 0.5f);
+            // The CombatUIManager will automatically show the UI when EventManager.TriggerBattleStarted() is called
+            combatUIManager.ShowBigNotification("Fight!", 0.5f);
         }
         else
         {
-            // Hide the combat UI when not in combat
-            combatUIHandler.HideCombatUI();
+            // The CombatUIManager will automatically hide the UI when EventManager.TriggerBattleEnded() is called
+            // No need to manually call HideCombatUI() anymore
         }
     }
 
@@ -198,20 +198,20 @@ public class CombatManager : MonoBehaviour
             if (_selectedAbility != null)
             {
                 // Show notification for ability usage
-                combatUIHandler.ShowNotification($"{currentUnit.name}{_selectedAbility.notifcationMessage}", 1);
+                combatUIManager.ShowNotification($"{currentUnit.name}{_selectedAbility.notifcationMessage}", 1);
             }
             else if (_selectedItem != null)
             {
                 // Show notification for item usage
-                combatUIHandler.ShowNotification($"{currentUnit.name} used a {_selectedItem.ItemName}", 1);
+                combatUIManager.ShowNotification($"{currentUnit.name} used a {_selectedItem.ItemName}", 1);
             }
             else
             {
                 //Show notifcation that the action is being executed
                 if (selectedTargets.Count > 1)
-                    combatUIHandler.ShowNotification($"{currentUnit.name} is attacking {selectedTargets.Count} targets", 1);
+                    combatUIManager.ShowNotification($"{currentUnit.name} is attacking {selectedTargets.Count} targets", 1);
                 else
-                    combatUIHandler.ShowNotification($"{currentUnit.name} is attacking {selectedTargets[0].name}", 1);
+                    combatUIManager.ShowNotification($"{currentUnit.name} is attacking {selectedTargets[0].name}", 1);
             }
 
             // set the active camera as the AttackCamera
@@ -269,7 +269,7 @@ public class CombatManager : MonoBehaviour
                             {
                                 int damage = currentUnit.characterClass.Strength.baseStatValue;
                                 target.TakeDamage(damage);
-                                CombatUIHandler.damageNumberUIHandler.ShowDamageNumber(damage, target.transform.position, DamageNumberType.Normal);
+                                combatUIManager.damageNumberUIHandler.ShowDamageNumber(damage, target.transform.position, DamageNumberType.Normal);
                                 // CameraManager.Instance?.ShakeActiveCamera();
                             });
                             attackSequence.AppendInterval(0.5f);
@@ -284,7 +284,7 @@ public class CombatManager : MonoBehaviour
                     {
                         int damage = currentUnit.characterClass.Strength.baseStatValue;
                         target.TakeDamage(damage);
-                        CombatUIHandler.damageNumberUIHandler.ShowDamageNumber(damage, target.transform.position, DamageNumberType.Normal);
+                        combatUIManager.damageNumberUIHandler.ShowDamageNumber(damage, target.transform.position, DamageNumberType.Normal);
                         // CameraManager.Instance?.ShakeActiveCamera();
                     }
                 }

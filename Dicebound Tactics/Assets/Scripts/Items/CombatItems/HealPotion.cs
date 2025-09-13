@@ -48,9 +48,9 @@ public class HealPotion : CombatItem
             target.HealEntity(totalHealAmount);
             
             // Show heal damage number
-            if (CombatManager.Instance?.CombatUIHandler?.damageNumberUIHandler != null)
+            if (CombatManager.Instance?.CombatUIManager?.damageNumberUIHandler != null)
             {
-                CombatManager.Instance.CombatUIHandler.damageNumberUIHandler.ShowDamageNumber(
+                CombatManager.Instance.CombatUIManager.damageNumberUIHandler.ShowDamageNumber(
                     totalHealAmount, 
                     target.transform.position, 
                     DamageNumberType.Heal
