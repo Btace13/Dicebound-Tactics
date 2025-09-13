@@ -77,15 +77,28 @@ public class DamageAbilitySO : AbilitySO
                 {
                     if (!character.CanUseMoreAbilitiesThisTurn())
                     {
-                        TurnManager.Instance.StartNextTurn();
+                        EventManager.TriggerCharacterTurnEnded(character);
                     }
                     else
                     { 
-                        EventManager.TriggerCharacterTurnStarted(character);
+                        // Continue the turn without restarting - refocus camera and refresh UI
+                        Debug.Log($"[DamageAbilitySO] Character {character.name} has more AP, continuing turn...");
+                        
+                        // First, ensure we end any target selection state
+                        EventManager.TriggerSelectingATarget(false);
+                        
+                        // Trigger the same events that happen during a normal turn start
+                        // This ensures camera and other systems are properly set up
+                        EventManager.TriggerNewActiveEntity(character);
+                        
+                        // Use the new ContinueCharacterTurn method to properly handle the UI state
+                        CombatManager.Instance?.CombatUIManager?.ContinueCharacterTurn(character);
+                        
+                        Debug.Log($"[DamageAbilitySO] Character turn continued for {character.name}");
                     }
                 }
             });
-            while (!returnDone) yield return new WaitForSeconds(1.6f);
+            while (!returnDone) yield return new WaitForSeconds(0.8f); // Reduced from 1.6f
         }
         else
         {
@@ -94,17 +107,30 @@ public class DamageAbilitySO : AbilitySO
             {
                 defensiveActionSucceeded = wasDefended;
             });
-            yield return new WaitForSeconds(1.6f);
+            yield return new WaitForSeconds(0.8f); // Reduced from 1.6f
             if (user is CharacterManager character)
             {
 
                 if (!character.CanUseMoreAbilitiesThisTurn())
                 {
-                    TurnManager.Instance.StartNextTurn();
+                    EventManager.TriggerCharacterTurnEnded(character);
                 }
                 else
                 { 
-                    EventManager.TriggerCharacterTurnStarted(character);
+                    // Continue the turn without restarting - refocus camera and refresh UI
+                    Debug.Log($"[DamageAbilitySO] Character {character.name} has more AP, continuing turn...");
+                    
+                    // First, ensure we end any target selection state
+                    EventManager.TriggerSelectingATarget(false);
+                    
+                    // Trigger the same events that happen during a normal turn start
+                    // This ensures camera and other systems are properly set up
+                    EventManager.TriggerNewActiveEntity(character);
+                    
+                    // Use the new ContinueCharacterTurn method to properly handle the UI state
+                    CombatManager.Instance?.CombatUIManager?.ContinueCharacterTurn(character);
+                    
+                    Debug.Log($"[DamageAbilitySO] Character turn continued for {character.name}");
                 }
             }
         }
@@ -140,8 +166,8 @@ public class DamageAbilitySO : AbilitySO
 
         if (animationHandler == null)
         {
-            // No animation, but still check for defensive timing on player characters
-            if (target is CharacterManager && defensiveWindowDuration > 0)
+            // No animation, but still check for defensive timing ONLY for player targets being attacked by enemies
+            if (target is CharacterManager && user is EnemyManager && defensiveWindowDuration > 0)
             {
                 var targetController = target.GetComponent<OverworldEntityController>();
                 if (targetController != null)
@@ -152,29 +178,36 @@ public class DamageAbilitySO : AbilitySO
                         Debug.Log($"[DamageAbilitySO] No animation - Defensive timing callback received for {target.name}. Success: {success}");
                         onDefensiveResult?.Invoke(success);
                         
-                        if (!damageApplied)
+                        // Only apply damage if there's no projectile - projectiles handle their own damage
+                        if (ProjectileManager.Instance == null || projectileData == null)
                         {
-                            Debug.Log($"[DamageAbilitySO] No animation - Applying damage to {target.name} after defensive timing. Success: {success}");
-                            ApplyDamage(damageAmount, user, target, defensiveActionSucceeded);
-                            damageApplied = true;
-                        }
-                        else
-                        {
-                            Debug.LogWarning($"[DamageAbilitySO] No animation - Damage already applied to {target.name}, skipping duplicate application.");
+                            if (!damageApplied)
+                            {
+                                ApplyDamage(damageAmount, user, target, defensiveActionSucceeded);
+                                damageApplied = true;
+                            }
                         }
                     }));
                 }
                 else
                 {
-                    ApplyDamage(damageAmount, user, target, false);
-                    damageApplied = true;
+                    // Apply damage without defensive timing only if no projectile
+                    if (ProjectileManager.Instance == null || projectileData == null)
+                    {
+                        ApplyDamage(damageAmount, user, target, false);
+                        damageApplied = true;
+                    }
                     onDefensiveResult?.Invoke(false);
                 }
             }
             else
             {
-                ApplyDamage(damageAmount, user, target, false);
-                damageApplied = true;
+                // Apply damage without defensive timing only if no projectile
+                if (ProjectileManager.Instance == null || projectileData == null)
+                {
+                    ApplyDamage(damageAmount, user, target, false);
+                    damageApplied = true;
+                }
                 onDefensiveResult?.Invoke(false);
             }
             animDone = true;
@@ -187,8 +220,8 @@ public class DamageAbilitySO : AbilitySO
                 // The damage will be applied after the defensive timing finishes
             }, () => { animDone = true; });
 
-            // Start defensive timing window if the target is a player character
-            if (target is CharacterManager && defensiveWindowDuration > 0)
+            // Start defensive timing window ONLY if the target is a player character AND the user is an enemy
+            if (target is CharacterManager && user is EnemyManager && defensiveWindowDuration > 0)
             {
                 // Find a MonoBehaviour to run the coroutine (using the target's controller)
                 var targetController = target.GetComponent<OverworldEntityController>();
@@ -200,37 +233,41 @@ public class DamageAbilitySO : AbilitySO
                         Debug.Log($"[DamageAbilitySO] Defensive timing callback received for {target.name}. Success: {success}");
                         onDefensiveResult?.Invoke(success);
                         
-                        // Apply damage after defensive window completes
-                        if (!damageApplied)
+                        // Only apply damage if there's no projectile - projectiles handle their own damage
+                        if (ProjectileManager.Instance == null || projectileData == null)
                         {
-                            Debug.Log($"[DamageAbilitySO] Applying damage to {target.name} after defensive timing. Success: {success}");
-                            ApplyDamage(damageAmount, user, target, defensiveActionSucceeded);
-                            damageApplied = true;
-                        }
-                        else
-                        {
-                            Debug.LogWarning($"[DamageAbilitySO] Damage already applied to {target.name}, skipping duplicate application.");
+                            if (!damageApplied)
+                            {
+                                ApplyDamage(damageAmount, user, target, defensiveActionSucceeded);
+                                damageApplied = true;
+                            }
                         }
                     }));
                 }
                 else
                 {
-                    // No controller found, apply damage without defensive timing
-                    if (!damageApplied)
+                    // No controller found, apply damage without defensive timing only if no projectile
+                    if (ProjectileManager.Instance == null || projectileData == null)
                     {
-                        ApplyDamage(damageAmount, user, target, false);
-                        damageApplied = true;
+                        if (!damageApplied)
+                        {
+                            ApplyDamage(damageAmount, user, target, false);
+                            damageApplied = true;
+                        }
                     }
                     onDefensiveResult?.Invoke(false);
                 }
             }
             else
             {
-                // Not a player character or no defensive window, apply damage normally
-                if (!damageApplied)
+                // Not a valid defensive scenario (enemy target or player attacker), apply damage normally only if no projectile
+                if (ProjectileManager.Instance == null || projectileData == null)
                 {
-                    ApplyDamage(damageAmount, user, target, false);
-                    damageApplied = true;
+                    if (!damageApplied)
+                    {
+                        ApplyDamage(damageAmount, user, target, false);
+                        damageApplied = true;
+                    }
                 }
                 onDefensiveResult?.Invoke(false);
             }
@@ -254,6 +291,41 @@ public class DamageAbilitySO : AbilitySO
 
                 yield return new WaitForSeconds(projectileData.castTime);
 
+                // For projectile abilities, handle defensive timing BEFORE launching projectile (only for player targets)
+                bool finalDefensiveResult = defensiveActionSucceeded;
+                if (target is CharacterManager && user is EnemyManager && defensiveWindowDuration > 0)
+                {
+                    bool defensiveTimingComplete = false;
+                    
+                    var targetController = target.GetComponent<OverworldEntityController>();
+                    if (targetController != null)
+                    {
+                        Debug.Log($"[DamageAbilitySO] Starting defensive timing for projectile attack on {target.name}");
+                        targetController.StartCoroutine(HandleDefensiveTimingWindow(target, 0f, (success) =>
+                        {
+                            finalDefensiveResult = success;
+                            defensiveTimingComplete = true;
+                        }));
+                        
+                        // Wait for defensive timing to complete before launching projectile
+                        float defensiveTimeout = buttonSequenceTimeLimit + 1f; // Reduced timeout
+                        float defensiveTimer = 0f;
+                        while (!defensiveTimingComplete && defensiveTimer < defensiveTimeout)
+                        {
+                            defensiveTimer += Time.deltaTime;
+                            yield return null;
+                        }
+                        
+                        if (!defensiveTimingComplete)
+                        {
+                            Debug.LogWarning($"[DamageAbilitySO] Defensive timing timed out for {target.name}");
+                        }
+                    }
+                }
+
+                // Create a flag to track when the projectile hits and damage is applied
+                bool projectileHit = false;
+                
                 ProjectileManager.CreateProjectile(
                     projectileSpawnPoint.position,
                     direction,
@@ -263,11 +335,34 @@ public class DamageAbilitySO : AbilitySO
                     projectileData.projectileSpeed,
                     damageAmount,
                     -1,
-                    null,
+                    (hit) =>
+                    {
+                        // This callback fires when the projectile hits - apply damage immediately
+                        if (hit.collider.gameObject.TryGetComponent(out Entity hitEntity) && hitEntity == target)
+                        {
+                            ApplyDamage(damageAmount, user, target, finalDefensiveResult);
+                            projectileHit = true;
+                        }
+                    },
                     projectileData.particleObject,
                     "",
                     target.transform
                 );
+                
+                // Wait for the projectile to hit before continuing
+                float projectileTimeout = 5f; // Reduced timeout from 10f to 5f
+                float projectileTimer = 0f;
+                while (!projectileHit && projectileTimer < projectileTimeout)
+                {
+                    projectileTimer += Time.deltaTime;
+                    yield return null;
+                }
+                
+                if (!projectileHit)
+                {
+                    Debug.LogWarning("[DamageAbilitySO] Projectile did not hit target within timeout, applying damage anyway");
+                    ApplyDamage(damageAmount, user, target, finalDefensiveResult);
+                }
             }
         }
         // Failsafe: if animation never completes, force exit after a timeout
@@ -281,7 +376,8 @@ public class DamageAbilitySO : AbilitySO
         if (!animDone)
         {
             // Only apply damage if it hasn't been applied yet and there's no active defensive timing
-            if (!damageApplied) 
+            // And only if there's no projectile system handling damage
+            if (!damageApplied && (ProjectileManager.Instance == null || projectileData == null)) 
             {
                 ApplyDamage(damageAmount, user, target, defensiveActionSucceeded);
                 onDefensiveResult?.Invoke(defensiveActionSucceeded);

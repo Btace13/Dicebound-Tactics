@@ -89,7 +89,6 @@ public class CameraManager : MonoBehaviour
 
     public void RegisterCamera(string cameraName, BaseCameraController cameraController)
     {
-        // print($"Attempting to register camera: {cameraName}");
         if (!Cameras.ContainsKey(cameraName))
         {
             Cameras.Add(cameraName, cameraController);
@@ -100,7 +99,7 @@ public class CameraManager : MonoBehaviour
         }
         else
         {
-            // Debug.LogWarning($"Camera with name {cameraName} is already registered.");
+            Debug.LogWarning($"[CameraManager] Camera with name {cameraName} is already registered.");
         }
     }
 
@@ -128,7 +127,7 @@ public class CameraManager : MonoBehaviour
         }
         else
         {
-            // Debug.LogWarning($"Camera with name {cameraName} not found.");
+            Debug.LogWarning($"[CameraManager] Camera with name {cameraName} not found.");
         }
     }
 
@@ -338,7 +337,15 @@ public class CameraManager : MonoBehaviour
                 // Debug.LogWarning("CameraManager: Camera target is set to ActivePlayer. Cannot set target.");
                 continue;
             }
-            combatCameraController.TargetGroup.Targets.Clear();
+            
+            // Instead of clearing all targets, manage them properly
+            // Remove the current target if it exists (should be at index 1 for Target cameras)
+            if (combatCameraController.TargetGroup.Targets.Count > 1)
+            {
+                combatCameraController.TargetGroup.RemoveMember(combatCameraController.TargetGroup.Targets[1].Object);
+            }
+            
+            // Add the new target
             combatCameraController.AddTarget(target);
         }
         activeTarget = target;
@@ -351,34 +358,45 @@ public class CameraManager : MonoBehaviour
 
     public void SetActiveCombatCharacter(Transform character)
     {
+        Debug.Log($"[CameraManager] SetActiveCombatCharacter called with: {character?.name ?? "NULL"}");
+        Debug.Log($"[CameraManager] Found {Cameras.Values.OfType<CombatCameraController>().Count()} combat cameras");
+        
         foreach (CombatCameraController combatCamera in Cameras.Values.OfType<CombatCameraController>())
         {
+            Debug.Log($"[CameraManager] Processing combat camera: {combatCamera?.name ?? "NULL"}");
+            
             if (combatCamera == null)
             {
-                // Debug.LogWarning("Active camera is not a CombatCameraController.");
+                Debug.LogWarning("[CameraManager] Active camera is not a CombatCameraController.");
                 continue;
             }
             if (combatCamera.TargetGroup == null)
             {
-                // Debug.LogError("Target group is not initialized in CombatCameraController.");
+                Debug.LogError("[CameraManager] Target group is not initialized in CombatCameraController.");
                 continue;
             }
             if (combatCamera.cameraTarget == CameraTarget.Target)
             {
-                // Debug.LogWarning("Camera target is set to Target. Cannot set active character.");
+                Debug.LogWarning("[CameraManager] Camera target is set to Target. Cannot set active character.");
                 continue;
             }
+            
+            Debug.Log($"[CameraManager] Setting up camera {combatCamera.name} with {combatCamera.TargetGroup.Targets.Count} existing targets");
+            
             if (combatCamera.TargetGroup.Targets.Count == 0)
             {
+                Debug.Log($"[CameraManager] Adding new target to {combatCamera.name}");
                 combatCamera.AddTarget(character);
             }
             else
             {
+                Debug.Log($"[CameraManager] Updating existing target in {combatCamera.name}");
                 combatCamera.UpdateTargetAtIndex(character, 0);
             }
             combatCamera.UpdateFollowTarget(character);
         }
         activeCharacter = character;
+        Debug.Log($"[CameraManager] Active character set to: {activeCharacter?.name ?? "NULL"}");
     }
 
     public void SetActiveCombatCharacter(Entity entity)

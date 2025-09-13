@@ -338,7 +338,10 @@ public class ProjectileManager : MonoBehaviour
 										new QueryParameters(), // Default query parameters
 										0f); // Zero distance
 
-			data.previousPosition = data.projectileObject.transform.position; // Update previous position to current
+			// Still update movement during initial phase
+			data.previousPosition = data.projectileObject.transform.position;
+			data.projectileObject.transform.position += data.direction * data.speed * Time.deltaTime;
+			data.timeAlive += Time.deltaTime;
 			return;
 		}
 
@@ -352,41 +355,51 @@ public class ProjectileManager : MonoBehaviour
 		}
 
 		var queryParameters = new QueryParameters(layers, false, QueryTriggerInteraction.Ignore);
-		// Calculate previous position more accurately based on current position and movement this frame
+		
+		// Calculate where the projectile will be this frame
 		Vector3 currentPosition = data.projectileObject.transform.position;
-		float castDistance = (currentPosition - data.previousPosition).magnitude; // Use the actual movement distance
+		Vector3 movement = data.direction * data.speed * Time.deltaTime;
+		Vector3 nextPosition = currentPosition + movement;
+		float castDistance = movement.magnitude;
 
 		// Ensure radius is not zero if scaling from zero
 		float currentRadius = Mathf.Max(data.projectileObject.transform.localScale.x * 0.5f, 0.01f);
 
+		// Use a slightly longer cast distance to ensure we don't miss fast-moving targets
+		float safeCastDistance = Mathf.Max(castDistance, currentRadius * 2f);
+
 		spherecastCommands[index] = new SpherecastCommand(
-									data.previousPosition,
-									currentRadius, // Use calculated radius
+									currentPosition,
+									currentRadius,
 									data.direction,
 									queryParameters,
-									castDistance);
+									safeCastDistance);
 	}
 
 	public void HandleProjectileCollision(ProjectileData data, RaycastHit hit)
 	{
 		if (hit.collider != null)
 		{
-			//if the object hit is damageable, apply damage
-			if (hit.collider.gameObject.TryGetComponent(out Entity damageable))
+			//invoke any additional callbacks on hit first - let them handle damage
+			data.OnImpact?.Invoke(hit);
+
+			// Only apply damage automatically if no callback was provided (backwards compatibility)
+			if (data.OnImpact == null)
 			{
-				// Only apply damage if the entity is properly initialized
-				if (damageable != null && damageable.statsContainer != null && damageable.statsContainer.CurrentHealth != null)
+				//if the object hit is damageable, apply damage
+				if (hit.collider.gameObject.TryGetComponent(out Entity damageable))
 				{
-					damageable.TakeDamage((int)data.damage);
-				}
-				else
-				{
-					Debug.LogWarning($"Entity {hit.collider.name} is not properly initialized for damage calculation");
+					// Only apply damage if the entity is properly initialized
+					if (damageable != null && damageable.statsContainer != null && damageable.statsContainer.CurrentHealth != null)
+					{
+						damageable.TakeDamage((int)data.damage);
+					}
+					else
+					{
+						Debug.LogWarning($"Entity {hit.collider.name} is not properly initialized for damage calculation");
+					}
 				}
 			}
-
-			//invoke any additional callbacks on hit
-			data.OnImpact?.Invoke(hit);
 
 			if (data.projectilePath == ProjectilePath.PARABOLIC && impactIndicators.ContainsKey(data))
 			{
@@ -396,13 +409,13 @@ public class ProjectileManager : MonoBehaviour
 
 			objectsQueuedForCleanup.Add(data);
 			data.isReseting = true;
-			data.OnImpact = null;
 			GameObject impactObj = Instantiate(data.projectileType.impactObject, hit.point, Quaternion.LookRotation(hit.normal));
 			StartCoroutine(DelayDestroy(impactObj));
 			return;
 		}
 
-		data.previousPosition = data.projectileObject.transform.position; // Update previous position to current
+		// Only move the projectile if no collision occurred
+		data.previousPosition = data.projectileObject.transform.position; // Store current position as previous
 		data.projectileObject.transform.rotation = Quaternion.RotateTowards(data.projectileObject.transform.rotation, Quaternion.LookRotation(data.direction), 720f * Time.deltaTime);
 		data.projectileObject.transform.position += data.direction * data.speed * Time.deltaTime;
 		data.timeAlive += Time.deltaTime;

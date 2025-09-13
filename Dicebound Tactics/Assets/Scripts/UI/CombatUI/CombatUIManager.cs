@@ -456,9 +456,29 @@ public class CombatUIManager : MonoBehaviour
 
     private void HandleShowActionPanel()
     {
+        Debug.Log($"[CombatUIManager] HandleShowActionPanel called with current state: {currentState}");
+        
         if (currentState == UIState.AbilitySelection || currentState == UIState.ItemSelection)
         {
+            Debug.Log($"[CombatUIManager] Transitioning from {currentState} to PlayerTurn via GoBack");
             TryTransition(UITransition.GoBack);
+        }
+        else if (currentState == UIState.TargetSelection)
+        {
+            Debug.Log($"[CombatUIManager] Transitioning from {currentState} to PlayerTurn via EndTargetSelection");
+            TryTransition(UITransition.EndTargetSelection);
+        }
+        else if (currentState == UIState.PlayerTurn)
+        {
+            Debug.Log($"[CombatUIManager] Already in PlayerTurn state, ensuring action panel is visible");
+            // Already in the correct state, just make sure the action panel is visible
+            OnEnterPlayerTurnState();
+        }
+        else
+        {
+            Debug.Log($"[CombatUIManager] Forcing transition to PlayerTurn from state: {currentState}");
+            // Force transition to PlayerTurn state
+            TransitionToState(UIState.PlayerTurn);
         }
     }
 
@@ -662,6 +682,33 @@ public class CombatUIManager : MonoBehaviour
     public void OpenActionPanel()
     {
         HandleShowActionPanel();
+    }
+
+    /// <summary>
+    /// Continues the current character's turn after an ability completion
+    /// Ensures proper UI state and character setup without restarting the turn
+    /// </summary>
+    public void ContinueCharacterTurn(CharacterManager character)
+    {
+        Debug.Log($"[CombatUIManager] ContinueCharacterTurn called for {character?.name ?? "NULL"}, current state: {currentState}");
+        
+        // Update the current character
+        currentCharacter = character;
+        
+        // Force transition to PlayerTurn state if not already there
+        if (currentState != UIState.PlayerTurn)
+        {
+            Debug.Log($"[CombatUIManager] Forcing transition to PlayerTurn from {currentState}");
+            TransitionToState(UIState.PlayerTurn);
+        }
+        else
+        {
+            // Already in PlayerTurn state, just refresh the UI
+            Debug.Log($"[CombatUIManager] Already in PlayerTurn, refreshing UI");
+            OnEnterPlayerTurnState();
+        }
+        
+        Debug.Log($"[CombatUIManager] ContinueCharacterTurn complete, new state: {currentState}");
     }
 
     public void FadeCurrentPanel(bool fadeIn)

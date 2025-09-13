@@ -18,6 +18,7 @@ public class CombatManager : MonoBehaviour
     public SelectionController SelectionController => selectionController;
     public TurnManager TurnManager => turnManager;
     public CombatUIManager CombatUIManager => combatUIManager;
+    public CombatEncounter CurrentEncounter => _currentEncounter;
 
     private CombatItem _selectedItem;
     private AbilitySO _selectedAbility;
@@ -172,7 +173,10 @@ public class CombatManager : MonoBehaviour
 
     public void ExecuteAction()
     {
+        Debug.Log($"[CombatManager] ExecuteAction called. Current UI state: {combatUIManager?.GetCurrentState()}");
         EventManager.TriggerSelectingATarget(false);
+        Debug.Log($"[CombatManager] After TriggerSelectingATarget(false). Current UI state: {combatUIManager?.GetCurrentState()}");
+        
         Entity currentUnit = turnManager.GetCurrentUnit();
 
         if (currentUnit == null)
@@ -192,6 +196,32 @@ public class CombatManager : MonoBehaviour
             return;
         }
 
+        // Handle item usage separately (items end turn immediately)
+        if (_selectedItem != null)
+        {
+            Entity target = selectedTargets[0]; // Items only affect the first selected target
+            bool itemUsed = currentUnit.UseCombatItem(_selectedItem, target);
+
+            if (!itemUsed)
+            {
+                Debug.LogWarning($"{currentUnit.name} failed to use {_selectedItem.ItemName} on {target.name}");
+            }
+            else
+            {
+                // Items always end the character's turn (regardless of remaining AP)
+                if (currentUnit is CharacterManager character)
+                {
+                    EventManager.TriggerCharacterTurnEnded(character);
+                }
+            }
+            
+            // Clean up
+            _selectedItem = null;
+            SelectionController.Instance.ClearAllSelections();
+            return; // Exit early - no need for the DOTween sequence
+        }
+
+        // Handle abilities and basic attacks with DOTween sequence
         Sequence sequence = DOTween.Sequence();
         sequence.AppendCallback(() =>
         {
@@ -214,8 +244,11 @@ public class CombatManager : MonoBehaviour
                     combatUIManager.ShowNotification($"{currentUnit.name} is attacking {selectedTargets[0].name}", 1);
             }
 
+            // Hide the action panel during the attack sequence
+            combatUIManager.FadeOutCurrentPanel();
+
             // set the active camera as the AttackCamera
-            CameraManager.Instance?.TrySetActiveCamera(_currentEncounter.GetCameraControllerForSide(currentUnit).name);
+            CameraManager.Instance?.TrySetActiveCamera(CurrentEncounter.GetCameraControllerForSide(currentUnit).name);
 
             //TODO: trigger animations / effects here
         });
@@ -223,8 +256,7 @@ public class CombatManager : MonoBehaviour
         sequence.AppendInterval(1f);
         sequence.AppendCallback(() =>
         {
-
-            // Execute the action with the selected targets
+            // Execute the action with the selected targets (for abilities and basic attacks only)
             foreach (var target in selectedTargets)
             {
                 // if should use ability
@@ -238,20 +270,6 @@ public class CombatManager : MonoBehaviour
                     }
 
                     StartCoroutine(damageAbility.Execute(currentUnit, target));
-                }
-                else if (_selectedItem != null)
-                {
-                    // Use the new centralized item usage method
-                    bool itemUsed = currentUnit.UseCombatItem(_selectedItem, target);
-
-                    if (!itemUsed)
-                    {
-                        Debug.LogWarning($"{currentUnit.name} failed to use {_selectedItem.ItemName} on {target.name}");
-                    }
-                    else
-                    { 
-                        TurnManager.Instance.StartNextTurn();
-                    }
                 }
                 else // basic attack
                 {
@@ -276,7 +294,49 @@ public class CombatManager : MonoBehaviour
                             attackSequence.AppendCallback(() =>
                             {
                                 // return to original position
-                                cc.MoveToPosition(cc.AssignedEncounterSlot.slotTransform.position, true);
+                                cc.MoveToPosition(cc.AssignedEncounterSlot.slotTransform.position, true, () =>
+                                {
+                                    // After returning to position, trigger the camera transition and UI update
+                                    if (currentUnit is CharacterManager character)
+                                    {
+                                        if (!character.CanUseMoreAbilitiesThisTurn())
+                                        {
+                                            // Character is out of action points - end the turn
+                                            EventManager.TriggerCharacterTurnEnded(character);
+                                        }
+                                        else
+                                        {
+                                            // Character still has action points - continue the turn
+                                            // Switch camera back to player's side and set them as the active character
+                                            if (CurrentEncounter != null)
+                                            {
+                                                var cameraController = CurrentEncounter.GetCameraControllerForSide(character);
+                                                if (cameraController != null)
+                                                {
+                                                    CameraManager.Instance?.TrySetActiveCamera(cameraController.name);
+                                                }
+                                                else
+                                                {
+                                                    Debug.LogWarning($"[CombatManager] No camera controller found for character {character.name}");
+                                                }
+                                            }
+                                            else
+                                            {
+                                                Debug.LogWarning("[CombatManager] CurrentEncounter is null, cannot switch camera");
+                                            }
+                                            
+                                            // Refocus camera on the player like their turn is starting again
+                                            CameraManager.Instance?.SetActiveCombatCharacter(character.transform);
+                                            
+                                            // Show the action panel again and move canvas back to player
+                                            combatUIManager.OpenActionPanel();
+                                            combatUIManager.MoveCanvasToCharacter(character);
+                                            
+                                            // Use the proper event to refresh the UI without restarting the turn
+                                            EventManager.TriggerShowActionPanel();
+                                        }
+                                    }
+                                });
                             });
                         });
                     }
@@ -293,9 +353,15 @@ public class CombatManager : MonoBehaviour
         sequence.AppendInterval(2f);
         sequence.AppendCallback(() =>
         {
+            // Store whether this was an ability before clearing it
+            bool wasAbility = _selectedAbility != null;
+            
             _selectedAbility = null;
-            _selectedItem = null;
             SelectionController.Instance.ClearAllSelections();
+            
+            // For abilities, they handle their own turn ending/continuation logic
+            // For basic attacks, the camera transition is handled after the character returns to position
+            // No additional logic needed here for basic attacks
         });
     }
 }

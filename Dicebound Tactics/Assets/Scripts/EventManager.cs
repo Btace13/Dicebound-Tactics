@@ -130,7 +130,6 @@ public class EventManager : MonoBehaviour
   }
   public static void TriggerDefensivePromptRequested(Entity target, string[] buttonSequence, float timeLimit, System.Action<bool> onComplete)
   {
-    Debug.Log($"[EventManager] TriggerDefensivePromptRequested called for {target.name}. Subscribers: {OnDefensivePromptRequested?.GetInvocationList()?.Length ?? 0}");
     OnDefensivePromptRequested?.Invoke(target, buttonSequence, timeLimit, onComplete);
   }
   public static void TriggerDefensivePromptHidden()
