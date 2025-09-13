@@ -141,6 +141,12 @@ public class TurnManager : MonoBehaviour
             unit.StartTurn();
             EventManager.TriggerNewActiveEntity(unit);
 
+            // Trigger battle started FIRST on first round to ensure UI is in correct state
+            if (isFirstRound)
+            {
+                EventManager.TriggerBattleStarted();
+            }
+
             diceRollManager.RollDiceForUnit(unit, () =>
             {
                 if (unit is CharacterManager character)
@@ -152,11 +158,6 @@ public class TurnManager : MonoBehaviour
                 {
                     EventManager.TriggerEnemyTurnStarted(enemy);
                     // Wait for EventManager.OnEnemyTurnEnded to advance turn
-                }
-
-                if (isFirstRound)
-                {
-                    EventManager.TriggerBattleStarted();
                 }
             });
         }
