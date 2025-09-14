@@ -13,6 +13,13 @@ public class ProjectileManager : MonoBehaviour
 	public static ProjectileManager Instance { get; private set; }
 	[HideInInspector] public bool useFriendlyFire = false;
 
+	[Header("Debug / Diagnostics")]
+	[SerializeField] private bool enableDebug = false;
+	[SerializeField] private bool drawGizmos = false;
+	[SerializeField, Tooltip("Extra forward distance multiplier to reduce tunneling")] private float castDistanceBufferMultiplier = 1.25f;
+	[SerializeField, Tooltip("Minimum sphere radius for collision tests")] private float minCollisionRadius = 0.05f;
+	[SerializeField, Tooltip("Record first collision outcome per projectile")] private bool logImpactResults = false;
+
 	[System.Serializable]
 	public enum ProjectilePath
 	{
@@ -41,6 +48,7 @@ public class ProjectileManager : MonoBehaviour
 	}
 
 	[SerializeField] LayerMask layersToCheck;
+	[SerializeField, Tooltip("Fallback layers if layersToCheck is empty")] private string[] fallbackLayerNames = new []{"Characters","Enemies","Default"};
 
 	private static UDictionary<ProjectileData, GameObject> impactIndicators = new UDictionary<ProjectileData, GameObject>();
 	private static UDictionary<ParticleData, List<GameObject>> pooledProjectiles = new UDictionary<ParticleData, List<GameObject>>();
@@ -327,24 +335,6 @@ public class ProjectileManager : MonoBehaviour
 
 		data.projectileObject.transform.localScale = Vector3.Lerp(data.projectileObject.transform.localScale, Vector3.one, Mathf.Clamp01(data.timeAlive));
 
-		if (data.timeAlive < 0.25f)
-		{
-			// Set a non-colliding spherecast command (e.g., zero distance)
-			// This prevents collision checks during the initial phase.
-			spherecastCommands[index] = new SpherecastCommand(
-										data.projectileObject.transform.position, // Current position
-										0f, // Zero radius to avoid hits
-										data.direction,
-										new QueryParameters(), // Default query parameters
-										0f); // Zero distance
-
-			// Still update movement during initial phase
-			data.previousPosition = data.projectileObject.transform.position;
-			data.projectileObject.transform.position += data.direction * data.speed * Time.deltaTime;
-			data.timeAlive += Time.deltaTime;
-			return;
-		}
-
 		// --- Proceed with normal collision setup if projectile is old enough ---
 
 		var layers = layersToCheck;
@@ -363,10 +353,37 @@ public class ProjectileManager : MonoBehaviour
 		float castDistance = movement.magnitude;
 
 		// Ensure radius is not zero if scaling from zero
-		float currentRadius = Mathf.Max(data.projectileObject.transform.localScale.x * 0.5f, 0.01f);
+		// Ensure a minimum collision radius so very small freshly spawned projectiles still collide.
+		float currentRadius = Mathf.Max(data.projectileObject.transform.localScale.x * 0.5f, minCollisionRadius);
+
+		// Guaranteed hit proximity check (if there is an intended target)
+		if (data.target != null && !data.isReseting)
+		{
+			Vector3 projCurrentPos = data.projectileObject.transform.position;
+			float moveDist = data.speed * Time.deltaTime;
+			Collider targetCol = data.target.GetComponent<Collider>();
+			float targetRadius = targetCol ? Mathf.Max(targetCol.bounds.extents.magnitude * 0.25f, 0.25f) : 0.5f;
+			float hitThreshold = Mathf.Max(currentRadius, targetRadius) * 1.25f;
+			float distToTarget = Vector3.Distance(currentPosition, data.target.position);
+
+			if (distToTarget <= moveDist + hitThreshold)
+			{
+				if (enableDebug)
+					Debug.Log($"[ProjectileManager] Forced impact (proximity) for {data.projectileObject.name} -> {data.target.name}");
+				ForceHitTargetInternal(data);
+				// Set a dummy spherecast command to keep array valid
+				spherecastCommands[index] = new SpherecastCommand(projCurrentPos, 0f, data.direction, new QueryParameters(), 0f);
+				return; // Skip normal scheduling (will be cleaned up in LateUpdate)
+			}
+		}
 
 		// Use a slightly longer cast distance to ensure we don't miss fast-moving targets
-		float safeCastDistance = Mathf.Max(castDistance, currentRadius * 2f);
+		float safeCastDistance = Mathf.Max(castDistance, currentRadius * 2f) * castDistanceBufferMultiplier;
+
+		if (enableDebug && drawGizmos)
+		{
+			Debug.DrawLine(currentPosition, currentPosition + data.direction * safeCastDistance, Color.cyan * 0.75f, 0f, false);
+		}
 
 		spherecastCommands[index] = new SpherecastCommand(
 									currentPosition,
@@ -380,6 +397,20 @@ public class ProjectileManager : MonoBehaviour
 	{
 		if (hit.collider != null)
 		{
+			// If we hit something that is NOT our intended target and we have a target -> treat as pass-through
+			if (data.target != null && hit.collider.transform != data.target)
+			{
+				// Move forward as if no collision happened (pass-through mode)
+				data.previousPosition = data.projectileObject.transform.position;
+				data.projectileObject.transform.rotation = Quaternion.RotateTowards(data.projectileObject.transform.rotation, Quaternion.LookRotation(data.direction), 720f * Time.deltaTime);
+				data.projectileObject.transform.position += data.direction * data.speed * Time.deltaTime;
+				data.timeAlive += Time.deltaTime;
+				return; // Ignore this collider
+			}
+			if (enableDebug && logImpactResults)
+			{
+				Debug.Log($"[ProjectileManager] Impact: {data.projectileObject.name} hit {hit.collider.name} at {hit.point}");
+			}
 			//invoke any additional callbacks on hit first - let them handle damage
 			data.OnImpact?.Invoke(hit);
 
@@ -446,11 +477,7 @@ public class ProjectileManager : MonoBehaviour
 	/// </summary>
 	private void CleanupQueuedProjectiles()
 	{
-		if (objectsQueuedForCleanup.Count == 0)
-		{
-			Debug.LogWarning("No projectiles queued for cleanup");
-			return;
-		}
+		if (objectsQueuedForCleanup.Count == 0) return;
 
 		print($"Cleaning up {objectsQueuedForCleanup.Count} projectiles");
 
@@ -545,4 +572,47 @@ public class ProjectileManager : MonoBehaviour
 
 		Destroy(objectToDestroy);
 	}
+
+	/// <summary>
+	/// Forces a projectile to register a hit on its intended target without relying on physics.
+	/// </summary>
+	private void ForceHitTargetInternal(ProjectileData data)
+	{
+		if (data == null || data.target == null || data.isReseting) return;
+
+		// Fake a RaycastHit centered on target
+		RaycastHit fakeHit = new RaycastHit();
+		var targetCollider = data.target.GetComponent<Collider>();
+		if (targetCollider != null)
+		{
+			fakeHit = new RaycastHit();
+			// We can't set collider directly (read-only). Use point/normal for VFX alignment; callback will still validate target by reference.
+			fakeHit.point = data.target.position;
+			fakeHit.normal = Vector3.up;
+		}
+
+		// Invoke impact callback (damage handled there) and cleanup like a normal hit
+		data.OnImpact?.Invoke(fakeHit);
+		objectsQueuedForCleanup.Add(data);
+		data.isReseting = true;
+		if (data.projectileType != null && data.projectileType.impactObject != null)
+		{
+			GameObject impactObj = Instantiate(data.projectileType.impactObject, data.target.position, Quaternion.identity);
+			StartCoroutine(DelayDestroy(impactObj));
+		}
+	}
+
+#if UNITY_EDITOR
+	private void OnDrawGizmos()
+	{
+		if (!drawGizmos || !Application.isPlaying) return;
+
+		Gizmos.color = new Color(0f, 0.8f, 1f, 0.15f);
+		foreach (var p in typeof(ProjectileManager).GetField("activeProjectiles", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static)?.GetValue(null) as List<ProjectileData>)
+		{
+			if (p == null || p.projectileObject == null) continue;
+			Gizmos.DrawSphere(p.projectileObject.transform.position, Mathf.Max(p.projectileObject.transform.localScale.x * 0.5f, minCollisionRadius));
+		}
+	}
+#endif
 }

@@ -323,7 +323,7 @@ public class DamageAbilitySO : AbilitySO
                     }
                 }
 
-                // Create a flag to track when the projectile hits and damage is applied
+                // Track projectile impact so we only apply damage on collision
                 bool projectileHit = false;
                 
                 ProjectileManager.CreateProjectile(
@@ -337,9 +337,24 @@ public class DamageAbilitySO : AbilitySO
                     -1,
                     (hit) =>
                     {
-                        // This callback fires when the projectile hits - apply damage immediately
-                        if (hit.collider.gameObject.TryGetComponent(out Entity hitEntity) && hitEntity == target)
+                        if (projectileHit) return; // safety guard
+
+                        // Forced hits may arrive with a RaycastHit lacking collider; trust intended target
+                        Entity hitEntity = null;
+                        if (hit.collider != null)
                         {
+                            hit.collider.gameObject.TryGetComponent(out hitEntity);
+                        }
+
+                        if (hitEntity == null && target != null)
+                        {
+                            // Fallback: assume target was reached (forced impact)
+                            hitEntity = target;
+                        }
+
+                        if (hitEntity == target)
+                        {
+                            Debug.Log($"[DamageAbilitySO] Projectile impact applying {damageAmount} damage to {target.name} (defended: {finalDefensiveResult})");
                             ApplyDamage(damageAmount, user, target, finalDefensiveResult);
                             projectileHit = true;
                         }
@@ -360,8 +375,7 @@ public class DamageAbilitySO : AbilitySO
                 
                 if (!projectileHit)
                 {
-                    Debug.LogWarning("[DamageAbilitySO] Projectile did not hit target within timeout, applying damage anyway");
-                    ApplyDamage(damageAmount, user, target, finalDefensiveResult);
+                    Debug.LogWarning("[DamageAbilitySO] Projectile timeout without impact - no damage applied to preserve hit accuracy");
                 }
             }
         }
