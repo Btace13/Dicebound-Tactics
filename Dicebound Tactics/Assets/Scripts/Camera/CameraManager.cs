@@ -72,6 +72,9 @@ public class CameraManager : MonoBehaviour
         EventManager.OnTargetChanged += SetCombatTarget;
         EventManager.OnCombatEncounterStarted += HandleCombatEncounterStarted;
         EventManager.OnCombatEncounterEnded += HandleCombatEncounterEnded;
+    // Redundant subscriptions for reliability: some flows may miss OnNewActiveEntity
+    EventManager.OnCharacterTurnStarted += HandleCharacterTurnStarted;
+    EventManager.OnEnemyTurnStarted += HandleEnemyTurnStarted;
     }
 
     private void OnDisable()
@@ -80,6 +83,8 @@ public class CameraManager : MonoBehaviour
         EventManager.OnTargetChanged -= SetCombatTarget;
         EventManager.OnCombatEncounterStarted -= HandleCombatEncounterStarted;
         EventManager.OnCombatEncounterEnded -= HandleCombatEncounterEnded;
+    EventManager.OnCharacterTurnStarted -= HandleCharacterTurnStarted;
+    EventManager.OnEnemyTurnStarted -= HandleEnemyTurnStarted;
     }
 
     void Start()
@@ -402,5 +407,20 @@ public class CameraManager : MonoBehaviour
     public void SetActiveCombatCharacter(Entity entity)
     {
         SetActiveCombatCharacter(entity.transform);
+    }
+
+    // Additional handlers to guarantee camera updates on every turn start
+    private void HandleCharacterTurnStarted(CharacterManager character)
+    {
+        if (character == null) return;
+        Debug.Log($"[CameraManager] Character turn started: {character.name} -> updating camera target");
+        SetActiveCombatCharacter(character.transform);
+    }
+
+    private void HandleEnemyTurnStarted(EnemyManager enemy)
+    {
+        if (enemy == null) return;
+        Debug.Log($"[CameraManager] Enemy turn started: {enemy.name} -> updating camera target");
+        SetActiveCombatCharacter(enemy.transform);
     }
 }
