@@ -247,7 +247,7 @@ public class CombatUIManager : MonoBehaviour
     private void OnEnterBattleStartState()
     {
         FadeCanvasGroup(screenSpaceCanvasGroup, true);
-        OpenPanel(ActionPanel);
+        // Action panel will be opened when character turn starts, not at battle start
     }
 
     private void OnEnterPlayerTurnState()
