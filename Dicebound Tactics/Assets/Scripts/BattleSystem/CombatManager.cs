@@ -265,6 +265,9 @@ public class CombatManager : MonoBehaviour
                         continue;
                     }
 
+                    // Trigger ability started event
+                    EventManager.TriggerAbilityStarted(currentUnit, target);
+                    
                     StartCoroutine(damageAbility.Execute(currentUnit, target));
                 }
                 else // basic attack

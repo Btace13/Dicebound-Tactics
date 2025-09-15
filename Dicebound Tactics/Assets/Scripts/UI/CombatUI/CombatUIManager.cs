@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using DG.Tweening;
 using TacticsToolkit;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 /// <summary>
@@ -475,17 +476,22 @@ public class CombatUIManager : MonoBehaviour
 
     private void OpenPanel(CombatPanel panel)
     {
+        Debug.Log($"[CombatUIManager] OpenPanel called for: {panel?.name ?? "NULL"}");
+        
         if (panel == null) return;
 
         if (currentPanel != null)
         {
+            Debug.Log($"[CombatUIManager] Switching from {currentPanel.name} to {panel.name}");
             SwitchPanels(currentPanel, panel);
         }
         else
         {
+            Debug.Log($"[CombatUIManager] Showing first panel: {panel.name}");
             ShowFirstPanel(panel);
         }
 
+        Debug.Log($"[CombatUIManager] Setting camera for panel: {panel.name}");
         SetCameraForPanel(panel);
     }
 
@@ -526,10 +532,44 @@ public class CombatUIManager : MonoBehaviour
 
     private void SetCameraForPanel(CombatPanel panel)
     {
-        if (cameraManager != null && PanelCameras.TryGetValue(panel, out string cameraName))
+        Debug.Log($"[CombatUIManager] SetCameraForPanel called for panel: {panel?.name ?? "NULL"}");
+        
+        if (cameraManager == null)
         {
-            cameraManager.TrySetActiveCamera(cameraName);
+            Debug.LogWarning("[CombatUIManager] CameraManager is null, cannot set camera for panel");
+            return;
         }
+        
+        if (panel == null)
+        {
+            Debug.LogWarning("[CombatUIManager] Panel is null, cannot set camera");
+            return;
+        }
+        
+        if (PanelCameras.TryGetValue(panel, out string cameraName))
+        {
+            Debug.Log($"[CombatUIManager] Found camera mapping: {panel.name} -> {cameraName}");
+            Debug.Log($"[CombatUIManager] Attempting to switch to camera: {cameraName}");
+            
+            // Add a small delay to ensure this camera switch happens after any turn setup camera changes
+            StartCoroutine(DelayedCameraSwitch(cameraName, 0.1f));
+        }
+        else
+        {
+            Debug.LogWarning($"[CombatUIManager] No camera mapping found for panel: {panel.name}");
+            Debug.Log("[CombatUIManager] Available panel camera mappings:");
+            foreach (var kvp in PanelCameras)
+            {
+                Debug.Log($"  - {kvp.Key?.name ?? "NULL"} -> {kvp.Value}");
+            }
+        }
+    }
+    
+    private System.Collections.IEnumerator DelayedCameraSwitch(string cameraName, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        Debug.Log($"[CombatUIManager] Delayed camera switch to: {cameraName}");
+        cameraManager.TrySetActiveCamera(cameraName);
     }
 
     private void CloseAllPanels()

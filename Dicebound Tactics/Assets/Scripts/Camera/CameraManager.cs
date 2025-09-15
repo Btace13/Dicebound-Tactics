@@ -72,9 +72,10 @@ public class CameraManager : MonoBehaviour
         EventManager.OnTargetChanged += SetCombatTarget;
         EventManager.OnCombatEncounterStarted += HandleCombatEncounterStarted;
         EventManager.OnCombatEncounterEnded += HandleCombatEncounterEnded;
-    // Redundant subscriptions for reliability: some flows may miss OnNewActiveEntity
-    EventManager.OnCharacterTurnStarted += HandleCharacterTurnStarted;
-    EventManager.OnEnemyTurnStarted += HandleEnemyTurnStarted;
+        EventManager.OnAbilityStarted += HandleAbilityStarted;
+        EventManager.OnAbilityEnded += HandleAbilityEnded;
+        EventManager.OnCharacterTurnStarted += HandleCharacterTurnStarted;
+        EventManager.OnEnemyTurnStarted += HandleEnemyTurnStarted;
     }
 
     private void OnDisable()
@@ -83,8 +84,10 @@ public class CameraManager : MonoBehaviour
         EventManager.OnTargetChanged -= SetCombatTarget;
         EventManager.OnCombatEncounterStarted -= HandleCombatEncounterStarted;
         EventManager.OnCombatEncounterEnded -= HandleCombatEncounterEnded;
-    EventManager.OnCharacterTurnStarted -= HandleCharacterTurnStarted;
-    EventManager.OnEnemyTurnStarted -= HandleEnemyTurnStarted;
+        EventManager.OnAbilityStarted -= HandleAbilityStarted;
+        EventManager.OnAbilityEnded -= HandleAbilityEnded;
+        EventManager.OnCharacterTurnStarted -= HandleCharacterTurnStarted;
+        EventManager.OnEnemyTurnStarted -= HandleEnemyTurnStarted;
     }
 
     void Start()
@@ -126,13 +129,23 @@ public class CameraManager : MonoBehaviour
 
     public void TrySetActiveCamera(string cameraName)
     {
+        Debug.Log($"[CameraManager] TrySetActiveCamera called with: {cameraName}");
+        Debug.Log($"[CameraManager] Current active camera: {ActiveCamera?.CameraName ?? "NULL"}");
+        
         if (Cameras.TryGetValue(cameraName, out var cameraController))
         {
+            Debug.Log($"[CameraManager] Found camera controller for: {cameraName}");
             SetActiveCamera(cameraController);
+            Debug.Log($"[CameraManager] Successfully switched to camera: {cameraName}");
         }
         else
         {
             Debug.LogWarning($"[CameraManager] Camera with name {cameraName} not found.");
+            Debug.Log("[CameraManager] Available cameras:");
+            foreach (var kvp in Cameras)
+            {
+                Debug.Log($"  - {kvp.Key}");
+            }
         }
     }
 
@@ -364,38 +377,42 @@ public class CameraManager : MonoBehaviour
     public void SetActiveCombatCharacter(Transform character)
     {
         Debug.Log($"[CameraManager] SetActiveCombatCharacter called with: {character?.name ?? "NULL"}");
+        
+        // Early exit if the character is already the active character
+        if (activeCharacter == character)
+        {
+            Debug.Log($"[CameraManager] Character {character?.name ?? "NULL"} is already the active character. Skipping update.");
+            return;
+        }
+        
         Debug.Log($"[CameraManager] Found {Cameras.Values.OfType<CombatCameraController>().Count()} combat cameras");
         
         foreach (CombatCameraController combatCamera in Cameras.Values.OfType<CombatCameraController>())
         {
-            Debug.Log($"[CameraManager] Processing combat camera: {combatCamera?.name ?? "NULL"}");
-            
             if (combatCamera == null)
             {
-                Debug.LogWarning("[CameraManager] Active camera is not a CombatCameraController.");
+                Debug.LogWarning("[CameraManager] Found null combat camera controller.");
                 continue;
             }
             if (combatCamera.TargetGroup == null)
             {
-                Debug.LogError("[CameraManager] Target group is not initialized in CombatCameraController.");
+                Debug.LogError($"[CameraManager] Target group is not initialized in CombatCameraController: {combatCamera.name}");
                 continue;
             }
             if (combatCamera.cameraTarget == CameraTarget.Target)
             {
-                Debug.LogWarning("[CameraManager] Camera target is set to Target. Cannot set active character.");
+                // Skip cameras that are specifically for targets, not active characters
                 continue;
             }
             
-            Debug.Log($"[CameraManager] Setting up camera {combatCamera.name} with {combatCamera.TargetGroup.Targets.Count} existing targets");
+            Debug.Log($"[CameraManager] Updating camera {combatCamera.name}");
             
             if (combatCamera.TargetGroup.Targets.Count == 0)
             {
-                Debug.Log($"[CameraManager] Adding new target to {combatCamera.name}");
                 combatCamera.AddTarget(character);
             }
             else
             {
-                Debug.Log($"[CameraManager] Updating existing target in {combatCamera.name}");
                 combatCamera.UpdateTargetAtIndex(character, 0);
             }
             combatCamera.UpdateFollowTarget(character);
@@ -409,18 +426,69 @@ public class CameraManager : MonoBehaviour
         SetActiveCombatCharacter(entity.transform);
     }
 
-    // Additional handlers to guarantee camera updates on every turn start
+    private void HandleAbilityStarted(Entity user, Entity target)
+    {
+        Debug.Log($"[CameraManager] Ability started: {user.name} -> {target.name}");
+        
+        // Switch to a side camera for ability execution
+        // First try Side1Camera, then Side2Camera, then AttackCamera as fallback
+        string[] sideCameraNames = { "Side1Camera", "Side2Camera", "AttackCamera" };
+        
+        foreach (string cameraName in sideCameraNames)
+        {
+            if (Cameras.ContainsKey(cameraName))
+            {
+                Debug.Log($"[CameraManager] Switching to {cameraName} for ability execution");
+                TrySetActiveCamera(cameraName);
+                return;
+            }
+        }
+        
+        Debug.LogWarning("[CameraManager] No side cameras found for ability execution");
+    }
+
+    private void HandleAbilityEnded(Entity user, Entity target)
+    {
+        Debug.Log($"[CameraManager] Ability ended: {user.name} -> {target.name}");
+        
+        // Check if the user is a character and if they can use more abilities
+        if (user is CharacterManager character)
+        {
+            if (character.CanUseMoreAbilitiesThisTurn())
+            {
+                // Turn is continuing - return camera focus to the character
+                Debug.Log($"[CameraManager] Turn continuing, returning camera to {character.name}");
+                SetActiveCombatCharacter(user.transform);
+            }
+            else
+            {
+                // Turn is ending - camera will be handled by the new turn started events
+                Debug.Log($"[CameraManager] Turn ending for {character.name}, camera will switch on next turn");
+            }
+        }
+        else
+        {
+            // For non-character entities (enemies), just return to the user
+            SetActiveCombatCharacter(user.transform);
+        }
+        
+        // Also trigger the panel camera switch if the UI is active
+        // This will be handled by the delayed camera switch in CombatUIManager
+    }
+
     private void HandleCharacterTurnStarted(CharacterManager character)
     {
-        if (character == null) return;
-        Debug.Log($"[CameraManager] Character turn started: {character.name} -> updating camera target");
+        Debug.Log($"[CameraManager] Character turn started: {character.name}");
+        
+        // Switch camera to the new character who is starting their turn
         SetActiveCombatCharacter(character.transform);
     }
 
     private void HandleEnemyTurnStarted(EnemyManager enemy)
     {
-        if (enemy == null) return;
-        Debug.Log($"[CameraManager] Enemy turn started: {enemy.name} -> updating camera target");
+        Debug.Log($"[CameraManager] Enemy turn started: {enemy.name}");
+        
+        // Switch camera to the new enemy who is starting their turn
         SetActiveCombatCharacter(enemy.transform);
     }
 }

@@ -23,6 +23,10 @@ public class EventManager : MonoBehaviour
   public static event Action OnAttackBlocked;
   public static event Action OnPassTurn;
 
+  // Ability Events
+  public static event Action<Entity, Entity> OnAbilityStarted; // user, target
+  public static event Action<Entity, Entity> OnAbilityEnded; // user, target
+
   // Defensive Timing Events
   public static event Action<Entity, string[], float, System.Action<bool>> OnDefensivePromptRequested;
   public static event Action OnDefensivePromptHidden;
@@ -167,6 +171,14 @@ public class EventManager : MonoBehaviour
   public static void TriggerPassTurn()
   {
     OnPassTurn?.Invoke();
+  }
+  public static void TriggerAbilityStarted(Entity user, Entity target)
+  {
+    OnAbilityStarted?.Invoke(user, target);
+  }
+  public static void TriggerAbilityEnded(Entity user, Entity target)
+  {
+    OnAbilityEnded?.Invoke(user, target);
   }
 }
 

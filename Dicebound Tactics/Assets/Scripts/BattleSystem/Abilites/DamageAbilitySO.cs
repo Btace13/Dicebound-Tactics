@@ -96,6 +96,14 @@ public class DamageAbilitySO : AbilitySO
                         
                         Debug.Log($"[DamageAbilitySO] Character turn continued for {character.name}");
                     }
+                    
+                    // Trigger ability ended event
+                    EventManager.TriggerAbilityEnded(character, target);
+                }
+                else
+                {
+                    // For non-CharacterManager users, still trigger the ability ended event
+                    EventManager.TriggerAbilityEnded(user, target);
                 }
             });
             while (!returnDone) yield return new WaitForSeconds(0.8f); // Reduced from 1.6f
@@ -132,6 +140,14 @@ public class DamageAbilitySO : AbilitySO
                     
                     Debug.Log($"[DamageAbilitySO] Character turn continued for {character.name}");
                 }
+                
+                // Trigger ability ended event
+                EventManager.TriggerAbilityEnded(character, target);
+            }
+            else
+            {
+                // For non-CharacterManager users, still trigger the ability ended event
+                EventManager.TriggerAbilityEnded(user, target);
             }
         }
     }

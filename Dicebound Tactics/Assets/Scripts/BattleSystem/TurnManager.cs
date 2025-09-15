@@ -147,6 +147,10 @@ public class TurnManager : MonoBehaviour
                 EventManager.TriggerBattleStarted();
             }
 
+            // Switch camera to CombatMenuCamera1 before dice rolling
+            Debug.Log($"[TurnManager] Switching to CombatMenuCamera1 before dice roll for {unit.name}");
+            CameraManager.Instance?.TrySetActiveCamera("CombatMenuCamera1");
+
             diceRollManager.RollDiceForUnit(unit, () =>
             {
                 if (unit is CharacterManager character)
