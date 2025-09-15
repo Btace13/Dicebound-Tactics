@@ -134,7 +134,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      dice-six-faces-one_0: -4704025289165538939
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

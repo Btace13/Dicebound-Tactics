@@ -5710,6 +5710,55 @@ CharacterController:
   m_SkinWidth: 0.02
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 1.02, z: 0}
+--- !u!114 &900295806
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 900295788}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 359fedb9ca6f840fd81c8d9e4f7935f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  leapDuration: 1
+  leapHeight: 3
+  leapCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  rotateTowardsTarget: 1
+  useLeapAnimation: 0
+  OnLeapStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  OnLeapCompleted:
+    m_PersistentCalls:
+      m_Calls: []
+  OnLeapLanded:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &901245795 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2608154472718758090, guid: 17230f4ae22f4427a9e2f2ef723a854a, type: 3}
@@ -7236,6 +7285,55 @@ CharacterController:
   m_SkinWidth: 0.02
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.97, z: 0}
+--- !u!114 &1169327138
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 554036962}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 359fedb9ca6f840fd81c8d9e4f7935f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  leapDuration: 1
+  leapHeight: 3
+  leapCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  rotateTowardsTarget: 1
+  useLeapAnimation: 0
+  OnLeapStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  OnLeapCompleted:
+    m_PersistentCalls:
+      m_Calls: []
+  OnLeapLanded:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1169335772 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 884337154495347306, guid: e669acb488d4d42da8cc45e9d8a0b3ee, type: 3}
@@ -8282,6 +8380,55 @@ CharacterController:
   m_SkinWidth: 0.02
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1318866927
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1318866917}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 359fedb9ca6f840fd81c8d9e4f7935f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  leapDuration: 1
+  leapHeight: 3
+  leapCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  rotateTowardsTarget: 1
+  useLeapAnimation: 0
+  OnLeapStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  OnLeapCompleted:
+    m_PersistentCalls:
+      m_Calls: []
+  OnLeapLanded:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1322283182 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5160738468129896619, guid: 17230f4ae22f4427a9e2f2ef723a854a, type: 3}
@@ -22093,6 +22240,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5475917019711313092, guid: d8c30de4e48b94564b5964eb287c6249, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1169327137}
+    - targetCorrespondingSourceObject: {fileID: 5475917019711313092, guid: d8c30de4e48b94564b5964eb287c6249, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1169327138}
   m_SourcePrefab: {fileID: 100100000, guid: d8c30de4e48b94564b5964eb287c6249, type: 3}
 --- !u!1001 &4247980680996621542
 PrefabInstance:
@@ -22166,6 +22316,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1353514822874806384, guid: 17230f4ae22f4427a9e2f2ef723a854a, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1318866926}
+    - targetCorrespondingSourceObject: {fileID: 1353514822874806384, guid: 17230f4ae22f4427a9e2f2ef723a854a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1318866927}
   m_SourcePrefab: {fileID: 100100000, guid: 17230f4ae22f4427a9e2f2ef723a854a, type: 3}
 --- !u!1001 &5625239005865857264
 PrefabInstance:
@@ -22243,6 +22396,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5179019300147648176, guid: e669acb488d4d42da8cc45e9d8a0b3ee, type: 3}
       insertIndex: -1
       addedObject: {fileID: 900295805}
+    - targetCorrespondingSourceObject: {fileID: 5179019300147648176, guid: e669acb488d4d42da8cc45e9d8a0b3ee, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 900295806}
   m_SourcePrefab: {fileID: 100100000, guid: e669acb488d4d42da8cc45e9d8a0b3ee, type: 3}
 --- !u!1001 &8722243413410060977
 PrefabInstance:
@@ -22272,6 +22428,10 @@ PrefabInstance:
       propertyPath: encounterMusic
       value: 
       objectReference: {fileID: 8300000, guid: 9f436fce459ff4cc9a431623c8afe43a, type: 3}
+    - target: {fileID: 5752600779834487987, guid: 9e553778f72e0894cb7e70029cd9fb36, type: 3}
+      propertyPath: useLeapMovement
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5752600779834487987, guid: 9e553778f72e0894cb7e70029cd9fb36, type: 3}
       propertyPath: 'Enemies.Array.data[0]'
       value: 

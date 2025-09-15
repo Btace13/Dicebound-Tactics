@@ -279,4 +279,67 @@ public class UnitAnimationHandler : MonoBehaviour
 				Destroy(_weaponObject);
 		}
 	}
+
+	#region Leap Animation Methods
+
+	/// <summary>
+	/// Checks if this character can play leap animations
+	/// </summary>
+	/// <returns>True if the character has jump animations available</returns>
+	public bool CanPlayLeapAnimations()
+	{
+		return AnimationData != null && AnimationData.CanJump && 
+		       AnimationData.jumpAnimation != null && AnimationData.landingAnimation != null;
+	}
+
+	/// <summary>
+	/// Plays the jump animation for the character
+	/// </summary>
+	public void PlayJumpAnimation()
+	{
+		if (!CanPlayLeapAnimations()) return;
+
+		AnimancerState state = _Animancer.Play(AnimationData.jumpAnimation, 0.1f, FadeMode.FixedDuration);
+		state.NormalizedTime = 0;
+		
+		if (debug)
+		{
+			Debug.Log($"{name}: Playing jump animation");
+		}
+	}
+
+	/// <summary>
+	/// Plays the landing animation for the character
+	/// </summary>
+	public void PlayLandingAnimation()
+	{
+		if (!CanPlayLeapAnimations()) return;
+
+		AnimancerState state = _Animancer.Play(AnimationData.landingAnimation, 0.1f, FadeMode.FixedDuration);
+		state.NormalizedTime = 0;
+		state.NormalizedEndTime = 1;
+		
+		if (debug)
+		{
+			Debug.Log($"{name}: Playing landing animation");
+		}
+	}
+
+	/// <summary>
+	/// Plays the falling animation if available (optional for mid-leap)
+	/// </summary>
+	public void PlayFallingAnimation()
+	{
+		if (!CanPlayLeapAnimations() || AnimationData.fallingAnimation == null) return;
+
+		AnimancerState state = _Animancer.Play(AnimationData.fallingAnimation, 0.1f, FadeMode.FixedDuration);
+		state.NormalizedTime = 0;
+		
+		if (debug)
+		{
+			Debug.Log($"{name}: Playing falling animation");
+		}
+	}
+
+	#endregion
 }

@@ -686,6 +686,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8300000, guid: 9f436fce459ff4cc9a431623c8afe43a, type: 3}
     - target: {fileID: 5752600779834487987, guid: 9e553778f72e0894cb7e70029cd9fb36, type: 3}
+      propertyPath: useLeapMovement
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5752600779834487987, guid: 9e553778f72e0894cb7e70029cd9fb36, type: 3}
       propertyPath: 'Enemies.Array.data[0]'
       value: 
       objectReference: {fileID: 0}

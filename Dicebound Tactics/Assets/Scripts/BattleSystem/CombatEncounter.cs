@@ -51,6 +51,13 @@ public class CombatEncounter : MonoBehaviour
     public bool IsAntagonistic = true;
     public AudioClip encounterMusic;
 
+    [Header("Movement Settings")]
+    [Tooltip("Enable this to make characters leap to encounter slots instead of running")]
+    public bool useLeapMovement = false;
+    [ShowIf("useLeapMovement")] public float leapDuration = 1.0f;
+    [ShowIf("useLeapMovement")] public float leapHeight = 3.0f;
+    [ShowIf("useLeapMovement")] public AnimationCurve leapCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
+
     [Header("Encounter References")]
     [SerializeField] private EncounterSide[] encounterSides = new EncounterSide[2];
     public List<EnemyManager> EnemyPrefabs = new List<EnemyManager>();
@@ -199,14 +206,60 @@ public class CombatEncounter : MonoBehaviour
 
                 controller.AssignedEncounterSlot = closestSlot; // Assign the slot to the controller
 
-                controller.MoveToTarget(closestSlot.slotTransform, true, () =>
+                // Choose movement type based on settings
+                Debug.Log($"useLeapMovement is set to: {useLeapMovement}");
+                if (useLeapMovement)
                 {
-                    remainingMovingCharacters--;
-                    if (remainingMovingCharacters <= 0)
+                    // Use leap movement
+                    Debug.Log($"Using leap movement for {c.name}");
+                    LeapMovementController leapController = c.GetComponent<LeapMovementController>();
+                    if (leapController == null)
                     {
-                        Debug.Log("All characters have reached their combat slots.");
+                        leapController = c.gameObject.AddComponent<LeapMovementController>();
+                        Debug.Log($"Added LeapMovementController to {c.name}");
                     }
-                });
+                    
+                    // Configure leap parameters
+                    leapController.SetLeapParameters(leapDuration, leapHeight, leapCurve);
+                    Debug.Log($"Configured leap parameters: duration={leapDuration}, height={leapHeight}");
+                    
+                    // Cancel any pathfinding to prevent conflicts
+                    controller.CancelPath();
+                    
+                    // Perform the leap
+                    leapController.LeapToTarget(closestSlot.slotTransform, () =>
+                    {
+                        // Clear pathfinding destination after leap to prevent running back
+                        controller.CancelPath();
+                        
+                        // Set the AI destination to current position to stop any movement
+                        if (controller.TryGetComponent(out CustomRichAI richAI))
+                        {
+                            richAI.destination = c.transform.position;
+                            richAI.canMove = true; // Ensure movement is re-enabled
+                        }
+                        
+                        remainingMovingCharacters--;
+                        Debug.Log($"{c.name} completed leap movement. Remaining: {remainingMovingCharacters}");
+                        if (remainingMovingCharacters <= 0)
+                        {
+                            Debug.Log("All characters have reached their combat slots.");
+                        }
+                    });
+                }
+                else
+                {
+                    // Use normal pathfinding movement
+                    Debug.Log($"Using normal pathfinding movement for {c.name}");
+                    controller.MoveToTarget(closestSlot.slotTransform, true, () =>
+                    {
+                        remainingMovingCharacters--;
+                        if (remainingMovingCharacters <= 0)
+                        {
+                            Debug.Log("All characters have reached their combat slots.");
+                        }
+                    });
+                }
                 closestSlot.isOccupied = true;
                 closestSlot.entity = c; // Assign the character to the slot
             }
@@ -236,14 +289,58 @@ public class CombatEncounter : MonoBehaviour
 
                 controller.AssignedEncounterSlot = closestSlot; // Assign the slot to the controller
 
-                controller.MoveToTarget(closestSlot.slotTransform, true, () =>
+                // Choose movement type based on settings
+                if (useLeapMovement)
                 {
-                    remainingMovingEnemies--;
-                    if (remainingMovingEnemies <= 0)
+                    // Use leap movement for enemies too
+                    Debug.Log($"Using leap movement for enemy {enemy.name}");
+                    LeapMovementController leapController = enemy.GetComponent<LeapMovementController>();
+                    if (leapController == null)
                     {
-                        Debug.Log("All enemies have reached their combat slots.");
+                        leapController = enemy.gameObject.AddComponent<LeapMovementController>();
+                        Debug.Log($"Added LeapMovementController to enemy {enemy.name}");
                     }
-                });
+                    
+                    // Configure leap parameters
+                    leapController.SetLeapParameters(leapDuration, leapHeight, leapCurve);
+                    
+                    // Cancel any pathfinding to prevent conflicts
+                    controller.CancelPath();
+                    
+                    // Perform the leap
+                    leapController.LeapToTarget(closestSlot.slotTransform, () =>
+                    {
+                        // Clear pathfinding destination after leap to prevent running back
+                        controller.CancelPath();
+                        
+                        // Set the AI destination to current position to stop any movement
+                        if (controller.TryGetComponent(out CustomRichAI richAI))
+                        {
+                            richAI.destination = enemy.transform.position;
+                            richAI.canMove = true; // Ensure movement is re-enabled
+                        }
+                        
+                        remainingMovingEnemies--;
+                        Debug.Log($"Enemy {enemy.name} completed leap movement. Remaining: {remainingMovingEnemies}");
+                        if (remainingMovingEnemies <= 0)
+                        {
+                            Debug.Log("All enemies have reached their combat slots.");
+                        }
+                    });
+                }
+                else
+                {
+                    // Use normal pathfinding movement
+                    Debug.Log($"Using normal pathfinding movement for enemy {enemy.name}");
+                    controller.MoveToTarget(closestSlot.slotTransform, true, () =>
+                    {
+                        remainingMovingEnemies--;
+                        if (remainingMovingEnemies <= 0)
+                        {
+                            Debug.Log("All enemies have reached their combat slots.");
+                        }
+                    });
+                }
 
                 closestSlot.isOccupied = true;
                 closestSlot.entity = enemy; // Assign the enemy to the slot
@@ -414,6 +511,55 @@ public class CombatEncounter : MonoBehaviour
             }
         });
     }
+
+    #region Testing Methods
+
+    [Button("Test Leap Movement")]
+    private void TestLeapMovement()
+    {
+        if (!Application.isPlaying)
+        {
+            Debug.LogWarning("Leap movement test can only be run in play mode.");
+            return;
+        }
+
+        if (PartyManager.Instance == null || PartyManager.Instance.ActivePartyMembers.Count == 0)
+        {
+            Debug.LogWarning("No party members found for leap movement test.");
+            return;
+        }
+
+        CharacterManager testCharacter = PartyManager.Instance.ActivePartyMembers[0];
+        LeapMovementController leapController = testCharacter.GetComponent<LeapMovementController>();
+        
+        if (leapController == null)
+        {
+            leapController = testCharacter.gameObject.AddComponent<LeapMovementController>();
+            Debug.Log($"Added LeapMovementController to {testCharacter.name} for testing.");
+        }
+
+        // Configure leap parameters from encounter settings
+        leapController.SetLeapParameters(leapDuration, leapHeight, leapCurve);
+
+        // Find a target slot to leap to
+        EncounterSide closestSide = GetClosestEncounterSide(testCharacter.transform.position);
+        EncounterSlot targetSlot = GetClosestSlot(testCharacter.transform.position, closestSide);
+
+        if (targetSlot != null)
+        {
+            Debug.Log($"Testing leap movement: {testCharacter.name} leaping to {targetSlot.slotTransform.position}");
+            leapController.LeapToTarget(targetSlot.slotTransform, () =>
+            {
+                Debug.Log($"Leap movement test completed for {testCharacter.name}!");
+            });
+        }
+        else
+        {
+            Debug.LogWarning("No available encounter slot found for leap movement test.");
+        }
+    }
+
+    #endregion
 
     #endregion
 }
