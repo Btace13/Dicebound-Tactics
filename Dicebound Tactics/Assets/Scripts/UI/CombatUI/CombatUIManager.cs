@@ -359,9 +359,19 @@ public class CombatUIManager : MonoBehaviour
     private void OnCharacterTurnStarted(CharacterManager character)
     {
         Debug.Log($"[CombatUIManager] OnCharacterTurnStarted called for {character.name}, current state: {currentState}");
+        Debug.Log($"[CombatUIManager] Previous currentCharacter: {currentCharacter?.name ?? "NULL"}");
         currentCharacter = character;
+        Debug.Log($"[CombatUIManager] New currentCharacter: {currentCharacter?.name ?? "NULL"}");
+        
+        // Force transition to PlayerTurn state or directly call OnEnterPlayerTurnState if already in PlayerTurn
         bool transitionSucceeded = TryTransition(UITransition.StartPlayerTurn);
         Debug.Log($"[CombatUIManager] StartPlayerTurn transition succeeded: {transitionSucceeded}, new state: {currentState}");
+        
+        if (!transitionSucceeded && currentState == UIState.PlayerTurn)
+        {
+            Debug.Log("[CombatUIManager] Already in PlayerTurn state, manually calling OnEnterPlayerTurnState");
+            OnEnterPlayerTurnState();
+        }
     }
 
     private void OnCharacterTurnEnded(CharacterManager _)
@@ -460,13 +470,24 @@ public class CombatUIManager : MonoBehaviour
 
     public void MoveCanvasToCharacter(CharacterManager character)
     {
-        if (character == null) return;
+        Debug.Log($"[CombatUIManager] MoveCanvasToCharacter called for: {character?.name ?? "NULL"}");
+        if (character == null) 
+        {
+            Debug.LogWarning("[CombatUIManager] Character is null, cannot move canvas");
+            return;
+        }
+        Debug.Log($"[CombatUIManager] Character position: {character.transform.position}");
         MoveCanvasToTarget(character.transform);
     }
 
     public void MoveCanvasToTarget(Transform target)
     {
-        if (currentPanel == null || target == null) return;
+        Debug.Log($"[CombatUIManager] MoveCanvasToTarget called for: {target?.name ?? "NULL"}");
+        if (currentPanel == null || target == null) 
+        {
+            Debug.LogWarning($"[CombatUIManager] Cannot move canvas - currentPanel: {currentPanel?.name ?? "NULL"}, target: {target?.name ?? "NULL"}");
+            return;
+        }
 
         // Check if the target is a CharacterManager and populate panels
         if (target.TryGetComponent(out CharacterManager character))
@@ -475,7 +496,10 @@ public class CombatUIManager : MonoBehaviour
             ItemPanel?.PopulateItemPanel(character);
         }
 
-        transform.position = target.position + _canvasOffset;
+        Vector3 newPosition = target.position + _canvasOffset;
+        Debug.Log($"[CombatUIManager] Moving canvas from {transform.position} to {newPosition} (target: {target.position} + offset: {_canvasOffset})");
+        transform.position = newPosition;
+        Debug.Log($"[CombatUIManager] Canvas moved to: {transform.position}");
     }
 
     private void OpenPanel(CombatPanel panel)
