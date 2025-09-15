@@ -252,9 +252,11 @@ public class CombatUIManager : MonoBehaviour
 
     private void OnEnterPlayerTurnState()
     {
+        Debug.Log("[CombatUIManager] Entering PlayerTurn state - opening ActionPanel");
         OpenPanel(ActionPanel);
         if (currentCharacter != null)
         {
+            Debug.Log($"[CombatUIManager] Moving canvas to character: {currentCharacter.name}");
             MoveCanvasToCharacter(currentCharacter);
         }
         ShowConfirmButton(false);
@@ -356,8 +358,10 @@ public class CombatUIManager : MonoBehaviour
 
     private void OnCharacterTurnStarted(CharacterManager character)
     {
+        Debug.Log($"[CombatUIManager] OnCharacterTurnStarted called for {character.name}, current state: {currentState}");
         currentCharacter = character;
-        TryTransition(UITransition.StartPlayerTurn);
+        bool transitionSucceeded = TryTransition(UITransition.StartPlayerTurn);
+        Debug.Log($"[CombatUIManager] StartPlayerTurn transition succeeded: {transitionSucceeded}, new state: {currentState}");
     }
 
     private void OnCharacterTurnEnded(CharacterManager _)

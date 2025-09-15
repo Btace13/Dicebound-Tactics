@@ -61,12 +61,12 @@ public class TurnManager : MonoBehaviour
 
     private void HandleCharacterTurnEnded(CharacterManager character = null)
     {
-        StartNextTurn();
+        StartCoroutine(StartNextTurn());
     }
 
     private void HandleEnemyTurnEnded(EnemyManager enemy = null)
     {
-        StartNextTurn();
+        StartCoroutine(StartNextTurn());
     }
 
     [Button("Start Battle", ButtonSizes.Medium, ButtonStyle.CompactBox)]
@@ -117,19 +117,19 @@ public class TurnManager : MonoBehaviour
             currentTurnIndex = 0;
         }
 
-        StartNextTurn(isFirstRound);
+        StartCoroutine(StartNextTurn(isFirstRound));
     }
 
-    public void StartNextTurn(bool isFirstRound = false)
+    public IEnumerator StartNextTurn(bool isFirstRound = false)
     {
         if (!BattlePlaying || turnOrder.Count == 0)
-            return;
+            yield break;
 
         if (currentTurnIndex >= turnOrder.Count)
         {
             // End of round, rebuild turn order and start again
             BuildTurnOrder();
-            return;
+            yield break;
         }
 
         var unit = currentUnit ? turnOrder[currentTurnIndex] : turnOrder.FirstOrDefault();
@@ -145,6 +145,8 @@ public class TurnManager : MonoBehaviour
             if (isFirstRound)
             {
                 EventManager.TriggerBattleStarted();
+                // Wait a frame to ensure UI state transition completes
+                yield return null;
             }
 
             // Switch camera to CombatMenuCamera1 before dice rolling

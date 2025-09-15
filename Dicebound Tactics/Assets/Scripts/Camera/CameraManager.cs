@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Cinemachine;
@@ -480,8 +481,8 @@ public class CameraManager : MonoBehaviour
     {
         Debug.Log($"[CameraManager] Character turn started: {character.name}");
         
-        // Switch camera to the new character who is starting their turn
-        SetActiveCombatCharacter(character.transform);
+        // Delay camera switch to allow action panel to appear first
+        StartCoroutine(DelayedCharacterCameraSwitch(character));
     }
 
     private void HandleEnemyTurnStarted(EnemyManager enemy)
@@ -490,5 +491,14 @@ public class CameraManager : MonoBehaviour
         
         // Switch camera to the new enemy who is starting their turn
         SetActiveCombatCharacter(enemy.transform);
+    }
+
+    private IEnumerator DelayedCharacterCameraSwitch(CharacterManager character)
+    {
+        // Wait a short time to allow action panel to appear and settle
+        yield return new WaitForSeconds(0.5f);
+        
+        Debug.Log($"[CameraManager] Delayed camera switch to character: {character.name}");
+        SetActiveCombatCharacter(character.transform);
     }
 }
