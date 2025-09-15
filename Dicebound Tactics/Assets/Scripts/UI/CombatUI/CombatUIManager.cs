@@ -403,8 +403,20 @@ public class CombatUIManager : MonoBehaviour
 
     private void OnPassTurn()
     {
+        Debug.Log($"[CombatUIManager] Pass turn requested for current character: {currentCharacter?.name ?? "NULL"}");
+        
+        if (currentCharacter != null)
+        {
+            // End the current character's turn - this will trigger the next turn automatically
+            EventManager.TriggerCharacterTurnEnded(currentCharacter);
+        }
+        else
+        {
+            Debug.LogWarning("[CombatUIManager] Cannot pass turn - no current character");
+        }
+        
+        // Transition UI to indicate turn is being passed
         TryTransition(UITransition.PassTurn);
-        TurnManager.Instance.StartNextTurn();
     }
 
     private void OnBackButtonPressed()
