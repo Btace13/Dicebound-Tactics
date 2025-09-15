@@ -90,19 +90,9 @@ public class CombatUIManager : MonoBehaviour
 
     private void Awake()
     {
-        if (debugStateChanges)
-        {
-            Debug.Log("[CombatUIManager] Awake: Starting initialization...");
-        }
-
         InitializeStateMachine();
         InitializePanels();
         SubscribeToEvents();
-
-        if (debugStateChanges)
-        {
-            Debug.Log($"[CombatUIManager] Awake: Initialization complete. Starting state: {currentState}");
-        }
     }
 
     private void OnDisable()
@@ -178,11 +168,6 @@ public class CombatUIManager : MonoBehaviour
 
     public bool TryTransition(UITransition transition)
     {
-        if (debugStateChanges)
-        {
-            Debug.Log($"[CombatUIManager] Attempting transition '{transition}' from state '{currentState}'");
-        }
-
         if (stateTransitions.TryGetValue((currentState, transition), out UIState newState))
         {
             TransitionToState(newState);
@@ -206,11 +191,6 @@ public class CombatUIManager : MonoBehaviour
 
     private void TransitionToState(UIState newState)
     {
-        if (debugStateChanges)
-        {
-            Debug.Log($"[CombatUIManager] State transition: {currentState} -> {newState}");
-        }
-
         currentState = newState;
 
         // Execute state entry action
@@ -322,11 +302,6 @@ public class CombatUIManager : MonoBehaviour
 
     private void SubscribeToEvents()
     {
-        if (debugStateChanges)
-        {
-            Debug.Log("[CombatUIManager] Subscribing to events...");
-        }
-
         // Combat flow events
         EventManager.OnBattleStarted += OnBattleStarted;
         EventManager.OnBattleEnded += OnBattleEnded;
@@ -342,11 +317,6 @@ public class CombatUIManager : MonoBehaviour
         EventManager.OnShowActionPanel += HandleShowActionPanel;
         EventManager.OnShowAbilityPanel += HandleShowAbilityPanel;
         EventManager.OnShowItemPanel += HandleShowItemPanel;
-
-        if (debugStateChanges)
-        {
-            Debug.Log("[CombatUIManager] Event subscription complete.");
-        }
     }
 
     private void UnsubscribeFromEvents()
@@ -374,17 +344,7 @@ public class CombatUIManager : MonoBehaviour
 
     private void OnBattleStarted()
     {
-        if (debugStateChanges)
-        {
-            Debug.Log($"[CombatUIManager] OnBattleStarted called, current state: {currentState}");
-        }
-        
-        bool transitionSuccess = TryTransition(UITransition.ShowCombatUI);
-        
-        if (debugStateChanges)
-        {
-            Debug.Log($"[CombatUIManager] ShowCombatUI transition result: {transitionSuccess}, new state: {currentState}");
-        }
+        TryTransition(UITransition.ShowCombatUI);
     }
 
     private void OnBattleEnded()
@@ -395,18 +355,8 @@ public class CombatUIManager : MonoBehaviour
 
     private void OnCharacterTurnStarted(CharacterManager character)
     {
-        if (debugStateChanges)
-        {
-            Debug.Log($"[CombatUIManager] OnCharacterTurnStarted called with character: {character?.name ?? "NULL"}, current state: {currentState}");
-        }
-        
         currentCharacter = character;
-        bool transitionSuccess = TryTransition(UITransition.StartPlayerTurn);
-        
-        if (debugStateChanges)
-        {
-            Debug.Log($"[CombatUIManager] StartPlayerTurn transition result: {transitionSuccess}, new state: {currentState}");
-        }
+        TryTransition(UITransition.StartPlayerTurn);
     }
 
     private void OnCharacterTurnEnded(CharacterManager _)
@@ -456,27 +406,21 @@ public class CombatUIManager : MonoBehaviour
 
     private void HandleShowActionPanel()
     {
-        Debug.Log($"[CombatUIManager] HandleShowActionPanel called with current state: {currentState}");
-        
         if (currentState == UIState.AbilitySelection || currentState == UIState.ItemSelection)
         {
-            Debug.Log($"[CombatUIManager] Transitioning from {currentState} to PlayerTurn via GoBack");
             TryTransition(UITransition.GoBack);
         }
         else if (currentState == UIState.TargetSelection)
         {
-            Debug.Log($"[CombatUIManager] Transitioning from {currentState} to PlayerTurn via EndTargetSelection");
             TryTransition(UITransition.EndTargetSelection);
         }
         else if (currentState == UIState.PlayerTurn)
         {
-            Debug.Log($"[CombatUIManager] Already in PlayerTurn state, ensuring action panel is visible");
             // Already in the correct state, just make sure the action panel is visible
             OnEnterPlayerTurnState();
         }
         else
         {
-            Debug.Log($"[CombatUIManager] Forcing transition to PlayerTurn from state: {currentState}");
             // Force transition to PlayerTurn state
             TransitionToState(UIState.PlayerTurn);
         }
@@ -690,25 +634,19 @@ public class CombatUIManager : MonoBehaviour
     /// </summary>
     public void ContinueCharacterTurn(CharacterManager character)
     {
-        Debug.Log($"[CombatUIManager] ContinueCharacterTurn called for {character?.name ?? "NULL"}, current state: {currentState}");
-        
         // Update the current character
         currentCharacter = character;
         
         // Force transition to PlayerTurn state if not already there
         if (currentState != UIState.PlayerTurn)
         {
-            Debug.Log($"[CombatUIManager] Forcing transition to PlayerTurn from {currentState}");
             TransitionToState(UIState.PlayerTurn);
         }
         else
         {
             // Already in PlayerTurn state, just refresh the UI
-            Debug.Log($"[CombatUIManager] Already in PlayerTurn, refreshing UI");
             OnEnterPlayerTurnState();
         }
-        
-        Debug.Log($"[CombatUIManager] ContinueCharacterTurn complete, new state: {currentState}");
     }
 
     public void FadeCurrentPanel(bool fadeIn)

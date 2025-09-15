@@ -167,15 +167,11 @@ public class CombatManager : MonoBehaviour
         
         // Start target selection
         EventManager.TriggerSelectingATarget(true);
-        
-        Debug.Log($"Item {item.ItemName} selected. Targeting mode: Allies={targetAllies}, Enemies={targetEnemies}");
     }
 
     public void ExecuteAction()
     {
-        Debug.Log($"[CombatManager] ExecuteAction called. Current UI state: {combatUIManager?.GetCurrentState()}");
         EventManager.TriggerSelectingATarget(false);
-        Debug.Log($"[CombatManager] After TriggerSelectingATarget(false). Current UI state: {combatUIManager?.GetCurrentState()}");
         
         Entity currentUnit = turnManager.GetCurrentUnit();
 
