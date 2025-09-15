@@ -169,6 +169,15 @@ public class CombatManager : MonoBehaviour
         EventManager.TriggerSelectingATarget(true);
     }
 
+    /// <summary>
+    /// Clears the currently selected ability and item. Called when the back button is pressed.
+    /// </summary>
+    public void ClearCurrentSelections()
+    {
+        _selectedAbility = null;
+        _selectedItem = null;
+    }
+
     public void ExecuteAction()
     {
         EventManager.TriggerSelectingATarget(false);

@@ -428,6 +428,13 @@ public class CombatUIManager : MonoBehaviour
             EventManager.TriggerSelectingATarget(false);
         }
         
+        // Clear any selections in the combat manager when going back
+        var combatManager = CombatManager.Instance;
+        if (combatManager != null)
+        {
+            combatManager.ClearCurrentSelections();
+        }
+        
         TryTransition(UITransition.GoBack);
     }
 
