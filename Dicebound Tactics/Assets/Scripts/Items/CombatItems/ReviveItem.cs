@@ -75,7 +75,6 @@ public class ReviveItem : CombatItem
                     target.GetStat(Stats.CurrentMana).statValue + totalManaAmount,
                     target.GetStat(Stats.Mana).statValue
                 );
-                Debug.Log($"Restored {totalManaAmount} mana to {target.name}");
             }
         }
         
@@ -84,7 +83,6 @@ public class ReviveItem : CombatItem
         {
             // TODO: Add temporary buff when status effect system is implemented
             target.AddTempModifier("DamageReduction", damageReduction);
-            Debug.Log($"Applied revival protection to {target.name}: {damageReduction}% damage reduction for {buffDuration} rounds");
         }
         
         // Show heal damage number
@@ -97,10 +95,6 @@ public class ReviveItem : CombatItem
             );
         }
 
-        // Log revival
-        Debug.Log($"{target.name} has been revived!");
-        Debug.Log($"{user.name} used {ItemName} to revive {target.name} with {reviveHealth} HP.");
-        
         return true;
     }
 }

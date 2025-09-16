@@ -7,6 +7,8 @@ using System;
 using Unity.Collections;
 using Unity.Jobs;
 using TacticsToolkit;
+using UnityEngine.UI;
+using TMPro;
 
 public class ProjectileManager : MonoBehaviour
 {
@@ -479,8 +481,6 @@ public class ProjectileManager : MonoBehaviour
 	{
 		if (objectsQueuedForCleanup.Count == 0) return;
 
-		print($"Cleaning up {objectsQueuedForCleanup.Count} projectiles");
-
 		// Create a new list to store indices to remove
 		List<int> indicesToRemove = new List<int>();
 
@@ -556,7 +556,7 @@ public class ProjectileManager : MonoBehaviour
 		{
 			ProjectileData data = projectile;
 
-			print("Reflected projectile!");
+			// Reflected projectile
 			data.timeAlive = 0f;
 			data.direction = direction;
 			data.speed *= 1.5f;

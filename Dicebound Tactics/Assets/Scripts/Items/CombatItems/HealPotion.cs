@@ -61,16 +61,13 @@ public class HealPotion : CombatItem
             if (removeDebuffs)
             {
                 // TODO: Add debuff removal logic when debuff system is implemented
-                Debug.Log($"Removed debuffs from {target.name}");
             }
             
             if (healOverTime)
             {
                 // TODO: Add heal over time effect when status effect system is implemented
-                Debug.Log($"Applied heal over time to {target.name}: {healOverTimeAmount} HP for {healOverTimeDuration} rounds");
             }
             
-            Debug.Log($"{user.name} used {ItemName} on {target.name}, healing for {totalHealAmount} HP.");
             return true;
         }
         

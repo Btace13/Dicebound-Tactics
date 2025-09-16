@@ -81,9 +81,6 @@ public class UnitAnimationHandler : MonoBehaviour
 
 	public void OnUnitVelocityChange(Vector2 velocity)
 	{
-		if (debug)
-			print($"OnVelocityChanged: {velocity}");
-
 		if (_equippedWeapon == null && AnimationData.movementAnimations.State != null)
 		{
 			// If no weapon is equipped, play the movement animation
@@ -152,8 +149,6 @@ public class UnitAnimationHandler : MonoBehaviour
 		WeaponData previousWeapon = _equippedWeapon;
 
 		_equippedWeapon = weaponData;
-
-		print("Weapon Type: " + _equippedWeapon);
 
 		if (_equippedWeapon != null)
 		{
@@ -301,11 +296,6 @@ public class UnitAnimationHandler : MonoBehaviour
 
 		AnimancerState state = _Animancer.Play(AnimationData.jumpAnimation, 0.1f, FadeMode.FixedDuration);
 		state.NormalizedTime = 0;
-		
-		if (debug)
-		{
-			Debug.Log($"{name}: Playing jump animation");
-		}
 	}
 
 	/// <summary>
@@ -318,11 +308,6 @@ public class UnitAnimationHandler : MonoBehaviour
 		AnimancerState state = _Animancer.Play(AnimationData.landingAnimation, 0.1f, FadeMode.FixedDuration);
 		state.NormalizedTime = 0;
 		state.NormalizedEndTime = 1;
-		
-		if (debug)
-		{
-			Debug.Log($"{name}: Playing landing animation");
-		}
 	}
 
 	/// <summary>
@@ -334,11 +319,6 @@ public class UnitAnimationHandler : MonoBehaviour
 
 		AnimancerState state = _Animancer.Play(AnimationData.fallingAnimation, 0.1f, FadeMode.FixedDuration);
 		state.NormalizedTime = 0;
-		
-		if (debug)
-		{
-			Debug.Log($"{name}: Playing falling animation");
-		}
 	}
 
 	#endregion

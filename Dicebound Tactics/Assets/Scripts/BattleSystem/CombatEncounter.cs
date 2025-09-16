@@ -98,7 +98,6 @@ public class CombatEncounter : MonoBehaviour
         {
             if (target != null && enemy.overworldController.CanSeeTarget(target))
             {
-                print($"{enemy.name} can see target {target.name} at position {target.position}");
                 enemy.overworldController.UpdateLastKnownTargetPosition(target.position);
             }
 
@@ -199,29 +198,21 @@ public class CombatEncounter : MonoBehaviour
                     Debug.LogWarning($"No available slots for {c.name} in the closest encounter side.");
                     continue;
                 }
-                else
-                {
-                    Debug.Log($"{c.name} assigned to slot at {closestSlot.slotTransform.position}");
-                }
 
                 controller.AssignedEncounterSlot = closestSlot; // Assign the slot to the controller
 
                 // Choose movement type based on settings
-                Debug.Log($"useLeapMovement is set to: {useLeapMovement}");
                 if (useLeapMovement)
                 {
                     // Use leap movement
-                    Debug.Log($"Using leap movement for {c.name}");
                     LeapMovementController leapController = c.GetComponent<LeapMovementController>();
                     if (leapController == null)
                     {
                         leapController = c.gameObject.AddComponent<LeapMovementController>();
-                        Debug.Log($"Added LeapMovementController to {c.name}");
                     }
                     
                     // Configure leap parameters
                     leapController.SetLeapParameters(leapDuration, leapHeight, leapCurve);
-                    Debug.Log($"Configured leap parameters: duration={leapDuration}, height={leapHeight}");
                     
                     // Cancel any pathfinding to prevent conflicts
                     controller.CancelPath();
@@ -240,23 +231,21 @@ public class CombatEncounter : MonoBehaviour
                         }
                         
                         remainingMovingCharacters--;
-                        Debug.Log($"{c.name} completed leap movement. Remaining: {remainingMovingCharacters}");
                         if (remainingMovingCharacters <= 0)
                         {
-                            Debug.Log("All characters have reached their combat slots.");
+                            // All characters have reached their combat slots
                         }
                     });
                 }
                 else
                 {
                     // Use normal pathfinding movement
-                    Debug.Log($"Using normal pathfinding movement for {c.name}");
                     controller.MoveToTarget(closestSlot.slotTransform, true, () =>
                     {
                         remainingMovingCharacters--;
                         if (remainingMovingCharacters <= 0)
                         {
-                            Debug.Log("All characters have reached their combat slots.");
+                            // All characters have reached their combat slots
                         }
                     });
                 }
@@ -282,10 +271,6 @@ public class CombatEncounter : MonoBehaviour
                     Debug.LogWarning($"No available slots for {enemy.name} in the opposite encounter side.");
                     continue;
                 }
-                else
-                {
-                    Debug.Log($"{enemy.name} assigned to slot at {closestSlot.slotTransform.position}");
-                }
 
                 controller.AssignedEncounterSlot = closestSlot; // Assign the slot to the controller
 
@@ -293,12 +278,10 @@ public class CombatEncounter : MonoBehaviour
                 if (useLeapMovement)
                 {
                     // Use leap movement for enemies too
-                    Debug.Log($"Using leap movement for enemy {enemy.name}");
                     LeapMovementController leapController = enemy.GetComponent<LeapMovementController>();
                     if (leapController == null)
                     {
                         leapController = enemy.gameObject.AddComponent<LeapMovementController>();
-                        Debug.Log($"Added LeapMovementController to enemy {enemy.name}");
                     }
                     
                     // Configure leap parameters
@@ -321,23 +304,21 @@ public class CombatEncounter : MonoBehaviour
                         }
                         
                         remainingMovingEnemies--;
-                        Debug.Log($"Enemy {enemy.name} completed leap movement. Remaining: {remainingMovingEnemies}");
                         if (remainingMovingEnemies <= 0)
                         {
-                            Debug.Log("All enemies have reached their combat slots.");
+                            // All enemies have reached their combat slots
                         }
                     });
                 }
                 else
                 {
                     // Use normal pathfinding movement
-                    Debug.Log($"Using normal pathfinding movement for enemy {enemy.name}");
                     controller.MoveToTarget(closestSlot.slotTransform, true, () =>
                     {
                         remainingMovingEnemies--;
                         if (remainingMovingEnemies <= 0)
                         {
-                            Debug.Log("All enemies have reached their combat slots.");
+                            // All enemies have reached their combat slots
                         }
                     });
                 }
@@ -365,14 +346,12 @@ public class CombatEncounter : MonoBehaviour
         EventManager.TriggerCombatEncounterStarted(this);
 
         // Initialize encounter logic here, such as spawning enemies, setting up UI, etc.
-        Debug.Log("Combat Encounter Started");
     }
 
     [Button("End Encounter")]
     public void EndEncounter()
     {
         // Cleanup encounter logic here, such as removing enemies, resetting UI, etc.
-        Debug.Log("Combat Encounter Ended");
 
         // Reset encounter state
         IsActive = false;
@@ -535,7 +514,6 @@ public class CombatEncounter : MonoBehaviour
         if (leapController == null)
         {
             leapController = testCharacter.gameObject.AddComponent<LeapMovementController>();
-            Debug.Log($"Added LeapMovementController to {testCharacter.name} for testing.");
         }
 
         // Configure leap parameters from encounter settings
@@ -547,10 +525,9 @@ public class CombatEncounter : MonoBehaviour
 
         if (targetSlot != null)
         {
-            Debug.Log($"Testing leap movement: {testCharacter.name} leaping to {targetSlot.slotTransform.position}");
             leapController.LeapToTarget(targetSlot.slotTransform, () =>
             {
-                Debug.Log($"Leap movement test completed for {testCharacter.name}!");
+                // Leap movement test completed
             });
         }
         else

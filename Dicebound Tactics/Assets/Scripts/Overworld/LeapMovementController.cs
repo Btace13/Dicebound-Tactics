@@ -54,7 +54,6 @@ public class LeapMovementController : MonoBehaviour
     {
         if (isLeaping)
         {
-            Debug.LogWarning($"Character {name} is already leaping. Cancelling previous leap.");
             CancelLeap();
         }
 

@@ -17,7 +17,7 @@ MonoBehaviour:
     To: '**ANY CAMERA**'
     Blend:
       Style: 4
-      Time: 0.35
+      Time: 0.3
       CustomCurve:
         serializedVersion: 2
         m_Curve: []
@@ -28,7 +28,7 @@ MonoBehaviour:
     To: '**ANY CAMERA**'
     Blend:
       Style: 4
-      Time: 0.35
+      Time: 0.3
       CustomCurve:
         serializedVersion: 2
         m_Curve: []
@@ -39,7 +39,7 @@ MonoBehaviour:
     To: '**ANY CAMERA**'
     Blend:
       Style: 4
-      Time: 0.35
+      Time: 0.3
       CustomCurve:
         serializedVersion: 2
         m_Curve: []
@@ -50,7 +50,7 @@ MonoBehaviour:
     To: CombatMenuCamera2
     Blend:
       Style: 4
-      Time: 0.35
+      Time: 0.3
       CustomCurve:
         serializedVersion: 2
         m_Curve: []
@@ -83,7 +83,7 @@ MonoBehaviour:
     To: CombatMenuCamera1
     Blend:
       Style: 4
-      Time: 0.35
+      Time: 0.3
       CustomCurve:
         serializedVersion: 2
         m_Curve: []
@@ -94,7 +94,7 @@ MonoBehaviour:
     To: '**ANY CAMERA**'
     Blend:
       Style: 1
-      Time: 0.35
+      Time: 0.3
       CustomCurve:
         serializedVersion: 2
         m_Curve: []

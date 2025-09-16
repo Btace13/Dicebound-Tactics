@@ -1,5 +1,7 @@
 using TacticsToolkit;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 using DG.Tweening;
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
@@ -60,27 +62,23 @@ public class GameStateManager : MonoBehaviour
     {
         currentGameState = initialState;
         EventManager.TriggerGameStateChanged(currentGameState);
-        Debug.Log($"Game state initialized to: {currentGameState}");
     }
 
     public void ChangeGameState(GameState newState)
     {
         currentGameState = newState;
         EventManager.TriggerGameStateChanged(currentGameState);
-        Debug.Log($"Game state changed to: {currentGameState}");
     }
 
     public void OnCombatEncounterStarted(CombatEncounter encounter)
     {
         // Handle logic when a combat encounter starts
-        Debug.Log("Combat encounter started. Switching to combat state.");
         ChangeGameState(GameState.Combat);
     }
 
     public void OnCombatEncounterEnded(CombatEncounter encounter)
     {
         // Handle logic when a combat encounter ends
-        Debug.Log("Combat encounter ended. Returning to overworld.");
         ChangeGameState(GameState.Overworld);
     }
 
@@ -88,7 +86,6 @@ public class GameStateManager : MonoBehaviour
     public void ShowGameOverScreen()
     {
         // Handle logic for showing the game over screen
-        Debug.Log("Game Over! Switching to game over state.");
         ChangeGameState(GameState.Menu);
 
         gameOverScreenCanvasGroup.DOFade(1, 0.5f).SetEase(Ease.InOutQuad)
@@ -104,7 +101,6 @@ public class GameStateManager : MonoBehaviour
     public void HideGameOverScreen()
     {
         // Handle logic for hiding the game over screen
-        Debug.Log("Hiding game over screen.");
         gameOverTextCanvasGroup.DOFade(0, 0.35f).SetEase(Ease.InOutQuad).OnComplete(() =>
         {
             gameOverScreenCanvasGroup.DOFade(0, 0.35f).SetEase(Ease.InOutQuad)

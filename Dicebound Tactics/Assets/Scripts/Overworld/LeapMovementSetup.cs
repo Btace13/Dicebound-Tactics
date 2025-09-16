@@ -44,7 +44,6 @@ public class LeapMovementSetup : MonoBehaviour
         if (leapController == null)
         {
             leapController = gameObject.AddComponent<LeapMovementController>();
-            Debug.Log($"Added LeapMovementController to {gameObject.name}");
         }
 
         // Configure leap controller with default settings
@@ -71,7 +70,6 @@ public class LeapMovementSetup : MonoBehaviour
             {
                 DestroyImmediate(leapController);
             }
-            Debug.Log($"Removed LeapMovementController from {gameObject.name}");
         }
         else
         {
@@ -96,7 +94,7 @@ public class LeapMovementSetup : MonoBehaviour
         Vector3 testTarget = transform.position + transform.forward * 5f;
         leapController.LeapToPosition(testTarget, () =>
         {
-            Debug.Log($"Leap movement test completed for {gameObject.name}!");
+            // Leap movement test completed
         });
     }
 
@@ -147,7 +145,7 @@ public class LeapMovementSetup : MonoBehaviour
 
         if (isValid)
         {
-            Debug.Log($"Leap movement setup validation passed for {gameObject.name}!");
+            // Leap movement setup validation passed
         }
     }
 

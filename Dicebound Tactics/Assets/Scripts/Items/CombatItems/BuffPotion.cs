@@ -36,7 +36,6 @@ public class BuffPotion : CombatItem
         // Apply the buff (using the existing temp modifier system)
         if (!stackable && target.tempModifiers.ContainsKey(buffType))
         {
-            Debug.Log($"{target.name} already has a {buffType} buff active!");
             return false;
         }
         
@@ -53,8 +52,6 @@ public class BuffPotion : CombatItem
                 DamageNumberType.Normal // You might want to add a new type for buffs
             );
         }
-        
-        Debug.Log($"{user.name} used {ItemName} on {target.name}, applying {buffType} buff (+{buffValue}) for {buffDuration} rounds.");
         
         return true;
     }
