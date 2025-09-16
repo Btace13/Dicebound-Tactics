@@ -54,7 +54,7 @@ public class CombatUIManager : MonoBehaviour
     #region UI Configuration
 
     [Header("Animation Settings")]
-    [SerializeField] private float _fadeDuration = 0.5f;
+    [SerializeField] private float _fadeDuration = 0.25f;
     [SerializeField] private Vector3 _canvasOffset = new Vector3(0.25f, 0.5f, 0);
     [SerializeField] private Ease _defaultEase = Ease.InOutQuad;
 
@@ -84,6 +84,7 @@ public class CombatUIManager : MonoBehaviour
 
     private CombatPanel currentPanel;
     private CharacterManager currentCharacter;
+    private bool isPanelSwitching = false;
 
     #endregion
 
@@ -395,7 +396,23 @@ public class CombatUIManager : MonoBehaviour
             combatManager.ClearCurrentSelections();
         }
         
-        TryTransition(UITransition.GoBack);
+        // For ability/item selection, handle the transition manually to avoid double fade
+        if (currentState == UIState.AbilitySelection || currentState == UIState.ItemSelection)
+        {
+            // Manually switch to action panel without triggering state change first
+            if (currentPanel != null && currentPanel != ActionPanel)
+            {
+                SwitchPanels(currentPanel, ActionPanel);
+            }
+            // Then update the state
+            currentState = UIState.PlayerTurn;
+            // Update back button state for new state
+            ToggleBackButtonInteractable(false);
+        }
+        else
+        {
+            TryTransition(UITransition.GoBack);
+        }
     }
 
     private void HandleShowActionPanel()
@@ -479,24 +496,63 @@ public class CombatUIManager : MonoBehaviour
     private void OpenPanel(CombatPanel panel)
     {
         if (panel == null) return;
+        
+        // If we're switching panels and trying to open a different panel, wait for current switch to complete
+        if (isPanelSwitching && currentPanel != panel)
+        {
+            // For critical panels like ActionPanel (PlayerTurn state), force the switch
+            if (currentState == UIState.PlayerTurn && panel == ActionPanel)
+            {
+                // Complete current switch immediately and then open action panel
+                isPanelSwitching = false;
+                if (currentPanel != null)
+                {
+                    currentPanel.gameObject.SetActive(false);
+                }
+                ShowFirstPanel(panel);
+                SetCameraForPanel(panel);
+                return;
+            }
+            else
+            {
+                return;
+            }
+        }
 
-        if (currentPanel != null)
+        if (currentPanel != null && currentPanel != panel)
         {
             SwitchPanels(currentPanel, panel);
         }
-        else
+        else if (currentPanel == null)
         {
             ShowFirstPanel(panel);
+            SetCameraForPanel(panel);
         }
-
-        SetCameraForPanel(panel);
+        else if (currentPanel == panel)
+        {
+            // We're already showing the right panel, just ensure camera is correct
+            SetCameraForPanel(panel);
+        }
     }
 
     private void SwitchPanels(CombatPanel fromPanel, CombatPanel toPanel)
     {
+        isPanelSwitching = true;
+        
+        // Kill any existing fade sequences to prevent conflicts
+        if (fromPanel.FadeSequence != null && fromPanel.FadeSequence.IsActive())
+        {
+            fromPanel.FadeSequence.Kill();
+        }
+        if (toPanel.FadeSequence != null && toPanel.FadeSequence.IsActive())
+        {
+            toPanel.FadeSequence.Kill();
+        }
+        
         fromPanel.FadeOutCanvas(() =>
         {
             CompletePanelSwitch(fromPanel, toPanel);
+            isPanelSwitching = false;
         }, _fadeDuration, _defaultEase);
     }
 
@@ -525,6 +581,21 @@ public class CombatUIManager : MonoBehaviour
         // Update UI state
         ShowScreenSpacePanelInputs(currentPanel.PreviousPanel != null);
         currentPanel.FadeInCanvas(null, _fadeDuration, _defaultEase);
+        
+        // Set camera after the panel switch is complete
+        SetCameraForPanel(toPanel);
+        
+        // Update other UI elements based on current state
+        if (currentState == UIState.PlayerTurn)
+        {
+            ShowConfirmButton(false);
+            // Back button state is handled in OnBackButtonPressed for manual transitions
+        }
+        else if (currentState == UIState.AbilitySelection || currentState == UIState.ItemSelection)
+        {
+            ToggleBackButtonInteractable(true);
+            ShowConfirmButton(false);
+        }
     }
 
     private void SetCameraForPanel(CombatPanel panel)
@@ -560,10 +631,13 @@ public class CombatUIManager : MonoBehaviour
 
     private void CloseAllPanels()
     {
-        if (currentPanel == null) return;
+        if (currentPanel == null || isPanelSwitching) return;
 
         if (cancelButton != null)
+        {
             cancelButton.interactable = false;
+            cancelButton.gameObject.SetActive(false);
+        }
 
         currentPanel.FadeOutCanvas(() =>
         {
@@ -574,6 +648,8 @@ public class CombatUIManager : MonoBehaviour
 
     private void CloseAllPanelsImmediate()
     {
+        if (isPanelSwitching) return;
+
         if (currentPanel != null)
         {
             currentPanel.gameObject.SetActive(false);
@@ -625,7 +701,10 @@ public class CombatUIManager : MonoBehaviour
     public void ToggleBackButtonInteractable(bool enable)
     {
         if (cancelButton != null)
+        {
             cancelButton.interactable = enable;
+            cancelButton.gameObject.SetActive(enable);
+        }
     }
 
     public void ShowTargetSelectionUI(bool enable)

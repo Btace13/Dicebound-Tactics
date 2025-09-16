@@ -1715,7 +1715,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentState: 0
   debugStateChanges: 0
-  _fadeDuration: 0.5
+  _fadeDuration: 0.2
   _canvasOffset: {x: 0, y: 0, z: 0}
   _defaultEase: 7
   cameraManager: {fileID: 717543930}
