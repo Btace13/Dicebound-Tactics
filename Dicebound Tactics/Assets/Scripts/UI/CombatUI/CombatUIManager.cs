@@ -178,14 +178,6 @@ public class CombatUIManager : MonoBehaviour
         if (debugStateChanges)
         {
             Debug.LogWarning($"[CombatUIManager] Invalid transition '{transition}' from state '{currentState}'");
-            Debug.Log($"[CombatUIManager] Available transitions from {currentState}:");
-            foreach (var kvp in stateTransitions)
-            {
-                if (kvp.Key.Item1 == currentState)
-                {
-                    Debug.Log($"  - {kvp.Key.Item2} -> {kvp.Value}");
-                }
-            }
         }
         return false;
     }
@@ -209,29 +201,6 @@ public class CombatUIManager : MonoBehaviour
     public void SetDebugMode(bool enabled)
     {
         debugStateChanges = enabled;
-        if (enabled)
-        {
-            Debug.Log($"[CombatUIManager] Debug mode enabled. Current state: {currentState}");
-        }
-    }
-
-    /// <summary>
-    /// Get detailed debug information about the current state
-    /// </summary>
-    public void LogCurrentStateInfo()
-    {
-        Debug.Log($"[CombatUIManager] Current State: {currentState}");
-        Debug.Log($"[CombatUIManager] Current Character: {currentCharacter?.name ?? "NULL"}");
-        Debug.Log($"[CombatUIManager] Current Panel: {currentPanel?.name ?? "NULL"}");
-        
-        Debug.Log($"[CombatUIManager] Available transitions from {currentState}:");
-        foreach (var kvp in stateTransitions)
-        {
-            if (kvp.Key.Item1 == currentState)
-            {
-                Debug.Log($"  - {kvp.Key.Item2} -> {kvp.Value}");
-            }
-        }
     }
 
     #endregion
@@ -252,11 +221,9 @@ public class CombatUIManager : MonoBehaviour
 
     private void OnEnterPlayerTurnState()
     {
-        Debug.Log("[CombatUIManager] Entering PlayerTurn state - opening ActionPanel");
         OpenPanel(ActionPanel);
         if (currentCharacter != null)
         {
-            Debug.Log($"[CombatUIManager] Moving canvas to character: {currentCharacter.name}");
             MoveCanvasToCharacter(currentCharacter);
         }
         ShowConfirmButton(false);
@@ -358,18 +325,13 @@ public class CombatUIManager : MonoBehaviour
 
     private void OnCharacterTurnStarted(CharacterManager character)
     {
-        Debug.Log($"[CombatUIManager] OnCharacterTurnStarted called for {character.name}, current state: {currentState}");
-        Debug.Log($"[CombatUIManager] Previous currentCharacter: {currentCharacter?.name ?? "NULL"}");
         currentCharacter = character;
-        Debug.Log($"[CombatUIManager] New currentCharacter: {currentCharacter?.name ?? "NULL"}");
         
         // Force transition to PlayerTurn state or directly call OnEnterPlayerTurnState if already in PlayerTurn
         bool transitionSucceeded = TryTransition(UITransition.StartPlayerTurn);
-        Debug.Log($"[CombatUIManager] StartPlayerTurn transition succeeded: {transitionSucceeded}, new state: {currentState}");
         
         if (!transitionSucceeded && currentState == UIState.PlayerTurn)
         {
-            Debug.Log("[CombatUIManager] Already in PlayerTurn state, manually calling OnEnterPlayerTurnState");
             OnEnterPlayerTurnState();
         }
     }
@@ -403,8 +365,6 @@ public class CombatUIManager : MonoBehaviour
 
     private void OnPassTurn()
     {
-        Debug.Log($"[CombatUIManager] Pass turn requested for current character: {currentCharacter?.name ?? "NULL"}");
-        
         if (currentCharacter != null)
         {
             // End the current character's turn - this will trigger the next turn automatically
@@ -489,19 +449,16 @@ public class CombatUIManager : MonoBehaviour
 
     public void MoveCanvasToCharacter(CharacterManager character)
     {
-        Debug.Log($"[CombatUIManager] MoveCanvasToCharacter called for: {character?.name ?? "NULL"}");
         if (character == null) 
         {
             Debug.LogWarning("[CombatUIManager] Character is null, cannot move canvas");
             return;
         }
-        Debug.Log($"[CombatUIManager] Character position: {character.transform.position}");
         MoveCanvasToTarget(character.transform);
     }
 
     public void MoveCanvasToTarget(Transform target)
     {
-        Debug.Log($"[CombatUIManager] MoveCanvasToTarget called for: {target?.name ?? "NULL"}");
         if (currentPanel == null || target == null) 
         {
             Debug.LogWarning($"[CombatUIManager] Cannot move canvas - currentPanel: {currentPanel?.name ?? "NULL"}, target: {target?.name ?? "NULL"}");
@@ -516,29 +473,22 @@ public class CombatUIManager : MonoBehaviour
         }
 
         Vector3 newPosition = target.position + _canvasOffset;
-        Debug.Log($"[CombatUIManager] Moving canvas from {transform.position} to {newPosition} (target: {target.position} + offset: {_canvasOffset})");
         transform.position = newPosition;
-        Debug.Log($"[CombatUIManager] Canvas moved to: {transform.position}");
     }
 
     private void OpenPanel(CombatPanel panel)
     {
-        Debug.Log($"[CombatUIManager] OpenPanel called for: {panel?.name ?? "NULL"}");
-        
         if (panel == null) return;
 
         if (currentPanel != null)
         {
-            Debug.Log($"[CombatUIManager] Switching from {currentPanel.name} to {panel.name}");
             SwitchPanels(currentPanel, panel);
         }
         else
         {
-            Debug.Log($"[CombatUIManager] Showing first panel: {panel.name}");
             ShowFirstPanel(panel);
         }
 
-        Debug.Log($"[CombatUIManager] Setting camera for panel: {panel.name}");
         SetCameraForPanel(panel);
     }
 
@@ -579,8 +529,6 @@ public class CombatUIManager : MonoBehaviour
 
     private void SetCameraForPanel(CombatPanel panel)
     {
-        Debug.Log($"[CombatUIManager] SetCameraForPanel called for panel: {panel?.name ?? "NULL"}");
-        
         if (cameraManager == null)
         {
             Debug.LogWarning("[CombatUIManager] CameraManager is null, cannot set camera for panel");
@@ -595,27 +543,18 @@ public class CombatUIManager : MonoBehaviour
         
         if (PanelCameras.TryGetValue(panel, out string cameraName))
         {
-            Debug.Log($"[CombatUIManager] Found camera mapping: {panel.name} -> {cameraName}");
-            Debug.Log($"[CombatUIManager] Attempting to switch to camera: {cameraName}");
-            
             // Add a small delay to ensure this camera switch happens after any turn setup camera changes
             StartCoroutine(DelayedCameraSwitch(cameraName, 0.1f));
         }
-        else
+        else if (debugStateChanges)
         {
             Debug.LogWarning($"[CombatUIManager] No camera mapping found for panel: {panel.name}");
-            Debug.Log("[CombatUIManager] Available panel camera mappings:");
-            foreach (var kvp in PanelCameras)
-            {
-                Debug.Log($"  - {kvp.Key?.name ?? "NULL"} -> {kvp.Value}");
-            }
         }
     }
     
     private System.Collections.IEnumerator DelayedCameraSwitch(string cameraName, float delay)
     {
         yield return new WaitForSeconds(delay);
-        Debug.Log($"[CombatUIManager] Delayed camera switch to: {cameraName}");
         cameraManager.TrySetActiveCamera(cameraName);
     }
 

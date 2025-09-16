@@ -122,31 +122,17 @@ public class CameraManager : MonoBehaviour
                 ActiveCamera = null; // Clear active camera if it was unregistered
             }
         }
-        else
-        {
-            // Debug.LogWarning($"Camera with name {cameraName} is not registered.");
-        }
     }
 
     public void TrySetActiveCamera(string cameraName)
     {
-        Debug.Log($"[CameraManager] TrySetActiveCamera called with: {cameraName}");
-        Debug.Log($"[CameraManager] Current active camera: {ActiveCamera?.CameraName ?? "NULL"}");
-        
         if (Cameras.TryGetValue(cameraName, out var cameraController))
         {
-            Debug.Log($"[CameraManager] Found camera controller for: {cameraName}");
             SetActiveCamera(cameraController);
-            Debug.Log($"[CameraManager] Successfully switched to camera: {cameraName}");
         }
         else
         {
             Debug.LogWarning($"[CameraManager] Camera with name {cameraName} not found.");
-            Debug.Log("[CameraManager] Available cameras:");
-            foreach (var kvp in Cameras)
-            {
-                Debug.Log($"  - {kvp.Key}");
-            }
         }
     }
 
@@ -200,18 +186,15 @@ public class CameraManager : MonoBehaviour
     {
         if (ActiveCamera == null)
         {
-            // Debug.LogWarning("No active camera to shake.");
             return;
         }
         BaseCameraController cameraToShake = ActiveCamera;
         if (cameraShakeSettings == null)
         {
             cameraShakeSettings = defaultCameraShakeSettings;
-            // print("Using default camera shake settings.");
         }
         if (cameraShakeSettings.Intensity <= 0 || cameraShakeSettings.Duration <= 0)
         {
-            // Debug.LogWarning("Intensity and duration must be greater than zero for camera shake.");
             return;
         }
         CinemachineBasicMultiChannelPerlin noise = cameraToShake.CinemachineCam.GetOrAddComponent<CinemachineBasicMultiChannelPerlin>();
@@ -232,7 +215,6 @@ public class CameraManager : MonoBehaviour
             noise.AmplitudeGain = initialAmplitude;
             noise.FrequencyGain = initialFrequency;
             noise.enabled = false; // Disable noise after shaking
-            // print("Camera shake completed and noise disabled.");
         });
     }
 
@@ -335,25 +317,21 @@ public class CameraManager : MonoBehaviour
     {
         if (target == null)
         {
-            // Debug.LogError("CameraManager: Target is null. Cannot set combat target.");
             return;
         }
-        print("CameraManager: Setting combat target: " + target.name);
+        
         foreach (CombatCameraController combatCameraController in Cameras.Values.OfType<CombatCameraController>())
         {
             if (combatCameraController == null)
             {
-                // Debug.LogWarning("CameraManager: Active camera is not a CombatCameraController.");
                 continue;
             }
             if (combatCameraController.TargetGroup == null)
             {
-                // Debug.LogError("CameraManager: Target group is not initialized in CombatCameraController.");
                 continue;
             }
             if (combatCameraController.cameraTarget == CameraTarget.ActivePlayer)
             {
-                // Debug.LogWarning("CameraManager: Camera target is set to ActivePlayer. Cannot set target.");
                 continue;
             }
             
@@ -377,16 +355,11 @@ public class CameraManager : MonoBehaviour
 
     public void SetActiveCombatCharacter(Transform character)
     {
-        Debug.Log($"[CameraManager] SetActiveCombatCharacter called with: {character?.name ?? "NULL"}");
-        
         // Early exit if the character is already the active character
         if (activeCharacter == character)
         {
-            Debug.Log($"[CameraManager] Character {character?.name ?? "NULL"} is already the active character. Skipping update.");
             return;
         }
-        
-        Debug.Log($"[CameraManager] Found {Cameras.Values.OfType<CombatCameraController>().Count()} combat cameras");
         
         foreach (CombatCameraController combatCamera in Cameras.Values.OfType<CombatCameraController>())
         {
@@ -406,8 +379,6 @@ public class CameraManager : MonoBehaviour
                 continue;
             }
             
-            Debug.Log($"[CameraManager] Updating camera {combatCamera.name}");
-            
             if (combatCamera.TargetGroup.Targets.Count == 0)
             {
                 combatCamera.AddTarget(character);
@@ -419,7 +390,6 @@ public class CameraManager : MonoBehaviour
             combatCamera.UpdateFollowTarget(character);
         }
         activeCharacter = character;
-        Debug.Log($"[CameraManager] Active character set to: {activeCharacter?.name ?? "NULL"}");
     }
 
     public void SetActiveCombatCharacter(Entity entity)
@@ -429,8 +399,6 @@ public class CameraManager : MonoBehaviour
 
     private void HandleAbilityStarted(Entity user, Entity target)
     {
-        Debug.Log($"[CameraManager] Ability started: {user.name} -> {target.name}");
-        
         // Switch to a side camera for ability execution
         // First try Side1Camera, then Side2Camera, then AttackCamera as fallback
         string[] sideCameraNames = { "Side1Camera", "Side2Camera", "AttackCamera" };
@@ -439,7 +407,6 @@ public class CameraManager : MonoBehaviour
         {
             if (Cameras.ContainsKey(cameraName))
             {
-                Debug.Log($"[CameraManager] Switching to {cameraName} for ability execution");
                 TrySetActiveCamera(cameraName);
                 return;
             }
@@ -450,22 +417,15 @@ public class CameraManager : MonoBehaviour
 
     private void HandleAbilityEnded(Entity user, Entity target)
     {
-        Debug.Log($"[CameraManager] Ability ended: {user.name} -> {target.name}");
-        
         // Check if the user is a character and if they can use more abilities
         if (user is CharacterManager character)
         {
             if (character.CanUseMoreAbilitiesThisTurn())
             {
                 // Turn is continuing - return camera focus to the character
-                Debug.Log($"[CameraManager] Turn continuing, returning camera to {character.name}");
                 SetActiveCombatCharacter(user.transform);
             }
-            else
-            {
-                // Turn is ending - camera will be handled by the new turn started events
-                Debug.Log($"[CameraManager] Turn ending for {character.name}, camera will switch on next turn");
-            }
+            // Turn is ending - camera will be handled by the new turn started events
         }
         else
         {
@@ -479,16 +439,12 @@ public class CameraManager : MonoBehaviour
 
     private void HandleCharacterTurnStarted(CharacterManager character)
     {
-        Debug.Log($"[CameraManager] Character turn started: {character.name}");
-        
         // Delay camera switch to allow action panel to appear first
         StartCoroutine(DelayedCharacterCameraSwitch(character));
     }
 
     private void HandleEnemyTurnStarted(EnemyManager enemy)
     {
-        Debug.Log($"[CameraManager] Enemy turn started: {enemy.name}");
-        
         // Switch camera to the new enemy who is starting their turn
         SetActiveCombatCharacter(enemy.transform);
     }
@@ -498,7 +454,6 @@ public class CameraManager : MonoBehaviour
         // Wait a short time to allow action panel to appear and settle
         yield return new WaitForSeconds(0.5f);
         
-        Debug.Log($"[CameraManager] Delayed camera switch to character: {character.name}");
         SetActiveCombatCharacter(character.transform);
     }
 }
