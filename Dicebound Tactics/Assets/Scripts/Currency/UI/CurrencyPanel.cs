@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
@@ -17,9 +18,15 @@ public class CurrencyPanel : MonoBehaviour
 
   [Header("Auto Setup")]
   [SerializeField] private bool autoSetupAllCurrencies = true;
+  
+  [Header("Visibility Settings")]
+  [SerializeField] private bool showOnCurrencyChange = true;
+  [SerializeField] private float showDuration = 3f; // How long to keep panel visible after currency change
+  [SerializeField] private bool hideWhenEmpty = false;
 
   private Dictionary<CurrencyType, CurrencyDisplay> currencyDisplays = new Dictionary<CurrencyType, CurrencyDisplay>();
   private CanvasGroup canvasGroup;
+  private Coroutine hideAfterDelayCoroutine;
 
   private void Awake()
   {
@@ -197,24 +204,42 @@ public class CurrencyPanel : MonoBehaviour
   // Currency change event handlers
   private void OnCurrencyChanged(CurrencyType type, int oldAmount, int newAmount)
   {
+    Debug.Log($"[CurrencyPanel] OnCurrencyChanged: {type} from {oldAmount} to {newAmount}");
     if (displayedCurrencies.Contains(type))
     {
+      if (showOnCurrencyChange)
+      {
+        Debug.Log($"[CurrencyPanel] Showing panel temporarily for {type}");
+        ShowPanelTemporarily();
+      }
       FlashPanel();
     }
   }
 
   private void OnCurrencyGained(CurrencyType type, int amount)
   {
+    Debug.Log($"[CurrencyPanel] OnCurrencyGained: {amount} {type}");
     if (displayedCurrencies.Contains(type))
     {
+      if (showOnCurrencyChange)
+      {
+        Debug.Log($"[CurrencyPanel] Showing panel temporarily for gained {type}");
+        ShowPanelTemporarily();
+      }
       FlashPanel();
     }
   }
 
   private void OnCurrencySpent(CurrencyType type, int amount)
   {
+    Debug.Log($"[CurrencyPanel] OnCurrencySpent: {amount} {type}");
     if (displayedCurrencies.Contains(type))
     {
+      if (showOnCurrencyChange)
+      {
+        Debug.Log($"[CurrencyPanel] Showing panel temporarily for spent {type}");
+        ShowPanelTemporarily();
+      }
       FlashPanel();
     }
   }
@@ -262,8 +287,56 @@ public class CurrencyPanel : MonoBehaviour
     }
   }
 
+  private void ShowPanelTemporarily()
+  {
+    if (canvasGroup == null) 
+    {
+      Debug.LogError("[CurrencyPanel] CanvasGroup is null in ShowPanelTemporarily!");
+      return;
+    }
+
+    Debug.Log($"[CurrencyPanel] ShowPanelTemporarily called. Current alpha: {canvasGroup.alpha}");
+
+    // Stop any existing hide coroutine
+    if (hideAfterDelayCoroutine != null)
+    {
+      StopCoroutine(hideAfterDelayCoroutine);
+    }
+
+    // Make panel visible
+    canvasGroup.DOKill();
+    canvasGroup.DOFade(1f, 0.3f).SetEase(Ease.OutQuad);
+    canvasGroup.interactable = true;
+    canvasGroup.blocksRaycasts = true;
+
+    Debug.Log($"[CurrencyPanel] Panel fading to visible, will hide after {showDuration} seconds");
+
+    // Start hide timer
+    hideAfterDelayCoroutine = StartCoroutine(HideAfterDelay());
+  }
+
+  private System.Collections.IEnumerator HideAfterDelay()
+  {
+    yield return new WaitForSeconds(showDuration);
+    
+    // Only hide if we're not in character menu
+    if (canvasGroup != null && canvasGroup.alpha > 0.5f)
+    {
+      canvasGroup.DOFade(0f, 0.5f).SetEase(Ease.InQuad);
+      canvasGroup.interactable = false;
+      canvasGroup.blocksRaycasts = false;
+    }
+  }
+
   private void ShowAllCurrencies()
   {
+    // Stop any hide timer since we're explicitly showing
+    if (hideAfterDelayCoroutine != null)
+    {
+      StopCoroutine(hideAfterDelayCoroutine);
+      hideAfterDelayCoroutine = null;
+    }
+
     // fade canvas in
     if (canvasGroup != null)
     {
@@ -276,6 +349,13 @@ public class CurrencyPanel : MonoBehaviour
 
   private void HideAllCurrencies()
   {
+    // Stop any hide timer
+    if (hideAfterDelayCoroutine != null)
+    {
+      StopCoroutine(hideAfterDelayCoroutine);
+      hideAfterDelayCoroutine = null;
+    }
+
     // fade canvas out
     if (canvasGroup != null)
     {

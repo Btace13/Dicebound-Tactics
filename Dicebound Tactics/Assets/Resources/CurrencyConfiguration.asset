@@ -18,6 +18,7 @@ MonoBehaviour:
     displayColor: {r: 1, g: 0.84, b: 0, a: 1}
     displayName: Gold
     shortName: G
+    pickupPrefab: {fileID: 2041144716309834592, guid: a737d1a0a799b420391fbe5d46e39ea6, type: 3}
     useCustomFormatting: 0
     customFormat: '{0}'
   - currencyType: 1
@@ -25,5 +26,6 @@ MonoBehaviour:
     displayColor: {r: 0.4, g: 0.8, b: 1, a: 1}
     displayName: Shards
     shortName: S
+    pickupPrefab: {fileID: 4265956088550997075, guid: 1066465fd79d3484087391f3144d672c, type: 3}
     useCustomFormatting: 0
     customFormat: '{0}'

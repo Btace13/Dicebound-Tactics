@@ -8,11 +8,15 @@ public class CurrencyConfiguration : ScriptableObject
     [System.Serializable]
     public class CurrencyDisplayData
     {
+        [Header("Basic Information")]
         public CurrencyType currencyType;
         public Sprite icon;
         public Color displayColor = Color.white;
         public string displayName;
         public string shortName; // "G" for Gold, "S" for Shards
+        
+        [Header("Pickup Prefab")]
+        public GameObject pickupPrefab; // Prefab to spawn for pickups
         
         [Header("Formatting")]
         public bool useCustomFormatting = false;
@@ -65,6 +69,12 @@ public class CurrencyConfiguration : ScriptableObject
     {
         var data = GetCurrencyData(type);
         return data?.shortName ?? type.ToString().Substring(0, 1);
+    }
+
+    public GameObject GetPickupPrefab(CurrencyType type)
+    {
+        var data = GetCurrencyData(type);
+        return data?.pickupPrefab;
     }
 
     // Auto-populate with all currency types

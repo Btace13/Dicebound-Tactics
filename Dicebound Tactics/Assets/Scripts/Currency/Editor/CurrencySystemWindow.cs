@@ -247,6 +247,36 @@ public class CurrencySystemWindow : EditorWindow
         EditorGUILayout.LabelField("Create Currency Pickups", EditorStyles.boldLabel);
         EditorGUILayout.Space();
 
+        // Prefab Configuration Status
+        if (CurrencyConfiguration.Instance != null)
+        {
+            EditorGUILayout.LabelField("Prefab Configuration:", EditorStyles.boldLabel);
+            EditorGUILayout.BeginVertical("box");
+            
+            foreach (CurrencyType type in System.Enum.GetValues(typeof(CurrencyType)))
+            {
+                var prefab = CurrencyConfiguration.Instance.GetPickupPrefab(type);
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField($"{type}:", GUILayout.Width(80));
+                if (prefab != null)
+                {
+                    EditorGUILayout.LabelField($"✓ {prefab.name}", EditorStyles.miniLabel);
+                }
+                else
+                {
+                    EditorGUILayout.LabelField("⚠ No prefab assigned", EditorStyles.miniLabel);
+                }
+                EditorGUILayout.EndHorizontal();
+            }
+            
+            EditorGUILayout.EndVertical();
+            EditorGUILayout.Space();
+        }
+        else
+        {
+            EditorGUILayout.HelpBox("No CurrencyConfiguration found! Pickups will use basic fallback.", MessageType.Warning);
+        }
+
         testCurrencyType = (CurrencyType)EditorGUILayout.EnumPopup("Currency Type:", testCurrencyType);
         testAmount = EditorGUILayout.IntField("Amount:", testAmount);
         spawnPosition = EditorGUILayout.Vector3Field("Spawn Position:", spawnPosition);
@@ -269,29 +299,23 @@ public class CurrencySystemWindow : EditorWindow
         // Batch creation
         EditorGUILayout.LabelField("Batch Creation:", EditorStyles.boldLabel);
         
-        if (GUILayout.Button("Create Gold Scatter (10 pickups)"))
+        if (GUILayout.Button("Create Gold Scatter (100 total, 10 pickups)"))
         {
-            for (int i = 0; i < 10; i++)
-            {
-                Vector3 randomOffset = new Vector3(
-                    Random.Range(-5f, 5f),
-                    0,
-                    Random.Range(-5f, 5f)
-                );
-                CurrencyPickup.CreateCurrencyPickup(spawnPosition + randomOffset, CurrencyType.Gold, Random.Range(5, 25));
-            }
+            CurrencyUtils.SpawnCurrencyScatter(spawnPosition, CurrencyType.Gold, 100, 10, 5f);
         }
 
-        if (GUILayout.Button("Create Shard Scatter (5 pickups)"))
+        if (GUILayout.Button("Create Shard Scatter (25 total, 5 pickups)"))
         {
-            for (int i = 0; i < 5; i++)
+            CurrencyUtils.SpawnCurrencyScatter(spawnPosition, CurrencyType.Shards, 25, 5, 3f);
+        }
+
+        if (GUILayout.Button("Create Victory Drop (Mixed Currencies)"))
+        {
+            // Create a victory-style drop with both currencies
+            CurrencyUtils.SpawnCurrencyScatter(spawnPosition, CurrencyType.Gold, Random.Range(50, 101), 8, 4f);
+            if (Random.Range(0f, 1f) < 0.7f) // 70% chance for shards
             {
-                Vector3 randomOffset = new Vector3(
-                    Random.Range(-3f, 3f),
-                    0,
-                    Random.Range(-3f, 3f)
-                );
-                CurrencyPickup.CreateCurrencyPickup(spawnPosition + randomOffset, CurrencyType.Shards, Random.Range(1, 10));
+                CurrencyUtils.SpawnCurrencyScatter(spawnPosition + Vector3.right * 2f, CurrencyType.Shards, Random.Range(5, 16), 3, 2f);
             }
         }
     }

@@ -68,11 +68,32 @@ public static class CurrencyUtils
     }
 
     /// <summary>
-    /// Spawn a currency pickup at a specific location
+    /// Spawn a currency pickup at a specific location using configured prefabs
     /// </summary>
     public static GameObject SpawnCurrencyPickup(Vector3 position, CurrencyType type, int amount, Transform parent = null)
     {
         return CurrencyPickup.CreateCurrencyPickup(position, type, amount, parent);
+    }
+
+    /// <summary>
+    /// Spawn multiple currency pickups with scatter effect
+    /// </summary>
+    public static void SpawnCurrencyScatter(Vector3 centerPosition, CurrencyType type, int totalAmount, int pickupCount = 5, float scatterRadius = 2f, Transform parent = null)
+    {
+        int amountPerPickup = Mathf.Max(1, totalAmount / pickupCount);
+        int remainder = totalAmount % pickupCount;
+
+        for (int i = 0; i < pickupCount; i++)
+        {
+            // Calculate scattered position
+            Vector2 randomOffset = Random.insideUnitCircle * scatterRadius;
+            Vector3 spawnPosition = centerPosition + new Vector3(randomOffset.x, 0, randomOffset.y);
+
+            // Add remainder to first few pickups
+            int pickupAmount = amountPerPickup + (i < remainder ? 1 : 0);
+
+            SpawnCurrencyPickup(spawnPosition, type, pickupAmount, parent);
+        }
     }
 
     /// <summary>
