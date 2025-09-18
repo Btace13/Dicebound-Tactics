@@ -12515,6 +12515,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1798676053812488226, guid: bbde8504cab454b2f8560186e359fe3c, type: 3}
+      propertyPath: m_Name
+      value: CurrencyContainer
+      objectReference: {fileID: 0}
     - target: {fileID: 1820154426427286914, guid: bbde8504cab454b2f8560186e359fe3c, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -12597,6 +12601,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4875560174081861600, guid: bbde8504cab454b2f8560186e359fe3c, type: 3}
       propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4976564324688176581, guid: bbde8504cab454b2f8560186e359fe3c, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4976564324688176581, guid: bbde8504cab454b2f8560186e359fe3c, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4976564324688176581, guid: bbde8504cab454b2f8560186e359fe3c, type: 3}
+      propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5060579086551970675, guid: bbde8504cab454b2f8560186e359fe3c, type: 3}
