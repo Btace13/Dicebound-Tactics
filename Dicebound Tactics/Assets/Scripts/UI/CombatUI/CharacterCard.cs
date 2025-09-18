@@ -8,12 +8,13 @@ using DG.Tweening;
 public class CharacterCard : MonoBehaviour
 {
   public DieIconSet diceIconSet;
+  
   [Header("UI References")]
   [SerializeField] private Image characterPortrait;
   [SerializeField] private TextMeshProUGUI characterNameText;
   [SerializeField] private TextMeshProUGUI lvlText;
-  [SerializeField] private Slider healthBar;
-  [SerializeField] private TextMeshProUGUI healthText;
+  [SerializeField] private ResourceBarUI healthBarUI;
+  [SerializeField] private ResourceBarUI expBarUI;
   [SerializeField] private TextMeshProUGUI apAmountText;
   [SerializeField] private TextMeshProUGUI modifierText;
   [SerializeField] private GameObject CurrentTurnIndicator;
@@ -41,6 +42,7 @@ public class CharacterCard : MonoBehaviour
     {
       character.OnCharacterStatChanged -= HandleUpdatingCharacterInfo;
       character.OnLevelChanged -= UpdateLevelText;
+      character.OnLevelChanged -= UpdateExpBar;
     }
 
     EventManager.OnCharacterTurnStarted -= UpdateCurrentTurnIndicator;
@@ -57,6 +59,9 @@ public class CharacterCard : MonoBehaviour
     {
       CurrentTurnIndicator.SetActive(CombatManager.Instance.TurnManager.GetCurrentUnit() == character);
     }
+
+    // Update experience bar when character stats change (includes experience changes)
+    UpdateExpBar();
   }
 
   public void SetCharacterInfo(Entity character)
@@ -65,13 +70,16 @@ public class CharacterCard : MonoBehaviour
     {
       characterPortrait.sprite = null;
       characterNameText.text = string.Empty;
-      healthBar.value = 0f;
-      healthText.text = string.Empty;
+      if (healthBarUI != null)
+        healthBarUI.Reset();
+      if (expBarUI != null)
+        expBarUI.Reset();
       apAmountText.text = string.Empty;
       modifierText.text = string.Empty;
       modifierTextTitle.text = string.Empty;
       modifierTextContent.text = string.Empty;
       lvlText.text = string.Empty;
+      
       return;
     }
 
@@ -80,6 +88,7 @@ public class CharacterCard : MonoBehaviour
     // Event Listeners
     this.character.OnCharacterStatChanged += HandleUpdatingCharacterInfo;
     this.character.OnLevelChanged += UpdateLevelText;
+    this.character.OnLevelChanged += UpdateExpBar;
 
     if (characterPortrait != null)
       characterPortrait.sprite = character.portrait;
@@ -90,29 +99,12 @@ public class CharacterCard : MonoBehaviour
     if (lvlText != null)
       lvlText.text = $"Lvl: {character.level}";
 
-    if (healthBar != null)
+    // Update health bar using ResourceBarUI
+    if (healthBarUI != null)
     {
-      healthBar.maxValue = character.GetStat(Stats.Health).statValue;
-      healthBar.DOValue(character.GetStat(Stats.CurrentHealth).statValue, 0.5f).SetEase(Ease.OutCubic);
-    }
-
-    if (healthText != null)
-    {
-      int from = 0;
-      if (!string.IsNullOrEmpty(healthText.text) && healthText.text.Contains("/"))
-      {
-        int.TryParse(healthText.text.Split('/')[0].Trim(), out from);
-      }
-      int to = character.GetStat(Stats.CurrentHealth).statValue;
-      int max = character.GetStat(Stats.Health).statValue;
-
-      // Animate health number
-      int currentHealth = from;
-      DOTween.To(() => currentHealth, x =>
-      {
-        currentHealth = x;
-        healthText.text = $"{currentHealth} / {max}";
-      }, to, 0.5f).SetEase(Ease.OutCubic);
+      int currentHealth = character.GetStat(Stats.CurrentHealth).statValue;
+      int maxHealth = character.GetStat(Stats.Health).statValue;
+      healthBarUI.UpdateBar(currentHealth, maxHealth, true);
     }
 
     if (apAmountText != null)
@@ -154,6 +146,9 @@ public class CharacterCard : MonoBehaviour
         diceIconImage.gameObject.SetActive(false);
       }
     }
+
+    // Update experience bar using ResourceBarUI
+    UpdateExpBar();
   }
 
   private void UpdateLevelText()
@@ -162,6 +157,16 @@ public class CharacterCard : MonoBehaviour
     {
       lvlText.text = $"Lvl: {character.level}";
     }
+  }
+
+  private void UpdateExpBar()
+  {
+    if (character == null || expBarUI == null) return;
+
+    // Update experience bar using ResourceBarUI
+    int currentExp = character.experience;
+    int maxExp = character.requiredExperience;
+    expBarUI.UpdateBar(currentExp, maxExp);
   }
 
   private void UpdateCurrentTurnIndicator(Entity c)
