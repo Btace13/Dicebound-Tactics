@@ -4668,6 +4668,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5069661960454695890, guid: e669acb488d4d42da8cc45e9d8a0b3ee, type: 3}
   m_PrefabInstance: {fileID: 5625239005865857264}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &688853004 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1519482092218383499, guid: bbde8504cab454b2f8560186e359fe3c, type: 3}
+  m_PrefabInstance: {fileID: 210218326903770414}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47b8fb3d6ce6f4dd1beae4996a64a6e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &691126489 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4795078894963849269, guid: d8c30de4e48b94564b5964eb287c6249, type: 3}
@@ -13525,6 +13536,18 @@ PrefabInstance:
     - target: {fileID: 7094277336188611496, guid: bbde8504cab454b2f8560186e359fe3c, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7383920243450120821, guid: bbde8504cab454b2f8560186e359fe3c, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 688853004}
+    - target: {fileID: 7383920243450120821, guid: bbde8504cab454b2f8560186e359fe3c, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: TriggerCharacterMenuClosed
+      objectReference: {fileID: 0}
+    - target: {fileID: 7383920243450120821, guid: bbde8504cab454b2f8560186e359fe3c, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: EventManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 7421328742392906721, guid: bbde8504cab454b2f8560186e359fe3c, type: 3}
       propertyPath: debugRoof

@@ -39,11 +39,11 @@ public class CharacterMenuHandler : MonoBehaviour
     {
       if (characterMenuUI.alpha == 0f)
       {
-        ShowCharacterMenu();
+        EventManager.TriggerCharacterMenuOpened();
       }
       else
       {
-        HideCharacterMenu();
+        EventManager.TriggerCharacterMenuClosed();
       }
     }
   }
@@ -71,7 +71,6 @@ public class CharacterMenuHandler : MonoBehaviour
     characterMenuUI.interactable = true;
     characterMenuUI.blocksRaycasts = true;
     OpenCharacterSelector();
-    EventManager.TriggerCharacterMenuOpened();
   }
 
   public void HideCharacterMenu()
@@ -80,7 +79,6 @@ public class CharacterMenuHandler : MonoBehaviour
     characterMenuUI.interactable = false;
     characterMenuUI.blocksRaycasts = false;
     CloseCharacterSelector();
-    EventManager.TriggerCharacterMenuClosed();
   }
 
   public void OpenCharacterSelector()
