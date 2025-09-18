@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a56cd5aa17e4642738a359598ebafabf, type: 3}
+  m_Name: CurrencyConfiguration
+  m_EditorClassIdentifier: 
+  currencyData:
+  - currencyType: 0
+    icon: {fileID: 7675826601332790545, guid: cf7f7cdf7619b421e85bd1f06bf61ca2, type: 3}
+    displayColor: {r: 1, g: 0.84, b: 0, a: 1}
+    displayName: Gold
+    shortName: G
+    useCustomFormatting: 0
+    customFormat: '{0}'
+  - currencyType: 1
+    icon: {fileID: 5725184139431673129, guid: b53980aa22e6647d5bf30f87dfb6aaca, type: 3}
+    displayColor: {r: 0.4, g: 0.8, b: 1, a: 1}
+    displayName: Shards
+    shortName: S
+    useCustomFormatting: 0
+    customFormat: '{0}'
