@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ffa15106f1484b96818ca496c37260d, type: 3}
   m_Name: AudioConfigProfile
   m_EditorClassIdentifier: 
-  menuButtonPressed: {fileID: 8300000, guid: 98743322818e54812925bba08fa0c62b, type: 3}
+  menuButtonPressed: {fileID: 8300000, guid: f4781d302b303408d8b02da3dd8aed5a, type: 3}
   successButtonPressed: {fileID: 8300000, guid: 3b6c971388bbd4df59bdcb9cc07c2190, type: 3}
-  combatStart: {fileID: 0}
+  combatStart: {fileID: 8300000, guid: 477e386c6eeb4450db9ce444baace0c5, type: 3}
   combatEnd: {fileID: 0}
   characterTurnStart: {fileID: 0}
   enemyTurnStart: {fileID: 0}

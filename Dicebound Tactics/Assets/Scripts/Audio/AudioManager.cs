@@ -1,5 +1,6 @@
 using UnityEngine;
 using TacticsToolkit;
+using andywiecko.BurstTriangulator;
 
 public class AudioManager : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class AudioManager : MonoBehaviour
     EventManager.OnSuccessButtonPressed += HandleSuccessButtonPressed;
     EventManager.OnModifierApplied += HandleModifierApplied;
     EventManager.OnAttackBlocked += HandleAttackBlocked;
+    EventManager.OnBattleStarted += HandleBattleStarted;
   }
 
   private void OnDisable()
@@ -20,6 +22,7 @@ public class AudioManager : MonoBehaviour
     EventManager.OnSuccessButtonPressed -= HandleSuccessButtonPressed;
     EventManager.OnModifierApplied -= HandleModifierApplied;
     EventManager.OnAttackBlocked -= HandleAttackBlocked;
+    EventManager.OnBattleStarted -= HandleBattleStarted;
   }
 
   private void HandleMenuButtonPressed()
@@ -51,6 +54,14 @@ public class AudioManager : MonoBehaviour
     if (audioConfig.attackedBlocked != null)
     {
       audioSource.PlayOneShot(audioConfig.attackedBlocked);
+    }
+  }
+
+  private void HandleBattleStarted()
+  {
+    if (audioConfig.combatStart != null)
+    {
+      audioSource.PlayOneShot(audioConfig.combatStart);
     }
   }
 }
