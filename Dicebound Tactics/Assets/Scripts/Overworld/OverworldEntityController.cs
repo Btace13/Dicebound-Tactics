@@ -19,6 +19,7 @@ public class OverworldEntityController : MonoBehaviour
     protected CustomRichAI pathfindingAI;
     protected RVOController rvoController;
     protected UnitAnimationHandler unitAnimationHandler;
+    protected CharacterController characterController;
     protected float lastRepath = float.NegativeInfinity;
     [ShowInInspector, ReadOnly] protected Vector3 _currentVelocity = Vector3.zero;
     public CombatEncounter Encounter { get; set; }
@@ -31,11 +32,30 @@ public class OverworldEntityController : MonoBehaviour
         pathfindingAI.maxSpeed = moveSpeed;
         pathfindingAI.rotationSpeed = rotationSpeed;
         unitAnimationHandler = gameObject.GetComponentInChildren<UnitAnimationHandler>(true);
+        characterController = gameObject.AddOrGetComponent<CharacterController>();
     }
 
     protected virtual void Update()
     {
+        // Use CharacterController for physics-based movement with collision detection
+        if (characterController != null)
+        {
+            Vector3 moveVector = new Vector3(0, pathfindingAI.velocity.y, 0);
 
+            // Apply gravity if not grounded
+            if (!characterController.isGrounded)
+            {
+                moveVector.y += Physics.gravity.y * Time.deltaTime;
+            }
+            else
+            {
+                // Ensure the y velocity is zero when grounded
+                moveVector.y = 0;
+            }
+
+            // Move the character using the calculated move vector
+            characterController.Move(moveVector);
+        }
     }
 
     protected virtual void LateUpdate()
