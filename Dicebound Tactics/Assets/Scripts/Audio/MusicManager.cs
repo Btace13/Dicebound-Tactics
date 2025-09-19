@@ -105,7 +105,7 @@ public class MusicManager : MonoBehaviour
         }
     }
 
-    private void OnCombatEncounterEnded(CombatEncounter encounter)
+    private void OnCombatEncounterEnded(CombatEncounter encounter, bool playerWon)
     {
         // Stop combat music and fade back to default
         if (fadeRoutine != null)

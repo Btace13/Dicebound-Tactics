@@ -50,7 +50,7 @@ public class TurnOrderHandler : MonoBehaviour
         }
     }
 
-    public async void OnCombatEncounterEnded(CombatEncounter encounter)
+    public async void OnCombatEncounterEnded(CombatEncounter encounter, bool playerWon)
     {
         await ClearTurnOrder();
     }

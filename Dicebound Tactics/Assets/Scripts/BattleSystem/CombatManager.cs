@@ -38,14 +38,14 @@ public class CombatManager : MonoBehaviour
         // Event Listeners
         EventManager.OnGameStateChanged += OnGameStateChanged;
         EventManager.OnCombatEncounterStarted += encounter => _currentEncounter = encounter;
-        EventManager.OnCombatEncounterEnded += encounter => _currentEncounter = null;
+        EventManager.OnCombatEncounterEnded += (encounter, playerWon) => _currentEncounter = null;
     }
 
     void OnDisable()
     {
         EventManager.OnGameStateChanged -= OnGameStateChanged;
         EventManager.OnCombatEncounterStarted -= encounter => _currentEncounter = encounter;
-        EventManager.OnCombatEncounterEnded -= encounter => _currentEncounter = null;
+        EventManager.OnCombatEncounterEnded -= (encounter, playerWon) => _currentEncounter = null;
     }
 
     public void OnGameStateChanged(GameState newState)

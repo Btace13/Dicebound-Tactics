@@ -157,12 +157,12 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   animateFloat: 1
-  floatHeight: 0.5
+  floatHeight: 0.2
   floatDuration: 2
   animateRotate: 1
   rotationSpeed: 90
-  pickupScaleMultiplier: 1.5
-  pickupAnimationDuration: 0.5
+  pickupScaleMultiplier: 1.2
+  pickupAnimationDuration: 0.3
   pickupSound: {fileID: 8300000, guid: ef2d2c5f82da048a5b5cff4497a485bf, type: 3}
   volume: 1
   pickupEffect: {fileID: 0}

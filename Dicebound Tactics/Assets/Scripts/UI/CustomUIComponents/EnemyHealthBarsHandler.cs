@@ -48,8 +48,7 @@ public class EnemyHealthBarsHandler : MonoBehaviour
     }
   }
 
-
-  private void DestroyEnemyHealthBars(CombatEncounter encounter)
+  private void DestroyEnemyHealthBars(CombatEncounter encounter, bool playerWon)
   {
     healthBars.Clear();
     foreach (Transform child in healthBarsContainer.transform)

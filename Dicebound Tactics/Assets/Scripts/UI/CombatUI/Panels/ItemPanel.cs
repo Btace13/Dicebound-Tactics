@@ -11,9 +11,16 @@ public class ItemPanel : CombatPanel
     public string cameraName = "ConfirmTargetCamera";
     private CombatEncounter _currentEncounter;
 
-    private void Awake() {
+    private void Awake()
+    {
         EventManager.OnCombatEncounterStarted += encounter => _currentEncounter = encounter;
-        EventManager.OnCombatEncounterEnded += encounter => _currentEncounter = null;
+        EventManager.OnCombatEncounterEnded += (encounter, playerWon) => _currentEncounter = null;
+    }
+
+    void OnDisable()
+    {
+        EventManager.OnCombatEncounterStarted -= encounter => _currentEncounter = encounter;
+        EventManager.OnCombatEncounterEnded -= (encounter, playerWon) => _currentEncounter = null;
     }
 
     public void PopulateItemPanel(CharacterManager character)
@@ -86,7 +93,7 @@ public class ItemPanel : CombatPanel
                         // {
                         //     Debug.LogWarning("Current encounter or enemy units are null/empty. Skipping camera switch.");
                         // }
-                        
+
                         CameraManager.Instance.TrySetActiveCamera(cameraName);
                         CombatManager.Instance.ItemSelected(currentItem);
                         OnItemClicked?.Invoke(currentItem);

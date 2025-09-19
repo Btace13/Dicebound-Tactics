@@ -136,7 +136,7 @@ public class CameraManager : MonoBehaviour
         }
     }
 
-    private void HandleCombatEncounterEnded(CombatEncounter encounter)
+    private void HandleCombatEncounterEnded(CombatEncounter encounter, bool playerWon)
     {
         foreach (var cam in encounter.GetAllCameraControllers())
         {

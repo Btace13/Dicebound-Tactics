@@ -5,9 +5,12 @@ using Sirenix.OdinInspector;
 using System.Threading.Tasks;
 using System.Linq;
 using Unity.Cinemachine;
+using andywiecko.BurstTriangulator;
 
 public class CombatEncounter : MonoBehaviour
 {
+    [Header("Loot Table")]
+    [SerializeField] private LootTable lootTable;
     [System.Serializable]
     public class EncounterSlot
     {
@@ -68,6 +71,31 @@ public class CombatEncounter : MonoBehaviour
         SpawnEnemies(EnemyPrefabs);
         IsActive = false;
         IsCompleted = false;
+
+        // Event Listeners
+        EventManager.OnCombatEncounterEnded += HandleCombatEncounterEnded;
+    }
+
+    void OnDisable()
+    {
+        EventManager.OnCombatEncounterEnded -= HandleCombatEncounterEnded;
+    }
+
+    /// <summary>
+    /// Call this to spawn loot at the end of the encounter (e.g. on victory)
+    /// </summary>
+    public void SpawnEncounterLoot()
+    {
+        if (lootTable == null) return;
+        var loot = lootTable.RollLoot();
+        // Use the center of the encounter as the spawn position
+        Vector3 spawnPosition = Enemies.Count > 0 ? Enemies[0].transform.position : transform.position;
+        float scatterRadius = 2f;
+        int pickupCount = 5;
+        foreach (var (currencyType, amount) in loot)
+        {
+            CurrencyUtils.SpawnCurrencyScatter(spawnPosition, currencyType, amount, pickupCount, scatterRadius);
+        }
     }
 
     public void SpawnEnemies(List<EnemyManager> enemies)
@@ -210,26 +238,26 @@ public class CombatEncounter : MonoBehaviour
                     {
                         leapController = c.gameObject.AddComponent<LeapMovementController>();
                     }
-                    
+
                     // Configure leap parameters
                     leapController.SetLeapParameters(leapDuration, leapHeight, leapCurve);
-                    
+
                     // Cancel any pathfinding to prevent conflicts
                     controller.CancelPath();
-                    
+
                     // Perform the leap
                     leapController.LeapToTarget(closestSlot.slotTransform, () =>
                     {
                         // Clear pathfinding destination after leap to prevent running back
                         controller.CancelPath();
-                        
+
                         // Set the AI destination to current position to stop any movement
                         if (controller.TryGetComponent(out CustomRichAI richAI))
                         {
                             richAI.destination = c.transform.position;
                             richAI.canMove = true; // Ensure movement is re-enabled
                         }
-                        
+
                         remainingMovingCharacters--;
                         if (remainingMovingCharacters <= 0)
                         {
@@ -283,26 +311,26 @@ public class CombatEncounter : MonoBehaviour
                     {
                         leapController = enemy.gameObject.AddComponent<LeapMovementController>();
                     }
-                    
+
                     // Configure leap parameters
                     leapController.SetLeapParameters(leapDuration, leapHeight, leapCurve);
-                    
+
                     // Cancel any pathfinding to prevent conflicts
                     controller.CancelPath();
-                    
+
                     // Perform the leap
                     leapController.LeapToTarget(closestSlot.slotTransform, () =>
                     {
                         // Clear pathfinding destination after leap to prevent running back
                         controller.CancelPath();
-                        
+
                         // Set the AI destination to current position to stop any movement
                         if (controller.TryGetComponent(out CustomRichAI richAI))
                         {
                             richAI.destination = enemy.transform.position;
                             richAI.canMove = true; // Ensure movement is re-enabled
                         }
-                        
+
                         remainingMovingEnemies--;
                         if (remainingMovingEnemies <= 0)
                         {
@@ -491,6 +519,19 @@ public class CombatEncounter : MonoBehaviour
         });
     }
 
+    private void HandleCombatEncounterEnded(CombatEncounter encounter, bool playerWon)
+    {
+
+        if (encounter != this) return;
+
+        IsCompleted = true;
+        IsActive = false;
+        if (playerWon)
+        {
+            SpawnEncounterLoot();
+        }
+    }
+
     #region Testing Methods
 
     [Button("Test Leap Movement")]
@@ -510,7 +551,7 @@ public class CombatEncounter : MonoBehaviour
 
         CharacterManager testCharacter = PartyManager.Instance.ActivePartyMembers[0];
         LeapMovementController leapController = testCharacter.GetComponent<LeapMovementController>();
-        
+
         if (leapController == null)
         {
             leapController = testCharacter.gameObject.AddComponent<LeapMovementController>();

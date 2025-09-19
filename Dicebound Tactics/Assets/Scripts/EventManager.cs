@@ -8,7 +8,7 @@ public class EventManager : MonoBehaviour
 {
   // Combat Events
   public static event Action<CombatEncounter> OnCombatEncounterStarted;
-  public static event Action<CombatEncounter> OnCombatEncounterEnded;
+  public static event Action<CombatEncounter, bool> OnCombatEncounterEnded;
   public static event Action OnBattleStarted;
   public static event Action OnBattleEnded;
   public static event Action<CharacterManager> OnCharacterTurnStarted;
@@ -56,9 +56,9 @@ public class EventManager : MonoBehaviour
   {
     OnCombatEncounterStarted?.Invoke(encounter);
   }
-  public static void TriggerCombatEncounterEnded(CombatEncounter encounter)
+  public static void TriggerCombatEncounterEnded(CombatEncounter encounter, bool playerWon = true)
   {
-    OnCombatEncounterEnded?.Invoke(encounter);
+    OnCombatEncounterEnded?.Invoke(encounter, playerWon);
   }
   public static void TriggerBattleStarted()
   {

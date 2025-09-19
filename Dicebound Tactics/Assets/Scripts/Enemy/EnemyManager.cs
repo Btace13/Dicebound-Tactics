@@ -25,14 +25,14 @@ public class EnemyManager : Entity
         // Event Listeners
         EventManager.OnEnemyTurnStarted += HandleEnemyTurnStarted;
         EventManager.OnCombatEncounterStarted += encounter => _currentEncounter = encounter;
-        EventManager.OnCombatEncounterEnded += encounter => _currentEncounter = null;
+        EventManager.OnCombatEncounterEnded += (encounter, playerWon) => _currentEncounter = null;
     }
 
     void OnDisable()
     {
         EventManager.OnEnemyTurnStarted -= HandleEnemyTurnStarted;
         EventManager.OnCombatEncounterStarted -= encounter => _currentEncounter = encounter;
-        EventManager.OnCombatEncounterEnded -= encounter => _currentEncounter = null;
+        EventManager.OnCombatEncounterEnded -= (encounter, playerWon) => _currentEncounter = null;
     }
 
     protected override void Start()

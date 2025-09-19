@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 
 public class TurnManager : MonoBehaviour
 {
+    [Header("Encounter Loot Table")]
+    [SerializeField] private LootTable lootTable;
     public static TurnManager Instance { get; private set; }
 
     public List<CharacterManager> playerUnits = new();
@@ -18,6 +20,7 @@ public class TurnManager : MonoBehaviour
     private List<Entity> turnOrder = new();
     private int currentTurnIndex = 0;
     private Entity currentUnit;
+    private CombatEncounter activeEncounter;
 
     private void Awake()
     {
@@ -32,6 +35,7 @@ public class TurnManager : MonoBehaviour
         EventManager.OnCharacterTurnEnded += HandleCharacterTurnEnded;
         EventManager.OnEnemyTurnEnded += HandleEnemyTurnEnded;
         EventManager.OnEntityDied += HandleEntityDied;
+        EventManager.OnCombatEncounterStarted += (encounter) => activeEncounter = encounter;
     }
 
     void OnDisable()
@@ -39,6 +43,7 @@ public class TurnManager : MonoBehaviour
         EventManager.OnCharacterTurnEnded -= HandleCharacterTurnEnded;
         EventManager.OnEnemyTurnEnded -= HandleEnemyTurnEnded;
         EventManager.OnEntityDied -= HandleEntityDied;
+        EventManager.OnCombatEncounterStarted -= (encounter) => activeEncounter = encounter;
     }
 
     private void Update()
@@ -48,15 +53,22 @@ public class TurnManager : MonoBehaviour
 
         if (enemyUnits.All(e => !e.isAlive))
         {
-            ShowBattleEndedDialog(true);
+            HandleCombatEncounterEnded(true);
             return;
         }
 
         if (playerUnits.All(p => !p.isAlive))
         {
-            ShowBattleEndedDialog(false);
+            HandleCombatEncounterEnded(false);
             return;
         }
+    }
+
+    private void HandleCombatEncounterEnded(bool playerWon)
+    {
+        BattlePlaying = false;
+        EventManager.TriggerCombatEncounterEnded(activeEncounter, playerWon);
+        EventManager.TriggerBattleEnded();
     }
 
     private void HandleCharacterTurnEnded(CharacterManager character = null)
@@ -251,14 +263,14 @@ public class TurnManager : MonoBehaviour
     {
         BattlePlaying = false;
 
-        if (PlayerWon)
-        {
-            BattleEndedDialogManager.Instance.Show(true);
-        }
-        else
-        {
-            BattleEndedDialogManager.Instance.Show(false);
-        }
+        // if (PlayerWon)
+        // {
+        //     BattleEndedDialogManager.Instance.Show(true);
+        // }
+        // else
+        // {
+        //     BattleEndedDialogManager.Instance.Show(false);
+        // }
 
         EventManager.TriggerBattleEnded();
     }

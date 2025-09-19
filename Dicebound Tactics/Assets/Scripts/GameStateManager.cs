@@ -76,7 +76,7 @@ public class GameStateManager : MonoBehaviour
         ChangeGameState(GameState.Combat);
     }
 
-    public void OnCombatEncounterEnded(CombatEncounter encounter)
+    public void OnCombatEncounterEnded(CombatEncounter encounter, bool playerWon)
     {
         // Handle logic when a combat encounter ends
         ChangeGameState(GameState.Overworld);
