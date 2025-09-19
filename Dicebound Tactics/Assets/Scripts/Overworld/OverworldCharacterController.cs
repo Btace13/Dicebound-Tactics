@@ -27,6 +27,8 @@ public class OverworldCharacterController : OverworldEntityController
 
     protected override void Update()
     {
+        base.Update();
+
         // Decay sharp turn boost
         if (sharpTurnBoostTimer > 0f)
         {
@@ -86,8 +88,6 @@ public class OverworldCharacterController : OverworldEntityController
                 }
             }
         }
-
-        base.Update();
     }
 
     #region PLAYER MOVEMENT
@@ -115,20 +115,20 @@ public class OverworldCharacterController : OverworldEntityController
         if (input.magnitude < 0.1f)
         {
             // Stop the character smoothly
-            rvoController.velocity = Vector3.Lerp(rvoController.velocity, Vector3.zero, Time.deltaTime * 15f);
+            rvoController.velocity = Vector3.Lerp(rvoController.velocity, new Vector3(0, rvoController.velocity.y, 0), Time.deltaTime * 15f);
             pathfindingAI.SetPath(null);
             return;
         }
 
         Vector3 movement = input.x * right + input.y * forward;
         Vector3 zeroedYVelocity = movement.normalized;
-        zeroedYVelocity.y = 0;
+        zeroedYVelocity.y = characterController.isGrounded ? 0 : rvoController.velocity.y;
 
         // Detect sharp turn
-        if (rvoController.velocity.magnitude > 0.1f && Vector3.Dot(rvoController.velocity.normalized, zeroedYVelocity) < -0.8f)
+        if (characterController.isGrounded && rvoController.velocity.magnitude > 0.1f && Vector3.Dot(rvoController.velocity.normalized, zeroedYVelocity) < -0.8f)
         {
             // Sharp turn: instantly stop and reorient
-            rvoController.velocity = Vector3.zero;
+            rvoController.velocity = new Vector3(0, rvoController.velocity.y, 0);
 
             // Temporarily boost rotation speed and acceleration (on pathfindingAI only)
             if (sharpTurnBoostTimer <= 0f)
@@ -153,7 +153,6 @@ public class OverworldCharacterController : OverworldEntityController
         rvoController.velocity = targetVelocity;
 
         // Use CharacterController for physics-based movement with collision detection
-        CharacterController characterController = GetComponent<CharacterController>();
         if (characterController != null)
         {
             Vector3 moveVector = rvoController.velocity * Time.deltaTime;
@@ -165,20 +164,6 @@ public class OverworldCharacterController : OverworldEntityController
             }
 
             characterController.Move(moveVector);
-        }
-        else
-        {
-            // Fallback: Use Rigidbody if available
-            Rigidbody rb = GetComponent<Rigidbody>();
-            if (rb != null)
-            {
-                rb.MovePosition(transform.position + rvoController.velocity * Time.deltaTime);
-            }
-            else
-            {
-                // Last resort: Direct transform movement (no collision)
-                transform.position += rvoController.velocity * Time.deltaTime;
-            }
         }
 
         // Ensure the rotation only affects the y-axis
