@@ -519,6 +519,20 @@ public class CombatEncounter : MonoBehaviour
         });
     }
 
+    public int CalculateEXP(Entity character)
+    {
+        int totalExp = 1;
+        foreach (var enemy in Enemies)
+        {
+            float levelDiff = enemy.level - character.level;
+            float multiplier = 1f + (levelDiff * 0.1f);
+            multiplier = Mathf.Clamp(multiplier, 0.5f, 2f);
+            int baseExp = enemy.level * 10;
+            totalExp += Mathf.RoundToInt(baseExp * multiplier);
+        }
+        return totalExp;
+    }
+
     private void HandleCombatEncounterEnded(CombatEncounter encounter, bool playerWon)
     {
 
@@ -529,6 +543,13 @@ public class CombatEncounter : MonoBehaviour
         if (playerWon)
         {
             SpawnEncounterLoot();
+
+            TurnManager.Instance.playerUnits.ForEach(unit =>
+            {
+                int expAdded = playerWon ? 100 / TurnManager.Instance.playerUnits.Count : 0;
+                Debug.Log($"Adding {expAdded} EXP to {unit.name}");
+                unit.IncreaseExp(expAdded);
+            });
         }
     }
 

@@ -100,6 +100,9 @@ namespace TacticsToolkit
             SetStats();
             requiredExperience = gameConfig.GetRequiredExp(level);
 
+            if (equippedDice != null)
+                equippedDice.LastRollModifier = null;
+
             if (statsContainer != null)
             {
                 initiativeValue = Mathf.RoundToInt(initiativeBase / GetStat(Stats.Speed).statValue);
@@ -226,6 +229,7 @@ namespace TacticsToolkit
         public void IncreaseExp(int value)
         {
             experience += value;
+            UpdateCharacterUI();
 
             while (experience >= requiredExperience)
             {

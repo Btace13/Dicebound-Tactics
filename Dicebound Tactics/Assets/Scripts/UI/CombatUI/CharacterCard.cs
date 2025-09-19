@@ -22,10 +22,14 @@ public class CharacterCard : MonoBehaviour
   [SerializeField] private TextMeshProUGUI modifierTextContent;
   [SerializeField] private Image diceIconImage;
   [SerializeField] private GameObject apInfo;
+  [SerializeField] private TextMeshProUGUI expInfo;
 
   private Entity character;
   public float rollSpeed = 2f; // higher = faster
   private Coroutine rollingCoroutine;
+
+  private int previousExp = -1;
+  private Coroutine expInfoCoroutine;
 
   private void Awake()
   {
@@ -41,8 +45,8 @@ public class CharacterCard : MonoBehaviour
     if (character != null)
     {
       character.OnCharacterStatChanged -= HandleUpdatingCharacterInfo;
-      character.OnLevelChanged -= UpdateLevelText;
-      character.OnLevelChanged -= UpdateExpBar;
+      // character.OnLevelChanged -= UpdateLevelText;
+      // character.OnLevelChanged -= UpdateExpBar;
     }
 
     EventManager.OnCharacterTurnStarted -= UpdateCurrentTurnIndicator;
@@ -54,14 +58,15 @@ public class CharacterCard : MonoBehaviour
   private void HandleUpdatingCharacterInfo(Entity character)
   {
     SetCharacterInfo(character);
-    
-    if(CurrentTurnIndicator != null)
+
+    if (CurrentTurnIndicator != null)
     {
       CurrentTurnIndicator.SetActive(CombatManager.Instance.TurnManager.GetCurrentUnit() == character);
     }
 
     // Update experience bar when character stats change (includes experience changes)
     UpdateExpBar();
+    UpdateLevelText();
   }
 
   public void SetCharacterInfo(Entity character)
@@ -87,8 +92,8 @@ public class CharacterCard : MonoBehaviour
 
     // Event Listeners
     this.character.OnCharacterStatChanged += HandleUpdatingCharacterInfo;
-    this.character.OnLevelChanged += UpdateLevelText;
-    this.character.OnLevelChanged += UpdateExpBar;
+    // this.character.OnLevelChanged += UpdateLevelText;
+    // this.character.OnLevelChanged += UpdateExpBar;
 
     if (characterPortrait != null)
       characterPortrait.sprite = character.portrait;
@@ -163,10 +168,40 @@ public class CharacterCard : MonoBehaviour
   {
     if (character == null || expBarUI == null) return;
 
-    // Update experience bar using ResourceBarUI
     int currentExp = character.experience;
     int maxExp = character.requiredExperience;
     expBarUI.UpdateBar(currentExp, maxExp);
+
+    // Show expInfo if exp changed
+    if (previousExp >= 0 && currentExp != previousExp && expInfo != null)
+    {
+      // int delta = currentExp - previousExp;
+      // if (delta != 0)
+      // {
+      //   expInfo.text = delta > 0 ? $"+{delta} EXP" : $"{delta} EXP";
+      //   expInfo.gameObject.SetActive(true);
+      //   if (expInfoCoroutine != null)
+      //     StopCoroutine(expInfoCoroutine);
+      //   expInfoCoroutine = StartCoroutine(HideExpInfoAfterDelay(2f));
+      // }
+
+      expInfo.text = $"+{currentExp} EXP";
+      expInfo.gameObject.SetActive(true);
+      
+      if (expInfoCoroutine != null)
+        StopCoroutine(expInfoCoroutine);
+
+      expInfoCoroutine = StartCoroutine(HideExpInfoAfterDelay(2f));
+    }
+    previousExp = currentExp;
+  }
+
+  private IEnumerator HideExpInfoAfterDelay(float delay)
+  {
+    yield return new WaitForSeconds(delay);
+    if (expInfo != null)
+      expInfo.gameObject.SetActive(false);
+    expInfoCoroutine = null;
   }
 
   private void UpdateCurrentTurnIndicator(Entity c)
