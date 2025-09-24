@@ -16,9 +16,10 @@ GameObject:
   - component: {fileID: 2090552786941716041}
   - component: {fileID: 353333461878314463}
   - component: {fileID: 6779705742492024982}
+  - component: {fileID: -4120021120113047476}
   m_Layer: 0
   m_Name: Wolf
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -78,6 +79,9 @@ MonoBehaviour:
   StartingWeapon: {fileID: 0}
   abilityLoadout:
   - {fileID: 11400000, guid: 5d28c466750da4c42be20859550aa08d, type: 2}
+  vfxSpawnPoints:
+    keys: []
+    values: []
   inventory: {fileID: 0}
   level: 1
   experience: 0
@@ -88,11 +92,12 @@ MonoBehaviour:
   characterClass: {fileID: 11400000, guid: 763d94318c060b24ba1cbe2270ccf432, type: 2}
   statsContainer: {fileID: 0}
   initiativeValue: 0
+  blockVfxPrefab: {fileID: 0}
   isAlive: 1
   isActive: 0
   healthBar: {fileID: 1851678539350849162}
   previousTurnCost: -1
-  myRenderer: {fileID: 0}
+  hasUsedItemThisTurn: 0
   gameConfig: {fileID: 11400000, guid: eaeab84eb6b1df54eb4c6951b5ec44ae, type: 2}
   diceProfile: {fileID: 11400000, guid: 22d593f9d0fc74833ae292890888b6e8, type: 2}
   overworldController: {fileID: 776336580776689130}
@@ -249,6 +254,57 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &-4120021120113047476
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3073121357325553197}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 359fedb9ca6f840fd81c8d9e4f7935f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxLeapTime: 3
+  maxLeapDistance: 20
+  leapDuration: 1
+  leapHeight: 3
+  leapCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  rotateTowardsTarget: 1
+  useLeapAnimation: 1
+  OnLeapStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  OnLeapCompleted:
+    m_PersistentCalls:
+      m_Calls: []
+  OnLeapLanded:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &4248950778546316051
 GameObject:
   m_ObjectHideFlags: 0
@@ -1170,7 +1226,9 @@ MonoBehaviour:
   _Animancer: {fileID: 8930319560600582372}
   AnimationData: {fileID: 11400000, guid: 434bd6966e3f0ac4080ca0e801c3c170, type: 2}
   rightHandTransform: {fileID: 0}
+  leftHandTransform: {fileID: 0}
   lookAnimator: {fileID: 3816410255904560061}
+  leanAnimator: {fileID: 0}
   debug: 0
 --- !u!114 &8930319560600582372
 MonoBehaviour:

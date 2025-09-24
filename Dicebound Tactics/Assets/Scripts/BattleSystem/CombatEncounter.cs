@@ -356,9 +356,25 @@ public class CombatEncounter : MonoBehaviour
             }
         }
 
+
+        float waitStartTime = Time.realtimeSinceStartup;
+        float maxWaitTime = 10f; // seconds
+        int lastCharacters = remainingMovingCharacters;
+        int lastEnemies = remainingMovingEnemies;
         while (remainingMovingCharacters > 0 || remainingMovingEnemies > 0)
         {
-            await Task.Yield(); // Wait until all units have moved to their slots
+            if (lastCharacters != remainingMovingCharacters || lastEnemies != remainingMovingEnemies)
+            {
+                Debug.Log($"[CombatEncounter] Waiting: Characters={remainingMovingCharacters}, Enemies={remainingMovingEnemies}");
+                lastCharacters = remainingMovingCharacters;
+                lastEnemies = remainingMovingEnemies;
+            }
+            if (Time.realtimeSinceStartup - waitStartTime > maxWaitTime)
+            {
+                Debug.LogError($"[CombatEncounter] Timeout waiting for units to finish leaping! Characters={remainingMovingCharacters}, Enemies={remainingMovingEnemies}");
+                break;
+            }
+            await Task.Yield();
         }
 
         foreach (CharacterManager c in PartyManager.Instance.ActivePartyMembers)

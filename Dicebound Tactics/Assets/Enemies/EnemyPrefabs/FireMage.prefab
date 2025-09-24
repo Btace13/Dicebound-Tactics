@@ -16,9 +16,10 @@ GameObject:
   - component: {fileID: 3690496676605078886}
   - component: {fileID: 8370747544775388377}
   - component: {fileID: 4559985932962491545}
+  - component: {fileID: 916872345706345805}
   m_Layer: 0
   m_Name: FireMage
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -93,10 +94,12 @@ MonoBehaviour:
   characterClass: {fileID: 11400000, guid: 877fb9b69af760f49bcb3ef3934df957, type: 2}
   statsContainer: {fileID: 0}
   initiativeValue: 0
+  blockVfxPrefab: {fileID: 0}
   isAlive: 1
   isActive: 0
   healthBar: {fileID: 5135797998519714728}
   previousTurnCost: -1
+  hasUsedItemThisTurn: 0
   gameConfig: {fileID: 11400000, guid: eaeab84eb6b1df54eb4c6951b5ec44ae, type: 2}
   diceProfile: {fileID: 11400000, guid: 22d593f9d0fc74833ae292890888b6e8, type: 2}
   overworldController: {fileID: 4862689077579711255}
@@ -253,6 +256,57 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &916872345706345805
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 28465503046186729}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 359fedb9ca6f840fd81c8d9e4f7935f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxLeapTime: 3
+  maxLeapDistance: 20
+  leapDuration: 1
+  leapHeight: 3
+  leapCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  rotateTowardsTarget: 1
+  useLeapAnimation: 1
+  OnLeapStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  OnLeapCompleted:
+    m_PersistentCalls:
+      m_Calls: []
+  OnLeapLanded:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &3916249256907675034
 GameObject:
   m_ObjectHideFlags: 0

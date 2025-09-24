@@ -37,25 +37,24 @@ public class OverworldEntityController : MonoBehaviour
 
     protected virtual void Update()
     {
-        // Use CharacterController for physics-based movement with collision detection
-        if (characterController != null)
-        {
-            Vector3 moveVector = new Vector3(0, pathfindingAI.velocity.y, 0);
+        // if (characterController != null)
+        // {
+        //     Vector3 moveVector = new Vector3(0, pathfindingAI.velocity.y, 0);
 
-            // Apply gravity if not grounded
-            if (!characterController.isGrounded)
-            {
-                moveVector.y += Physics.gravity.y * Time.deltaTime;
-            }
-            else
-            {
-                // Ensure the y velocity is zero when grounded
-                moveVector.y = 0;
-            }
+        //     // Apply gravity if not grounded
+        //     if (!characterController.isGrounded)
+        //     {
+        //         moveVector.y += Physics.gravity.y * Time.deltaTime;
+        //     }
+        //     else
+        //     {
+        //         // Ensure the y velocity is zero when grounded
+        //         moveVector.y = 0;
+        //     }
 
-            // Move the character using the calculated move vector
-            characterController.Move(moveVector);
-        }
+        //     // Move the character using the calculated move vector
+        //     characterController.Move(moveVector);
+        // }
     }
 
     protected virtual void LateUpdate()

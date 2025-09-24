@@ -9,6 +9,10 @@ using Sirenix.OdinInspector;
 /// </summary>
 public class LeapMovementController : MonoBehaviour
 {
+    [BoxGroup("Leap Settings"), SerializeField]
+    private float maxLeapTime = 3.0f; // Max seconds allowed for a leap
+    [BoxGroup("Leap Settings"), SerializeField]
+    private float maxLeapDistance = 20.0f; // Max distance allowed from target before teleport
     [BoxGroup("Leap Settings"), SerializeField] 
     private float leapDuration = 1.0f;
     
@@ -143,30 +147,49 @@ public class LeapMovementController : MonoBehaviour
         }
 
         // Perform the leap with smooth arc movement
+
         float elapsedLeapTime = 0f;
         Vector3 startPosition = originalPosition;
-        
+        bool teleported = false;
+
+        float safeRange = 10000f; // Unity's floating point precision is reliable within this range
         while (elapsedLeapTime < leapDuration)
         {
             elapsedLeapTime += Time.deltaTime;
             float progress = elapsedLeapTime / leapDuration;
-            
             // Apply animation curve for smooth motion
             float curvedProgress = leapCurve.Evaluate(progress);
-            
             // Calculate horizontal movement
             Vector3 horizontalPosition = Vector3.Lerp(startPosition, targetPosition, curvedProgress);
-            
             // Calculate vertical arc movement
             float heightProgress = Mathf.Sin(progress * Mathf.PI); // Sin wave for natural arc
             Vector3 currentPosition = horizontalPosition + Vector3.up * (heightProgress * leapHeight);
-            
+
+            // Clamp position to safe range
+            if (Mathf.Abs(currentPosition.x) > safeRange || Mathf.Abs(currentPosition.y) > safeRange || Mathf.Abs(currentPosition.z) > safeRange)
+            {
+                Debug.LogWarning($"[LeapMovementController] Attempted to set {gameObject.name} to out-of-bounds position {currentPosition}. Clamping to safe range.");
+                currentPosition.x = Mathf.Clamp(currentPosition.x, -safeRange, safeRange);
+                currentPosition.y = Mathf.Clamp(currentPosition.y, -safeRange, safeRange);
+                currentPosition.z = Mathf.Clamp(currentPosition.z, -safeRange, safeRange);
+            }
             transform.position = currentPosition;
+
+            // Safety: teleport if too far or too long
+            float distToTarget = Vector3.Distance(transform.position, targetPosition);
+            if (elapsedLeapTime > maxLeapTime || distToTarget > maxLeapDistance)
+            {
+                Debug.LogWarning($"[LeapMovementController] Teleporting {gameObject.name} to target due to timeout or excessive distance.");
+                transform.position = targetPosition;
+                teleported = true;
+                break;
+            }
             yield return null;
         }
 
         // Ensure we land exactly at target
-        transform.position = targetPosition;
+        if (!teleported)
+            transform.position = targetPosition;
 
         // Play landing animation if available
         if (useLeapAnimation && animationHandler != null && animationHandler.CanPlayLeapAnimations())
