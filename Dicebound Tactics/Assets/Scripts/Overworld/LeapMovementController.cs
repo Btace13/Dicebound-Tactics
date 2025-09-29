@@ -2,6 +2,8 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.Events;
 using Sirenix.OdinInspector;
+using System.Linq;
+using System.Collections.Generic;
 
 /// <summary>
 /// Component that handles leap/jump movement for characters, allowing them to smoothly jump to target positions
@@ -9,6 +11,11 @@ using Sirenix.OdinInspector;
 /// </summary>
 public class LeapMovementController : MonoBehaviour
 {
+    [BoxGroup("Leap Settings"), SerializeField]
+    private bool faceOpposingTeamAfterLeap = true;
+
+    // Reference to TurnManager for team lookup
+    private TurnManager turnManager;
     [BoxGroup("Leap Settings"), SerializeField]
     private float maxLeapTime = 3.0f; // Max seconds allowed for a leap
     [BoxGroup("Leap Settings"), SerializeField]
@@ -47,6 +54,14 @@ public class LeapMovementController : MonoBehaviour
     {
         animationHandler = GetComponentInChildren<UnitAnimationHandler>();
         rb = GetComponent<Rigidbody>();
+        turnManager = FindFirstObjectByType<TurnManager>();
+    }
+    /// <summary>
+    /// Set whether to face the opposing team after leap
+    /// </summary>
+    public void SetFaceOpposingTeamAfterLeap(bool value)
+    {
+        faceOpposingTeamAfterLeap = value;
     }
 
     /// <summary>
@@ -207,8 +222,75 @@ public class LeapMovementController : MonoBehaviour
         OnLeapLanded?.Invoke();
         OnLeapCompleted?.Invoke();
         onComplete?.Invoke();
+        // Face opposing team after leap if enabled
+        if (faceOpposingTeamAfterLeap && turnManager != null)
+        {
+            FaceOpposingTeam();
+        }
         
         currentLeapCoroutine = null;
+    }
+
+    /// <summary>
+    /// Rotates the entity to face the average position of the opposing team after leap
+    /// </summary>
+    private void FaceOpposingTeam()
+    {
+        // Try to get Entity component for teamID
+        var entity = GetComponent<TacticsToolkit.Entity>();
+        if (entity == null) return;
+
+        Vector3 myPos = transform.position;
+        List<TacticsToolkit.Entity> opposingTeam = new List<TacticsToolkit.Entity>();
+        if (turnManager != null)
+        {
+            var playerUnits = turnManager.playerUnits?.Where(e => e != null && e.isAlive).Select(e => e as TacticsToolkit.Entity).Where(e => e != null).ToList();
+            var enemyUnits = turnManager.enemyUnits?.Where(e => e != null && e.isAlive).Select(e => e as TacticsToolkit.Entity).Where(e => e != null).ToList();
+            // If this entity is an enemy, face players. If player, face enemies.
+            if (enemyUnits != null && enemyUnits.Contains(entity))
+            {
+                if (playerUnits != null && playerUnits.Count > 0)
+                    opposingTeam = playerUnits;
+            }
+            else if (playerUnits != null && playerUnits.Contains(entity))
+            {
+                if (enemyUnits != null && enemyUnits.Count > 0)
+                    opposingTeam = enemyUnits;
+            }
+        }
+        if (opposingTeam.Count == 0) return;
+        Vector3 avgPos = Vector3.zero;
+        foreach (var opp in opposingTeam)
+            avgPos += opp.transform.position;
+        avgPos /= opposingTeam.Count;
+        Vector3 lookDir = avgPos - myPos;
+        lookDir.y = 0;
+
+        if (lookDir.sqrMagnitude > 0.01f)
+        {
+            Quaternion targetRot = Quaternion.LookRotation(lookDir, Vector3.up);
+            transform.rotation = targetRot;
+            // Force CustomRichAI to use this facing after leap
+            var ai = GetComponent<CustomRichAI>();
+            if (ai != null)
+            {
+                ai.rotation = targetRot;
+                ai.desiredFinalRotation = targetRot;
+                var shouldRotateAtEndField = ai.GetType().GetField("shouldRotateAtEnd", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                if (shouldRotateAtEndField != null)
+                    shouldRotateAtEndField.SetValue(ai, true);
+                ai.enableRotation = false;
+                // Re-enable AI rotation after a short delay to avoid immediate overwrite
+                StartCoroutine(ReenableAIRotation(ai, 0.2f));
+            }
+        }
+    }
+
+    private IEnumerator ReenableAIRotation(CustomRichAI ai, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if (ai != null)
+            ai.enableRotation = true;
     }
 
     /// <summary>

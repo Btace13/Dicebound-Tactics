@@ -16,8 +16,12 @@ public class LeapMovementSetup : MonoBehaviour
     [BoxGroup("Leap Settings"), SerializeField] 
     private float defaultLeapHeight = 3.0f;
     
-    [BoxGroup("Leap Settings"), SerializeField] 
+
+    [BoxGroup("Leap Settings"), SerializeField]
     private AnimationCurve defaultLeapCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
+
+    [BoxGroup("Leap Settings"), SerializeField]
+    private bool faceOpposingTeamAfterLeap = true;
 
     [BoxGroup("References"), SerializeField, ReadOnly] 
     private LeapMovementController leapController;
@@ -48,6 +52,9 @@ public class LeapMovementSetup : MonoBehaviour
 
         // Configure leap controller with default settings
         leapController.SetLeapParameters(defaultLeapDuration, defaultLeapHeight, defaultLeapCurve);
+
+    // Set facing option
+    leapController.SetFaceOpposingTeamAfterLeap(faceOpposingTeamAfterLeap);
 
         // Find required components
         animationHandler = GetComponentInChildren<UnitAnimationHandler>();
