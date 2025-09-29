@@ -149,7 +149,7 @@ public class DefensiveTimingUI : MonoBehaviour
                   if (currentButtonIndex >= buttonSequence.Length)
                   {
                       sequenceCompleted = true;
-                      UpdateInstructionText("Success!");
+                      UpdateInstructionText("DefensiveTimingUI:Success!");
                       target.PlayBlockVFX();
                       EventManager.TriggerAttackBlocked();
                       ShowSuccessFeedback();
@@ -157,15 +157,16 @@ public class DefensiveTimingUI : MonoBehaviour
                   }
                   else
                   {
-                      UpdateInstructionText($"Good! Press next button ({currentButtonIndex + 1}/{buttonSequence.Length})");
+                      UpdateInstructionText($"DefensiveTimingUI: Good! Press next button ({currentButtonIndex + 1}/{buttonSequence.Length})");
                   }
               }
               else if (AnyUnexpectedButtonPressed(inputActions, expectedButton))
               {
                   // Wrong button pressed
                   ResetButtonPrompts();
+                  SetupButtonPrompts(buttonSequence); // Re-setup to reset visuals
                   currentButtonIndex = 0;
-                  UpdateInstructionText("Wrong button! Try again!");
+                  UpdateInstructionText("DefensiveTimingUI: Wrong button! Try again!");
                   ShowFailureFeedback();
               }
           }
@@ -179,12 +180,12 @@ public class DefensiveTimingUI : MonoBehaviour
       // Show final result
       if (sequenceCompleted)
       {
-          UpdateInstructionText("Perfect Defense!");
+          UpdateInstructionText("DefensiveTimingUI: Perfect Defense!");
           ShowSuccessFeedback();
       }
       else
       {
-          UpdateInstructionText("Time's up!");
+          UpdateInstructionText("DefensiveTimingUI: Time's up!");
           ShowFailureFeedback();
           EventManager.TriggerDefensiveSequenceFailed();
       }
@@ -414,28 +415,51 @@ public class DefensiveTimingUI : MonoBehaviour
   private bool AnyUnexpectedButtonPressed(InputSystem_Actions inputActions, string expectedButton)
   {
       Vector2 moveInput = inputActions.Player.Move.ReadValue<Vector2>();
-      
-      bool upPressed = moveInput.y > 0.5f && !wasMovingUp;
-      bool downPressed = moveInput.y < -0.5f && !wasMovingDown;
-      bool leftPressed = moveInput.x < -0.5f && !wasMovingLeft;
-      bool rightPressed = moveInput.x > 0.5f && !wasMovingRight;
+
+      // Edge-detection for all directions
+      bool currentlyUp = moveInput.y > 0.5f;
+      bool currentlyDown = moveInput.y < -0.5f;
+      bool currentlyLeft = moveInput.x < -0.5f;
+      bool currentlyRight = moveInput.x > 0.5f;
+
+      bool wasWrongUp = currentlyUp && !wasMovingUp;
+      bool wasWrongDown = currentlyDown && !wasMovingDown;
+      bool wasWrongLeft = currentlyLeft && !wasMovingLeft;
+      bool wasWrongRight = currentlyRight && !wasMovingRight;
+
+      // Update movement flags for all directions
+      wasMovingUp = currentlyUp;
+      wasMovingDown = currentlyDown;
+      wasMovingLeft = currentlyLeft;
+      wasMovingRight = currentlyRight;
 
       switch (expectedButton)
       {
           case "Up":
           case "W":
-              return downPressed || leftPressed || rightPressed;
+              if (wasWrongDown || wasWrongLeft || wasWrongRight)
+                  return true;
+              break;
           case "Down":
           case "S":
-              return upPressed || leftPressed || rightPressed;
+              if (wasWrongUp || wasWrongLeft || wasWrongRight)
+                  return true;
+              break;
           case "Left":
           case "A":
-              return upPressed || downPressed || rightPressed;
+              if (wasWrongUp || wasWrongDown || wasWrongRight)
+                  return true;
+              break;
           case "Right":
           case "D":
-              return upPressed || downPressed || leftPressed;
+              if (wasWrongUp || wasWrongDown || wasWrongLeft)
+                  return true;
+              break;
           default:
-              return upPressed || downPressed || leftPressed || rightPressed;
+              if (wasWrongUp || wasWrongDown || wasWrongLeft || wasWrongRight)
+                  return true;
+              break;
       }
+      return false;
   }
 }
