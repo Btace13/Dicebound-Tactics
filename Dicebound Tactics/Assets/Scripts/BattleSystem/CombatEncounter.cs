@@ -22,6 +22,8 @@ public class CombatEncounter : MonoBehaviour
     [System.Serializable]
     public class EncounterSide
     {
+        [Header("Side Configuration")]
+        public bool isPlayerSide = false;
         public CombatCameraController combatCamera;
         public List<EncounterSlot> combatSlots = new List<EncounterSlot>();
         public Vector3 CenterPosition
@@ -201,7 +203,20 @@ public class CombatEncounter : MonoBehaviour
 
         IsActive = true;
 
-        EncounterSide closestSide = GetClosestEncounterSide(PartyManager.Instance.PartyLeader.transform.position);
+        EncounterSide playerSide = GetPlayerEncounterSide();
+        EncounterSide enemySide = GetEnemyEncounterSide();
+        
+        if (playerSide == null)
+        {
+            Debug.LogError("No player side found! Please mark one EncounterSide as isPlayerSide = true");
+            return;
+        }
+        
+        if (enemySide == null)
+        {
+            Debug.LogError("No enemy side found! Please ensure at least one EncounterSide has isPlayerSide = false");
+            return;
+        }
 
         int remainingMovingCharacters = PartyManager.Instance.ActivePartyMembers.Count;
 
@@ -219,7 +234,7 @@ public class CombatEncounter : MonoBehaviour
                 controller.CancelPath(); // Cancel any existing pathfinding
                 controller.SetShouldSprint(true); // Enable sprinting for combat movement
 
-                EncounterSlot closestSlot = GetClosestSlot(c.transform.position, closestSide);
+                EncounterSlot closestSlot = GetClosestSlot(c.transform.position, playerSide);
 
                 if (closestSlot == null)
                 {
@@ -291,7 +306,6 @@ public class CombatEncounter : MonoBehaviour
                 controller.CancelPath(); // Cancel any existing pathfinding
                 controller.SetShouldSprint(true); // Enable sprinting for combat movement
 
-                EncounterSide enemySide = encounterSides.Where(s => s != closestSide).FirstOrDefault();
                 EncounterSlot closestSlot = GetClosestSlot(enemy.transform.position, enemySide);
 
                 if (closestSlot == null)
@@ -428,9 +442,15 @@ public class CombatEncounter : MonoBehaviour
         return allEnemiesDefeated;
     }
 
+    public EncounterSide GetPlayerEncounterSide()
+    {
+        return encounterSides.FirstOrDefault(side => side.isPlayerSide);
+    }
+
     public EncounterSide GetEnemyEncounterSide()
     {
-        return encounterSides.FirstOrDefault(side => side.combatSlots.Any(slot => slot.isOccupied && slot.entity is EnemyManager));
+        // Return the first side that is NOT marked as player side
+        return encounterSides.FirstOrDefault(side => !side.isPlayerSide);
     }
 
     #region OVERWORLD ENEMY MANAGEMENT

@@ -25833,6 +25833,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1129101337}
     - target: {fileID: 5752600779834487987, guid: 9e553778f72e0894cb7e70029cd9fb36, type: 3}
+      propertyPath: encounterSides.Array.data[0].isPlayerSide
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5752600779834487987, guid: 9e553778f72e0894cb7e70029cd9fb36, type: 3}
       propertyPath: encounterSides.Array.data[1].combatCamera
       value: 
       objectReference: {fileID: 478739487}
