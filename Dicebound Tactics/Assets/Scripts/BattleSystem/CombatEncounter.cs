@@ -205,13 +205,13 @@ public class CombatEncounter : MonoBehaviour
 
         EncounterSide playerSide = GetPlayerEncounterSide();
         EncounterSide enemySide = GetEnemyEncounterSide();
-        
+
         if (playerSide == null)
         {
             Debug.LogError("No player side found! Please mark one EncounterSide as isPlayerSide = true");
             return;
         }
-        
+
         if (enemySide == null)
         {
             Debug.LogError("No enemy side found! Please ensure at least one EncounterSide has isPlayerSide = false");

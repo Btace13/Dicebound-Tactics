@@ -19,6 +19,7 @@ public class CombatManager : MonoBehaviour
     public TurnManager TurnManager => turnManager;
     public CombatUIManager CombatUIManager => combatUIManager;
     public CombatEncounter CurrentEncounter => _currentEncounter;
+    public AbilitySO SelectedAbility => _selectedAbility;
 
     private CombatItem _selectedItem;
     private AbilitySO _selectedAbility;
@@ -275,12 +276,31 @@ public class CombatManager : MonoBehaviour
                     }
 
                     // Trigger ability started event
+                    Debug.Log($"[CombatManager] Triggering OnAbilityStarted: {currentUnit.name} -> {target.name} with ability {damageAbility.name}");
                     EventManager.TriggerAbilityStarted(currentUnit, target);
                     
                     StartCoroutine(damageAbility.Execute(currentUnit, target));
                 }
                 else // basic attack
                 {
+                    // Check for final blow effect BEFORE any movement or attack
+                    bool isFinalBlow = false;
+                    Debug.Log($"[CombatManager] Checking for final blow: {currentUnit.name} -> {target.name}");
+                    Debug.Log($"[CombatManager] FinalBlowEffectManager.Instance: {(FinalBlowEffectManager.Instance != null ? "Found" : "NULL")}");
+                    
+                    if (FinalBlowEffectManager.Instance != null && 
+                        FinalBlowEffectManager.Instance.ShouldTriggerFinalBlowEffect(currentUnit, target))
+                    {
+                        isFinalBlow = true;
+                        Debug.Log($"[CombatManager] Triggering final blow effect for basic attack: {currentUnit.name} -> {target.name}");
+                        // Trigger the final blow effect for basic attacks
+                        EventManager.TriggerFinalBlowTriggered(currentUnit, target);
+                    }
+                    else
+                    {
+                        Debug.Log("[CombatManager] Final blow effect NOT triggered for basic attack");
+                    }
+                    
                     Vector3 dir = (target.transform.position - currentUnit.transform.position).normalized;
                     dir.y = 0;
 
@@ -290,13 +310,19 @@ public class CombatManager : MonoBehaviour
                     {
                         cc.MoveToPosition(target.transform.position - dir * 3f, true, () =>
                         {
+                            
                             Sequence attackSequence = DOTween.Sequence();
                             attackSequence.AppendCallback(() =>
                             {
                                 int damage = currentUnit.characterClass.Strength.baseStatValue;
                                 target.TakeDamage(damage);
                                 combatUIManager.damageNumberUIHandler.ShowDamageNumber(damage, target.transform.position, DamageNumberType.Normal);
-                                // CameraManager.Instance?.ShakeActiveCamera();
+                                
+                                // Only shake camera if not in final blow (final blow handles its own effects)
+                                if (!isFinalBlow)
+                                {
+                                    CameraManager.Instance?.ShakeActiveCamera();
+                                }
                             });
                             attackSequence.AppendInterval(0.5f);
                             attackSequence.AppendCallback(() =>
@@ -353,7 +379,12 @@ public class CombatManager : MonoBehaviour
                         int damage = currentUnit.characterClass.Strength.baseStatValue;
                         target.TakeDamage(damage);
                         combatUIManager.damageNumberUIHandler.ShowDamageNumber(damage, target.transform.position, DamageNumberType.Normal);
-                        // CameraManager.Instance?.ShakeActiveCamera();
+                        
+                        // Only shake camera if not in final blow (final blow handles its own effects)
+                        if (!isFinalBlow)
+                        {
+                            CameraManager.Instance?.ShakeActiveCamera();
+                        }
                     }
                 }
             }
