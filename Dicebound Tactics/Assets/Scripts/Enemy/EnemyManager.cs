@@ -135,7 +135,7 @@ public class EnemyManager : Entity
             if (CameraManager.Instance != null && _currentEncounter != null)
             {
                 CameraManager.Instance.SetActiveCombatCharacter(target.transform);
-                CameraManager.Instance.SetCombatTarget(transform);
+                CameraManager.Instance.SetCombatTransform(transform);
                 
                 var cameraController = _currentEncounter.GetCameraControllerForSide(target);
                 if (cameraController != null)

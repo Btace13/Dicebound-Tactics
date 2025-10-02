@@ -19,6 +19,16 @@ public class CombatCameraController : BaseCameraController
     [Header("Camera Target Settings")]
     public CameraTarget cameraTarget = CameraTarget.ActivePlayer;
 
+    private void Awake()
+    {
+        EventManager.OnCombatEncounterStarted += AddDefaultTarget;
+    }
+
+    private void OnDisable()
+    {
+        EventManager.OnCombatEncounterStarted -= AddDefaultTarget;
+    }
+
     protected override void Start()
     {
         base.Start();
@@ -95,5 +105,17 @@ public class CombatCameraController : BaseCameraController
         {
             Debug.LogError("Target group is not initialized.");
         }
+    }
+    
+    private void AddDefaultTarget(CombatEncounter encounter)
+    {
+        if (encounter == null)
+        {
+            Debug.LogWarning("No combat encounter found.");
+            return;
+        }
+
+        Transform defaultTarget = encounter.Enemies[0].transform;
+        AddTarget(defaultTarget);
     }
 }

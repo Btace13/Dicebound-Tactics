@@ -258,6 +258,7 @@ public class LeapMovementController : MonoBehaviour
                     opposingTeam = enemyUnits;
             }
         }
+
         if (opposingTeam.Count == 0) return;
         Vector3 avgPos = Vector3.zero;
         foreach (var opp in opposingTeam)

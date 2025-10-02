@@ -157,6 +157,12 @@ public class SelectionController : MonoBehaviour
 
     if (!list.Contains(entity)) return;
 
+    // For enemy targeting, always enforce single selection to prevent multiple enemies in target group
+    if (cyclingEnemies && numberOfSelectableTargets == 1)
+    {
+      additive = false; // Force clear previous selections when targeting enemies
+    }
+
     if (!additive)
     {
       ClearAllSelections();
@@ -291,6 +297,12 @@ public class SelectionController : MonoBehaviour
   {
     cyclingEnemies = cycleEnemies;
     currentIndex = 0;
+
+    // When switching to enemy targeting, enforce single selection to prevent multiple enemies in target group
+    if (cycleEnemies)
+    {
+      numberOfSelectableTargets = 1;
+    }
 
     List<Entity> list = cyclingEnemies
         ? turnManager.enemyUnits.ConvertAll(e => (Entity)e)

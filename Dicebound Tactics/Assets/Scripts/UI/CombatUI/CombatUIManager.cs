@@ -250,6 +250,12 @@ public class CombatUIManager : MonoBehaviour
         ShowConfirmButton(true);
         ShowTargetSelectionUI(true);
         ToggleBackButtonInteractable(true);
+        
+        // Clear camera targets to ensure clean state for target selection
+        if (CameraManager.Instance != null)
+        {
+            CameraManager.Instance.ClearCombatTargets();
+        }
     }
 
     private void OnEnterEnemyTurnState()

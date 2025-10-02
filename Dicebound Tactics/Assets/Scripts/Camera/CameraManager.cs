@@ -178,7 +178,7 @@ public class CameraManager : MonoBehaviour
 
         if (activeTarget != null)
         {
-            SetCombatTarget(activeTarget);
+            SetCombatTransform(activeTarget);
         }
     }
 
@@ -313,7 +313,7 @@ public class CameraManager : MonoBehaviour
         FrameCamera(ActiveCamera.CameraName, CameraFramingOptions.LOWER_RIGHT);
     }
 
-    public void SetCombatTarget(Transform target)
+    public void SetCombatTransform(Transform target)
     {
         if (target == null)
         {
@@ -335,14 +335,14 @@ public class CameraManager : MonoBehaviour
                 continue;
             }
             
-            // Instead of clearing all targets, manage them properly
-            // Remove the current target if it exists (should be at index 1 for Target cameras)
-            if (combatCameraController.TargetGroup.Targets.Count > 1)
+            // Clear ALL targets and add only the new single target
+            // This ensures only one enemy is in the target group for confirm target camera
+            while (combatCameraController.TargetGroup.Targets.Count > 0)
             {
-                combatCameraController.TargetGroup.RemoveMember(combatCameraController.TargetGroup.Targets[1].Object);
+                combatCameraController.TargetGroup.RemoveMember(combatCameraController.TargetGroup.Targets[0].Object);
             }
             
-            // Add the new target
+            // Add only the new single target
             combatCameraController.AddTarget(target);
         }
         activeTarget = target;
@@ -350,7 +350,47 @@ public class CameraManager : MonoBehaviour
 
     public void SetCombatTarget(Entity targetEntity)
     {
-        SetCombatTarget(targetEntity.transform);
+        SetCombatTransform(targetEntity.transform);
+    }
+
+    /// <summary>
+    /// Sets combat targets from a list of selected entities, ensuring only one target for confirm camera
+    /// </summary>
+    public void SetCombatTargetsFromSelection(List<Entity> selectedEntities)
+    {
+        if (selectedEntities == null || selectedEntities.Count == 0)
+        {
+            return;
+        }
+
+        // For confirm target camera, only use the first selected entity to prevent multiple targets
+        Entity targetEntity = selectedEntities[0];
+        SetCombatTransform(targetEntity.transform);
+    }
+
+    /// <summary>
+    /// Clears all targets from Target cameras to reset the target group
+    /// </summary>
+    public void ClearCombatTargets()
+    {
+        foreach (CombatCameraController combatCameraController in Cameras.Values.OfType<CombatCameraController>())
+        {
+            if (combatCameraController == null || combatCameraController.TargetGroup == null)
+            {
+                continue;
+            }
+            if (combatCameraController.cameraTarget == CameraTarget.ActivePlayer)
+            {
+                continue;
+            }
+
+            // Clear ALL targets completely
+            while (combatCameraController.TargetGroup.Targets.Count > 0)
+            {
+                combatCameraController.TargetGroup.RemoveMember(combatCameraController.TargetGroup.Targets[0].Object);
+            }
+        }
+        activeTarget = null;
     }
 
     public void SetActiveCombatCharacter(Transform character)
